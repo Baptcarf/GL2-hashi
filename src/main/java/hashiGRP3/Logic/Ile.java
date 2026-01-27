@@ -38,4 +38,16 @@ public class Ile {
     public int getNbPontsRequis() {return nbPontsRequis;}
     public Map<Direction, Pont> getDirectionPonts() {return directionPonts;}
     public Pont getPont(Direction direction) {return directionPonts.get(direction);}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ile ile)) return false;
+        return x == ile.x && y == ile.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(x, y);
+    }
 }
