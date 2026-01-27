@@ -10,16 +10,16 @@ public class Pont {
         VERTICAL
     }
 
-    private final Ile ileSource, ileCible;
+    private final Ile ileA, ileB;
     private EtatDuPont etat;         // Représente la valeur entre les ponts
-    private final Orientation direction;    // HORIZONTAL ou VERTICAL
+    private final Orientation orientation;    // HORIZONTAL ou VERTICAL
     private List<Pont> conflits;            // La liste des ponts qui, si il sont placé, empeche le faite de posé celui ci
 
-    public Pont(Ile ileSource, Ile ileCible, EtatDuPont EtatDuPont, Orientation direction) {
-        this.ileSource = ileSource;
-        this.ileCible = ileCible;
+    public Pont(Ile ileA, Ile ileB, EtatDuPont EtatDuPont, Orientation orientation) {
+        this.ileA = ileA;
+        this.ileB = ileB;
         this.etat = EtatDuPont;
-        this.direction = direction;
+        this.orientation = orientation;
         this.conflits = new ArrayList<>();
     }
     
@@ -27,10 +27,10 @@ public class Pont {
         this.conflits.add(pont);
     }
     
-    public Ile getIleSource() {return ileSource;}
-    public Ile getIleCible() {return ileCible;}
+    public Ile getileA() {return ileA;}
+    public Ile getileB() {return ileB;}
     public EtatDuPont getEtat() {return etat;}
-    public Orientation getDirection() {return direction;}
+    public Orientation getOrientation() {return orientation;}
     public List<Pont> getConflits() {return conflits;}
 
     public void setEtat(EtatDuPont etat) {this.etat = etat;}
