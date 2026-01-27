@@ -20,5 +20,22 @@ public class Ile {
         this.nbPontsRequis = nbPontsRequis;
         this.directionPonts = new HashMap<>();
     }
-    
+
+    public void ajouterPonts(Direction direction, Pont pont) {
+        this.directionPonts.put(direction, pont);
+    }
+
+    public int getNbPontsActuels() {
+        int total = 0;
+        for (Pont pont : directionPonts.values()) {
+            total += pont.getEtat().getValue();
+        }
+        return total;
+    }
+
+    public int getX() {return x;}
+    public int getY() {return y;}
+    public int getNbPontsRequis() {return nbPontsRequis;}
+    public Map<Direction, Pont> getDirectionPonts() {return directionPonts;}
+    public Pont getPont(Direction direction) {return directionPonts.get(direction);}
 }
