@@ -14,15 +14,15 @@ public class Pont {
     private final Ile ileA, ileB;
     private EtatDuPont etat;                    // Représente la valeur entre les ponts
     private final Orientation orientation;      // HORIZONTAL ou VERTICAL
-    private List<Pont> conflits;                // La liste des ponts qui, si il sont placé, empeche le faite de posé celui ci
+    private List<Pont> conflits;                // La liste des ponts qui, s'ils sont placé, empêche le fait de poser celui ci
 
     public Pont(Ile ileA, Ile ileB, EtatDuPont EtatDuPont) {
         if (ileA.equals(ileB)) {
             throw new IllegalArgumentException("Une ile ne peut pas etre lié a elle meme");
         }
 
-        // Dans le jeu, un pont entre ile A et ile B est exactement le meme que entre B et A
-        // Pour evité les doublons (ponts identique mais inversé) on met toujours l'ile la plus a gauche (ou la plus haute) en premier
+        // Dans le jeu, un pont entre ile A et ile B est exactement le même que entre B et A
+        // Pour eviter les doublons (ponts identiques mais inversés) on met toujours l'ile la plus à gauche (ou la plus haute) en premier
         Ile premier, second;
         if ((ileA.comparePositionDesIles(ileB)) < 0) {
             premier = ileA;
@@ -42,7 +42,7 @@ public class Pont {
         } else if (ileA.memeColonne(ileB)) {
             this.orientation = Orientation.VERTICAL;
         } else {
-            throw new IllegalArgumentException("Les iles doivent etre aligné verticalement ou horizontalement");
+            throw new IllegalArgumentException("Les iles doivent être aligné verticalement ou horizontalement");
         }
     }
     

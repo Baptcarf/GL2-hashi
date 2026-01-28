@@ -8,11 +8,11 @@ public class Coordonnees implements Comparable<Coordonnees>{
         this.y = y;
     }
 
-    // Cette fonction sert à "trier" deux coordonnees pour qu'elles soient toujours dans le même ordre
-    // On compare d'abord la position X, et ensuite Y si ils sont sur la meme colonne
+    // Cette fonction sert à "trier" deux coordonnées pour qu'elles soient toujours dans le même ordre
+    // On compare d'abord la position X, et ensuite Y pour voir s'ils sont sur la même colonne
 
     // Retourne un nombre négatif si cette coordonnée est avant l'autre (plus à gauche, puis plus en haut),
-    // positif si elle est après, et 0 si coordo egales
+    // positif si elle est après, et 0 si les coordonnées sont égales
     @Override
     public int compareTo(Coordonnees autre) {
         int comparaison = Integer.compare(this.x, autre.x);
