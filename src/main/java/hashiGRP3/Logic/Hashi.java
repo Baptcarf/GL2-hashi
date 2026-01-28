@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Hashi {
-    private Map<Coordonnees, Ile> iles = new HashMap<>(); // Une hashmap ou les clé sont les coordonées (x, y) => Une Ile 
+    private Map<Coordonnees, Ile> iles = new HashMap<>(); // Une hashmap où les clés sont les coordonées (x, y) => Une Ile 
     private Set<Pont> ponts = new HashSet<>();
     private int tailleX = 0;
     private int tailleY = 0;

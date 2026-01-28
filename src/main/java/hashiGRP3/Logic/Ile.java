@@ -8,9 +8,9 @@ public class Ile {
     private static int compteurId = 0;
     private final int id;                           // Identifiant unique de l'île
 
-    private final Coordonnees coordonnees;          // Coordonnées de l'ile relative a la grille, (0, 0) en haut a gauche
-    private final int nbPontsRequis;                // Nombre de ponts à connecter a cette ile
-    private Map<Direction, Pont> directionPonts;    // Liaison d'une direction a un ponts 
+    private final Coordonnees coordonnees;          // Coordonnées de l'ile relative à la grille, (0, 0) en haut à gauche
+    private final int nbPontsRequis;                // Nombre de ponts à connecter à cette île
+    private Map<Direction, Pont> directionPonts;    // Liaison d'une direction à un pont 
 
     public Ile(Coordonnees coordonnees, int nbPontsRequis) {
         this.id = ++compteurId;
