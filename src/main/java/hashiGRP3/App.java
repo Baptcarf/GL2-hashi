@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 
 import javafx.application.Application;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import java.io.IOException;
@@ -23,11 +24,11 @@ public class App extends Application {
   	public void start(final Stage primaryStage) {
     		try {
       			//Localisation du fichier FXML.
-      			final URL url = getClass().getResource("/resource/HashiGRP3/views/menu.fxml");
+      			final URL url = getClass().getResource("/hashiGRP3/views/menu.fxml");
       			//Création du loader.
-      			final FXMLLoader fxmlLoader = new FXMLLoader(url);
+				final FXMLLoader fxmlLoader = new FXMLLoader(url);
       			//Chargement du FXML.
-      			final AnchorPane root = (AnchorPane) fxmlLoader.load();
+      			final TitledPane root = (TitledPane) fxmlLoader.load();
       			//Création de la scène.
       			final Scene scene = new Scene(root, 300, 250);
       			primaryStage.setScene(scene);
