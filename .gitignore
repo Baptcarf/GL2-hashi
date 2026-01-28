@@ -1,2 +1,6 @@
+#Fichier de compilation
 *.class
+
+#Dossier de build
 target/
+./target/
