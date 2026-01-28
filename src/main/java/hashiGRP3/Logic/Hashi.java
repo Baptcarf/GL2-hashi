@@ -1,25 +1,28 @@
 package hashiGRP3.Logic;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Hashi {
-    private Set<Ile> iles = new HashSet<>();
+    private Map<Coordonnees, Ile> iles = new HashMap<>(); // Une hashmap ou les clé sont les coordonées (x, y) => Une Ile 
     private Set<Pont> ponts = new HashSet<>();
     private int tailleX = 0;
     private int tailleY = 0;
 
     public void ajouterIle(Ile ile) {
-        iles.add(ile);
-        
-        if (ile.getX() > this.tailleX) {
-            this.tailleX = ile.getX();
+        iles.put(ile.getCoordonnees(), ile);
+
+        int x = ile.getCoordonnees().getX();
+        int y = ile.getCoordonnees().getY();
+
+        if (x > this.tailleX) {
+            this.tailleX = x;
         }
-        
-        if (ile.getY() > this.tailleY) {
-            this.tailleY = ile.getY();
+        if (y > this.tailleY) {
+            this.tailleY = y;
         }
     }
-
 }
 
