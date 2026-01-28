@@ -12,9 +12,9 @@ public class Pont {
     }
 
     private final Ile ileA, ileB;
-    private EtatDuPont etat;         // Représente la valeur entre les ponts
-    private final Orientation orientation;    // HORIZONTAL ou VERTICAL
-    private List<Pont> conflits;            // La liste des ponts qui, si il sont placé, empeche le faite de posé celui ci
+    private EtatDuPont etat;                    // Représente la valeur entre les ponts
+    private final Orientation orientation;      // HORIZONTAL ou VERTICAL
+    private List<Pont> conflits;                // La liste des ponts qui, si il sont placé, empeche le faite de posé celui ci
 
     public Pont(Ile ileA, Ile ileB, EtatDuPont EtatDuPont) {
         if (ileA.equals(ileB)) {
@@ -23,50 +23,29 @@ public class Pont {
 
         // Dans le jeu, un pont entre ile A et ile B est exactement le meme que entre B et A
         // Pour evité les doublons (ponts identique mais inversé) on met toujours l'ile la plus a gauche (ou la plus haute) en premier
-        if (comparePositionDesIles(ileA, ileB) < 0) {
-            this.ileA = ileA;
-            this.ileB = ileB;
+        Ile premier, second;
+        if ((ileA.comparePositionDesIles(ileB)) < 0) {
+            premier = ileA;
+            second = ileB;
         } else {
-            this.ileA = ileB;
-            this.ileB = ileA;
+            premier = ileB;
+            second = ileA;
         }
+        this.ileA = premier;
+        this.ileB = second;
 
         this.etat = EtatDuPont;
         this.conflits = new ArrayList<>();
 
-        if (ileA.getY() == ileB.getY()) {
+        if (ileA.memeLigne(ileB)) {
             this.orientation = Orientation.HORIZONTAL;
-        } else if (ileA.getX() == ileB.getX()) {
+        } else if (ileA.memeColonne(ileB)) {
             this.orientation = Orientation.VERTICAL;
         } else {
             throw new IllegalArgumentException("Les iles doivent etre aligné verticalement ou horizontalement");
         }
     }
- 
-    // Cette fonction sert à "trier" deux iles pour qu'elles soient toujours dans le même ordre
-    // On compare d'abord la position X, et ensuite Y si ils sont sur la meme colonne.
-    // -1 si l'ile A doit etre placé avant l'ile B. 
-    // 1 si l'ile A doit etre placé apres l'ile B.
-    // 0 si c'est les meme iles.
-    private int comparePositionDesIles(Ile ileA, Ile ileB) {
-        if (ileA.getX() != ileB.getX()) {
-            if (ileA.getX() < ileB.getX()) {
-                return -1;
-            } else {
-                return 1;
-            }
-            
-        } else {
-            if (ileA.getY() < ileB.getY()) {
-                return -1;
-            } else if (ileA.getY() > ileB.getY()) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-    }
-
+    
     public void ajouterConflit(Pont pont) {
         this.conflits.add(pont);
     }
