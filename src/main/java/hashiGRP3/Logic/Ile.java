@@ -35,8 +35,18 @@ public class Ile {
         return total;
     }
 
-    public int getX() {return coordonnees.x;}
-    public int getY() {return coordonnees.y;}
+    public boolean memeLigne(Ile autre) {
+        return this.coordonnees.memeLigne(autre.coordonnees);
+    }
+
+    public boolean memeColonne(Ile autre) {
+        return this.coordonnees.memeColonne(autre.coordonnees);
+    }
+
+    public int comparePositionDesIles(Ile autre) {
+        return this.getCoordonnees().compareTo(autre.getCoordonnees());
+    }
+
     public Coordonnees getCoordonnees() {return coordonnees;}
 
     public int getNbPontsRequis() {return nbPontsRequis;}
