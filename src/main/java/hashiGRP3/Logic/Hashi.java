@@ -24,5 +24,45 @@ public class Hashi {
             this.tailleY = y;
         }
     }
+
+    public void initialisationToutLesPonts() {
+        // Pour chaque ile,
+        for (Ile ileActuel : iles.values()) {
+            Coordonnees coordonneesIleActuel = ileActuel.getCoordonnees();
+            // Pour chaque direction, 
+            for (Direction direction : Direction.values()) {
+
+                int x = coordonneesIleActuel.x + direction.getDx();
+                int y = coordonneesIleActuel.y + direction.getDy();
+
+                Ile ileVoisine = null;
+
+                // On avance dans la direction actuel tout pendant que on trouve pas d'ile ou tant qu'on est dans la grille
+                while (x >= 0 && x <= this.tailleX && y >= 0 && y <= this.tailleY) {
+                    Coordonnees testCoordonnees = new Coordonnees(x, y);
+                    if (iles.containsKey(testCoordonnees)) {
+                        ileVoisine = iles.get(testCoordonnees);
+                        break;
+                    }
+
+                    x += direction.getDx();
+                    y += direction.getDy();
+                }
+
+                if (ileVoisine != null) {
+                    Pont pont = new Pont(ileActuel, ileVoisine, EtatDuPont.VIDE);
+                    this.ponts.add(pont);
+
+                    // On connecte le pont aux deux ile (A-->B, B-->A)
+                    ileActuel.ajouterPonts(direction, pont);
+                    ileVoisine.ajouterPonts(direction.directionOppose(), pont);
+                }
+            }
+        }
+    }
+
+    public void initialisationToutLesConflits() {
+
+    }
 }
 
