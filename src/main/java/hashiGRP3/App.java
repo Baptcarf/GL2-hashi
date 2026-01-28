@@ -23,7 +23,7 @@ public class App extends Application {
   	public void start(final Stage primaryStage) {
     		try {
       			//Localisation du fichier FXML.
-      			final URL url = getClass().getResource("/views/menu.fxml");
+      			final URL url = getClass().getResource("/resource/HashiGRP3/views/menu.fxml");
       			//Création du loader.
       			final FXMLLoader fxmlLoader = new FXMLLoader(url);
       			//Chargement du FXML.

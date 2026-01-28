@@ -127,5 +127,13 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+
+
+		<resources>  
+    			<resource>  
+				<directory>src/main/resources/</directory>  
+      				<!-- No <excludes> here unless intentional! -->  
+    			</resource>  
+  		</resources>
 	</build>
 </project>
