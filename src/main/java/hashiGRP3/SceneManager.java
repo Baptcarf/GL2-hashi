@@ -15,6 +15,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.io.IOException;
 
+import hashiGRP3.Controller.MenuController;
+
 public class SceneManager {
 
         private List<Composante> allScene;
@@ -28,8 +30,19 @@ public class SceneManager {
         public void addScene(String name) {
                 try {
                         final URL url = getClass().getResource("/hashiGRP3/views/" + name + ".fxml");
+                        if (url == null) {
+                                System.out.println("Fichier FXML non trouvé : " + name);
+                                return;
+                        }
+
                         final FXMLLoader fxmlLoader = new FXMLLoader(url);
                         final Parent root = fxmlLoader.load();
+
+                        Object controller = fxmlLoader.getController();
+                        if (controller instanceof MenuController menuController) {
+                                menuController.setSceneManager(this);
+                        }
+
                         final Scene s = new Scene(root, 300, 250);
                         allScene.add(new Composante(s, name));
                 } catch (IOException ex) {
@@ -40,7 +53,7 @@ public class SceneManager {
         public Scene findScene(String name) {
                 for (Composante c : allScene) {
                         if (name.equals(c.getNom())) {
-                                return c.scene;
+                                return c.getScene();
                         }
                 }
                 return null;
@@ -53,6 +66,7 @@ public class SceneManager {
                         return;
                 }
                 stage.setScene(s);
+                stage.show();
         }
 
         private class Composante {

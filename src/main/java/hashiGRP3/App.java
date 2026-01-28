@@ -9,7 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -18,15 +20,23 @@ import java.io.IOException;
 //Driver program
 public class App extends Application {
 
+	private static SceneManager sn;
+
 	@Override
 	public void start(final Stage primaryStage) {
-		SceneManager sn = new SceneManager(primaryStage);
+		sn = new SceneManager(primaryStage);
 
 		sn.addScene("menu");
-		sn.changeScene("menu");
+		sn.addScene("test");
+		sn.changeScene("test");
 
-		primaryStage.show();
+	}
 
+	@FXML
+	public void changeScene(ActionEvent e) {
+		Button bn = (Button) e.getSource();
+		String s = (String) bn.getUserData();
+		sn.changeScene(s);
 	}
 
 	public static void main(String[] args) {
