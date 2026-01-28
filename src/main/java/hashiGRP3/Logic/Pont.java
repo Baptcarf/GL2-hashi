@@ -69,4 +69,14 @@ public class Pont {
     public int hashCode() {
         return Objects.hash(ileA, ileB);
     }
+
+    @Override
+    public String toString() {
+        return "Pont{" +
+                "ileA=" + ileA.getCoordonnees() +
+                ", ileB=" + ileB.getCoordonnees() +
+                ", etat=" + etat +
+                ", orientation=" + orientation +
+                '}';
+    }
 }

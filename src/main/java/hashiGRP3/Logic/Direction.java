@@ -1,8 +1,8 @@
 package hashiGRP3.Logic;
 
 public enum Direction {
-    HAUT(0, 1), 
-    BAS(0, -1), 
+    HAUT(0, -1), 
+    BAS(0, 1), 
     DROITE(1, 0), 
     GAUCHE(-1, 0);
 
@@ -14,8 +14,8 @@ public enum Direction {
         this.dy = dy;
     }
 
-    public static Direction directionOppose(Direction dir) {
-        return switch (dir) {
+    public Direction directionOppose() {
+        return switch (this) {
             case HAUT -> BAS;
             case BAS -> HAUT;
             case DROITE -> GAUCHE;
@@ -29,5 +29,15 @@ public enum Direction {
 
     public int getDy() {
         return dy;
+    }
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case HAUT -> "haut";
+            case BAS -> "bas";
+            case DROITE -> "droite";
+            case GAUCHE -> "gauche";
+        };
     }
 }
