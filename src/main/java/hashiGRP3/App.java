@@ -32,13 +32,6 @@ public class App extends Application {
 
 	}
 
-	@FXML
-	public void changeScene(ActionEvent e) {
-		Button bn = (Button) e.getSource();
-		String s = (String) bn.getUserData();
-		sn.changeScene(s);
-	}
-
 	public static void main(String[] args) {
 		launch(args);
 	}
