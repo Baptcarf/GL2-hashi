@@ -44,7 +44,7 @@ public class Ile {
     }
 
     public int comparePositionDesIles(Ile autre) {
-        return this.getCoordonnees().compareTo(autre.getCoordonnees());
+        return this.coordonnees.compareTo(autre.coordonnees);
     }
 
     public Coordonnees getCoordonnees() {return coordonnees;}

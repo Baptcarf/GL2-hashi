@@ -42,7 +42,4 @@ public class Coordonnees implements Comparable<Coordonnees>{
     public int hashCode() {
         return java.util.Objects.hash(x, y);
     }
-
-    public int getX() {return x;}
-    public int getY() {return y;}
 }

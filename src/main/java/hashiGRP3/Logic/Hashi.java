@@ -14,8 +14,8 @@ public class Hashi {
     public void ajouterIle(Ile ile) {
         iles.put(ile.getCoordonnees(), ile);
 
-        int x = ile.getCoordonnees().getX();
-        int y = ile.getCoordonnees().getY();
+        int x = ile.getCoordonnees().x;
+        int y = ile.getCoordonnees().y;
 
         if (x > this.tailleX) {
             this.tailleX = x;
