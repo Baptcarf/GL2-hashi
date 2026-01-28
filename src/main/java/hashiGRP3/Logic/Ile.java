@@ -5,10 +5,6 @@ import java.util.Map;
 
 public class Ile {
 
-    public enum Direction {
-        HAUT, BAS, DROITE, GAUCHE;
-    }
-
     private static int compteurId = 0;
     private final int id;                           // Identifiant unique de l'île
 
