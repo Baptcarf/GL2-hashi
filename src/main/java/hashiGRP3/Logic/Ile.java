@@ -61,4 +61,12 @@ public class Ile {
     public int hashCode() {
         return java.util.Objects.hash(coordonnees, id);
     }
+
+    @Override
+    public String toString() {
+        return "Ile n°" + id + "|" + coordonnees + ", (" + getNbPontsActuels() + "/" + nbPontsRequis + ") ponts connecté\n"  
+                + directionPonts;
+    }
+
+    
 }
