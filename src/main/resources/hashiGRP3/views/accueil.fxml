@@ -40,7 +40,7 @@
 
     <!-- Bouton Technique en bas à gauche -->
     <HBox alignment="BOTTOM_RIGHT" prefWidth="600.0" style="-fx-padding:0 0 20 20;">
-        <Button text="Technique">
+        <Button text="Technique" onAction="#changeScene" userData="technique">
             <font><Font size="12.0"/></font>
         </Button>
     </HBox>

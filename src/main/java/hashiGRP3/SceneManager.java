@@ -56,6 +56,8 @@ public class SceneManager {
                                 optionController.setSceneManager(this);
                         } else if (controller instanceof ConnexionController connexionController) {
                                 connexionController.setSceneManager(this);
+                        } else if (controller instanceof TechniqueControler techniqueController) {
+                                techniqueController.setSceneManager(this);
                         }
 
                         final Scene s = new Scene(root, 1600, 900);
