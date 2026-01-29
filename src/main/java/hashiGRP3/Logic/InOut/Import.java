@@ -60,7 +60,10 @@ public class Import {
         return HashiGrille;
     }
 
-    // Prend les îles du fichier txt sous la forme : (x,y):nbPonts
+
+
+
+    // Prend les îles du fichier txt sous la forme : (x,y):nbPonts et les convertit en objet Ile
     private static Ile ligneVersIle(String ligne) {
         // Supprime les espaces inutiles
         ligne = ligne.trim();
@@ -89,10 +92,11 @@ public class Import {
         int x = Integer.parseInt(xy[0].trim());
         int y = Integer.parseInt(xy[1].trim());
 
-        // Créer et retourner l'île
         return new Ile(new Coordonnees(x, y), nbPonts);
     }
 
+
+    // Prend les lignes du txt sous la forme : (x1,y1)(x2,y2):nbPonts et les convertit en objet Pont
     private static Pont ligneVersPont(String ligne, Hashi hash) {
         // Exemple de ligne : "(1,1)(1,5):2"
         ligne = ligne.trim();
@@ -144,6 +148,7 @@ public class Import {
         // On applique l'état correct
         pontExistant.setEtatCorrect(etat);
 
+        
         return pontExistant;
     }
 }
