@@ -15,7 +15,6 @@ public class App {
         Path chemin = Path.of("src/main/java/hashiGRP3/Ressources/7x7/hashi1.txt");
 
         Hashi hashi = Import.chargerFichier(chemin);
-        hashi.initialisationToutLesPonts();
         hashi.initialisationToutLesConflits();
 
         for (var pont : hashi.getPonts()) {
@@ -23,10 +22,8 @@ public class App {
             System.out.println("Conflits : " + pont.getConflits());
             System.out.println();
         }
-        System.out.println(hashi.getIle(0, 0).getPont(Direction.DROITE).getConflits());
-
-        Hashi hashi2 = Import.chargerFichier(chemin);
-        hashi2.afficherPlateau();
+        System.out.println(hashi.getIle(2, 5).getPont(Direction.HAUT).getConflits());
+        hashi.afficherPlateau();
 
     }
 
