@@ -16,14 +16,13 @@ public class App {
 
         Hashi hashi = Import.chargerFichier(chemin);
         hashi.initialisationToutLesPonts();
-        hashi.conflictPont();
+        hashi.initialisationToutLesConflits();
 
     for (var pont : hashi.getPonts()) {
         System.out.println("Pont : " + pont);
         System.out.println("Conflits : " + pont.getConflits());
         System.out.println();
     }
-
     System.out.println(hashi.getIle(1, 1).getPont(Direction.DROITE).getConflits());
 
     }
