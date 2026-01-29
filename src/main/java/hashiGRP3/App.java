@@ -28,7 +28,8 @@ public class App extends Application {
 
 		sn.addScene("menu");
 		sn.addScene("test");
-		sn.changeScene("test");
+		sn.addScene("accueil");
+		sn.changeScene("accueil");
 
 	}
 
