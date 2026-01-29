@@ -26,7 +26,7 @@ public class Ile {
     public int getNbPontsActuels() {
         int total = 0;
         for (Pont pont : directionPonts.values()) {
-            total += pont.getEtat().getValue();
+            total += pont.getEtatActuel().getValue();
         }
         return total;
     }

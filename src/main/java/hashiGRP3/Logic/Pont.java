@@ -12,7 +12,9 @@ public class Pont {
     }
 
     private final Ile ileA, ileB;
-    private EtatDuPont etat;                    // Représente la valeur entre les ponts
+    private EtatDuPont etatActuel;                    // Représente la valeur entre les ponts
+    private EtatDuPont etatCorrect = EtatDuPont.VIDE;                    // Représente les valeurs finales correctes du pont
+
     private final Orientation orientation;      // HORIZONTAL ou VERTICAL
     private List<Pont> conflits;                // La liste des ponts qui, s'ils sont placé, empêche le fait de poser celui ci
 
@@ -34,7 +36,7 @@ public class Pont {
         this.ileA = premier;
         this.ileB = second;
 
-        this.etat = EtatDuPont;
+        this.etatActuel = EtatDuPont;
         this.conflits = new ArrayList<>();
 
         if (ileA.memeLigne(ileB)) {
@@ -52,11 +54,13 @@ public class Pont {
 
     public Ile getileA() {return ileA;}
     public Ile getileB() {return ileB;}
-    public EtatDuPont getEtat() {return etat;}
+    public EtatDuPont getEtatActuel() {return etatActuel;}
+    public EtatDuPont getEtatCorrect() {return etatCorrect;}
     public Orientation getOrientation() {return orientation;}
     public List<Pont> getConflits() {return conflits;}
 
-    public void setEtat(EtatDuPont etat) {this.etat = etat;}
+    public void setEtatActuel(EtatDuPont etat) {this.etatActuel = etat;}
+    public void setEtatCorrect(EtatDuPont etat) {this.etatCorrect = etat;}
 
     @Override
     public boolean equals(Object o) {

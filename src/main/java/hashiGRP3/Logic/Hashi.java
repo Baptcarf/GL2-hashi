@@ -25,5 +25,180 @@ public class Hashi {
         }
     }
     
+    public void afficherPlateau() {
+             // --- DEBUG : afficher tous les ponts ayant un état correct > 0 ---
+        System.out.println("=== Ponts avec étatCorrect > 0 ===");
+        for (Pont pont : ponts) {
+            if (pont.getEtatCorrect() != null && pont.getEtatCorrect() != EtatDuPont.VIDE) {
+                System.out.println(
+                    pont.getileA().getCoordonnees()
+                    + " <-> " 
+                    + pont.getileB().getCoordonnees()
+                    + " | EtatCorrect : " + pont.getEtatCorrect()
+                );
+            }
+        }
+        System.out.println("==================================");
+
+
+
+
+        String[][] grilleAffichage = new String[tailleY + 1][tailleX + 1];
+
+        // Grille vide
+        for (int y = 0; y <= tailleY; y++) {
+            for (int x = 0; x <= tailleX; x++) {
+                grilleAffichage[y][x] = " "; 
+            }
+        }
+
+        // Placer les îles
+        for (Ile ile : iles.values()) {
+            int x = ile.getCoordonnees().x;
+            int y = ile.getCoordonnees().y;
+            grilleAffichage[y][x] = String.valueOf(ile.getNbPontsRequis());
+        }
+
+        // Placer les ponts
+        for (Pont pont : ponts) {
+            Ile a = pont.getileA();
+            Ile b = pont.getileB();
+            int x1 = a.getCoordonnees().x;
+            int y1 = a.getCoordonnees().y;
+            int x2 = b.getCoordonnees().x;
+            int y2 = b.getCoordonnees().y;
+            if (pont.getOrientation() == Pont.Orientation.HORIZONTAL) {
+                String c;
+                if (pont.getEtatActuel() == EtatDuPont.SIMPLE) {
+                    c = "─";
+                } else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) {
+                    c = "═";
+                } else {
+                    c = "."; // au cas où, mais normalement ne devrait pas arriver
+                }
+                int minX = Math.min(x1, x2) + 1;
+                int maxX = Math.max(x1, x2);
+                for (int x = minX; x < maxX; x++) {
+                    grilleAffichage[y1][x] = c;
+                }
+            } else { // VERTICAL
+                String c;
+                if (pont.getEtatActuel() == EtatDuPont.SIMPLE) {
+                    c = "|";
+                } else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) {
+                    c = "║";
+                } else {
+                    c = "."; // au cas où, mais normalement ne devrait pas arriver
+                }
+                int minY = Math.min(y1, y2) + 1;
+                int maxY = Math.max(y1, y2);
+                for (int y = minY; y < maxY; y++) {
+                    grilleAffichage[y][x1] = c;
+                }
+            }
+        }
+
+        // Affichage stylé
+        System.out.println("=== Plateau Hashi avec Ponts ===");
+        for (int y = 0; y <= tailleY; y++) {
+            System.out.print("│ ");
+            for (int x = 0; x <= tailleX; x++) {
+                System.out.print(grilleAffichage[y][x] + " ");
+            }
+            System.out.println("│");
+        }
+        System.out.print("└");
+        for (int i = 0; i <= tailleX * 2 + 2; i++) System.out.print("─");
+        System.out.println("┘");
+    }
+
+
+    public void initialisationToutLesPonts() {
+        // Pour chaque ile,
+        for (Ile ileActuel : iles.values()) {
+            Coordonnees coordonneesIleActuel = ileActuel.getCoordonnees();
+            // Pour chaque direction, 
+            for (Direction direction : Direction.values()) {
+
+                int x = coordonneesIleActuel.x + direction.getDx();
+                int y = coordonneesIleActuel.y + direction.getDy();
+
+                Ile ileVoisine = null;
+
+                // On avance dans la direction actuel tout pendant que on trouve pas d'ile ou tant qu'on est dans la grille
+                while (x >= 0 && x <= this.tailleX && y >= 0 && y <= this.tailleY) {
+                    Coordonnees testCoordonnees = new Coordonnees(x, y);
+                    if (iles.containsKey(testCoordonnees)) {
+                        ileVoisine = iles.get(testCoordonnees);
+                        break;
+                    }
+
+                    x += direction.getDx();
+                    y += direction.getDy();
+                }
+
+                if (ileVoisine != null) {
+                    Pont pont = new Pont(ileActuel, ileVoisine, EtatDuPont.VIDE);
+                    this.ponts.add(pont);
+
+                    // On connecte le pont aux deux ile (A-->B, B-->A)
+                    ileActuel.ajouterPonts(direction, pont);
+                    ileVoisine.ajouterPonts(direction.directionOppose(), pont);
+                }
+            }
+        }
+    }
+
+    public void initialisationToutLesConflits() {
+
+    }
+    public void conflictPont() { 
+        for(Pont pontA : ponts) {
+            boolean isHorizontal = pontA.getOrientation() == Pont.Orientation.HORIZONTAL; //True si le pont est Horizontal, False sinon
+            for(Pont pontB : ponts) {
+                if (pontA.getOrientation() != pontB.getOrientation()) { //Teste si les ponts sont perpendiculaires
+                    if (isHorizontal) {
+                        if(pontB.getileA().getCoordonnees().y<pontA.getileA().getCoordonnees().y 
+                        && pontA.getileA().getCoordonnees().y<pontB.getileB().getCoordonnees().y){// teste si Bay < Aay < Bby
+                            pontA.ajouterConflit(pontB);
+                        }
+                    } else { 
+                        if(pontB.getileA().getCoordonnees().x<pontA.getileA().getCoordonnees().x  
+                        && pontA.getileA().getCoordonnees().x<pontB.getileB().getCoordonnees().x){// teste si Bax < Aax < Bbx
+                            pontA.ajouterConflit(pontB);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public Map<Coordonnees, Ile> getIles() {
+        return iles;
+    }
+
+    public Set<Pont> getPonts() {
+        return ponts;
+    }
+
+    public int getTailleX() {
+        return tailleX;
+    }
+
+    public int getTailleY() {
+        return tailleY;
+    }
+    public Ile getIle(int x, int y) {
+        return iles.get(new Coordonnees(x, y));
+    }
+
+    public Pont getPont(Pont recherche) {
+        for (Pont pont : ponts) {
+            if (pont.equals(recherche)) {
+                return pont;
+            }
+        }
+        return null;
+    }
 }
 
