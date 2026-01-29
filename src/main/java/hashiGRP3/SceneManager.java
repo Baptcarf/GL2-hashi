@@ -31,10 +31,12 @@ public class SceneManager {
 
         private List<Composante> allScene;
         private Stage stage;
+	private boolean boolFull;
 
         SceneManager(Stage stage) {
                 allScene = new ArrayList<>();
                 this.stage = stage;
+		this.boolFull = false;
         }
 
         public void addScene(String name) {
@@ -84,10 +86,17 @@ public class SceneManager {
                 }
                 s.getStylesheets().add(getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
 
-                stage.setFullScreen(true);
                 stage.setScene(s);
+
+		if(this.boolFull && stage.isFullScreen() == false)
+                	stage.setFullScreen(true);
+
                 stage.show();
         }
+
+	public void setFullScreen(boolean value) {
+		boolFull = value;
+	}
 
         private class Composante {
 
