@@ -1,0 +1,12 @@
+button {
+        -fx-background-color: white;
+        -fx-border-radius: 12px;
+        -fx-background-radius: 12px;
+        -fx-border-color: black;
+}
+
+.titre {
+        -fx-text-alignment: center;
+        -fx-font-size: 41px;
+        -fx-font-weight: bold;
+}

@@ -44,6 +44,7 @@ public class SceneManager {
                         }
 
                         final Scene s = new Scene(root, 300, 250);
+                        s.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
                         allScene.add(new Composante(s, name));
                 } catch (IOException ex) {
                         System.err.println("Erreur au chargement: " + ex);
