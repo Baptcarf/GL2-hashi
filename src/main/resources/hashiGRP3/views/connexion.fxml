@@ -7,11 +7,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="TOP_CENTER" spacing="20.0" prefHeight="600.0" prefWidth="800.0"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      style="-fx-padding: 30 20 20 20;">  <!-- padding: top, right, bottom, left -->
+      style="-fx-padding: 30 20 20 20;"
+      fx:controller="hashiGRP3.Controller.ConnexionController">  <!-- padding: top, right, bottom, left -->
 
     <!-- Label texte légèrement plus haut -->
     <Label text="Connexion" styleClass="titre">
@@ -21,13 +23,24 @@
     </Label>
 
     <!-- Cercle plus gros et centré -->
-    <StackPane prefHeight="400.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
-        <children>
-            <Circle fx:id="myCircle" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
-            <Line startX="0.0" startY="-60.0" endX="0.0" endY="60.0" />   <!-- verticale -->
-            <Line startX="-60.0" startY="0.0" endX="60.0" endY="0.0" />   <!-- horizontale -->
-        </children>
-    </StackPane>
+    <HBox  alignment="CENTER" spacing="50.0" prefWidth="600.0" prefHeight="300.0"
+      fx:id="hbox">
+
+            <!-- Cercle existant avec la croix -->
+            <StackPane>
+                 <Circle fx:id="creer" radius="100.0" stroke="BLACK" fill="#eaf5ff"
+                        onMouseClicked="#addCount"
+                        onMouseEntered="#afficheMessage"
+                        onMouseExited="#enleverMessage">
+                </Circle>
+                <Line startX="0.0" startY="-60.0" endX="0.0" endY="60.0" strokeWidth="3"/>
+                <Line startX="-60.0" startY="0.0" endX="60.0" endY="0.0" strokeWidth="3"/>
+             </StackPane>
+
+    </HBox>
+
+    <Label fx:id="labelCreer" text="Nombre de comptes maximal atteint !" visible="false" style="-fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.8); -fx-padding: 5px; -fx-border-color: black; -fx-text-fill: red;"/>
+           
 
     <!-- Bouton en bas à gauche avec marge -->
     <HBox alignment="BOTTOM_RIGHT" prefWidth="800.0" style="-fx-padding: 0 0 20 20;">

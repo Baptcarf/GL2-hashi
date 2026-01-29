@@ -30,7 +30,7 @@ public class App extends Application {
 		sn.addScene("accueil");
 		sn.addScene("connexion");
 
-		sn.changeScene("accueil");
+		sn.changeScene("connexion");
 
 	}
 
