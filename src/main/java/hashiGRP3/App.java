@@ -3,7 +3,6 @@ package hashiGRP3;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import hashiGRP3.Logic.Coordonnees;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.InOut.Import;
 
@@ -18,7 +17,10 @@ public class App {
         hashi.initialisationToutLesPonts();
         hashi.conflictPont();
 
-        System.out.println(hashi.getIle(1,1));
-        
+    for (var pont : hashi.getPonts()) {
+        System.out.println("Pont : " + pont);
+        System.out.println("Conflits : " + pont.getConflits());
+        System.out.println();
+    }
     }
 }
