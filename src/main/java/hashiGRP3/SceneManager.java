@@ -4,15 +4,7 @@ package hashiGRP3;
 /* Libs */
 import java.net.URL;
 import java.util.*;
-
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
-import javafx.application.Application;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.TitledPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -50,8 +42,8 @@ public class SceneManager {
 
                         // On attribut le controller correspondant
                         Object controller = fxmlLoader.getController();
-                        if (controller instanceof MenuController menuController) {
-                                menuController.setSceneManager(this);
+                        if (controller instanceof ManageController manageController) {
+                                manageController.setSceneManager(this);
                         } else if (controller instanceof OptionController optionController) {
                                 optionController.setSceneManager(this);
                         } else if (controller instanceof ConnexionController connexionController) {

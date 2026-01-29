@@ -1,21 +1,11 @@
-//Attribut au packet
 package hashiGRP3.Controller;
 
-
-
-/* Libs */
-import javafx.fxml.FXML;
+import hashiGRP3.SceneManager;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
-import hashiGRP3.SceneManager;
-
-
-
-/**
- * Classe de controlleur du fichier 'menu.fxml'
- */
-public class MenuController {
+public class ManageController {
 
         private SceneManager sceneManager;
 
@@ -32,8 +22,13 @@ public class MenuController {
                 }
         }
 
+        public SceneManager getSceneManager() {
+                return sceneManager;
+        }
+
         @FXML
         private void quitApp() {
                 System.exit(0);
         }
+
 }

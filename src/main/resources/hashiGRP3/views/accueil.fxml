@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.HBox?>
 
 
-<VBox alignment="TOP_CENTER" spacing="20.0" prefWidth="600.0"
+<VBox alignment="TOP_CENTER" spacing="60.0" prefWidth="600.0"
       xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="hashiGRP3.Controller.MenuController"
+      fx:controller="hashiGRP3.Controller.ManageController"
       style="-fx-padding: 50 20 20 20;">
 
     <Label text="Hashi" styleClass="titre">
@@ -21,19 +21,20 @@
 
     <Region prefHeight="30.0"/> 
 
-
-    <Button text="Jouer" style="-fx-pref-width: 200;">
-        <font><Font size="25.0"/></font>
-    </Button>
-    <Button text="Tutoriel" style="-fx-pref-width: 200;">
-        <font><Font size="25.0"/></font>
-    </Button>
-    <Button text="Option" style="-fx-pref-width: 200;" onAction="#changeScene" userData="option">
-        <font><Font size="25.0"/></font>
-    </Button>
-    <Button text="Quitter" style="-fx-pref-width: 200;" onAction="#quitApp">
-        <font><Font size="25.0"/></font>
-    </Button>
+    <VBox alignment = "TOP_CENTER" spacing="20">
+        <Button text="Jouer" style="-fx-pref-width: 200;">
+            <font><Font size="25.0"/></font>
+        </Button>
+        <Button text="Tutoriel" style="-fx-pref-width: 200;">
+            <font><Font size="25.0"/></font>
+        </Button>
+        <Button text="Option" style="-fx-pref-width: 200;" onAction="#changeScene" userData="option">
+            <font><Font size="25.0"/></font>
+        </Button>
+        <Button text="Quitter" style="-fx-pref-width: 200;" onAction="#quitApp">
+            <font><Font size="25.0"/></font>
+        </Button>
+    </VBox>
 
     <!-- Region flexible pour pousser le bouton Technique en bas -->
     <Region VBox.vgrow="ALWAYS"/>

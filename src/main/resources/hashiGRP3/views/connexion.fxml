@@ -4,49 +4,49 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" spacing="20.0" prefHeight="600.0" prefWidth="800.0"
-      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      style="-fx-padding: 30 20 20 20;"
-      fx:controller="hashiGRP3.Controller.ConnexionController">  <!-- padding: top, right, bottom, left -->
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hashiGRP3.Controller.ConnexionController"
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-padding: 30 20 20 20;">
 
-    <!-- Label texte légèrement plus haut -->
-    <Label text="Connexion" styleClass="titre">
-        <font>
-            <Font size="45.0"/>
-        </font>
-    </Label>
+    <!-- Centre : titre + cercle + message -->
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="70.0"  style="-fx-padding: 40 0 0 0;">
+            <Label text="Connexion" styleClass="titre">
+                <font>
+                    <Font size="45.0"/>
+                </font>
+            </Label>
 
-    <!-- Cercle plus gros et centré -->
-    <HBox  alignment="CENTER" spacing="50.0" prefWidth="600.0" prefHeight="300.0"
-      fx:id="hbox">
+            <HBox alignment="CENTER" spacing="50.0" prefWidth="600.0" prefHeight="300.0" fx:id="hbox">
+                <StackPane>
+                    <Circle fx:id="creer" radius="100.0" stroke="BLACK" fill="#eaf5ff"
+                            onMouseClicked="#addCount"
+                            onMouseEntered="#afficheMessage"
+                            onMouseExited="#enleverMessage"/>
+                    <Line startX="0.0" startY="-60.0" endX="0.0" endY="60.0" strokeWidth="3"/>
+                    <Line startX="-60.0" startY="0.0" endX="60.0" endY="0.0" strokeWidth="3"/>
+                </StackPane>
+            </HBox>
 
-            <!-- Cercle existant avec la croix -->
-            <StackPane>
-                 <Circle fx:id="creer" radius="100.0" stroke="BLACK" fill="#eaf5ff"
-                        onMouseClicked="#addCount"
-                        onMouseEntered="#afficheMessage"
-                        onMouseExited="#enleverMessage">
-                </Circle>
-                <Line startX="0.0" startY="-60.0" endX="0.0" endY="60.0" strokeWidth="3"/>
-                <Line startX="-60.0" startY="0.0" endX="60.0" endY="0.0" strokeWidth="3"/>
-             </StackPane>
+            <Label fx:id="labelCreer" text="Nombre de comptes maximal atteint !" visible="false"
+                   style="-fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.8); -fx-padding: 5px; -fx-border-color: black; -fx-text-fill: red;"/>
+        </VBox>
+    </center>
 
-    </HBox>
+    <!-- Bottom : bouton en bas à droite -->
+    <bottom>
+        <HBox alignment="BOTTOM_RIGHT" style="-fx-padding: 0 20 20 0;">
+            <Button text="Supprimer" styleClass="button" onAction="#supCompte"/>
+        </HBox>
+    </bottom>
 
-    <Label fx:id="labelCreer" text="Nombre de comptes maximal atteint !" visible="false" style="-fx-font-size: 18px; -fx-background-color: rgba(255,255,255,0.8); -fx-padding: 5px; -fx-border-color: black; -fx-text-fill: red;"/>
-           
+</BorderPane>
 
-    <!-- Bouton en bas à gauche avec marge -->
-    <HBox alignment="BOTTOM_RIGHT" prefWidth="800.0" style="-fx-padding: 0 0 20 20;">
-        <children>
-            <Button text="Supprimer" styleClass="button"/>
-        </children>
-    </HBox>
-
-</VBox>
