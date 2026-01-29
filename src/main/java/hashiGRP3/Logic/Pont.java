@@ -79,6 +79,6 @@ public class Pont {
         return "Pont{" +
                 "ileA=" + ileA.getCoordonnees() +
                 ", ileB=" + ileB.getCoordonnees() +
-                ", etat=" + etat +
+                ", etat=" + etatActuel +
                 ", orientation=" + orientation;    }
-}
+    }
