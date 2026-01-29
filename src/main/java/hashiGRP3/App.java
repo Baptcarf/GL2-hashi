@@ -1,7 +1,9 @@
-//Attribute to package
+//Attribut au packet
 package hashiGRP3;
 
-//Libs
+
+
+/* Libs */
 import java.net.URL;
 
 import javafx.fxml.FXML;
@@ -17,7 +19,9 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import java.io.IOException;
 
-//Driver program
+
+
+/* Point de démarrage de l'application */
 public class App extends Application {
 
 	private static SceneManager sn;
@@ -28,9 +32,9 @@ public class App extends Application {
 
 		sn.addScene("option");
 		sn.addScene("menu");
-		sn.addScene("test");
 		sn.addScene("accueil");
 		sn.addScene("connexion");
+
 		sn.changeScene("accueil");
 
 	}
