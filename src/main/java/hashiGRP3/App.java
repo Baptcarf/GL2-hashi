@@ -1,6 +1,8 @@
 //Attribute to package
 package hashiGRP3;
 
+
+
 //Libs
 import java.net.URL;
 
@@ -17,6 +19,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import java.io.IOException;
 
+
+
 //Driver program
 public class App extends Application {
 
@@ -26,6 +30,7 @@ public class App extends Application {
 	public void start(final Stage primaryStage) {
 		sn = new SceneManager(primaryStage);
 
+		sn.addScene("option");
 		sn.addScene("menu");
 		sn.addScene("test");
 		sn.addScene("accueil");

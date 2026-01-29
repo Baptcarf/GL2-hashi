@@ -23,7 +23,7 @@
             <Font size="25.0" />
          </font>
       </Button>
-      <Button layoutX="200.0" layoutY="243.0" mnemonicParsing="false" style="-fx-pref-width: 200;" text="Option" textAlignment="CENTER">
+      <Button layoutX="200.0" layoutY="243.0" mnemonicParsing="false" style="-fx-pref-width: 200;" text="Option" onAction="#changeScene" userData = "option" textAlignment="CENTER">
          <font>
             <Font size="25.0" />
          </font>

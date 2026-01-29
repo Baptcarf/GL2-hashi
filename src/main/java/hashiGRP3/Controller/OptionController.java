@@ -13,9 +13,9 @@ import hashiGRP3.SceneManager;
 
 
 /**
- * Classe de controlleur du fichier 'menu.fxml'
+ * Classe de controlleur du fichier 'option.fxml'
  */
-public class MenuController {
+public class OptionController {
 
         private SceneManager sceneManager;
 
