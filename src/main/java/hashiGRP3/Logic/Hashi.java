@@ -165,12 +165,16 @@ public class Hashi {
                 if (pontA.getOrientation() != pontB.getOrientation()) { //Teste si les ponts sont perpendiculaires
                     if (isHorizontal) {
                         if(pontB.getileA().getCoordonnees().y<pontA.getileA().getCoordonnees().y 
-                        && pontA.getileA().getCoordonnees().y<pontB.getileB().getCoordonnees().y){// teste si Bay < Aay < Bby
+                        && pontA.getileA().getCoordonnees().y<pontB.getileB().getCoordonnees().y  // teste si Aay < Bay < Aby
+                        && pontA.getileA().getCoordonnees().x<pontB.getileA().getCoordonnees().x  
+                        && pontB.getileA().getCoordonnees().x<pontA.getileB().getCoordonnees().x){// teste si Bax < Aax < Bbx
                             pontA.ajouterConflit(pontB);
                         }
                     } else { 
                         if(pontB.getileA().getCoordonnees().x<pontA.getileA().getCoordonnees().x  
-                        && pontA.getileA().getCoordonnees().x<pontB.getileB().getCoordonnees().x){// teste si Bax < Aax < Bbx
+                        && pontA.getileA().getCoordonnees().x<pontB.getileB().getCoordonnees().x  // teste si Bax < Aax < Bbx
+                        && pontA.getileA().getCoordonnees().y<pontB.getileA().getCoordonnees().y  
+                        && pontB.getileA().getCoordonnees().y<pontA.getileB().getCoordonnees().y){// teste si Aay < Bay < Aby
                             pontA.ajouterConflit(pontB);
                         }
                     }
