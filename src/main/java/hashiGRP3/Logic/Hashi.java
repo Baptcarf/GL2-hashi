@@ -89,6 +89,10 @@ public class Hashi {
         return iles;
     }
 
+    public Ile getIle(int x, int y) {
+        return iles.get(new Coordonnees(x, y));
+    }
+
     public Set<Pont> getPonts() {
         return ponts;
     }

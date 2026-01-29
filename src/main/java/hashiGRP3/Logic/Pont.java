@@ -77,6 +77,6 @@ public class Pont {
                 ", ileB=" + ileB.getCoordonnees() +
                 ", etat=" + etat +
                 ", orientation=" + orientation +
-                '}';
+                ", conflits=" + conflits;
     }
 }
