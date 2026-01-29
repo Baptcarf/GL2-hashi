@@ -10,10 +10,11 @@ import java.util.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-
+import javafx.geometry.Rectangle2D;
 import javafx.application.Application;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.TitledPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -61,7 +62,7 @@ public class SceneManager {
 				optionController.setSceneManager(this);
 			}
 
-                        final Scene s = new Scene(root);
+                        final Scene s = new Scene(root, 1600, 900);
                         allScene.add(new Composante(s, name));
 
                 } catch (IOException ex) {

@@ -4,39 +4,44 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.HBox?>
 
 
-<Pane fx:controller="hashiGRP3.Controller.MenuController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label styleClass="titre" alignment="CENTER" layoutX="251.0" layoutY="40.0" text="Hashi">
-         <font>
-            <Font size="41.0" />
-         </font>
-      </Label>
-      <Button layoutX="200.0" layoutY="109.0" mnemonicParsing="false" style="-fx-pref-width: 200;" text="Jouer" textAlignment="CENTER">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Button>
-      <Button layoutX="200.0" layoutY="176.0" mnemonicParsing="false" style="-fx-pref-width: 200;" text="Tutoriel" textAlignment="CENTER">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Button>
-      <Button layoutX="200.0" layoutY="243.0" mnemonicParsing="false" style="-fx-pref-width: 200;" text="Option" onAction="#changeScene" userData = "option" textAlignment="CENTER">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Button>
-      <Button layoutX="200.0" layoutY="310.0" mnemonicParsing="false" style="-fx-pref-width: 200;" text="Quitter" onAction="#quitApp" textAlignment="CENTER">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Button>
-      <Button layoutX="511.0" layoutY="352.0" mnemonicParsing="false" text="Technique">
-         <font>
-            <Font size="12.0" />
-         </font>
-      </Button>
-   </children>
-</Pane>
+<VBox alignment="TOP_CENTER" spacing="20.0" prefWidth="600.0"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="hashiGRP3.Controller.MenuController"
+      style="-fx-padding: 50 20 20 20;">
+
+    <Label text="Hashi" styleClass="titre">
+        <font><Font size="41.0"/></font>
+    </Label>
+
+
+    <Region prefHeight="30.0"/> 
+
+
+    <Button text="Jouer" style="-fx-pref-width: 200;">
+        <font><Font size="25.0"/></font>
+    </Button>
+    <Button text="Tutoriel" style="-fx-pref-width: 200;">
+        <font><Font size="25.0"/></font>
+    </Button>
+    <Button text="Option" style="-fx-pref-width: 200;" onAction="#changeScene" userData="option">
+        <font><Font size="25.0"/></font>
+    </Button>
+    <Button text="Quitter" style="-fx-pref-width: 200;" onAction="#quitApp">
+        <font><Font size="25.0"/></font>
+    </Button>
+
+    <!-- Region flexible pour pousser le bouton Technique en bas -->
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <!-- Bouton Technique en bas à gauche -->
+    <HBox alignment="BOTTOM_RIGHT" prefWidth="600.0" style="-fx-padding:0 0 20 20;">
+        <Button text="Technique">
+            <font><Font size="12.0"/></font>
+        </Button>
+    </HBox>
+</VBox>

@@ -1,8 +1,6 @@
 //Attribut au packet
 package hashiGRP3;
 
-
-
 /* Libs */
 import java.net.URL;
 
@@ -19,8 +17,6 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import java.io.IOException;
 
-
-
 /* Point de démarrage de l'application */
 public class App extends Application {
 
@@ -31,7 +27,6 @@ public class App extends Application {
 		sn = new SceneManager(primaryStage);
 
 		sn.addScene("option");
-		sn.addScene("menu");
 		sn.addScene("accueil");
 		sn.addScene("connexion");
 

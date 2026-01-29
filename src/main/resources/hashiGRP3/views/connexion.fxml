@@ -2,47 +2,38 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
+<VBox alignment="TOP_CENTER" spacing="20.0" prefHeight="600.0" prefWidth="800.0"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      style="-fx-padding: 30 20 20 20;">  <!-- padding: top, right, bottom, left -->
 
+    <!-- Label texte légèrement plus haut -->
+    <Label text="Connexion" styleClass="titre">
+        <font>
+            <Font size="45.0"/>
+        </font>
+    </Label>
 
-
-
-<SplitPane dividerPositions="0.3293172690763052, 0.803714859437751" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-  <items>
-    
-    <!-- Titre centré -->
-    <AnchorPane prefHeight="100.0">
+    <!-- Cercle plus gros et centré -->
+    <StackPane prefHeight="400.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
         <children>
-            <Label text="Connexion" textAlignment="CENTER" layoutX="0.0" layoutY="0.0" prefWidth="600.0" prefHeight="100.0" styleClass="titre"/>
+            <Circle fx:id="myCircle" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+            <Line startX="0.0" startY="-60.0" endX="0.0" endY="60.0" />   <!-- verticale -->
+            <Line startX="-60.0" startY="0.0" endX="60.0" endY="0.0" />   <!-- horizontale -->
         </children>
-    </AnchorPane>
-    
-    <!-- Cercle avec "+" centré -->
-    <AnchorPane prefHeight="200.0">
-        <children>
-            <StackPane layoutX="0" layoutY="0" prefWidth="600" prefHeight="200">
-                <children>
-                    <Circle fx:id="myCircle" fill="#e9f4fc" radius="50.0" stroke="BLACK" strokeType="INSIDE"/>
-                    <Label text="+" style="-fx-font-size: 48px; -fx-font-weight: bold; -fx-text-fill: black;"/>
-                </children>
-            </StackPane>
-        </children>
-    </AnchorPane>
-    
-    <!-- Bouton centré -->
-    <AnchorPane prefHeight="100.0">
-        <children>
-            <StackPane prefWidth="600" prefHeight="100">
-                <children>
-                    <Button text="Supprimer" styleClass="button"/>
-                </children>
-            </StackPane>
-        </children>
-    </AnchorPane>
+    </StackPane>
 
-  </items>
-</SplitPane>
+    <!-- Bouton en bas à gauche avec marge -->
+    <HBox alignment="BOTTOM_RIGHT" prefWidth="800.0" style="-fx-padding: 0 0 20 20;">
+        <children>
+            <Button text="Supprimer" styleClass="button"/>
+        </children>
+    </HBox>
+
+</VBox>
