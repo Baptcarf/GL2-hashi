@@ -1,12 +1,73 @@
-button {
-        -fx-background-color: white;
-        -fx-border-radius: 12px;
-        -fx-background-radius: 12px;
-        -fx-border-color: black;
+/* ======================
+   Style des Labels
+   ====================== */
+.titre {
+        -fx-font-size: 41px;
+        /* taille du titre */
+        -fx-font-weight: bold;
+        /* gras */
+        -fx-alignment: center;
+        /* centre le texte dans le Label */
+        -fx-text-fill: #333333;
+        /* couleur du texte */
 }
 
-.titre {
-        -fx-text-alignment: center;
-        -fx-font-size: 41px;
+/* ======================
+   Style des boutons
+   ====================== */
+.button {
+        -fx-background-color: #ffffff;
+        /* fond blanc */
+        -fx-background-radius: 12px;
+        /* coins arrondis */
+        -fx-border-radius: 12px;
+        /* bord arrondi */
+        -fx-border-color: #000000;
+        /* bordure noire */
+        -fx-border-width: 2px;
+        -fx-font-size: 16px;
+        /* taille du texte */
         -fx-font-weight: bold;
+        /* texte gras */
+        -fx-text-fill: #000000;
+        /* couleur du texte */
+        -fx-cursor: hand;
+        /* curseur au survol */
+}
+
+/* Effet hover pour le bouton */
+.button:hover {
+        -fx-background-color: #4CAF50;
+        /* fond vert au survol */
+        -fx-text-fill: white;
+        /* texte blanc au survol */
+}
+
+/* ======================
+   Style du cercle avec "+"
+   ====================== */
+#myCircle {
+        -fx-fill: #e9f4fc;
+        /* couleur de fond du cercle */
+        -fx-stroke: #000000;
+        /* bordure noire */
+        -fx-stroke-width: 2px;
+}
+
+/* Label "+" à l'intérieur du cercle */
+.plus-label {
+        -fx-font-size: 48px;
+        /* taille du "+" */
+        -fx-font-weight: bold;
+        /* gras */
+        -fx-text-fill: black;
+        /* couleur du texte */
+}
+
+/* ======================
+   Layout centré (StackPane / VBox)
+   ====================== */
+.centered {
+        -fx-alignment: center;
+        /* centre horizontal et vertical */
 }

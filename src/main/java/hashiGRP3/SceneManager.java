@@ -43,9 +43,9 @@ public class SceneManager {
                                 menuController.setSceneManager(this);
                         }
 
-                        final Scene s = new Scene(root, 300, 250);
-                        s.getStylesheets().add(getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
+                        final Scene s = new Scene(root);
                         allScene.add(new Composante(s, name));
+
                 } catch (IOException ex) {
                         System.err.println("Erreur au chargement: " + ex);
                 }
@@ -66,6 +66,9 @@ public class SceneManager {
                         System.out.println("Scène introuvable : " + name);
                         return;
                 }
+                s.getStylesheets().add(getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
+
+                stage.setFullScreen(true);
                 stage.setScene(s);
                 stage.show();
         }
