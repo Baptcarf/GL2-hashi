@@ -51,11 +51,26 @@ public class Hashi {
 
                 if (ileVoisine != null) {
                     Pont pont = new Pont(ileActuel, ileVoisine, EtatDuPont.VIDE);
-                    this.ponts.add(pont);
-
-                    // On connecte le pont aux deux ile (A-->B, B-->A)
-                    ileActuel.ajouterPonts(direction, pont);
-                    ileVoisine.ajouterPonts(direction.directionOppose(), pont);
+                    
+                    // Vérifier si le pont existe déjà dans le Set
+                    Pont pontExistant = null;
+                    for (Pont p : this.ponts) {
+                        if (p.equals(pont)) {
+                            pontExistant = p;
+                            break;
+                        }
+                    }
+                    
+                    if (pontExistant == null) {
+                        // Nouveau pont, on l'ajoute
+                        this.ponts.add(pont);
+                        ileActuel.ajouterPonts(direction, pont);
+                        ileVoisine.ajouterPonts(direction.directionOppose(), pont);
+                    } else {
+                        // Pont existe deja on utilise l'instance de base
+                        ileActuel.ajouterPonts(direction, pontExistant);
+                        ileVoisine.ajouterPonts(direction.directionOppose(), pontExistant);
+                    }
                 }
             }
         }

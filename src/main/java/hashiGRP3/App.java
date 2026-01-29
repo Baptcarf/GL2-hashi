@@ -3,6 +3,7 @@ package hashiGRP3;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import hashiGRP3.Logic.Direction;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.InOut.Import;
 
@@ -22,5 +23,8 @@ public class App {
         System.out.println("Conflits : " + pont.getConflits());
         System.out.println();
     }
+
+    System.out.println(hashi.getIle(1, 1).getPont(Direction.DROITE).getConflits());
+
     }
 }
