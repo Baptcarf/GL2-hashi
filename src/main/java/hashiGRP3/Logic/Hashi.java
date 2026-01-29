@@ -25,24 +25,8 @@ public class Hashi {
         }
     }
     
+    // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
     public void afficherPlateau() {
-             // --- DEBUG : afficher tous les ponts ayant un état correct > 0 ---
-        System.out.println("=== Ponts avec étatCorrect > 0 ===");
-        for (Pont pont : ponts) {
-            if (pont.getEtatCorrect() != null && pont.getEtatCorrect() != EtatDuPont.VIDE) {
-                System.out.println(
-                    pont.getileA().getCoordonnees()
-                    + " <-> " 
-                    + pont.getileB().getCoordonnees()
-                    + " | EtatCorrect : " + pont.getEtatCorrect()
-                );
-            }
-        }
-        System.out.println("==================================");
-
-
-
-
         String[][] grilleAffichage = new String[tailleY + 1][tailleX + 1];
 
         // Grille vide
@@ -74,7 +58,7 @@ public class Hashi {
                 } else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) {
                     c = "═";
                 } else {
-                    c = "."; // au cas où, mais normalement ne devrait pas arriver
+                    c = "."; // Pont possible pendant la partie
                 }
                 int minX = Math.min(x1, x2) + 1;
                 int maxX = Math.max(x1, x2);
@@ -88,7 +72,7 @@ public class Hashi {
                 } else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) {
                     c = "║";
                 } else {
-                    c = "."; // au cas où, mais normalement ne devrait pas arriver
+                    c = "."; // Pont possible pendant la partie
                 }
                 int minY = Math.min(y1, y2) + 1;
                 int maxY = Math.max(y1, y2);
@@ -98,16 +82,26 @@ public class Hashi {
             }
         }
 
-        // Affichage stylé
-        System.out.println("=== Plateau Hashi avec Ponts ===");
+        // Affichage stylé avec coordonnées
+        System.out.print("    "); 
+        for (int x = 0; x <= tailleX; x++) {
+            System.out.print(x + " ");
+        }
+        System.out.println();
+
+        System.out.print("  ┌");
+        for (int i = 0; i <= tailleX * 2 + 2; i++) System.out.print("─");
+        System.out.println("┐");
+
         for (int y = 0; y <= tailleY; y++) {
-            System.out.print("│ ");
+            System.out.print(y + " │ "); 
             for (int x = 0; x <= tailleX; x++) {
                 System.out.print(grilleAffichage[y][x] + " ");
             }
             System.out.println("│");
         }
-        System.out.print("└");
+
+        System.out.print("  └");
         for (int i = 0; i <= tailleX * 2 + 2; i++) System.out.print("─");
         System.out.println("┘");
     }
