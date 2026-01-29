@@ -64,5 +64,22 @@ public class Hashi {
     public void initialisationToutLesConflits() {
 
     }
+
+    public Map<Coordonnees, Ile> getIles() {
+        return iles;
+    }
+
+    public Set<Pont> getPonts() {
+        return ponts;
+    }
+
+    public int getTailleX() {
+        return tailleX;
+    }
+
+    public int getTailleY() {
+        return tailleY;
+    }
+    
 }
 
