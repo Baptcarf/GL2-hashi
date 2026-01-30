@@ -107,49 +107,46 @@ public class Hashi {
     }
 
 
+    private Ile trouverVoisin(Ile ile, Direction direction) {
+        Coordonnees deplacementTheorique = ile.getCoordonnees().additionner(direction.getDelta());
+
+        while (estDansLaGrille(deplacementTheorique)) {
+            if (iles.containsKey(deplacementTheorique)) {
+                return iles.get(deplacementTheorique);
+            }
+            deplacementTheorique = deplacementTheorique.additionner(direction.getDelta());
+        }
+        return null;
+    }
+
+    private Pont obtenirOuCreerPont(Ile ileA, Ile ileB) {
+        Pont pont = getPont(ileA, ileB);
+        
+        if (pont != null) {
+            return pont;
+        }
+
+        Pont nouveauPont = new Pont(ileA, ileB, EtatDuPont.VIDE);
+        this.ponts.add(nouveauPont);
+        return nouveauPont;
+    }
+
     public void initialisationToutLesPonts() {
-        // Pour chaque ile,
-        for (Ile ileActuel : iles.values()) {
-            Coordonnees coordonneesIleActuel = ileActuel.getCoordonnees();
-            // Pour chaque direction, 
+        // Pour chaque ile
+        for (Ile ileActuelle : iles.values()) {
+            
+            // Pour chaque direction
             for (Direction direction : Direction.values()) {
 
-                Coordonnees deplacementTheorique = coordonneesIleActuel.additionner(direction.getDelta());
-
-                Ile ileVoisine = null;
-
-                // On avance dans la direction actuel tout pendant que on trouve pas d'ile ou tant qu'on est dans la grille
-                while (estDansLaGrille(deplacementTheorique)) {
-                    if (iles.containsKey(deplacementTheorique)) {
-                        ileVoisine = iles.get(deplacementTheorique);
-                        break;
-                    }
-
-                    deplacementTheorique = deplacementTheorique.additionner(direction.getDelta());
-                }
+                Ile ileVoisine = trouverVoisin(ileActuelle, direction);
 
                 if (ileVoisine != null) {
-                    Pont pont = new Pont(ileActuel, ileVoisine, EtatDuPont.VIDE);
-                    
-                    // Vérifier si le pont existe déjà dans le Set
-                    Pont pontExistant = null;
-                    for (Pont p : this.ponts) {
-                        if (p.equals(pont)) {
-                            pontExistant = p;
-                            break;
-                        }
-                    }
-                    
-                    if (pontExistant == null) {
-                        // Nouveau pont, on l'ajoute
-                        this.ponts.add(pont);
-                        ileActuel.ajouterPonts(direction, pont);
-                        ileVoisine.ajouterPonts(direction.directionOppose(), pont);
-                    } else {
-                        // Pont existe deja on utilise l'instance de base
-                        ileActuel.ajouterPonts(direction, pontExistant);
-                        ileVoisine.ajouterPonts(direction.directionOppose(), pontExistant);
-                    }
+                    // On recupere ou on cree le pont unique entre les deux iles
+                    Pont pont = obtenirOuCreerPont(ileActuelle, ileVoisine);
+
+                    // On connecte le pont a l'ile, et l'ile voisine
+                    ileActuelle.ajouterPonts(direction, pont);
+                    ileVoisine.ajouterPonts(direction.directionOppose(), pont);
                 }
             }
         }
@@ -204,8 +201,14 @@ public class Hashi {
     public int getTailleY() {
         return tailleY;
     }
+    
     public Ile getIle(int x, int y) {
         return iles.get(new Coordonnees(x, y));
+    }
+
+    public Pont getPont(Ile ileA, Ile ileB) {
+        Pont test = new Pont(ileA, ileB, EtatDuPont.VIDE);
+        return getPont(test);
     }
 
     public Pont getPont(Pont recherche) {
