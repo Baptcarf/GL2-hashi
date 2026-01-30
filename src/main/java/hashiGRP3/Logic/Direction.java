@@ -15,10 +15,8 @@ public enum Direction {
     /** Deplacement vers la gauche (x - 1) */
     GAUCHE(-1, 0);
 
-    /** Variation x pour cette direction */
-    private final int dx;
-    /** Variation y pour cette direction */
-    private final int dy;
+    /** Delta de déplacement vers la direction */
+    private final Coordonnees delta;
 
     /**
      * Construit une direction avec ses déplacements associés
@@ -26,8 +24,7 @@ public enum Direction {
      * @param dy variation y
      */
     Direction(int dx, int dy) {
-        this.dx = dx;
-        this.dy = dy;
+        this.delta = new Coordonnees(dx, dy);
     }
 
     /**
@@ -44,11 +41,19 @@ public enum Direction {
     }
 
     /**
+     * Retourne le vecteur de déplacement vers cette direction
+     * @return Coordonnees de déplacement (dx, dy)
+     */
+    public Coordonnees getDelta() {
+        return delta;
+    }
+
+    /**
      * Donne le delta en x de cette direction
      * @return dx
      */
     public int getDx() {
-        return dx;
+        return delta.x;
     }
 
     /**
@@ -56,7 +61,7 @@ public enum Direction {
      * @return dy
      */
     public int getDy() {
-        return dy;
+        return delta.y;
     }
 
     /**

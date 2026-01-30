@@ -56,6 +56,15 @@ public class Coordonnees implements Comparable<Coordonnees>{
     }
 
     /**
+     * Additionne les deux coordonnées
+     * @param autre Coordonnées a ajouter
+     * @return Nouvelles coordonnées
+     */
+    public Coordonnees additionner(Coordonnees autre) {
+        return new Coordonnees(this.x + autre.x, this.y + autre.y);
+    }
+
+    /**
      * Teste l'egalite entre deux Coordonnees
      * @param o objet a comparer
      * @return true si egal, false sinon

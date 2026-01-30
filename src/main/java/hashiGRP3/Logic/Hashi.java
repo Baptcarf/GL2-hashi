@@ -114,21 +114,18 @@ public class Hashi {
             // Pour chaque direction, 
             for (Direction direction : Direction.values()) {
 
-                int x = coordonneesIleActuel.x + direction.getDx();
-                int y = coordonneesIleActuel.y + direction.getDy();
+                Coordonnees deplacementTheorique = coordonneesIleActuel.additionner(direction.getDelta());
 
                 Ile ileVoisine = null;
 
                 // On avance dans la direction actuel tout pendant que on trouve pas d'ile ou tant qu'on est dans la grille
-                while (x >= 0 && x <= this.tailleX && y >= 0 && y <= this.tailleY) {
-                    Coordonnees testCoordonnees = new Coordonnees(x, y);
-                    if (iles.containsKey(testCoordonnees)) {
-                        ileVoisine = iles.get(testCoordonnees);
+                while (deplacementTheorique.x >= 0 && deplacementTheorique.x <= this.tailleX && deplacementTheorique.y >= 0 && deplacementTheorique.y <= this.tailleY) {
+                    if (iles.containsKey(deplacementTheorique)) {
+                        ileVoisine = iles.get(deplacementTheorique);
                         break;
                     }
 
-                    x += direction.getDx();
-                    y += direction.getDy();
+                    deplacementTheorique = deplacementTheorique.additionner(direction.getDelta());
                 }
 
                 if (ileVoisine != null) {
