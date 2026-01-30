@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Contrôleur qui hérite de MenuController et ajoute la sélection de grille
  */
-public class SelectGrilleController extends MenuController {
+public class SelectGrilleController extends ManageController {
 
     // ====== Leaderboard dynamique ======
     @FXML private Label labelGrilleSelected;
