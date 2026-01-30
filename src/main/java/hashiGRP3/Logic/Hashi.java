@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Hashi {
     private final Map<Coordonnees, Ile> iles = new HashMap<>(); // Une hashmap où les clés sont les coordonées (x, y) => Une Ile 
-    public Set<Pont> ponts = new HashSet<>();
+    private  Set<Pont> ponts = new HashSet<>();
     private int tailleX = 0;
     private int tailleY = 0;
 
@@ -119,7 +119,7 @@ public class Hashi {
                 Ile ileVoisine = null;
 
                 // On avance dans la direction actuel tout pendant que on trouve pas d'ile ou tant qu'on est dans la grille
-                while (deplacementTheorique.x >= 0 && deplacementTheorique.x <= this.tailleX && deplacementTheorique.y >= 0 && deplacementTheorique.y <= this.tailleY) {
+                while (estDansLaGrille(deplacementTheorique)) {
                     if (iles.containsKey(deplacementTheorique)) {
                         ileVoisine = iles.get(deplacementTheorique);
                         break;
@@ -178,6 +178,15 @@ public class Hashi {
                 }
             }
         }
+    }
+
+    /**
+     * Verifie si une coord est dans de la grille
+     * @param c La coordonnée
+     * @return true si la coordonnée est dans la grille, false sinon
+     */
+    public boolean estDansLaGrille(Coordonnees c) {
+        return c.x >= 0 && c.x <= this.tailleX && c.y >= 0 && c.y <= this.tailleY;
     }
 
     public Map<Coordonnees, Ile> getIles() {
