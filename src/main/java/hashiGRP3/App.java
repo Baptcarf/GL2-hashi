@@ -19,7 +19,7 @@ public class App extends Application {
 		sn.addScene("accueil");
 		sn.addScene("connexion");
 		sn.addScene("technique");
-
+		sn.addScene("selectGrille");
 		sn.changeScene("connexion");
 
 	}

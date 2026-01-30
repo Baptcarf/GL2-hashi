@@ -71,3 +71,27 @@
         -fx-alignment: center;
         /* centre horizontal et vertical */
 }
+
+/* ======================
+        Style des boutons des grilles
+   ====================== */
+
+.sectionFacile {
+        /* fond vert pour facile */
+        -fx-border-color: rgb(25, 129, 25);
+        -fx-border-width: 5px;
+}
+
+.sectionMoyen {
+        /* fond orange pour moyen */
+        -fx-border-color: rgb(255, 140, 0);
+        -fx-border-width: 5px;
+
+}
+
+.sectionDifficile {
+        /* fond rouge pour difficile */
+        -fx-border-color: rgb(139, 0, 0);
+        -fx-border-width: 5px;
+
+}
