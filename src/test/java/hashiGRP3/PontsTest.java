@@ -99,12 +99,16 @@ public class PontsTest {
         assert(!pont1.equals(notAPont));
     }
 
-    @Test //Test du ToString - à finir
+    @Test //Test du ToString
     public void TestToString(){
         Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
         Ile ile2 = new Ile(new Coordonnees(0, 2), 3);
+        Ile ile3 = new Ile(new Coordonnees(2, 0), 1);
         Pont pont1 = new Pont(ile1, ile2, EtatDuPont.VIDE);
-        Pont pont2 = new Pont(ile1, ile2, EtatDuPont.VIDE);
-        assert(pont1.toString().equals(pont2.toString()));//A finir quand le toString sera confirmé fini
+        String pont1StrAttendu = ile1.getCoordonnees() + "-V-"+ ile2.getCoordonnees() +" [" + EtatDuPont.VIDE + "]";  
+        Pont pont2 = new Pont(ile1, ile3, EtatDuPont.VIDE);
+        String pont2StrAttendu = ile1.getCoordonnees() + "-H-"+ ile3.getCoordonnees() +" [" + EtatDuPont.VIDE + "]"; 
+        
+        assert(pont1.toString().equals(pont1StrAttendu) && pont2.toString().equals(pont2StrAttendu));
     }
 }
