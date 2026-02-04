@@ -15,6 +15,8 @@ public class App extends Application {
 	public void start(final Stage primaryStage) {
 		sn = new SceneManager(primaryStage);
 
+		BaseDb.init();
+
 		sn.addScene("option");
 		sn.addScene("accueil");
 		sn.addScene("connexion");
