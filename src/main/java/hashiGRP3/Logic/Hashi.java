@@ -8,30 +8,23 @@ import java.util.Set;
 public class Hashi {
     private final Map<Coordonnees, Ile> iles = new HashMap<>(); // Une hashmap où les clés sont les coordonées (x, y) => Une Ile 
     private  Set<Pont> ponts = new HashSet<>();
-    private int tailleX = 0;
-    private int tailleY = 0;
+    private Coordonnees taille = new Coordonnees(0,0);
 
     public void ajouterIle(Ile ile) {
         iles.put(ile.getCoordonnees(), ile);
 
-        int x = ile.getCoordonnees().x;
-        int y = ile.getCoordonnees().y;
-
-        if (x > this.tailleX) {
-            this.tailleX = x;
-        }
-        if (y > this.tailleY) {
-            this.tailleY = y;
-        }
+        int newX = Math.max(taille.x, ile.getCoordonnees().x);
+        int newY = Math.max(taille.y, ile.getCoordonnees().y);
+        taille = new Coordonnees(newX, newY);
     }
     
     // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
     public void afficherPlateau() {
-        String[][] grilleAffichage = new String[tailleY + 1][tailleX + 1];
+        String[][] grilleAffichage = new String[taille.y + 1][taille.x + 1];
 
         // Grille vide
-        for (int y = 0; y <= tailleY; y++) {
-            for (int x = 0; x <= tailleX; x++) {
+        for (int y = 0; y <= taille.y; y++) {
+            for (int x = 0; x <= taille.x; x++) {
                 grilleAffichage[y][x] = " "; 
             }
         }
@@ -84,28 +77,27 @@ public class Hashi {
 
         // Affichage stylé avec coordonnées
         System.out.print("    "); 
-        for (int x = 0; x <= tailleX; x++) {
+        for (int x = 0; x <= taille.x; x++) {
             System.out.print(x + " ");
         }
         System.out.println();
 
         System.out.print("  ┌");
-        for (int i = 0; i <= tailleX * 2 + 2; i++) System.out.print("─");
+        for (int i = 0; i <= taille.x * 2 + 2; i++) System.out.print("─");
         System.out.println("┐");
 
-        for (int y = 0; y <= tailleY; y++) {
+        for (int y = 0; y <= taille.y; y++) {
             System.out.print(y + " │ "); 
-            for (int x = 0; x <= tailleX; x++) {
+            for (int x = 0; x <= taille.x; x++) {
                 System.out.print(grilleAffichage[y][x] + " ");
             }
             System.out.println("│");
         }
 
         System.out.print("  └");
-        for (int i = 0; i <= tailleX * 2 + 2; i++) System.out.print("─");
+        for (int i = 0; i <= taille.x * 2 + 2; i++) System.out.print("─");
         System.out.println("┘");
     }
-
 
     private Ile trouverVoisin(Ile ile, Direction direction) {
         Coordonnees deplacementTheorique = ile.getCoordonnees().additionner(direction.getDelta());
@@ -183,7 +175,7 @@ public class Hashi {
      * @return true si la coordonnée est dans la grille, false sinon
      */
     public boolean estDansLaGrille(Coordonnees c) {
-        return c.x >= 0 && c.x <= this.tailleX && c.y >= 0 && c.y <= this.tailleY;
+        return c.x >= 0 && c.x <= this.taille.x && c.y >= 0 && c.y <= this.taille.y;
     }
 
     public Map<Coordonnees, Ile> getIles() {
@@ -192,14 +184,6 @@ public class Hashi {
 
     public Set<Pont> getPonts() {
         return ponts;
-    }
-
-    public int getTailleX() {
-        return tailleX;
-    }
-
-    public int getTailleY() {
-        return tailleY;
     }
     
     public Ile getIle(int x, int y) {
