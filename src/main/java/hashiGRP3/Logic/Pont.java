@@ -135,9 +135,9 @@ public class Pont {
      */
     @Override
     public String toString() {
-        return "Pont{" +
-                "ileA=" + ileA.getCoordonnees() +
-                ", ileB=" + ileB.getCoordonnees() +
-                ", etat=" + etatActuel +
-                ", orientation=" + orientation;    }
+        return ileA.getCoordonnees() + 
+               (orientation == Orientation.HORIZONTAL ? "-H-" : "-V-" ) + 
+               ileB.getCoordonnees() +
+               " [" + etatCorrect + "]";    
     }
+}
