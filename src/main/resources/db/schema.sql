@@ -1,14 +1,14 @@
 
 -- Table des informations de l'utilisateur
 CREATE TABLE Utilisateur(
-        id_utilisateur SERIAL PRIMARY KEY,
-        pseudo VARCHAR(50) NOT NULL, 
+        id_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
+        pseudo VARCHAR(50) NOT NULL UNIQUE, 
         Couleur VARCHAR(7) NOT NULL -- La couleur du compte
 );
 
 -- Table des grilles présent dans le jeu
 CREATE TABLE Grille(
-        id_grille SERIAL PRIMARY KEY,
+        id_grille INTEGER PRIMARY KEY AUTOINCREMENT,
         niveau INT NOT NULL, -- Le niveau de difficulté de la grille
         grille_dep BLOB NOT NULL -- la grille de départ
 );

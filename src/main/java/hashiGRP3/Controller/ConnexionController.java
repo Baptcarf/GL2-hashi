@@ -1,8 +1,6 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-
-
 /* Libs */
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -11,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
@@ -26,8 +25,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import hashiGRP3.SceneManager;
-
-
+import hashiGRP3.BaseDb;
 
 /* Class */
 public class ConnexionController extends ManageController {
@@ -64,36 +62,36 @@ public class ConnexionController extends ManageController {
                 }
         }
 
-	/**
-	 * Creer un cercle de connexion à afficher.
-	 */
-	private Circle createCircle() {
-		//Apparence
-		Circle circle = new Circle();
-		circle.setRadius(100); // même taille que rightCircle
-		circle.setFill(Color.web("#eaf5ff"));
-		circle.setStroke(Color.BLACK);
-		circle.setStrokeWidth(2);
+        /**
+         * Creer un cercle de connexion à afficher.
+         */
+        private Circle createCircle() {
+                // Apparence
+                Circle circle = new Circle();
+                circle.setRadius(100); // même taille que rightCircle
+                circle.setFill(Color.web("#eaf5ff"));
+                circle.setStroke(Color.BLACK);
+                circle.setStrokeWidth(2);
 
-		//Logique
-		circle.setOnMouseClicked(event -> {
-			if (sup) {
+                // Logique
+                circle.setOnMouseClicked(event -> {
+                        if (sup) {
 
-				supprimerCompte(circle);
+                                supprimerCompte(circle);
 
-			} else {
-				getSceneManager().changeScene("accueil");
-			}
+                        } else {
+                                getSceneManager().changeScene("accueil");
+                        }
 
-		});
-		
-		//Retour
-		return circle;
-	}
+                });
 
-	/**
-	 * Ajoute un cercle de connexion à la page d'accueil.
-	 */
+                // Retour
+                return circle;
+        }
+
+        /**
+         * Ajoute un cercle de connexion à la page d'accueil.
+         */
         @FXML
         private void addCount() {
                 if (nbCount < 5) {
@@ -111,11 +109,20 @@ public class ConnexionController extends ManageController {
 
         }
 
-        private void appliqueCouleur(Color c) {
+        public String colorToString(Color c) {
+
                 String couleurCSS = String.format("#%02X%02X%02X",
                                 (int) (c.getRed() * 255),
                                 (int) (c.getGreen() * 255),
                                 (int) (c.getBlue() * 255));
+
+                return couleurCSS;
+
+        }
+
+        private void appliqueCouleur(Color c) {
+                String couleurCSS = colorToString(c);
+
                 String value = String.format("-fx-background-color:%s;", couleurCSS);
                 getSceneManager().findScene("connexion").getRoot()
                                 .setStyle(value);
@@ -164,6 +171,21 @@ public class ConnexionController extends ManageController {
                 });
 
                 bo.setOnAction(ev -> {
+                        BaseDb db = getSceneManager().getBD();
+
+                        VBox parentVBox = (VBox) circle.getParent();
+                        Label lab = null;
+
+                        // Parcours les enfants du VBox
+                        for (Node node : parentVBox.getChildren()) {
+                                if (node instanceof Label) {
+                                        lab = (Label) node;
+                                        break;
+                                }
+                        }
+
+                        db.deletetUser(lab.getText());
+
                         hbox.getChildren().remove(circle.getParent());
                         nbCount--;
                         s.close();
@@ -191,8 +213,8 @@ public class ConnexionController extends ManageController {
         }
 
         private void creerUtilisateur(Circle c) {
-		//Créer une nouvelle fenêtre
-		Stage s = new Stage();
+                // Créer une nouvelle fenêtre
+                Stage s = new Stage();
                 s.setTitle("Creer un compte");
 
                 GridPane grid = new GridPane();
@@ -220,11 +242,15 @@ public class ConnexionController extends ManageController {
                 grid.add(b, 0, 3, 2, 1);
                 grid.add(messageLabel, 0, 4, 2, 1);
 
-		//Logique de la fenêtre
+                // Logique de la fenêtre
                 b.setOnAction(ev -> {
                         try {
                                 String pseudo = pseudofield.getText();
+                                String couleur = colorToString(cpfield.getValue());
                                 c.setFill(cpfield.getValue());
+
+                                BaseDb db = getSceneManager().getBD();
+                                db.insertUser(pseudo, couleur);
 
                                 if (!pseudo.equals("")) {
                                         VBox v = new VBox();
@@ -252,7 +278,7 @@ public class ConnexionController extends ManageController {
                         }
                 });
 
-		//Afficher la fenêtre
+                // Afficher la fenêtre
                 Scene sc = new Scene(grid, 400, 400);
                 s.setScene(sc);
                 s.show();
