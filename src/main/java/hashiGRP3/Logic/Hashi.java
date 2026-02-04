@@ -106,7 +106,6 @@ public class Hashi {
         System.out.println("┘");
     }
 
-
     public void initialisationToutLesPonts() {
         // Pour chaque ile,
         for (Ile ileActuel : iles.values()) {
@@ -209,6 +208,15 @@ public class Hashi {
             }
         }
         return null;
+    }
+
+    public boolean estGagne(){
+        for(Pont p : ponts){
+            if (!p.estCorrect()){
+                return false;
+            }
+        }
+        return true;
     }
 }
 

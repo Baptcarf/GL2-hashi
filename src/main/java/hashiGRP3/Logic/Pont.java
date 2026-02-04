@@ -56,6 +56,7 @@ public class Pont {
     public Ile getileB() {return ileB;}
     public EtatDuPont getEtatActuel() {return etatActuel;}
     public EtatDuPont getEtatCorrect() {return etatCorrect;}
+    public boolean estCorrect(){return getEtatActuel()==getEtatCorrect();}
     public Orientation getOrientation() {return orientation;}
     public List<Pont> getConflits() {return conflits;}
 
