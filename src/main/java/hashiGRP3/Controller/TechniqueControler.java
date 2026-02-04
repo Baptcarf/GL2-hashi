@@ -2,163 +2,208 @@ package hashiGRP3.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import java.io.InputStream;
 
 public class TechniqueControler extends ManageController {
 
     @FXML
-    private TextArea mainContentArea;
+    private VBox instructionBox; 
     @FXML
     private HBox imageContainer;
+    @FXML
+    private Label titleLabel; 
 
     @FXML
     private void handleTechniqueClick(javafx.event.ActionEvent event) {
         Button clickedButton = (Button) event.getSource();
-        String techniqueName = (String) clickedButton.getUserData();
+        String techniqueID = (String) clickedButton.getUserData();
 
-        loadTechniqueContent(techniqueName);
+        loadTechniqueContent(techniqueID);
     }
 
-    private void loadTechniqueContent(String techniqueName) {
-
+    private void loadTechniqueContent(String id) {
+        instructionBox.getChildren().clear();
         imageContainer.getChildren().clear();
 
-        String text = "";
-        String imagePath1 = "";
-        String imagePath2 = "";
-        String imagePath3 = "";
+switch (id) {
+    case "1":
+        titleLabel.setText("LES COUPS FORCÉS : 4, 6, 8");
+        addSectionTitle("Saturation totale des ponts :");
+        addBodyText("Certaines îles exigent le maximum absolu de connexions possibles. C'est mathématique :\n\n" +
+            "1. Le '4' dans un coin (2 voisins) : Il doit faire 2 + 2.\n" +
+            "2. Le '6' sur un bord (3 voisins) : Il doit faire 2 + 2 + 2.\n" +
+            "3. Le '8' central (4 voisins) : Il doit faire 2 + 2 + 2 + 2.");
+        addActionBox("Action : Ces îles ne laissent aucun choix. Tracez des doubles ponts vers TOUS leurs voisins et marquez-les comme terminées (X).");
+        loadImages("/hashiGRP3/images/1312.gif", "/hashiGRP3/images/1313.gif");
+        break;
 
-        switch (techniqueName) {
-            case "1":
-                text = "Iles avec 4 dans le coin, 6 sur le côté et 8 au milieu:\n\n"
-                        + "Une île dans un coin ne peut pas avoir plus de deux voisins et le nombre de ponts vers chaque voisin ne peut pas être supérieur à 2. L'île dans le coin avec l'indice 4 doit donc avoir deux ponts reliés à chacun de ses deux voisins.  "
-                        + "De même, l'île du côté du puzzle avec l'indice 6 doit avoir deux ponts reliés à chacun de ses trois voisins et l'île au milieu du puzzle avec l'indice 8 doit avoir deux ponts reliés à chacun de ses quatre voisins."
-                        + "Dans tous les cas, le nombre total de ponts est connecté, ce qui signifie que les îles peuvent être marquées d'un X.";
-                imagePath1 = "/hashiGRP3/images/1312.gif";
-                imagePath2 = "/hashiGRP3/images/1313.gif";
-                break;
+    case "2":
+        titleLabel.setText("Îles avec un seul voisin");
+        addSectionTitle("Une seule direction possible :");
+        addBodyText("Observez l'île '1' dans la rangée du bas : elle n'a qu'un seul voisin à sa droite. Elle est donc obligée de s'y connecter.\n\n" +
+            "Même logique pour le '2' en haut à droite : avec un seul voisin en dessous, il doit envoyer ses deux ponts vers lui pour être complet.\n\n" +
+            "Rappel : Une île avec un seul voisin ne peut jamais être un '3' ou plus (max 2 ponts par ligne).");
+        addActionBox("Action : Tracez les ponts pour ces îles, puis marquez-les d'une croix (X) car elles sont terminées.");
+        loadImages("/hashiGRP3/images/1314.gif", "/hashiGRP3/images/1315.gif");
+        break;
 
-            case "2":
-                text = "Îles avec un seul voisin:\n\n"
-                        + "L'île contenant 1 dans la rangée du bas n'a qu'un seul voisin à sa droite, ce qui signifie que nous devons relier un seul pont entre ces îles."
-                        + "De même, l'île contenant 2 en haut à droite n'a qu'un seul voisin en dessous, ce qui signifie que nous devons relier deux ponts entre ces îles. Dans les deux cas, l'île contenant 1 et l'île contenant 2 sont terminées, ce qui signifie qu'elles peuvent être marquées d'un X."
-                        + "Notez qu'une île avec un seul voisin ne peut jamais contenir 3 ou plus car cela violerait les règles de Hashi.";
-                imagePath1 = "/hashiGRP3/images/1314.gif";
-                imagePath2 = "/hashiGRP3/images/1315.gif";
-                break;
+    case "3":
+        titleLabel.setText("LE 3 DANS UN COIN");
+        addSectionTitle("Distribution minimale garantie :");
+        addBodyText("Un '3' situé dans un coin a deux voisins. Est-il possible qu'il n'envoie aucun pont vers l'un d'eux ?\n\n" +
+                    "Non ! Car même si l'autre voisin prenait le maximum de ponts (2), il manquerait encore un pont pour atteindre 3.");
+        addActionBox("Action : Par sécurité, vous pouvez tracer au moins 1 pont vers chacun des deux voisins. Le troisième pont sera déterminé plus tard.");
+        loadImages("/hashiGRP3/images/1316.gif", "/hashiGRP3/images/1317.gif");
+        break;
 
-            case "3":
-                text = "Iles avec 3 dans le coin, 5 sur le côté et 7 au milieu\n\n"
-                        + "Une île dans un coin avec l'indice 3 doit avoir deux voisins, avec un pont relié à un voisin et deux ponts reliés à l'autre voisin."
-                        + "Bien que nous ne sachions pas quel voisin possède deux ponts, nous pouvons être certains qu'il y a au moins un pont dans chaque direction comme on le voit avec l'île dans le coin inférieur gauche de cet exemple."
-                        + "De même, une île sur le côté du puzzle avec l'indice 5 doit avoir au moins un pont relié à chacun de ses trois voisins et une île au milieu du puzzle avec l'indice 7 doit avoir au moins un pont relié à chacun de ses quatre voisins.";
-                imagePath1 = "/hashiGRP3/images/1316.gif";
-                imagePath2 = "/hashiGRP3/images/1317.gif";
-                break;
-            case "4":
-                text = "Cas particuliers de 3 dans le coin, 5 sur le côté et 7 au milieu\n\n"
-                        + "Si une île dans un coin a un indice 3 et que l'une de ses voisines est une île avec l'indice 1, alors toutes les conditions sont remplies et trois ponts peuvent être tracés."
-                        + "La même logique peut être appliquée si une île sur le côté du puzzle avec l'indice 5 ou si une île au milieu du puzzle avec l'indice 7 a une île voisine avec l'indice 1.";
-                imagePath1 = "/hashiGRP3/images/1318.gif";
-                imagePath2 = "/hashiGRP3/images/1319.gif";
-                break;
-            case "5":
-                text = "Cas particulier de 4 sur le côté\n\n"
-                        + "Dans cet exemple, nous pouvons voir une île avec un indice 4 dans la deuxième rangée en partant du bas. Bien que le 4 ne soit pas du côté du puzzle, d'un point de vue logique on peut le traiter comme tel car il n'a de voisins que sur trois côtés."
-                        + "Comme il n'est pas permis de construire plus de deux ponts dans la même direction, toutes les conditions sont remplies et quatre ponts peuvent être tracés : deux ponts vers l'île située au-dessus et un pont vers chacune des îles situées sur les côtés.";
-                imagePath1 = "/hashiGRP3/images/1320.gif";
-                imagePath2 = "/hashiGRP3/images/1321.gif";
-                break;
-            case "6":
-                text = "Cas particulier de 6 au milieu\n\n"
-                        + "Supposons que l’île avec l’indice 6 soit connectée à l’île avec l’indice 1. Il reste donc cinq ponts, ce qui signifie qu'il doit y avoir au moins un pont relié aux îles A, B et C."
-                        + "Supposons maintenant que l'île avec l'indice 6 ne soit pas reliée à l'île avec l'indice 1. Dans ce cas, exactement deux ponts doivent être reliés aux îles A, B et C. Ainsi, que l'île avec l'indice 6 soit reliée ou non à l'île avec l'indice 1, il doit y avoir au moins un pont relié aux îles A, B et C.";
-                imagePath1 = "/hashiGRP3/images/1322.gif";
-                imagePath2 = "/hashiGRP3/images/1323.gif";
-                break;
-            case "7":
-                text = "Cas particulier de 6 au milieu\n\n"
-                        + "Regardons l’île du bas avec l’indice 1 dans la colonne de droite. Si nous le relions à l'autre île avec l'indice 1 comme indiqué dans le diagramme de gauche, alors les deux îles deviendront un segment isolé qui n'est pas autorisé selon les règles de Hashi. La seule autre possibilité est donc de le relier à l’île A. Pour la même raison, l'île avec l'indice 2 dans le coin inférieur gauche ne peut pas être reliée aux deux ponts menant à l'île de sa droite comme le montre le schéma de gauche. Cela signifie qu'au moins un pont doit être relié de l'île située dans le coin inférieur gauche à l'île B.";
-                imagePath1 = "/hashiGRP3/images/1324.gif";
-                imagePath2 = "/hashiGRP3/images/1325.gif";
-                break;
-            case "8":
-                text = "Isolement d'un segment de trois îles\n\n"
-                        + "La technique ci-dessus peut être étendue à des segments comportant trois îles. L'île avec l'indice 2 dans la rangée du bas ne peut pas être reliée à deux ponts comme indiqué dans le diagramme de gauche car elle deviendrait alors un segment 1-2-1 isolé. Cela signifie qu'il doit y avoir au moins un pont vers l'île A. De même, l'île avec l'indice 3 dans la colonne de gauche ne peut pas être reliée à trois ponts comme indiqué dans le diagramme de gauche car elle deviendrait alors un segment 1-3-2 isolé. Cela signifie qu'il doit y avoir au moins un pont vers l'île B.";
-                imagePath1 = "/hashiGRP3/images/1326.gif";
-                imagePath2 = "/hashiGRP3/images/1327.gif";
-                break;
-            case "9":
-                text = "Isolement lorsqu'un segment se connecte à une île\n\n"
-                        + "Parfois, des segments d’îles beaucoup plus longs peuvent devenir isolés, créant des situations logiques plus difficiles à trouver et plus intéressantes à résoudre. Regardons l’exemple dans le diagramme de gauche. Ce que nous voyons est un segment composé de sept îles, où six des îles sont terminées et seule l'île avec l'indice 3 dans la rangée supérieure a un pont manquant. Si nous relions ce pont à l'île dans le coin supérieur gauche selon la ligne rouge, nous nous retrouverons alors avec un segment isolé. Ce pont doit donc être relié à l'île par l'indice 5 comme indiqué sur le schéma de droite.";
-                imagePath1 = "/hashiGRP3/images/1328.gif";
-                imagePath2 = "/hashiGRP3/images/1329.gif";
-                break;
-            case "10":
-                text = "Isolement lorsqu'un segment se connecte à un autre segment\n\n"
-                        + "Dans le diagramme de gauche, nous avons deux segments, l'un composé de quatre îles où toutes les îles sont complétées sauf l'île avec l'indice 6, et l'autre composé de huit îles où toutes les îles sont également complétées sauf l'île avec l'indice 3. Dans les deux segments, il manque exactement deux ponts aux îles inachevées. Maintenant, si nous devions relier deux ponts entre ces deux segments selon les lignes rouges, nous nous retrouverions avec un long segment isolé. On peut donc en déduire qu'au moins un pont doit être relié à l'îlot supérieur gauche comme le montre le schéma de droite.";
-                imagePath1 = "/hashiGRP3/images/1330.gif";
-                imagePath2 = "/hashiGRP3/images/1331.gif";
-                break;
-            case "11":
-                text = "Isoler un segment en bloquant un pont\n\n"
-                        + "Si nous supposons qu'aucun pont n'est connecté dans la direction du X rouge dans le diagramme de gauche, alors les cinq îles doivent être connectées selon le diagramme central, créant ainsi un segment isolé. Il doit donc y avoir au moins un pont montant comme indiqué sur le schéma de droite.";
-                imagePath1 = "/hashiGRP3/images/1332.gif";
-                imagePath2 = "/hashiGRP3/images/1333.gif";
-                imagePath3 = "/hashiGRP3/images/1334.gif";
-                break;
-            case "12":
-                text = "Isoler un segment en ajoutant un pont\n\n"
-                        + "Regardons la rangée supérieure du diagramme de gauche montrant une étape d'une solution de puzzle Hashi. Si nous supposons que le deuxième pont de l'île avec l'indice 2 est connecté à l'île sur sa droite, alors le segment de six îles sera isolé comme indiqué dans le diagramme central. Cette île doit donc être connectée comme indiqué sur le schéma de droite. De même, l’île située dans le coin inférieur gauche doit être reliée à l’île située au-dessus.";
-                imagePath1 = "/hashiGRP3/images/1335.gif";
-                imagePath2 = "/hashiGRP3/images/1336.gif";
-                imagePath3 = "/hashiGRP3/images/1337.gif";
-                break;
-            case "13":
-                text = "Isoler une île avec des ponts\n\n"
-                        + "Regardons l’île avec l’indice 2 dans le diagramme de gauche. Si nous supposons qu'il n'y a pas de pont dans la direction du X rouge, alors les deux ponts doivent être connectés comme indiqué dans le diagramme central. Cependant, cela entraînera l'isolement de l'île avec l'indice 1 car la seule autre île à laquelle elle peut se connecter est déjà terminée. Il doit donc y avoir au moins un pont descendant comme le montre le schéma de droite.";
-                imagePath1 = "/hashiGRP3/images/1338.gif";
-                imagePath2 = "/hashiGRP3/images/1339.gif";
-                imagePath3 = "/hashiGRP3/images/1340.gif";
-                break;
-            case "14":
-                text = "Créer des conflits de connexion entre les ponts \n\n"
-                        + "L'île avec l'indice 1 dans la deuxième rangée peut être reliée dans deux directions. Supposons qu'il soit relié à l'île à l'extrême droite comme le montre le schéma de gauche. Cela conduit à un segment de quatre îles représenté sur le diagramme central. Cependant, l'île avec l'indice 2 possède toujours un pont non connecté créant un conflit ! Par conséquent, l'île avec l'indice 1 dans la deuxième rangée doit être reliée à l'île située en dessous, comme le montre le schéma de droite.";
-                imagePath1 = "/hashiGRP3/images/1341.gif";
-                imagePath2 = "/hashiGRP3/images/1342.gif";
-                imagePath3 = "/hashiGRP3/images/1343.gif";
-                break;
+    case "4":
+        titleLabel.setText("LE 3 VOISIN D'UN 1");
+        addSectionTitle("Déduction par élimination :");
+        addBodyText("Reprenons notre '3' dans le coin. Cette fois, observez ses voisins. L'un d'eux est un '1'.\n\n" +
+                    "Ce voisin '1' ne peut accepter qu'un seul pont, pas plus. Le '3' doit donc trouver une autre solution pour écouler ses ponts restants.");
+        addActionBox("Action : Le '3' est forcé d'envoyer un double pont vers son autre voisin.");
+        loadImages("/hashiGRP3/images/1318.gif", "/hashiGRP3/images/1319.gif");
+        break;
 
-        }
+    case "5":
+        titleLabel.setText("LE 4 SUR UN BORD");
+        addSectionTitle("Distribution de la charge :");
+        addBodyText("Un '4' situé sur un bord du plateau n'a que 3 directions possibles.\n\n" +
+                    "Si nous essayions de ne connecter que deux voisins, nous aurions besoin de deux doubles ponts (2+2). Mais souvent, la configuration des voisins bloque cette possibilité.");
+        addActionBox("Action : Dans cette configuration précise, il est sûr de tracer au moins 1 pont vers chacun des trois voisins.");
+        loadImages("/hashiGRP3/images/1320.gif", "/hashiGRP3/images/1321.gif");
+        break;
 
-        mainContentArea.setText(text);
+    case "6":
+        titleLabel.setText("LE 6 CENTRAL");
+        addSectionTitle("Une île à forte capacité :");
+        addBodyText("Le '6' est une île très puissante. Elle a généralement 4 voisins.\n\n" +
+                    "Même si l'un des voisins ne prend qu'un seul pont, le '6' doit encore distribuer 5 ponts sur les 3 autres voisins. Impossible de laisser un voisin vide !");
+        addActionBox("Action : Un '6' doit obligatoirement être relié à ses 4 voisins. Tracez au moins 1 pont vers chacun d'eux.");
+        loadImages("/hashiGRP3/images/1322.gif", "/hashiGRP3/images/1323.gif");
+        break;
 
-        addImageToContainer(imagePath1);
-        addImageToContainer(imagePath2);
-        addImageToContainer(imagePath3);
+    case "7":
+        titleLabel.setText("Isolement d'un segment de deux îles");
+        addSectionTitle("Danger de fermeture prématurée !");
+        addBodyText("Le but du jeu est de relier TOUTES les îles en un seul réseau unique.\n\n" +
+                    "Si vous reliez deux '1' directement entre eux, ils forment un couple satisfait (1-1) mais totalement coupé du monde. C'est une erreur fatale.");
+        addActionBox("Action : Il est INTERDIT de relier ces deux '1'. Vous devez obligatoirement les relier à leurs autres voisins respectifs.");
+        loadImages("/hashiGRP3/images/1324.gif", "/hashiGRP3/images/1325.gif");
+        break;
+
+    case "8":
+        titleLabel.setText("Isolement d'un segment de trois îles");
+        addSectionTitle("Éviter les mini-groupes fermés :");
+        addBodyText("Imaginez trois îles alignées (par exemple 1-2-1). Si vous les reliez toutes entre elles, le '2' central sera satisfait, et les '1' aussi.\n\n" +
+                    "Problème : Ce trio forme un îlot autonome isolé du reste du puzzle. C'est impossible.");
+        addActionBox("Action : Vous devez 'casser' ce groupe fermé. Le '2' doit obligatoirement chercher une connexion vers l'extérieur.");
+        loadImages("/hashiGRP3/images/1326.gif", "/hashiGRP3/images/1327.gif");
+        break;
+
+    case "9":
+        titleLabel.setText("Isolement chaîne (connexion île)");
+        addSectionTitle("La règle du circuit unique :");
+        addBodyText("Vous avez construit une longue chaîne d'îles qui serpente sur le plateau ? Attention aux extrémités !\n\n" +
+                    "Si vous reliez les deux bouts de cette chaîne ensemble, vous créez une boucle fermée. Plus aucune île ne pourra rejoindre ce groupe.");
+        addActionBox("Action : Ne fermez jamais une longue boucle si d'autres îles doivent encore être rattachées. Laissez une ouverture.");
+        loadImages("/hashiGRP3/images/1328.gif", "/hashiGRP3/images/1329.gif");
+        break;
+
+    case "10":
+        titleLabel.setText("Isolement (connexion segment)");
+        addSectionTitle("Unification des réseaux :");
+        addBodyText("À un stade avancé du jeu, vous aurez souvent deux gros groupes d'îles séparés.\n\n" +
+                    "Vous ne pouvez pas valider une connexion qui fermerait l'un des groupes sur lui-même. Vous devez chercher le pont qui permettra de FUSIONNER ces deux groupes.");
+        addActionBox("Action : Privilégiez les ponts qui agissent comme des 'connecteurs' entre deux zones distinctes du plateau.");
+        loadImages("/hashiGRP3/images/1330.gif", "/hashiGRP3/images/1331.gif");
+        break;
+
+    // --- TECHNIQUES AVANCÉES ---
+    case "11":
+        titleLabel.setText("Bloquer un pont");
+        addSectionTitle("Raisonnement par l'absurde :");
+        addBodyText("Regardez l'espace entre ces deux îles. Imaginez que vous traciez un pont ici (ligne rouge).\n\n" +
+                    "Si ce pont coupe le chemin et empêche une autre île de se connecter au reste du jeu, alors ce pont est impossible. Il créerait une isolation.");
+        addActionBox("Action : Puisque le pont est impossible, l'île doit obligatoirement se connecter dans l'autre direction disponible.");
+        loadImages("/hashiGRP3/images/1332.gif", "/hashiGRP3/images/1333.gif", "/hashiGRP3/images/1334.gif");
+        break;
+
+    case "12":
+        titleLabel.setText("Ajouter un pont forcé");
+        addSectionTitle("Sauver le groupe :");
+        addBodyText("Analysez la structure du réseau. Parfois, un groupe d'îles ne possède qu'une seule 'porte de sortie' vers le reste du plateau.\n\n" +
+                    "Si vous ne mettez pas de pont à cet endroit précis, ce groupe mourra isolé.");
+        addActionBox("Action : Ce pont est critique et obligatoire. Tracez-le pour garantir la connectivité globale.");
+        loadImages("/hashiGRP3/images/1335.gif", "/hashiGRP3/images/1336.gif", "/hashiGRP3/images/1337.gif");
+        break;
+
+    case "13":
+        titleLabel.setText("Isoler une île avec des ponts");
+        addSectionTitle("Anticipation à un coup :");
+        addBodyText("Observez le '1'. S'il ne se connecte pas au '2' voisin, le '2' sera forcé de se connecter ailleurs.\n\n" +
+                    "Mais si le '2' se connecte ailleurs et se sature, le '1' se retrouvera tout seul sans voisin disponible !");
+        addActionBox("Action : Pour ne pas 'tuer' le 1, vous êtes obligé de le relier au 2 dès maintenant.");
+        loadImages("/hashiGRP3/images/1338.gif", "/hashiGRP3/images/1339.gif", "/hashiGRP3/images/1340.gif");
+        break;
+
+    case "14":
+        titleLabel.setText("Conflits de connexion");
+        addSectionTitle("Gestion des incompatibilités :");
+        addBodyText("Faisons une hypothèse : Si je connecte l'île A vers la droite, cela force l'île B à aller vers le bas.\n\n" +
+                    "Cependant, si cela laisse une troisième île C avec un nombre de ponts impossible à satisfaire, alors l'hypothèse de départ était fausse.");
+        addActionBox("Action : L'hypothèse A vers la droite mène à une erreur. Il faut donc faire l'inverse (A ne va pas à droite).");
+        loadImages("/hashiGRP3/images/1341.gif", "/hashiGRP3/images/1342.gif", "/hashiGRP3/images/1343.gif");
+        break;
+}
     }
 
-    private void addImageToContainer(String path) {
-        try {
-            InputStream is = getClass().getResourceAsStream(path);
-            if (is == null) {
-                System.out.println("Could not find image: " + path);
-                return;
+    private void addSectionTitle(String text) {
+        Label lbl = new Label(text);
+        lbl.setFont(Font.font("System", FontWeight.BOLD, 16));
+        lbl.setStyle("-fx-text-fill: #2c3e50; -fx-padding: 10 0 5 0;"); 
+        instructionBox.getChildren().add(lbl);
+    }
+
+    private void addBodyText(String text) {
+        Label lbl = new Label(text);
+        lbl.setWrapText(true);
+        lbl.setFont(Font.font("System", 14));
+        lbl.setStyle("-fx-text-fill: black;");
+        instructionBox.getChildren().add(lbl);
+    }
+
+    private void addActionBox(String text) {
+        Label lbl = new Label(text);
+        lbl.setWrapText(true);
+        lbl.setFont(Font.font("System", FontWeight.BOLD, 14));
+        lbl.setStyle("-fx-background-color: #e8f8f5; -fx-text-fill: #27ae60; -fx-padding: 10; -fx-background-radius: 5; -fx-border-color: #27ae60; -fx-border-radius: 5;");
+        VBox.setMargin(lbl, new javafx.geometry.Insets(10, 0, 0, 0));
+        instructionBox.getChildren().add(lbl);
+    }
+
+    private void loadImages(String... paths) {
+        for (String path : paths) {
+            try {
+                InputStream is = getClass().getResourceAsStream(path);
+                if (is != null) {
+                    ImageView iv = new ImageView(new Image(is));
+                    iv.setFitHeight(200);
+                    iv.setPreserveRatio(true);
+                    imageContainer.getChildren().add(iv);
+                } else {
+                    System.out.println("Image not found: "+ path);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            Image img = new Image(is);
-            ImageView imageView = new ImageView(img);
-            imageView.setFitHeight(200);
-            imageView.setPreserveRatio(true);
-
-            imageContainer.getChildren().add(imageView);
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
-
 }

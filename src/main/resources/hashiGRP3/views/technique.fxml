@@ -5,13 +5,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.65" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hashiGRP3.Controller.TechniqueControler">
+<SplitPane dividerPositions="0.65" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hashiGRP3.Controller.TechniqueControler">
   <items>
     <AnchorPane minWidth="300.0">
          <children>
@@ -19,25 +18,30 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="15.0">
                      <children>
-                        <Button mnemonicParsing="false" styleClass="button" onAction="#changeScene" text="&lt;-" userData="accueil">
+                        <Button mnemonicParsing="false" onAction="#changeScene" text="&lt;-" userData="accueil">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Button>
-                        <Label text="TECHNIQUE DU COIN">
+                        <Label fx:id="titleLabel" text="">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
                      </children>
                   </HBox>
-                  <TextArea fx:id="mainContentArea" editable="false" prefHeight="200.0" prefWidth="551.0" text="Sélectionnez une technique sur la droite..." wrapText="true" VBox.vgrow="ALWAYS">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextArea>
+
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+                     <content>
+                        <VBox fx:id="instructionBox" spacing="10.0">
+                           <padding>
+                              <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
                   
-                  <HBox fx:id="imageContainer" alignment="CENTER" prefHeight="293.0" prefWidth="551.0" spacing="10.0" style="-fx-border-color: black; -fx-border-width: 2; -fx-border-style: solid;" VBox.vgrow="ALWAYS" />
+                  <HBox fx:id="imageContainer" alignment="CENTER" prefHeight="250.0" prefWidth="551.0" spacing="10.0" style="-fx-border-color: #cccccc; -fx-border-width: 2; -fx-border-style: solid; -fx-background-color: #f9f9f9;" />
                </children>
             </VBox>
          </children>
@@ -52,39 +56,51 @@
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </padding>
                      <children>
+                        
                         <Label text="TECHNIQUES DE BASE">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                         </Label>
                         
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Iles avec 4 dans le coin, 6 sur le côté et 8 au milieu" userData="1" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Îles avec un seul voisin" userData="2" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Iles avec 3 dans le coin, 5 sur le côté et 7 au milieu" userData="3" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Cas particuliers de 3 dans le coin, 5 sur le côté et 7 au milieu" userData="4" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Cas particulier de 4 sur le côté" userData="5" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Cas particulier de 6 au milieu" userData="6" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="1. Les coups forçés : 4, 6, 8" userData="1" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="2. Îles avec un seul voisin" userData="2" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="3. Le 3 dans un coin" userData="3" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="4. Le 3 voisin d'un 1" userData="4" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="5. Le 4 sur un Bord" userData="5" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="6. Le 6 Central" userData="6" wrapText="true" />
 
                         <Label text="TECHNIQUES D'ISOLEMENT">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </Label>
 
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Isolement d'un segment de deux îles" userData="7" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Isolement d'un segment de trois îles" userData="8" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Isolement lorsqu'un segment se connecte à une île" userData="9" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Isolement lorsqu'un segment se connecte à un autre segment" userData="10" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="7. Isolement d'un segment de deux îles" userData="7" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="8. Isolement d'un segment de trois îles" userData="8" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="9. Isolement chaîne (connexion île)" userData="9" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="10. Isolement (connexion segment)" userData="10" wrapText="true" />
                         
                         <Label text="TECHNIQUES AVANCÉES">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </Label>
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Isoler un segment en bloquant un pont" userData="11" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Isoler un segment en ajoutant un pont" userData="12" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Isoler une île avec des ponts" userData="13" wrapText="true" />
-                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="Créer des conflits de connexion entre les ponts" userData="14" wrapText="true" />
+
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="11. Bloquer un pont" userData="11" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="12. Ajouter un pont forcé" userData="12" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="13. Isoler une île avec des ponts" userData="13" wrapText="true" />
+                        <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleTechniqueClick" text="14. Conflits de connexion" userData="14" wrapText="true" />
+                        
                      </children>
                   </VBox>
                </content>
