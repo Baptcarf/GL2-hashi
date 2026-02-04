@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import hashiGRP3.Logic.Coordonnees;
 import hashiGRP3.Logic.EtatDuPont;
@@ -18,12 +16,38 @@ import hashiGRP3.Logic.Pont;
  * Classe pour importer une grille Hashi depuis un fichier texte.
  */
 public class Import {
+    private Import() {
+        // classe utilitaire, pas d'instance
+    }
+
     public static Hashi chargerFichier(Path chemin) throws IOException {
         List<String> txt = Files.readAllLines(chemin); // lire toutes les lignes du fichier
         List<String> lignesIles = new ArrayList<>(); // stocke les lignes des îles (nodes)
         List<String> lignesPonts = new ArrayList<>(); // stocke les lignes des ponts (edges)
         Hashi HashiGrille = new Hashi();
 
+        separerLignes(txt, lignesIles, lignesPonts);
+        ajouterIles(HashiGrille, lignesIles);
+        HashiGrille.initialisationToutLesPonts();
+        ajouterPonts(HashiGrille, lignesPonts);
+
+        return HashiGrille;
+    }
+
+    private static void ajouterPonts(Hashi hashi, List<String> lignesPonts) {
+        for (String ligne : lignesPonts) {
+            ligneVersPont(ligne, hashi); // transforme la ligne en Pont et applique l'état dans Hashi
+        }
+    }
+     
+    private static void ajouterIles(Hashi hashi, List<String> lignesIles) {
+        for (String ligne : lignesIles) {
+            Ile ile = ligneVersIle(ligne); // transforme "(x,y):nbPonts" en Ile
+            hashi.ajouterIle(ile);         // ajoute dans l'objet Hashi
+        }
+    }
+
+    private static void separerLignes(List<String> txt, List<String> lignesIles, List<String> lignesPonts) {
         boolean apresTiret = false;
 
         for (String ligne : txt) {
@@ -40,28 +64,7 @@ public class Import {
                 lignesPonts.add(ligne);
             }
         }
-
-        for (String ligne : lignesIles) {
-            Ile ile = ligneVersIle(ligne); // transforme "(x,y):nbPonts" en Ile
-            HashiGrille.ajouterIle(ile); // ajoute dans l'objet Hashi
-        }
-
-        HashiGrille.initialisationToutLesPonts();
-
-        Set<Pont> pontsFinis = new HashSet<>();
-
-        for (String ligne : lignesPonts) {
-            Pont pont = ligneVersPont(ligne, HashiGrille);
-            if (pont != null) {
-                pontsFinis.add(pont); // ajouter uniquement si le pont existait
-            }
-        }
-
-        return HashiGrille;
     }
-
-
-
 
     // Prend les îles du fichier txt sous la forme : (x,y):nbPonts et les convertit en objet Ile
     private static Ile ligneVersIle(String ligne) {
