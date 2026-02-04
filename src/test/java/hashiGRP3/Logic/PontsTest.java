@@ -1,9 +1,7 @@
-package hashiGRP3;
+package hashiGRP3.Logic;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
-
-import hashiGRP3.Logic.*;
 
 public class PontsTest {
     @Test //Test le cas où un pont essaie de relier une île à elle même
