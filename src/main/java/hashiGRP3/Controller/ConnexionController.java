@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.Scene;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import hashiGRP3.SceneManager;
 
@@ -58,7 +59,7 @@ public class ConnexionController extends ManageController {
 
         @FXML
         private void addCount() {
-                if (nbCount < 5) {
+                if (nbCount < 6) {
                         endSupp();
                         Circle circle = new Circle();
                         circle.setRadius(100); // même taille que rightCircle
@@ -169,6 +170,8 @@ public class ConnexionController extends ManageController {
 
         private void creerUtilisateur(Circle c) {
                 Stage s = new Stage();
+                s.initModality(Modality.APPLICATION_MODAL);
+                s.initOwner(hbox.getScene().getWindow());
                 s.setTitle("Creer un compte");
 
                 GridPane grid = new GridPane();

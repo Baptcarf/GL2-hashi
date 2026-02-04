@@ -60,6 +60,12 @@ public class SceneManager {
                 }
         }
 
+        /**
+         * Fonction pour trouver une scène
+         * 
+         * @param name le nom de la scène
+         * @return la scène ou null si pas trouvée
+         */
         public Scene findScene(String name) {
                 for (Composante c : allScene) {
                         if (name.equals(c.getNom())) {
@@ -69,6 +75,11 @@ public class SceneManager {
                 return null;
         }
 
+        /**
+         * Fonction pour changer de scène
+         * 
+         * @param name nom de la scène
+         */
         public void changeScene(String name) {
                 Scene s = findScene(name);
                 if (s == null) {
@@ -85,10 +96,20 @@ public class SceneManager {
                 stage.show();
         }
 
+        /**
+         * Seteur du mode pleine écran
+         * 
+         * @param value
+         */
         public void setFullScreen(boolean value) {
                 boolFull = value;
         }
 
+        /**
+         * classe représenant la scène
+         * scene : la secene en elle même
+         * nom : nom donné à la scène
+         */
         private class Composante {
 
                 private Scene scene;

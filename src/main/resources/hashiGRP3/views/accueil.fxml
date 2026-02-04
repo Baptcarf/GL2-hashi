@@ -31,6 +31,9 @@
         <Button text="Option" style="-fx-pref-width: 200;" onAction="#changeScene" userData="option">
             <font><Font size="25.0"/></font>
         </Button>
+        <Button text="Compte" style="-fx-pref-width: 200;" onAction="#changeScene" userData="connexion">
+            <font><Font size="25.0"/></font>
+        </Button>
         <Button text="Quitter" style="-fx-pref-width: 200;" onAction="#quitApp">
             <font><Font size="25.0"/></font>
         </Button>
