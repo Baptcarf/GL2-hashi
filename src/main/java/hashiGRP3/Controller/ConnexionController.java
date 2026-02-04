@@ -209,10 +209,12 @@ public class ConnexionController extends ManageController {
                 grid.add(messageLabel, 0, 4, 2, 1);
 
 		//Tentative de base de données
-		try(Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-			connection.close();
-		}catch (SQLException e) {
-            		System.err.println(e.getMessage());
+		try(var conn = DriverManager.getConnection("jdbc:sqlite:./src/data.db")) {
+			conn.close();
+
+		} catch (SQLException e) {
+            		System.err.println("SQL Error : " + e.getMessage());
+			System.err.println("No save will be available");
         	}
 
 
@@ -252,7 +254,6 @@ public class ConnexionController extends ManageController {
                 Scene sc = new Scene(grid, 400, 400);
                 s.setScene(sc);
                 s.show();
-
         }
 
 }
