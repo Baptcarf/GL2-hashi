@@ -1,10 +1,14 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-/* Libs */
+
+
+//Imports
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
+
+
 
 /**
  * Classe de controlleur du fichier 'option.fxml'

@@ -1,10 +1,13 @@
 //Attribut au packet
 package hashiGRP3;
 
-/* Libs */
 
+
+//Imports
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+
 
 /* Point de démarrage de l'application */
 public class App extends Application {
@@ -20,6 +23,7 @@ public class App extends Application {
 		sn.addScene("connexion");
 		sn.addScene("technique");
 		sn.addScene("selectGrille");
+
 		sn.changeScene("connexion");
 
 	}

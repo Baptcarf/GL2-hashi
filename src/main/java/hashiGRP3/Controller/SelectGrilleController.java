@@ -1,5 +1,9 @@
+//Attribut au packet
 package hashiGRP3.Controller;
 
+
+
+//Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,12 +11,14 @@ import javafx.scene.image.ImageView;
 
 import java.util.List;
 
+
+
 /**
- * Contrôleur qui hérite de MenuController et ajoute la sélection de grille
+ * Contrôleur pour la séléction de grille dans le menu jouer.
  */
 public class SelectGrilleController extends ManageController {
 
-    // ====== Leaderboard dynamique ======
+    //Leaderboard dynamique
     @FXML private Label labelGrilleSelected;
     @FXML private ImageView imageGrilleSelected;
     @FXML private Label labelScoreSelected;
@@ -35,21 +41,21 @@ public class SelectGrilleController extends ManageController {
 
     @FXML
     public void initialize() {
-        // Initialisation du leaderboard (aucune grille sélectionnée)
-        labelGrilleSelected.setText("");
+        //Initialisation du leaderboard (aucune grille sélectionnée)
+	labelGrilleSelected.setText("");
         imageGrilleSelected.setVisible(false);
         labelScoreSelected.setText("");
         labelNombreIle.setText("Nombre d'île : None");
         labelTempsPerso.setText("Temps perso : None");
 
-        // Liste de tous les boutons
+        //Liste de tous les boutons
         List<Button> toutesLesGrilles = List.of(
                 sectionGrille1, sectionGrille2, sectionGrille3, sectionGrille4,
                 sectionGrille5, sectionGrille6, sectionGrille7, sectionGrille8,
                 sectionGrille9, sectionGrille10, sectionGrille11, sectionGrille12
         );
 
-        // Associer chaque bouton à son numéro de grille
+        //Associer chaque bouton à son numéro de grille
         for (int i = 0; i < toutesLesGrilles.size(); i++) {
             final int index = i + 1;
             Button b = toutesLesGrilles.get(i);
@@ -65,7 +71,7 @@ public class SelectGrilleController extends ManageController {
         labelTempsPerso.setText("Temps perso : " + obtenirTempsPerso(numeroGrille));
     }
 
-    // ====== Méthodes fictives à remplacer par ta logique ======
+    /* Méthode fictives/temporaires */
     private int obtenirScore(int numeroGrille) {
         return 0; // TODO: récupérer le score réel
     }

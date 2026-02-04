@@ -1,16 +1,21 @@
 //Attribut au packet
 package hashiGRP3;
 
-/* Libs */
+
+
+//Imports
 import java.net.URL;
-import java.util.*;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import hashiGRP3.Controller.*;
+
+
 
 /**
  * Classe de gestion des fenêtres.
@@ -27,20 +32,23 @@ public class SceneManager {
                 this.boolFull = false;
         }
 
+	/**
+	 * Ajoute une scène dans le SceneManager.
+	 */
         public void addScene(String name) {
                 try {
-                        // On récupère le fichier FXML
+                        //On récupère le fichier FXML correspondant au nom donnée.
                         final URL url = getClass().getResource("/hashiGRP3/views/" + name + ".fxml");
                         if (url == null) {
                                 System.out.println("Fichier FXML non trouvé : " + name);
                                 return;
                         }
 
-                        // On le charge
+                        //On le charge
                         final FXMLLoader fxmlLoader = new FXMLLoader(url);
                         final Parent root = fxmlLoader.load();
 
-                        // On attribut le controller correspondant
+                        //On attribut le controller correspondant
                         Object controller = fxmlLoader.getController();
                         if (controller instanceof ManageController manageController) {
                                 manageController.setSceneManager(this);
@@ -52,6 +60,7 @@ public class SceneManager {
                                 techniqueController.setSceneManager(this);
                         }
 
+			//On creer une scène avec
                         final Scene s = new Scene(root, 1600, 900);
                         allScene.add(new Composante(s, name));
 
@@ -106,13 +115,14 @@ public class SceneManager {
         }
 
         /**
-         * classe représenant la scène
-         * scene : la secene en elle même
-         * nom : nom donné à la scène
+         * Classe représenant une scène dans le SceneManager.
          */
         private class Composante {
 
+		/** La scène en elle-même */
                 private Scene scene;
+
+		/** Le nom attribué à la scène */
                 private String nom;
 
                 Composante(Scene scene, String nom) {

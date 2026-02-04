@@ -1,5 +1,9 @@
+//Attribut au packet
 package hashiGRP3.Controller;
 
+
+
+//Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +15,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import java.io.InputStream;
 
+
+
+/**
+ * Controlleur de la page des techniques
+ */
 public class TechniqueControler extends ManageController {
 
     @FXML
