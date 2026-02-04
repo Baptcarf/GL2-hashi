@@ -1,4 +1,7 @@
+//Attribut au packet
 package hashiGRP3.Controller;
+
+
 
 /* Libs */
 import javafx.fxml.FXML;
@@ -20,8 +23,16 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import hashiGRP3.SceneManager;
 
+
+
+/* Class */
 public class ConnexionController extends ManageController {
 
         private int nbCount;
@@ -168,7 +179,8 @@ public class ConnexionController extends ManageController {
         }
 
         private void creerUtilisateur(Circle c) {
-                Stage s = new Stage();
+		//Créer une nouvelle fenêtre
+		Stage s = new Stage();
                 s.setTitle("Creer un compte");
 
                 GridPane grid = new GridPane();
@@ -196,6 +208,15 @@ public class ConnexionController extends ManageController {
                 grid.add(b, 0, 3, 2, 1);
                 grid.add(messageLabel, 0, 4, 2, 1);
 
+		//Tentative de base de données
+		try(Connection connection = DriverManager.getConnection("jdbc:sqlite:test.db")) {
+			connection.close();
+		}catch (SQLException e) {
+            		System.err.println(e.getMessage());
+        	}
+
+
+		//Logique de la fenêtre
                 b.setOnAction(ev -> {
                         try {
                                 String pseudo = pseudofield.getText();
@@ -226,6 +247,8 @@ public class ConnexionController extends ManageController {
                                 messageLabel.setText("Erreur : saisie invalide pour les champs numériques !");
                         }
                 });
+
+		//Afficher la fenêtre
                 Scene sc = new Scene(grid, 400, 400);
                 s.setScene(sc);
                 s.show();
