@@ -20,12 +20,12 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 import hashiGRP3.SceneManager;
 import hashiGRP3.BaseDb;
+import hashiGRP3.compDB.Utilisateur;
+
+import java.sql.*;
+import java.util.List;
 
 /* Class */
 public class ConnexionController extends ManageController {
@@ -51,6 +51,18 @@ public class ConnexionController extends ManageController {
                 nbCount = 0;
                 Tooltip.install(creer, new Tooltip("Créer un compte"));
                 Tooltip.install(supprimer, new Tooltip("supprimer un compte"));
+
+                List<Utilisateur> au = sm.getBD().findAllUser();
+
+                for (Utilisateur u : au) {
+                        Circle c = createCircle(u.getColor());
+                        createBoxUser(c, u.getPseudo());
+                        nbCount++;
+                }
+                if (nbCount == 5) {
+                        creer.setFill(Color.web("#DFDFDFDF"));
+                }
+
         }
 
         @FXML
@@ -60,16 +72,32 @@ public class ConnexionController extends ManageController {
                 if (getSceneManager() != null && sceneName != null) {
                         getSceneManager().changeScene(sceneName);
                 }
+
+        }
+
+        private void createBoxUser(Circle c, String val) {
+
+                VBox v = new VBox();
+                v.setAlignment(Pos.CENTER);
+                v.setSpacing(8);
+                v.setMinHeight(150);
+                v.setPrefHeight(150);
+                Label l = new Label(val);
+                l.setAlignment(Pos.CENTER);
+                v.getChildren().addAll(c, l);
+
+                hbox.getChildren().add(0, v);
+
         }
 
         /**
          * Creer un cercle de connexion à afficher.
          */
-        private Circle createCircle() {
+        private Circle createCircle(String color) {
                 // Apparence
                 Circle circle = new Circle();
                 circle.setRadius(100); // même taille que rightCircle
-                circle.setFill(Color.web("#eaf5ff"));
+                circle.setFill(Color.web(color));
                 circle.setStroke(Color.BLACK);
                 circle.setStrokeWidth(2);
 
@@ -97,14 +125,10 @@ public class ConnexionController extends ManageController {
                 if (nbCount < 5) {
                         endSupp();
 
-                        Circle circle = createCircle();
+                        Circle circle = createCircle("#eaf5ff");
 
-                        nbCount += 1;
-                        if (nbCount == 5) {
-                                creer.setFill(Color.web("#DFDFDFDF"));
-                        } else {
-                                this.creerUtilisateur(circle);
-                        }
+                        this.creerUtilisateur(circle);
+
                 }
 
         }
@@ -190,6 +214,7 @@ public class ConnexionController extends ManageController {
                         nbCount--;
                         s.close();
                         endSupp();
+                        creer.setFill(Color.web("#eaf5ff"));
                 });
 
                 Scene sn = new Scene(v);
@@ -224,7 +249,6 @@ public class ConnexionController extends ManageController {
 
                 s.setOnCloseRequest(ev -> {
                         hbox.getChildren().remove(c);
-                        nbCount -= 1;
                 });
 
                 TextField pseudofield = new TextField();
@@ -253,15 +277,11 @@ public class ConnexionController extends ManageController {
                                 db.insertUser(pseudo, couleur);
 
                                 if (!pseudo.equals("")) {
-                                        VBox v = new VBox();
-                                        v.setAlignment(Pos.CENTER);
-                                        v.setSpacing(8);
-                                        v.setMinHeight(150);
-                                        v.setPrefHeight(150);
-                                        Label l = new Label(pseudo);
-                                        l.setAlignment(Pos.CENTER);
-                                        v.getChildren().addAll(c, l);
-                                        hbox.getChildren().add(0, v);
+                                        createBoxUser(c, pseudo);
+                                        nbCount += 1;
+                                        if (nbCount == 5) {
+                                                creer.setFill(Color.web("#DFDFDFDF"));
+                                        }
                                         s.close();
                                         if (cbfield.isSelected()) {
                                                 getSceneManager().changeScene("tutorielle");

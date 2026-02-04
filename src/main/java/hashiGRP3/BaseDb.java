@@ -1,11 +1,15 @@
 package hashiGRP3;
 
 import java.sql.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.print.DocFlavor.STRING;
 
 import java.nio.file.*;
 import java.io.*;
+
+import hashiGRP3.compDB.*;
 
 public class BaseDb {
 
@@ -66,10 +70,39 @@ public class BaseDb {
 
 			pstmt.setString(1, pseudo);
 
+			pstmt.executeUpdate();
 			System.out.println("Utilisateur supprimé : ");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+
+	public List<Utilisateur> findAllUser() {
+		List<Utilisateur> au = new ArrayList<>();
+		String sql = "SELECT * FROM Utilisateur";
+
+		try (Connection conn = DriverManager.getConnection(
+				URL);
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			ResultSet r = pstmt.executeQuery();
+			if (r == null) {
+				return au;
+			}
+
+			while (r.next()) {
+				String name = r.getString("pseudo");
+				String color = r.getString("Couleur");
+
+				au.add(new Utilisateur(name, color));
+			}
+			return au;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return au;
+		}
+	}
+
 }

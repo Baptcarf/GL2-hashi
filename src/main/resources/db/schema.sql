@@ -3,7 +3,7 @@
 CREATE TABLE Utilisateur(
         id_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
         pseudo VARCHAR(50) NOT NULL UNIQUE, 
-        Couleur VARCHAR(7) NOT NULL -- La couleur du compte
+        couleur VARCHAR(7) NOT NULL -- La couleur du compte
 );
 
 -- Table des grilles présent dans le jeu
