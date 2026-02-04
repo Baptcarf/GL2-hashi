@@ -4,27 +4,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+* Représente un pont reliant deux iles
+* Un pont possede une orientation, un état actuel, et un état correcte 
+* et peut être en conflit avec d'autres ponts
+*/
 public class Pont {
 
+    /**
+     * Les orientations possibles d'un pont.
+     */
     public enum Orientation {
         HORIZONTAL,
         VERTICAL
     }
 
-    private final Ile ileA, ileB;
-    private EtatDuPont etatActuel;                    // Représente la valeur entre les ponts
-    private EtatDuPont etatCorrect = EtatDuPont.VIDE;                    // Représente les valeurs finales correctes du pont
+    /** île reliée par le pont */
+    private final Ile ileA;
+    /** île reliée par le pont */
+    private final Ile ileB;
+    /** Etat actuel du pont */
+    private EtatDuPont etatActuel;
+    /** Etat correct du pont */
+    private EtatDuPont etatCorrect = EtatDuPont.VIDE; 
+    /** Orientation du pont*/
+    private final Orientation orientation;
+    /** Liste des ponts qui peuvent renter en conflit avec ce pont */
+    private List<Pont> conflits;
 
-    private final Orientation orientation;      // HORIZONTAL ou VERTICAL
-    private List<Pont> conflits;                // La liste des ponts qui, s'ils sont placé, empêche le fait de poser celui ci
-
+    /**
+     * Construit un pont entre deux ile
+     * Les iles doivent être alignées horizontalement ou verticalement
+     * 
+     * L'ordre des iles est normalisé pour que A<=>B soit la meme chose que B<=>A a la création
+     * La normalisation se fait en plaçant l'ile la plus à gauche (ou la plus haute)
+     * en premier, selon l'ordre défini par comparePositionDesIles
+     * 
+     * @param ileA Premiere île
+     * @param ileB Deuxieme île
+     * @param EtatDuPont Etat initial du pont
+     * @throws IllegalArgumentException si les iles sont identiques ou pas alignés
+     */
     public Pont(Ile ileA, Ile ileB, EtatDuPont EtatDuPont) {
         if (ileA.equals(ileB)) {
             throw new IllegalArgumentException("Une ile ne peut pas etre lié a elle meme");
         }
 
-        // Dans le jeu, un pont entre ile A et ile B est exactement le même que entre B et A
-        // Pour eviter les doublons (ponts identiques mais inversés) on met toujours l'ile la plus à gauche (ou la plus haute) en premier
         Ile premier, second;
         if ((ileA.comparePositionDesIles(ileB)) < 0) {
             premier = ileA;
@@ -48,20 +73,46 @@ public class Pont {
         }
     }
     
+    /**
+     * Ajoute un pont a la liste des conflits de ce pont
+     * @param pont Pont en conflit
+     */
     public void ajouterConflit(Pont pont) {
         this.conflits.add(pont);
     }
 
+    /** @return Première île reliée */
     public Ile getileA() {return ileA;}
+    /** @return Deuxième île reliée */
     public Ile getileB() {return ileB;}
+    /** @return Etat actuel du pont */
     public EtatDuPont getEtatActuel() {return etatActuel;}
+    /** @return Etat correct du pont */
     public EtatDuPont getEtatCorrect() {return etatCorrect;}
+    /** @return True si le pont est dans l'etat correcte */
+    public boolean estCorrect(){return getEtatActuel()==getEtatCorrect();}
+    /** @return Orientation du pont */
     public Orientation getOrientation() {return orientation;}
+    /** @return Liste des ponts en conflit */
     public List<Pont> getConflits() {return conflits;}
 
-    public void setEtatActuel(EtatDuPont etat) {this.etatActuel = etat;}
-    public void setEtatCorrect(EtatDuPont etat) {this.etatCorrect = etat;}
+    /**
+     * Modifie l'état actuel du pont
+     * @param etat Nouvel état
+     */
+    public void setEtatActuel(EtatDuPont etat) { this.etatActuel = etat; }
 
+    /**
+     * Modifie l'état correct du pont
+     * @param etat Nouvel état correct
+     */
+    public void setEtatCorrect(EtatDuPont etat) { this.etatCorrect = etat; }
+
+    /**
+     * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A<=>B ou B<=>A
+     * @param o Objet à comparer
+     * @return true si les ponts relient les memes iles, false sinon
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,16 +120,24 @@ public class Pont {
         return ileA.equals(pont.ileA) && ileB.equals(pont.ileB);
     }
 
+    /**
+     * Hashcode base sur les deux iles
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         return Objects.hash(ileA, ileB);
     }
 
+    /**
+     * Représentation en texte du pont.
+     * @return une string uqi decrit le pont
+     */
     @Override
     public String toString() {
-        return "Pont{" +
-                "ileA=" + ileA.getCoordonnees() +
-                ", ileB=" + ileB.getCoordonnees() +
-                ", etat=" + etatActuel +
-                ", orientation=" + orientation;    }
+        return ileA.getCoordonnees() + 
+               (orientation == Orientation.HORIZONTAL ? "-H-" : "-V-" ) + 
+               ileB.getCoordonnees() +
+               " [" + etatCorrect + "]";    
     }
+}
