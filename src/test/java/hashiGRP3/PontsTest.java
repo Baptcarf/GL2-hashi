@@ -30,4 +30,81 @@ public class PontsTest {
         Pont pont = new Pont(ile2, ile1, EtatDuPont.VIDE);
         assert(pont.getileA() == ile1 && pont.getileB() == ile2);
     }
+    
+    @Test ///Test les EtatDuPont si le pont est vide
+    public void TestEtatDuPontVide(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 2);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        assert(pont.getEtatActuel() == EtatDuPont.VIDE);
+    }
+
+    @Test ///Test les EtatDuPont si le pont est simple
+    public void TestEtatDuPontSimple(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 2);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.SIMPLE);
+        assert(pont.getEtatActuel() == EtatDuPont.SIMPLE);
+    }
+
+    @Test ///Test les EtatDuPont si le pont est double
+    public void TestEtatDuPontDouble(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 2);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.DOUBLE);
+        assert(pont.getEtatActuel() == EtatDuPont.DOUBLE);
+    }
+
+    @Test //Test EtatCorrect & SetEtatCorrect
+    public void TestEtatCorrectEtSetEtatCorrect(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 2);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        pont.setEtatCorrect(EtatDuPont.SIMPLE);
+        assert(pont.getEtatCorrect() == EtatDuPont.SIMPLE);
+    }
+
+    @Test //Test EstCorrect
+    public void TestEstCorrect(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 3);
+        Ile ile3 = new Ile(new Coordonnees(2, 0), 1);
+        Pont pont1 = new Pont(ile1, ile2, EtatDuPont.DOUBLE);
+        Pont pont2 = new Pont(ile1, ile3, EtatDuPont.VIDE);
+        pont1.setEtatCorrect(EtatDuPont.DOUBLE);
+        pont2.setEtatCorrect(EtatDuPont.SIMPLE);
+        assert(pont1.estCorrect() && !pont2.estCorrect());
+    }
+
+    @Test //Test SetEtatActuel
+    public void TestSetEtatActuel(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 3);
+        Pont pont1 = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        Pont pont2 = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        Pont pont3 = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        pont1.setEtatActuel(EtatDuPont.SIMPLE);
+        pont2.setEtatActuel(EtatDuPont.DOUBLE);
+        pont3.setEtatActuel(EtatDuPont.SIMPLE);
+        pont3.setEtatActuel(EtatDuPont.VIDE);
+        assert(pont1.getEtatActuel() == EtatDuPont.SIMPLE && pont2.getEtatActuel() == EtatDuPont.DOUBLE && pont3.getEtatActuel() == EtatDuPont.VIDE);
+    }
+
+    @Test //Test egalité entre pont et objet non pont
+    public void TestEgalitePontEtObjetNonPont(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 3);
+        Pont pont1 = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        String notAPont = "Je ne suis pas un pont";
+        assert(!pont1.equals(notAPont));
+    }
+
+    @Test //Test du ToString - à finir
+    public void TestToString(){
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 2), 3);
+        Pont pont1 = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        Pont pont2 = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        assert(pont1.toString().equals(pont2.toString()));//A finir quand le toString sera confirmé fini
+    }
 }
