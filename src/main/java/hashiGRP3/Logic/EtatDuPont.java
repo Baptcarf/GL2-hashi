@@ -40,9 +40,9 @@ public enum EtatDuPont {
     @Override
     public String toString() {
         return switch (this) {
-            case VIDE -> "vide";
-            case SIMPLE -> "simple";
-            case DOUBLE -> "double";
+            case VIDE -> "VIDE";
+            case SIMPLE -> "SIMPLE";
+            case DOUBLE -> "DOUBLE";
         };
     }
 }
