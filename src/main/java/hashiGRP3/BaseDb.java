@@ -8,20 +8,27 @@ public class BaseDb {
 
         private static final String URL = "jdbc:sqlite:data/Hashi.db";
 
-        public static void init() {
-                try (Connection conn = DriverManager.getConnection(URL);
-                                Statement stmt = conn.createStatement()) {
+        public BaseDb() {
 
-                        // Lire le fichier SQL depuis resources
-                        InputStream is = BaseDb.class.getResourceAsStream("/db/schema.sql");
-                        if (is == null)
-                                throw new FileNotFoundException("schema.sql introuvable");
+        }
 
-                        String sql = new String(is.readAllBytes());
-                        stmt.executeUpdate(sql);
+        public void init() {
+                File dbFile = new File("data/Hashi.db");
+                if (!dbFile.exists()) {
+                        try (Connection conn = DriverManager.getConnection(URL);
+                                        Statement stmt = conn.createStatement()) {
 
-                } catch (SQLException | IOException e) {
-                        e.printStackTrace();
+                                // Lire le fichier SQL depuis resources
+                                InputStream is = BaseDb.class.getResourceAsStream("/db/schema.sql");
+                                if (is == null)
+                                        throw new FileNotFoundException("schema.sql introuvable");
+
+                                String sql = new String(is.readAllBytes());
+                                stmt.executeUpdate(sql);
+
+                        } catch (SQLException | IOException e) {
+                                e.printStackTrace();
+                        }
                 }
         }
 

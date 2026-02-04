@@ -18,13 +18,15 @@ import hashiGRP3.Controller.*;
 public class SceneManager {
 
         private List<Composante> allScene;
+        private BaseDb db;
         private Stage stage;
         private boolean boolFull;
 
-        SceneManager(Stage stage) {
+        SceneManager(Stage stage, BaseDb db) {
                 allScene = new ArrayList<>();
                 this.stage = stage;
                 this.boolFull = false;
+                this.db = db;
         }
 
         public void addScene(String name) {
@@ -87,6 +89,10 @@ public class SceneManager {
 
         public void setFullScreen(boolean value) {
                 boolFull = value;
+        }
+
+        public BaseDb getBD() {
+                return db;
         }
 
         private class Composante {
