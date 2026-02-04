@@ -32,4 +32,17 @@ public enum EtatDuPont {
     public int getValue() {
         return value;
     }
+
+    /**
+     * La valeur du pont 
+     * @return "vide", "simple", "double"
+     */
+    @Override
+    public String toString() {
+        return switch (this) {
+            case VIDE -> "vide";
+            case SIMPLE -> "simple";
+            case DOUBLE -> "double";
+        };
+    }
 }
