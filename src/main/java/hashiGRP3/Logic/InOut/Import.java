@@ -14,12 +14,24 @@ import hashiGRP3.Logic.Pont;
 
 /**
  * Classe pour importer une grille Hashi depuis un fichier texte.
+ * Exemple de format du fichier texte :
+ * (1,1):2
+ * (1,5):2
+ * -
+ * (1,1)(1,5):2
  */
 public class Import {
     private Import() {
         // classe utilitaire, pas d'instance
     }
 
+    /**
+     * Charge une grille Hashi depuis un fichier texte.
+     *
+     * @param chemin chemin du fichier à charger
+     * @return la grille Hashi importée
+     * @throws IOException en cas d'erreur de lecture du fichier
+     */
     public static Hashi chargerFichier(Path chemin) throws IOException {
         List<String> txt = Files.readAllLines(chemin); // lire toutes les lignes du fichier
         List<String> lignesIles = new ArrayList<>(); // stocke les lignes des îles (nodes)
@@ -34,12 +46,24 @@ public class Import {
         return HashiGrille;
     }
 
+    /**
+     * Ajoute les ponts à la grille Hashi à partir des lignes du fichier.
+     *
+     * @param hashi la grille Hashi à compléter
+     * @param lignesPonts les lignes décrivant les ponts
+     */
     private static void ajouterPonts(Hashi hashi, List<String> lignesPonts) {
         for (String ligne : lignesPonts) {
             ligneVersPont(ligne, hashi); // transforme la ligne en Pont et applique l'état dans Hashi
         }
     }
      
+    /**
+     * Ajoute les îles à la grille Hashi à partir des lignes du fichier.
+     *
+     * @param hashi la grille Hashi à compléter
+     * @param lignesIles les lignes décrivant les îles
+     */
     private static void ajouterIles(Hashi hashi, List<String> lignesIles) {
         for (String ligne : lignesIles) {
             Ile ile = ligneVersIle(ligne); // transforme "(x,y):nbPonts" en Ile
@@ -47,6 +71,13 @@ public class Import {
         }
     }
 
+    /**
+     * Sépare les lignes du fichier en lignes d'îles et lignes de ponts.
+     *
+     * @param txt toutes les lignes lues depuis le fichier
+     * @param lignesIles liste où stocker les lignes des îles
+     * @param lignesPonts liste où stocker les lignes des ponts
+     */
     private static void separerLignes(List<String> txt, List<String> lignesIles, List<String> lignesPonts) {
         boolean apresTiret = false;
 
@@ -66,7 +97,14 @@ public class Import {
         }
     }
 
-    // Prend les îles du fichier txt sous la forme : (x,y):nbPonts et les convertit en objet Ile
+    /**
+     * Transforme une ligne de fichier représentant une île en objet Ile.
+     * La ligne doit être au format "(x,y):nbPonts".
+     *
+     * @param ligne la ligne à convertir
+     * @return l'objet Ile correspondant
+     * @throws IllegalArgumentException si le format est invalide
+     */
     private static Ile ligneVersIle(String ligne) {
         // Supprime les espaces inutiles
         ligne = ligne.trim();
@@ -99,7 +137,16 @@ public class Import {
     }
 
 
-    // Prend les lignes du txt sous la forme : (x1,y1)(x2,y2):nbPonts et les convertit en objet Pont
+    /**
+     * Transforme une ligne de fichier représentant un pont en objet Pont
+     * et applique l'état correct dans la grille Hashi.
+     * La ligne doit être au format "(x1,y1)(x2,y2):nbPonts".
+     *
+     * @param ligne la ligne à convertir
+     * @param hash la grille Hashi contenant les îles et ponts
+     * @return le pont mis à jour, ou null si le pont n'existe pas dans la grille
+     * @throws IllegalArgumentException si la ligne ou les îles sont invalides
+     */
     private static Pont ligneVersPont(String ligne, Hashi hash) {
         // Exemple de ligne : "(1,1)(1,5):2"
         ligne = ligne.trim();
