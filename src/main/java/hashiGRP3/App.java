@@ -23,8 +23,11 @@ public class App {
             System.out.println();
         }
         System.out.println(hashi.getIle(2, 5).getPont(Direction.HAUT).getConflits());
-        hashi.afficherPlateau();
-
+        System.out.println(hashi);
+        for (var pont : hashi.getPonts()) {
+            pont.setEtatActuel(pont.getEtatCorrect());
+        }
+        System.out.println(hashi);
     }
 
 }
