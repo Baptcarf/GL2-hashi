@@ -18,11 +18,11 @@ import hashiGRP3.Controller.*;
 public class SceneManager {
 
         private List<Composante> allScene;
-        private BaseDb db;
+        private DatabaseManager db;
         private Stage stage;
         private boolean boolFull;
 
-        SceneManager(Stage stage, BaseDb db) {
+        SceneManager(Stage stage, DatabaseManager db) {
                 allScene = new ArrayList<>();
                 this.stage = stage;
                 this.boolFull = false;
@@ -31,18 +31,18 @@ public class SceneManager {
 
         public void addScene(String name) {
                 try {
-                        // On récupère le fichier FXML
+                        //On récupère le fichier FXML
                         final URL url = getClass().getResource("/hashiGRP3/views/" + name + ".fxml");
                         if (url == null) {
                                 System.out.println("Fichier FXML non trouvé : " + name);
                                 return;
                         }
 
-                        // On le charge
+                        //On le charge
                         final FXMLLoader fxmlLoader = new FXMLLoader(url);
                         final Parent root = fxmlLoader.load();
 
-                        // On attribut le controller correspondant
+                        //On attribut le controller correspondant
                         Object controller = fxmlLoader.getController();
                         if (controller instanceof ManageController manageController) {
                                 manageController.setSceneManager(this);
@@ -91,7 +91,7 @@ public class SceneManager {
                 boolFull = value;
         }
 
-        public BaseDb getBD() {
+        public DatabaseManager getBD() {
                 return db;
         }
 

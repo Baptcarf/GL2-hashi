@@ -1,10 +1,13 @@
 //Attribut au packet
 package hashiGRP3;
 
-/* Libs */
 
+
+//Imports
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+
 
 /* Point de démarrage de l'application */
 public class App extends Application {
@@ -14,10 +17,10 @@ public class App extends Application {
 	@Override
 	public void start(final Stage primaryStage) {
 
-		BaseDb bd = new BaseDb();
-		bd.init();
+		DatabaseManager db = new DatabaseManager();
+		db.init();
 
-		sn = new SceneManager(primaryStage, bd);
+		sn = new SceneManager(primaryStage, db);
 
 		sn.addScene("option");
 		sn.addScene("accueil");

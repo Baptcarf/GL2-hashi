@@ -1,5 +1,11 @@
+//Attribut au paquet
 package hashiGRP3.compDB;
 
+
+
+/** 
+ * Classe d'utilisateur pour la base de donnée.
+ */
 public class Utilisateur {
 
         private String pseudo;
@@ -17,5 +23,4 @@ public class Utilisateur {
         public String getColor() {
                 return color;
         }
-
 }

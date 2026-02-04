@@ -1,7 +1,9 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-/* Libs */
+
+
+//Imports
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
@@ -21,11 +23,13 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 import hashiGRP3.SceneManager;
-import hashiGRP3.BaseDb;
+import hashiGRP3.DatabaseManager;
 import hashiGRP3.compDB.Utilisateur;
 
 import java.sql.*;
 import java.util.List;
+
+
 
 /* Class */
 public class ConnexionController extends ManageController {
@@ -195,7 +199,7 @@ public class ConnexionController extends ManageController {
                 });
 
                 bo.setOnAction(ev -> {
-                        BaseDb db = getSceneManager().getBD();
+                        DatabaseManager db = getSceneManager().getBD();
 
                         VBox parentVBox = (VBox) circle.getParent();
                         Label lab = null;
@@ -208,7 +212,7 @@ public class ConnexionController extends ManageController {
                                 }
                         }
 
-                        db.deletetUser(lab.getText());
+                        db.deleteUser(lab.getText());
 
                         hbox.getChildren().remove(circle.getParent());
                         nbCount--;
@@ -238,7 +242,7 @@ public class ConnexionController extends ManageController {
         }
 
         private void creerUtilisateur(Circle c) {
-                // Créer une nouvelle fenêtre
+                //Créer une nouvelle fenêtre
                 Stage s = new Stage();
                 s.setTitle("Creer un compte");
 
@@ -266,14 +270,14 @@ public class ConnexionController extends ManageController {
                 grid.add(b, 0, 3, 2, 1);
                 grid.add(messageLabel, 0, 4, 2, 1);
 
-                // Logique de la fenêtre
+                //Logique de la fenêtre
                 b.setOnAction(ev -> {
                         try {
                                 String pseudo = pseudofield.getText();
                                 String couleur = colorToString(cpfield.getValue());
                                 c.setFill(cpfield.getValue());
 
-                                BaseDb db = getSceneManager().getBD();
+                                DatabaseManager db = getSceneManager().getBD();
                                 db.insertUser(pseudo, couleur);
 
                                 if (!pseudo.equals("")) {
@@ -298,7 +302,7 @@ public class ConnexionController extends ManageController {
                         }
                 });
 
-                // Afficher la fenêtre
+                //Afficher la fenêtre
                 Scene sc = new Scene(grid, 400, 400);
                 s.setScene(sc);
                 s.show();

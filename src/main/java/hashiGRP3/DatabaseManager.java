@@ -1,5 +1,9 @@
+//Attribut au paquet
 package hashiGRP3;
 
+
+
+//Imports
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -11,14 +15,18 @@ import java.io.*;
 
 import hashiGRP3.compDB.*;
 
-public class BaseDb {
+
+
+/* Class */
+public class DatabaseManager {
 
 	private static final String URL = "jdbc:sqlite:data/Hashi.db";
 
-	public BaseDb() {
+	public DatabaseManager() {}
 
-	}
-
+	/**
+	 * Initialise la base de données avec le schéma construit.
+	 */
 	public void init() {
 		File dbFile = new File("data/Hashi.db");
 		if (!dbFile.exists()) {
@@ -26,7 +34,7 @@ public class BaseDb {
 					Statement stmt = conn.createStatement()) {
 
 				// Lire le fichier SQL depuis resources
-				InputStream is = BaseDb.class.getResourceAsStream("/db/schema.sql");
+				InputStream is = DatabaseManager.class.getResourceAsStream("/db/schema.sql");
 				if (is == null)
 					throw new FileNotFoundException("schema.sql introuvable");
 
@@ -39,10 +47,16 @@ public class BaseDb {
 		}
 	}
 
+	/**
+	 * Renvoie un connecteur vers la base de donnée.
+	 */
 	public static Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(URL);
 	}
 
+	/**
+	 * Insère un utilisateur dans la base de donnée.
+	 */
 	public void insertUser(String pseudo, String couleur) {
 		String sql = "INSERT INTO Utilisateur(pseudo, Couleur) VALUES(?, ?)";
 
@@ -61,7 +75,10 @@ public class BaseDb {
 		}
 	}
 
-	public void deletetUser(String pseudo) {
+	/**
+	 * Supprime un utilisateur de la base de donnée.
+	 */
+	public void deleteUser(String pseudo) {
 		String sql = "DELETE FROM Utilisateur where pseudo == ?";
 
 		try (Connection conn = DriverManager.getConnection(
@@ -78,6 +95,9 @@ public class BaseDb {
 		}
 	}
 
+	/**
+	 * Renvoie tout les utilisateurs de la base de donnée.
+	 */
 	public List<Utilisateur> findAllUser() {
 		List<Utilisateur> au = new ArrayList<>();
 		String sql = "SELECT * FROM Utilisateur";
