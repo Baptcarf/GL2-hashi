@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Hashi {
     private final Map<Coordonnees, Ile> iles = new HashMap<>(); // Une hashmap où les clés sont les coordonées (x, y) => Une Ile 
-    public Set<Pont> ponts = new HashSet<>();
+    private  Set<Pont> ponts = new HashSet<>();
     private int tailleX = 0;
     private int tailleY = 0;
 
@@ -106,52 +106,47 @@ public class Hashi {
         System.out.println("┘");
     }
 
+
+    private Ile trouverVoisin(Ile ile, Direction direction) {
+        Coordonnees deplacementTheorique = ile.getCoordonnees().additionner(direction.getDelta());
+
+        while (estDansLaGrille(deplacementTheorique)) {
+            if (iles.containsKey(deplacementTheorique)) {
+                return iles.get(deplacementTheorique);
+            }
+            deplacementTheorique = deplacementTheorique.additionner(direction.getDelta());
+        }
+        return null;
+    }
+
+    private Pont obtenirOuCreerPont(Ile ileA, Ile ileB) {
+        Pont pont = getPont(ileA, ileB);
+        
+        if (pont != null) {
+            return pont;
+        }
+
+        Pont nouveauPont = new Pont(ileA, ileB, EtatDuPont.VIDE);
+        this.ponts.add(nouveauPont);
+        return nouveauPont;
+    }
+
     public void initialisationToutLesPonts() {
-        // Pour chaque ile,
-        for (Ile ileActuel : iles.values()) {
-            Coordonnees coordonneesIleActuel = ileActuel.getCoordonnees();
-            // Pour chaque direction, 
+        // Pour chaque ile
+        for (Ile ileActuelle : iles.values()) {
+            
+            // Pour chaque direction
             for (Direction direction : Direction.values()) {
 
-                int x = coordonneesIleActuel.x + direction.getDx();
-                int y = coordonneesIleActuel.y + direction.getDy();
-
-                Ile ileVoisine = null;
-
-                // On avance dans la direction actuel tout pendant que on trouve pas d'ile ou tant qu'on est dans la grille
-                while (x >= 0 && x <= this.tailleX && y >= 0 && y <= this.tailleY) {
-                    Coordonnees testCoordonnees = new Coordonnees(x, y);
-                    if (iles.containsKey(testCoordonnees)) {
-                        ileVoisine = iles.get(testCoordonnees);
-                        break;
-                    }
-
-                    x += direction.getDx();
-                    y += direction.getDy();
-                }
+                Ile ileVoisine = trouverVoisin(ileActuelle, direction);
 
                 if (ileVoisine != null) {
-                    Pont pont = new Pont(ileActuel, ileVoisine, EtatDuPont.VIDE);
-                    
-                    // Vérifier si le pont existe déjà dans le Set
-                    Pont pontExistant = null;
-                    for (Pont p : this.ponts) {
-                        if (p.equals(pont)) {
-                            pontExistant = p;
-                            break;
-                        }
-                    }
-                    
-                    if (pontExistant == null) {
-                        // Nouveau pont, on l'ajoute
-                        this.ponts.add(pont);
-                        ileActuel.ajouterPonts(direction, pont);
-                        ileVoisine.ajouterPonts(direction.directionOppose(), pont);
-                    } else {
-                        // Pont existe deja on utilise l'instance de base
-                        ileActuel.ajouterPonts(direction, pontExistant);
-                        ileVoisine.ajouterPonts(direction.directionOppose(), pontExistant);
-                    }
+                    // On recupere ou on cree le pont unique entre les deux iles
+                    Pont pont = obtenirOuCreerPont(ileActuelle, ileVoisine);
+
+                    // On connecte le pont a l'ile, et l'ile voisine
+                    ileActuelle.ajouterPonts(direction, pont);
+                    ileVoisine.ajouterPonts(direction.directionOppose(), pont);
                 }
             }
         }
@@ -182,6 +177,15 @@ public class Hashi {
         }
     }
 
+    /**
+     * Verifie si une coord est dans de la grille
+     * @param c La coordonnée
+     * @return true si la coordonnée est dans la grille, false sinon
+     */
+    public boolean estDansLaGrille(Coordonnees c) {
+        return c.x >= 0 && c.x <= this.tailleX && c.y >= 0 && c.y <= this.tailleY;
+    }
+
     public Map<Coordonnees, Ile> getIles() {
         return iles;
     }
@@ -197,8 +201,14 @@ public class Hashi {
     public int getTailleY() {
         return tailleY;
     }
+    
     public Ile getIle(int x, int y) {
         return iles.get(new Coordonnees(x, y));
+    }
+
+    public Pont getPont(Ile ileA, Ile ileB) {
+        Pont test = new Pont(ileA, ileB, EtatDuPont.VIDE);
+        return getPont(test);
     }
 
     public Pont getPont(Pont recherche) {
