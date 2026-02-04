@@ -13,16 +13,13 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.Scene;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.scene.Scene;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -67,27 +64,42 @@ public class ConnexionController extends ManageController {
                 }
         }
 
+	/**
+	 * Creer un cercle de connexion à afficher.
+	 */
+	private Circle createCircle() {
+		//Apparence
+		Circle circle = new Circle();
+		circle.setRadius(100); // même taille que rightCircle
+		circle.setFill(Color.web("#eaf5ff"));
+		circle.setStroke(Color.BLACK);
+		circle.setStrokeWidth(2);
+
+		//Logique
+		circle.setOnMouseClicked(event -> {
+			if (sup) {
+
+				supprimerCompte(circle);
+
+			} else {
+				getSceneManager().changeScene("accueil");
+			}
+
+		});
+		
+		//Retour
+		return circle;
+	}
+
+	/**
+	 * Ajoute un cercle de connexion à la page d'accueil.
+	 */
         @FXML
         private void addCount() {
                 if (nbCount < 5) {
                         endSupp();
-                        Circle circle = new Circle();
-                        circle.setRadius(100); // même taille que rightCircle
-                        circle.setFill(Color.web("#eaf5ff"));
-                        circle.setStroke(Color.BLACK);
-                        circle.setStrokeWidth(2);
-                        Tooltip.install(circle, new Tooltip("jouer"));
 
-                        circle.setOnMouseClicked(event -> {
-                                if (sup) {
-
-                                        supprimerCompte(circle);
-
-                                } else {
-                                        getSceneManager().changeScene("accueil");
-                                }
-
-                        });
+                        Circle circle = createCircle();
 
                         nbCount += 1;
                         if (nbCount == 5) {
@@ -207,16 +219,6 @@ public class ConnexionController extends ManageController {
                 grid.addRow(2, new Label("Je n'ai jamais joué au Hashi : "), cbfield);
                 grid.add(b, 0, 3, 2, 1);
                 grid.add(messageLabel, 0, 4, 2, 1);
-
-		//Tentative de base de données
-		try(var conn = DriverManager.getConnection("jdbc:sqlite:./src/data.db")) {
-			conn.close();
-
-		} catch (SQLException e) {
-            		System.err.println("SQL Error : " + e.getMessage());
-			System.err.println("No save will be available");
-        	}
-
 
 		//Logique de la fenêtre
                 b.setOnAction(ev -> {
