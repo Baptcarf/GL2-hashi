@@ -1,65 +1,51 @@
-//Attribut au packet
 package hashiGRP3.Controller;
 
-
-
-//Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 
-import java.util.List;
-
-
-
-/**
- * Contrôleur pour la séléction de grille dans le menu jouer.
- */
 public class SelectGrilleController extends ManageController {
 
-    //Leaderboard dynamique
+    // Leaderboard dynamique
     @FXML private Label labelGrilleSelected;
     @FXML private ImageView imageGrilleSelected;
     @FXML private Label labelScoreSelected;
     @FXML private Label labelNombreIle;
     @FXML private Label labelTempsPerso;
 
-    // Boutons de toutes les grilles
-    @FXML private Button sectionGrille1;
-    @FXML private Button sectionGrille2;
-    @FXML private Button sectionGrille3;
-    @FXML private Button sectionGrille4;
-    @FXML private Button sectionGrille5;
-    @FXML private Button sectionGrille6;
-    @FXML private Button sectionGrille7;
-    @FXML private Button sectionGrille8;
-    @FXML private Button sectionGrille9;
-    @FXML private Button sectionGrille10;
-    @FXML private Button sectionGrille11;
-    @FXML private Button sectionGrille12;
+    // Conteneur des boutons
+    @FXML private GridPane grilleContainer;
+
+    private static final int NOMBRE_GRILLES = 12;
+    private static final int COLONNES = 4;
 
     @FXML
     public void initialize() {
-        //Initialisation du leaderboard (aucune grille sélectionnée)
-	labelGrilleSelected.setText("");
+        labelGrilleSelected.setText("");
         imageGrilleSelected.setVisible(false);
         labelScoreSelected.setText("");
         labelNombreIle.setText("Nombre d'île : None");
         labelTempsPerso.setText("Temps perso : None");
 
-        //Liste de tous les boutons
-        List<Button> toutesLesGrilles = List.of(
-                sectionGrille1, sectionGrille2, sectionGrille3, sectionGrille4,
-                sectionGrille5, sectionGrille6, sectionGrille7, sectionGrille8,
-                sectionGrille9, sectionGrille10, sectionGrille11, sectionGrille12
-        );
+        creerBoutonsGrilles();
+    }
 
-        //Associer chaque bouton à son numéro de grille
-        for (int i = 0; i < toutesLesGrilles.size(); i++) {
-            final int index = i + 1;
-            Button b = toutesLesGrilles.get(i);
-            b.setOnAction(event -> afficherGrilleSelectionnee(index));
+    private void creerBoutonsGrilles() {
+        grilleContainer.getChildren().clear();
+
+        for (int i = 0; i < NOMBRE_GRILLES; i++) {
+            int numeroGrille = i + 1;
+
+            Button bouton = new Button("Grille " + numeroGrille);
+            bouton.setPrefWidth(150);
+            bouton.setOnAction(e -> afficherGrilleSelectionnee(numeroGrille));
+
+            int colonne = i % COLONNES;
+            int ligne = i / COLONNES;
+
+            grilleContainer.add(bouton, colonne, ligne);
         }
     }
 
@@ -71,16 +57,16 @@ public class SelectGrilleController extends ManageController {
         labelTempsPerso.setText("Temps perso : " + obtenirTempsPerso(numeroGrille));
     }
 
-    /* Méthode fictives/temporaires */
+    /* Méthodes temporaires */
     private int obtenirScore(int numeroGrille) {
-        return 0; // TODO: récupérer le score réel
+        return 0;
     }
 
     private int obtenirNombreIle(int numeroGrille) {
-        return 5; // TODO: récupérer le nombre réel d'îles
+        return 5;
     }
 
     private String obtenirTempsPerso(int numeroGrille) {
-        return "00:00"; // TODO: récupérer le temps réel
+        return "00:00";
     }
 }

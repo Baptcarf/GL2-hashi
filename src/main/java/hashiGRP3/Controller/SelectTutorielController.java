@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SelectTutorielController extends ManageController {
 
-    /* ==================== ÉTATS ==================== */
+    /* ==================== ÉTATS LVL ==================== */
 
     private enum LevelState {
         LOCKED,        // Niveau bloqué
@@ -43,7 +43,7 @@ public class SelectTutorielController extends ManageController {
         setupProgression();
     }
 
-
+    //Charger les images pour les différents états des niveaux
     private void loadImages() {
         imgLocked = new Image(
             SelectTutorielController.class
@@ -64,6 +64,7 @@ public class SelectTutorielController extends ManageController {
         );
     }
 
+    // Récupérer les HBox représentant les niveaux à partir du ScrollPane
     private void collectLevels() {
         VBox content = (VBox) scrollPane.getContent();
 
@@ -74,19 +75,19 @@ public class SelectTutorielController extends ManageController {
         });
     }
 
+    // Initialiser les états des niveaux (seul le premier est débloqué au départ)
     private void initLevels() {
         states.clear();
 
-        for (int i = 0; i < levels.size(); i++) {
-            if (i == 0) {
-                states.add(LevelState.UNLOCKED);
-            } else {
-                states.add(LevelState.LOCKED);
-            }
+        states.add(LevelState.UNLOCKED); // Premier niveau débloqué
+        applyState(levels.get(0), LevelState.UNLOCKED);
+        for (int i = 1; i < levels.size(); i++) {
+            states.add(LevelState.LOCKED);
             applyState(levels.get(i), states.get(i));
         }
     }
 
+    // Configurer les actions des boutons pour gérer la progression
     private void setupProgression() {
         for (int i = 0; i < levels.size(); i++) {
             final int index = i;
@@ -95,14 +96,14 @@ public class SelectTutorielController extends ManageController {
     }
 
 
+    // Gérer le clic sur un niveau : si débloqué, le marquer comme complété et débloquer le suivant
     private void onLevelClicked(int index) {
         if (states.get(index) == LevelState.LOCKED) return;
-
-     
 
         completeLevel(index);
     }
 
+    // Marquer un niveau comme complété et débloquer le suivant si nécessaire
     private void completeLevel(int index) {
         if (states.get(index) == LevelState.COMPLETED) return;
 
@@ -118,6 +119,7 @@ public class SelectTutorielController extends ManageController {
     }
 
 
+    // Appliquer le style et l'image appropriés à un niveau en fonction de son état
     private void applyState(HBox level, LevelState state) {
         Button btn = getButton(level);
         ImageView img = getImage(level);
