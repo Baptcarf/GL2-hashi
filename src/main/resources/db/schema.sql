@@ -16,7 +16,7 @@ CREATE TABLE Grille(
 
 -- Table des parties 
 CREATE TABLE Partie(
-        id_partie INTEGER PRIMARY KEY AUTOINCREMENT
+        id_partie INTEGER PRIMARY KEY AUTOINCREMENT,
         id_utilisateur BIGINT REFERENCES Utilisateur(id_utilisateur),
         id_grille BIGINT REFERENCES Grille(id_grille),
         statut INT NOT NULL, -- Le statut de la partie (0 pas commencé, 1 en cours, 2 terminé)
