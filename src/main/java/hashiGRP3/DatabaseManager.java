@@ -1,8 +1,6 @@
 //Attribut au paquet
 package hashiGRP3;
 
-
-
 //Imports
 import java.sql.*;
 import java.util.List;
@@ -15,14 +13,13 @@ import java.io.*;
 
 import hashiGRP3.compDB.*;
 
-
-
 /* Class */
 public class DatabaseManager {
 
 	private static final String URL = "jdbc:sqlite:data/Hashi.db";
 
-	public DatabaseManager() {}
+	public DatabaseManager() {
+	}
 
 	/**
 	 * Initialise la base de données avec le schéma construit.
@@ -107,9 +104,6 @@ public class DatabaseManager {
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			ResultSet r = pstmt.executeQuery();
-			if (r == null) {
-				return au;
-			}
 
 			while (r.next()) {
 				String name = r.getString("pseudo");
@@ -123,6 +117,29 @@ public class DatabaseManager {
 			e.printStackTrace();
 			return au;
 		}
+	}
+
+	public Boolean userExist(String pseudo) {
+		String sql = "SELECT * FROM Utilisateur where pseudo = ?";
+
+		try (Connection conn = DriverManager.getConnection(
+				URL);
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.setString(1, pseudo);
+
+			ResultSet r = pstmt.executeQuery();
+			if (!r.next()) {
+				return false;
+			}
+
+			return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 }

@@ -1,8 +1,6 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-
-
 //Imports
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -29,8 +27,6 @@ import hashiGRP3.compDB.Utilisateur;
 
 import java.sql.*;
 import java.util.List;
-
-
 
 /* Class */
 public class ConnexionController extends ManageController {
@@ -243,7 +239,7 @@ public class ConnexionController extends ManageController {
         }
 
         private void creerUtilisateur(Circle c) {
-                //Créer une nouvelle fenêtre
+                // Créer une nouvelle fenêtre
                 Stage s = new Stage();
                 s.initModality(Modality.APPLICATION_MODAL);
                 s.initOwner(hbox.getScene().getWindow());
@@ -273,7 +269,7 @@ public class ConnexionController extends ManageController {
                 grid.add(b, 0, 3, 2, 1);
                 grid.add(messageLabel, 0, 4, 2, 1);
 
-                //Logique de la fenêtre
+                // Logique de la fenêtre
                 b.setOnAction(ev -> {
                         try {
                                 String pseudo = pseudofield.getText();
@@ -281,9 +277,9 @@ public class ConnexionController extends ManageController {
                                 c.setFill(cpfield.getValue());
 
                                 DatabaseManager db = getSceneManager().getBD();
-                                db.insertUser(pseudo, couleur);
 
-                                if (!pseudo.equals("")) {
+                                if ((!pseudo.equals("")) && (!db.userExist(pseudo))) {
+                                        db.insertUser(pseudo, couleur);
                                         createBoxUser(c, pseudo);
                                         nbCount += 1;
                                         if (nbCount == 5) {
@@ -291,13 +287,18 @@ public class ConnexionController extends ManageController {
                                         }
                                         s.close();
                                         if (cbfield.isSelected()) {
-                                                getSceneManager().changeScene("tutorielle");
+                                                getSceneManager().changeScene("selectTutoriel");
                                         } else {
                                                 getSceneManager().changeScene("accueil");
                                         }
                                 }
                                 messageLabel.setTextFill(Color.RED);
-                                messageLabel.setText("Erreur : Pseudo non renseigné");
+                                if (pseudo.equals("")) {
+                                        messageLabel.setText("Erreur : Pseudo non renseigné");
+                                } else {
+                                        messageLabel.setText("Erreur : Pseudo déjà pris");
+
+                                }
 
                         } catch (NumberFormatException ex) {
                                 messageLabel.setTextFill(Color.RED);
@@ -305,7 +306,7 @@ public class ConnexionController extends ManageController {
                         }
                 });
 
-                //Afficher la fenêtre
+                // Afficher la fenêtre
                 Scene sc = new Scene(grid, 400, 400);
                 s.setScene(sc);
                 s.show();
