@@ -22,6 +22,12 @@ public class SceneManager {
         private Stage stage;
         private boolean boolFull;
 
+        /**
+         * Création du sceneManager
+         * 
+         * @param stage : le stage
+         * @param db    : la base de donnée
+         */
         SceneManager(Stage stage, DatabaseManager db) {
                 allScene = new ArrayList<>();
                 this.stage = stage;
@@ -29,29 +35,28 @@ public class SceneManager {
                 this.db = db;
         }
 
+        /**
+         * Ajoiut d'une scène dans le scène controller
+         * 
+         * @param name : le nom du fichier source de la scène (.fxml)
+         */
         public void addScene(String name) {
                 try {
-                        //On récupère le fichier FXML
+                        // On récupère le fichier FXML
                         final URL url = getClass().getResource("/hashiGRP3/views/" + name + ".fxml");
                         if (url == null) {
                                 System.out.println("Fichier FXML non trouvé : " + name);
                                 return;
                         }
 
-                        //On le charge
+                        // On le charge
                         final FXMLLoader fxmlLoader = new FXMLLoader(url);
                         final Parent root = fxmlLoader.load();
 
-                        //On attribut le controller correspondant
+                        // On attribut le controller correspondant
                         Object controller = fxmlLoader.getController();
                         if (controller instanceof ManageController manageController) {
                                 manageController.setSceneManager(this);
-                        } else if (controller instanceof OptionController optionController) {
-                                optionController.setSceneManager(this);
-                        } else if (controller instanceof ConnexionController connexionController) {
-                                connexionController.setSceneManager(this);
-                        } else if (controller instanceof TechniqueControler techniqueController) {
-                                techniqueController.setSceneManager(this);
                         }
 
                         final Scene s = new Scene(root, 1600, 900);
@@ -62,6 +67,12 @@ public class SceneManager {
                 }
         }
 
+        /**
+         * trouver une scène par son nom
+         * 
+         * @param name le nom de la scène à trouver
+         * @return la scène correspondante si trouver sinon null
+         */
         public Scene findScene(String name) {
                 for (Composante c : allScene) {
                         if (name.equals(c.getNom())) {
@@ -71,6 +82,11 @@ public class SceneManager {
                 return null;
         }
 
+        /**
+         * Changer de scènne
+         * 
+         * @param name la nouvelle scène principal
+         */
         public void changeScene(String name) {
                 Scene s = findScene(name);
                 if (s == null) {
@@ -87,28 +103,60 @@ public class SceneManager {
                 stage.show();
         }
 
+        /**
+         * Seteur du pleine écran
+         * 
+         * @param value : la nouvelle valeur
+         */
         public void setFullScreen(boolean value) {
                 boolFull = value;
         }
 
+        /**
+         * geter de la base de donnée
+         * 
+         * @return la base de donnée
+         */
         public DatabaseManager getBD() {
                 return db;
         }
 
+        /**
+         * classe représentant une scène
+         */
         private class Composante {
 
+                // la scène en elle même
                 private Scene scene;
+
+                // le nom donnée à la scène
                 private String nom;
 
+                /**
+                 * Créeation du composant scène
+                 * 
+                 * @param scene
+                 * @param nom
+                 */
                 Composante(Scene scene, String nom) {
                         this.scene = scene;
                         this.nom = nom;
                 }
 
+                /**
+                 * getter de la scène
+                 * 
+                 * @return la scène
+                 */
                 public Scene getScene() {
                         return scene;
                 }
 
+                /**
+                 * getter du nom de la scène
+                 * 
+                 * @return le nom de la scène
+                 */
                 public String getNom() {
                         return nom;
                 }
