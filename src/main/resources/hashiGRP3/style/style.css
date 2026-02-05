@@ -95,3 +95,37 @@
         -fx-border-width: 5px;
 
 }
+
+/* ======================
+        Style des section des tutoriels
+   ====================== */
+
+   .sous-section-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 5 10 5 10;
+}
+
+.sous-section-btn:hover {
+    -fx-background-color: #eeeeee;
+    -fx-cursor: hand;
+}
+
+.sous-section-text {
+    -fx-font-size: 17px;
+    -fx-text-fill: #333333;
+}
+
+/* ======================
+        Style bouton du menu toturiel
+   ====================== */
+.button:disabled {
+    -fx-opacity: 0.5;
+}
+
+.button.locked {
+    -fx-text-fill: #888888;
+}
+
+.button.unlocked {
+    -fx-text-fill: #000000;
+}
