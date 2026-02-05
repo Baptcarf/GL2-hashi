@@ -58,7 +58,8 @@ public class DatabaseManager {
 	 * Insère un utilisateur dans la base de donnée.
 	 */
 	public void insertUser(String pseudo, String couleur) {
-		String sql = "INSERT INTO Utilisateur(pseudo, Couleur) VALUES(?, ?)";
+
+		String sql = "INSERT INTO Utilisateur(pseudo, Couleur) VALUES(?, ?)";// préparation de la requète
 
 		try (Connection conn = DriverManager.getConnection(
 				URL);
