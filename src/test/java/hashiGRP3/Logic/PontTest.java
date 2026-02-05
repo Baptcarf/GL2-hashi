@@ -1,4 +1,5 @@
 package hashiGRP3.Logic;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -126,6 +127,42 @@ public class PontTest {
         Pont pontConflit = new Pont(ile2, ile3, EtatDuPont.VIDE);
         pont.ajouterConflit(pontConflit);
         assertTrue(pont.pontEstPossible());
+    }
+
+    @Test
+    void testCyclerFromVidePossible() {
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 1);
+        Ile ile2 = new Ile(new Coordonnees(0, 1), 1);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        pont.cycler();
+        assertTrue(pont.getEtatActuel() == EtatDuPont.SIMPLE);
+    }
+
+    @Test
+    void testCyclerFromVideImpossible() {
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 1);
+        Ile ile2 = new Ile(new Coordonnees(0, 1), 1);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        Pont pontConflit = new Pont(new Ile(new Coordonnees(0, 1), 1), new Ile(new Coordonnees(0, 2), 1), EtatDuPont.SIMPLE);
+        pont.ajouterConflit(pontConflit);
+        pont.cycler();
+        assertTrue(pont.getEtatActuel() == EtatDuPont.VIDE);
+    }
+
+    @Test
+    void testCyclerSequence() {
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(0, 1), 2);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+
+        pont.cycler();
+        assertEquals(EtatDuPont.SIMPLE, pont.getEtatActuel());
+        pont.cycler();
+        assertEquals(EtatDuPont.DOUBLE, pont.getEtatActuel());
+        pont.cycler();
+        assertEquals(EtatDuPont.VIDE, pont.getEtatActuel());
+        pont.cycler();
+        assertEquals(EtatDuPont.SIMPLE, pont.getEtatActuel());
     }
 
     @Test //Test du ToString

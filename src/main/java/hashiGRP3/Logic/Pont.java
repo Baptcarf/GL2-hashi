@@ -122,6 +122,18 @@ public class Pont {
     public void setEtatCorrect(EtatDuPont etat) { this.etatCorrect = etat; }
 
     /**
+     * Cycle l'état actuelle du pont : VIDE -> SIMPLE -> DOUBLE -> VIDE
+     * Si le pont est vide, on doit verifier si il est possible de mettre un pont
+     */
+    public void cycler() {
+        this.etatActuel = switch (this.etatActuel) {
+            case VIDE -> pontEstPossible() ? EtatDuPont.SIMPLE : EtatDuPont.VIDE;
+            case SIMPLE -> EtatDuPont.DOUBLE;
+            case DOUBLE -> EtatDuPont.VIDE;
+        };
+    }
+
+    /**
      * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A<=>B ou B<=>A
      * @param o Objet à comparer
      * @return true si les ponts relient les memes iles, false sinon
