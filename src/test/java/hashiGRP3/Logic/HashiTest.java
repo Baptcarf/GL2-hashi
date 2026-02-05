@@ -2,11 +2,8 @@ package hashiGRP3.Logic;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-import hashiGRP3.Logic.Coordonnees;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
 
-public class ConflitTest {
+public class HashiTest {
     @Test
     public void testConflitListePontsUniquee() { //Test de la génération des conflit dans le cas où la liste de ponts ne contient qu'un seul élément  
         Hashi hashi = new Hashi();

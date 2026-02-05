@@ -81,6 +81,19 @@ public class Pont {
         this.conflits.add(pont);
     }
 
+    /**
+     * Vérifie si un pont peut être ajouté sans entrer en conflit avec d'autres ponts existants
+     * 
+     * @return true si il est possible de rajouter un pont, false si un pont empeche le placement
+     */
+    public boolean pontEstPossible() {
+        int total = 0;
+        for (Pont pont : conflits) {
+            total += pont.etatActuel.getValue();
+        }
+        return total == 0;
+    }
+
     /** @return Première île reliée */
     public Ile getileA() {return ileA;}
     /** @return Deuxième île reliée */
@@ -107,6 +120,18 @@ public class Pont {
      * @param etat Nouvel état correct
      */
     public void setEtatCorrect(EtatDuPont etat) { this.etatCorrect = etat; }
+
+    /**
+     * Cycle l'état actuelle du pont : VIDE -> SIMPLE -> DOUBLE -> VIDE
+     * Si le pont est vide, on doit verifier si il est possible de mettre un pont
+     */
+    public void cycler() {
+        this.etatActuel = switch (this.etatActuel) {
+            case VIDE -> pontEstPossible() ? EtatDuPont.SIMPLE : EtatDuPont.VIDE;
+            case SIMPLE -> EtatDuPont.DOUBLE;
+            case DOUBLE -> EtatDuPont.VIDE;
+        };
+    }
 
     /**
      * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A<=>B ou B<=>A
