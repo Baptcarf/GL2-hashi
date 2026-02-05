@@ -81,6 +81,19 @@ public class Pont {
         this.conflits.add(pont);
     }
 
+    /**
+     * Vérifie si un pont peut être ajouté sans entrer en conflit avec d'autres ponts existants
+     * 
+     * @return true si il est possible de rajouter un pont, false si un pont empeche le placement
+     */
+    public boolean pontEstPossible() {
+        int total = 0;
+        for (Pont pont : conflits) {
+            total += pont.etatActuel.getValue();
+        }
+        return total == 0;
+    }
+
     /** @return Première île reliée */
     public Ile getileA() {return ileA;}
     /** @return Deuxième île reliée */
