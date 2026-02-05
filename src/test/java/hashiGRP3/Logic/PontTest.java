@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-public class PontsTest {
+public class PontTest {
     @Test //Test le cas où un pont essaie de relier une île à elle même
     public void PontReliantUneIleAElleMeme(){
         Ile ile1 = new Ile(new Coordonnees(3, 1), 2);
