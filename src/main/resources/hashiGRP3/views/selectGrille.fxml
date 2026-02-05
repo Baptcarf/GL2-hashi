@@ -11,6 +11,8 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.GridPane?>
+
 
 <BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hashiGRP3.Controller.SelectGrilleController">
 
@@ -57,309 +59,38 @@
                             </padding>
 
                             <!-- ================= SECTION 1 ================= -->
-                            <VBox prefHeight="245.0" prefWidth="756.0" spacing="30">
-                                <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Facile (5x5)" />
+                           <VBox spacing="30">
+                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Facile (5x5)" />
+
+                              <GridPane fx:id="grilleFacile"
+                                       hgap="15"
+                                       vgap="15"
+                                       minWidth="700"
+                                       alignment="CENTER"/>
+                           </VBox>
+
+                           <!-- ================= SECTION 2 ================= -->
+                           <VBox spacing="30">
+                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Intermédiaire (8x9)" />
+
+                              <GridPane fx:id="grilleMoyen"
+                                       hgap="15"
+                                       vgap="15"
+                                       minWidth="700"
+                                       alignment="CENTER"/>
+                           </VBox>
+
+                           <!-- ================= SECTION 3 ================= -->
+                           <VBox spacing="30">
+                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Difficile (12x12)" />
+
+                              <GridPane fx:id="grilleDifficile"
+                                       hgap="15"
+                                       vgap="15"
+                                       minWidth="700"
+                                       alignment="CENTER"/>
+                           </VBox>
 
-                                <HBox minWidth="700.0" spacing="10.0">
-
-                                    <!--================ Grille 1=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="239.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 1" />
-
-                                       <Button fx:id="sectionGrille1" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionFacile">
-
-                                          <graphic>
-                                                <ImageView fitHeight="90" fitWidth="90.0" preserveRatio="true">
-                                          <image>
-                                             <Image url="@../images/pointHashi.png" />
-                                          </image>
-                                       </ImageView>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="152.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-
-                                    <!--================ Grille 2=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="292.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 2" />
-
-                                       <Button fx:id="sectionGrille2" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionFacile">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="249.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 3=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="283.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 3" />
-
-                                       <Button fx:id="sectionGrille3" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionFacile">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="193.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 4=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="254.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 4" />
-
-                                       <Button fx:id="sectionGrille4" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionFacile">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="243.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                </HBox>
-                            </VBox>
-
-                            <!-- ================= SECTION 2 ================= -->
-                            <VBox spacing="30">
-                                <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Intermédiare (8x9)" />
-
-                                <HBox minWidth="700.0" spacing="10.0">
-
-                                    <!--================ Grille 5=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="238.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 5" />
-
-                                       <Button fx:id="sectionGrille5" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionMoyen">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="324.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 6=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="306.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 6" />
-
-                                       <Button fx:id="sectionGrille6" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionMoyen">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="306.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 7=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="249.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 7" />
-
-                                       <Button fx:id="sectionGrille7" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionMoyen">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="320.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 8=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="239.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 8" />
-
-                                       <Button fx:id="sectionGrille8" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionMoyen">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="194.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                </HBox>
-                            </VBox>
-
-                            <!-- ================= SECTION 3 ================= -->
-                            <VBox spacing="30">
-                                <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Difficile (12x12)" />
-
-                                <HBox minWidth="700.0" spacing="10.0">
-
-                                    <!--================ Grille 9=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="211.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 9" />
-
-                                       <Button fx:id="sectionGrille9" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionDifficile">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="332.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 10=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="304.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 10" />
-
-                                       <Button fx:id="sectionGrille10" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionDifficile">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="350.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 11=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="320.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 11" />
-
-                                       <Button fx:id="sectionGrille11" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionDifficile">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="426.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                    <!--================ Grille 12=================-->
-                                    <VBox prefWidth="155" spacing="10">
-                                       <padding>
-                                          <Insets bottom="12" left="12" right="12" top="12" />
-                                       </padding>
-
-                                       <Label alignment="CENTER" prefHeight="19.0" prefWidth="233.0" style="-fx-font-size: 15px; -fx-font-weight: bold;" text="Grille 12" />
-
-                                       <Button fx:id="sectionGrille12" style="-fx-background-color: transparent; -fx-cursor: hand;" styleClass="sectionDifficile">
-
-                                          <graphic>
-                                             <ImageView fitHeight="90" fitWidth="90" preserveRatio="true" />
-                                             <image>
-                                                <Image url="@../images/pointHashi.png" />
-                                             </image>
-                                          </graphic>
-
-                                       </Button>
-
-                                       <Label alignment="CENTER" prefHeight="15.0" prefWidth="234.0" style="-fx-font-size: 12px;" text="score" wrapText="true" />
-
-                                    </VBox>
-
-                                </HBox>
-                            </VBox>
 
                         </VBox>
 
