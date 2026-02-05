@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import hashiGRP3.Logic.Historique.HistoriqueManager;
+
 /**
  * Représente le jeu Hashi avec la grille, les îles et les ponts.
  * Gère la création et l'initialisation du plateau de jeu,
@@ -14,7 +16,7 @@ public class Hashi {
     /** Map associant les coordonnées aux îles du plateau */
     private final Map<Coordonnees, Ile> iles = new HashMap<>();
     /** Ensemble des ponts reliant les îles */
-    private  Set<Pont> ponts = new HashSet<>();
+    private Set<Pont> ponts = new HashSet<>();
     /** Taille maximale du plateau (largeur, hauteur) */
     private Coordonnees taille = new Coordonnees(0,0);
 
@@ -283,6 +285,36 @@ public class Hashi {
             }
         }
         return true;
+    }
+
+    /**
+     * Joue un coup sur un pont et l'enregistre dans l'historique
+     * @param pont Le pont sur lequel jouer
+     */
+    public void jouer(Pont pont) {
+        EtatDuPont avant = pont.getEtatActuel();
+        pont.cycler();
+        EtatDuPont apres = pont.getEtatActuel();
+        
+        if (avant != apres) {
+            historique.ajouterAction(pont, avant, apres);
+        }
+    }
+    
+    /**
+     * Annule le dernier coup (Ctrl+Z)
+     * @return true si un coup a été annulé, false si rien à annuler
+     */
+    public boolean undo() {
+        return historique.undo();
+    }
+    
+    /**
+     * Remet le dernier coup annulé (Ctrl+Y)
+     * @return true si un coup a été remit, false si rien à ete remit
+     */
+    public boolean redo() {
+        return historique.redo();
     }
 }
 
