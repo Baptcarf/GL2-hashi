@@ -5,10 +5,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import hashiGRP3.Logic.Historique.HistoriqueManager;
+
 public class Hashi {
     private final Map<Coordonnees, Ile> iles = new HashMap<>(); // Une hashmap où les clés sont les coordonées (x, y) => Une Ile 
-    private  Set<Pont> ponts = new HashSet<>();
+    private Set<Pont> ponts = new HashSet<>();
     private Coordonnees taille = new Coordonnees(0,0);
+    private final HistoriqueManager historique = new HistoriqueManager();
 
     public void ajouterIle(Ile ile) {
         iles.put(ile.getCoordonnees(), ile);
@@ -211,6 +214,36 @@ public class Hashi {
             }
         }
         return true;
+    }
+
+    /**
+     * Joue un coup sur un pont et l'enregistre dans l'historique
+     * @param pont Le pont sur lequel jouer
+     */
+    public void jouer(Pont pont) {
+        EtatDuPont avant = pont.getEtatActuel();
+        pont.cycler();
+        EtatDuPont apres = pont.getEtatActuel();
+        
+        if (avant != apres) {
+            historique.ajouterAction(pont, avant, apres);
+        }
+    }
+    
+    /**
+     * Annule le dernier coup (Ctrl+Z)
+     * @return true si un coup a été annulé, false si rien à annuler
+     */
+    public boolean undo() {
+        return historique.undo();
+    }
+    
+    /**
+     * Remet le dernier coup annulé (Ctrl+Y)
+     * @return true si un coup a été remit, false si rien à ete remit
+     */
+    public boolean redo() {
+        return historique.redo();
     }
 }
 
