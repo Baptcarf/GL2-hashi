@@ -124,6 +124,13 @@ public class Ile {
     public Pont getPont(Direction direction) {return directionPonts.get(direction);}
 
     /**
+     * Retourne l'identifiant unique de cette île
+     * 
+     * @return l'identifiant unique de cette île
+     */
+    public int getId() {return id;}
+    
+    /**
      * Vérifie l'égalité entre cette île et un autre objet
      * Deux îles sont égales si elles ont le même identifiant unique
      * 
@@ -134,7 +141,7 @@ public class Ile {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Ile ile)) return false;
-        return id == ile.id;
+        return false;
     }
 
     /**
