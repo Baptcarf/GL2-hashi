@@ -166,10 +166,15 @@ public class Hashi {
 
             if (pont.getOrientation() == Pont.Orientation.HORIZONTAL) {
                 for (int x = Math.min(x1, x2) + 1; x < Math.max(x1, x2); x++)
-                    grilleAffichage[y1][x] = c;
+                    // Vérifie que le pont n'en écrase pas un autre
+                    if (grilleAffichage[y1][x].equals(" ") || grilleAffichage[y1][x].equals(".")){
+                        grilleAffichage[y1][x] = c;
+                    }  
             } else {
                 for (int y = Math.min(y1, y2) + 1; y < Math.max(y1, y2); y++)
-                    grilleAffichage[y][x1] = c;
+                    if (grilleAffichage[y][x1].equals(" ") || grilleAffichage[y][x1].equals(".")){
+                        grilleAffichage[y][x1] = c;
+                    }  
             }
         }
 
