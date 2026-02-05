@@ -16,9 +16,11 @@ public class Hashi {
     /** Map associant les coordonnées aux îles du plateau */
     private final Map<Coordonnees, Ile> iles = new HashMap<>();
     /** Ensemble des ponts reliant les îles */
-    private Set<Pont> ponts = new HashSet<>();
+    private final Set<Pont> ponts = new HashSet<>();
     /** Taille maximale du plateau (largeur, hauteur) */
     private Coordonnees taille = new Coordonnees(0,0);
+    /** Historique de la partie */
+    private final HistoriqueManager historique = new HistoriqueManager();
 
     /**
      * Ajoute une île au plateau de jeu.
@@ -213,15 +215,6 @@ public class Hashi {
      */
     public boolean estDansLaGrille(Coordonnees c) {
         return c.x >= 0 && c.x <= this.taille.x && c.y >= 0 && c.y <= this.taille.y;
-    }
-
-    /**
-     * Retourne la map de toutes les îles du plateau.
-     * 
-     * @return la map des coordonnées vers les îles
-     */
-    public Map<Coordonnees, Ile> getIles() {
-        return iles;
     }
 
     /**
