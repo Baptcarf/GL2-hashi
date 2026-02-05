@@ -4,3 +4,6 @@
 #Dossier de build
 target/
 ./target/
+
+#Data
+*.db

@@ -16,7 +16,11 @@ public class App extends Application {
 
 	@Override
 	public void start(final Stage primaryStage) {
-		sn = new SceneManager(primaryStage);
+
+		DatabaseManager db = new DatabaseManager();
+		db.init();
+
+		sn = new SceneManager(primaryStage, db);
 
 		sn.addScene("option");
 		sn.addScene("accueil");
