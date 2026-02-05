@@ -25,7 +25,7 @@
         <Button text="Jouer" onAction="#changeScene" userData="selectGrille" style="-fx-pref-width: 200;">
             <font><Font size="25.0"/></font>
         </Button>
-        <Button text="Tutoriel" style="-fx-pref-width: 200;">
+        <Button text="Tutoriel" style="-fx-pref-width: 200;" onAction="#changeScene" userData="tutoriel">
             <font><Font size="25.0"/></font>
         </Button>
         <Button text="Option" style="-fx-pref-width: 200;" onAction="#changeScene" userData="option">
