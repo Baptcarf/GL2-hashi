@@ -18,6 +18,9 @@ public class DatabaseManager {
 
 	private static final String URL = "jdbc:sqlite:data/Hashi.db";
 
+	/**
+	 * Constructeur
+	 */
 	public DatabaseManager() {
 	}
 
@@ -74,6 +77,8 @@ public class DatabaseManager {
 
 	/**
 	 * Supprime un utilisateur de la base de donnée.
+	 * 
+	 * @param pseudo le pseudo du compte utilisateur
 	 */
 	public void deleteUser(String pseudo) {
 		String sql = "DELETE FROM Utilisateur where pseudo == ?";
@@ -94,6 +99,8 @@ public class DatabaseManager {
 
 	/**
 	 * Renvoie tout les utilisateurs de la base de donnée.
+	 * 
+	 * @return la liste de tout les utilsiateurs
 	 */
 	public List<Utilisateur> findAllUser() {
 		List<Utilisateur> au = new ArrayList<>();
@@ -119,6 +126,12 @@ public class DatabaseManager {
 		}
 	}
 
+	/**
+	 * test si un utilisateur existe déjà avec un certain pseudo
+	 * 
+	 * @param pseudo
+	 * @return true si un utilisateur existe déjà avec un pseudo x
+	 */
 	public Boolean userExist(String pseudo) {
 		String sql = "SELECT * FROM Utilisateur where pseudo = ?";
 
