@@ -84,11 +84,11 @@ public class DatabaseManager {
 	public void deleteUser(String pseudo) {
 		String sql = "DELETE FROM Utilisateur where pseudo == ?";
 
-		try (Connection conn = DriverManager.getConnection(
-				URL);
+		try (Connection conn = DriverManager.getConnection(URL);
+				Statement stmt = conn.createStatement();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-			pstmt.execute("PRAGMA foreign_keys = ON");
+			stmt.execute("PRAGMA foreign_keys = ON");
 			pstmt.setString(1, pseudo);
 
 			pstmt.executeUpdate();
@@ -108,8 +108,7 @@ public class DatabaseManager {
 		List<Utilisateur> au = new ArrayList<>();
 		String sql = "SELECT * FROM Utilisateur";
 
-		try (Connection conn = DriverManager.getConnection(
-				URL);
+		try (Connection conn = DriverManager.getConnection(URL);
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			ResultSet r = pstmt.executeQuery();
@@ -137,8 +136,7 @@ public class DatabaseManager {
 	public Boolean userExist(String pseudo) {
 		String sql = "SELECT * FROM Utilisateur where pseudo = ?";
 
-		try (Connection conn = DriverManager.getConnection(
-				URL);
+		try (Connection conn = DriverManager.getConnection(URL);
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 			pstmt.setString(1, pseudo);
@@ -159,12 +157,24 @@ public class DatabaseManager {
 
 	public void resetLastTutoriel(String pseudo) {
 
-		String sql = "DELETE FROM Partie NATURAL JOIN utilisateur NATURAL JOIN Grille WHERE pseudo = ? AND niveau = 0 AND statut = 1";
+		String sql = "DELETE FROM Partie\r\n" + //
+				"WHERE statut = 1\r\n" + //
+				"  AND id_grille IN (\r\n" + //
+				"        SELECT g.id_grille\r\n" + //
+				"        FROM Grille g\r\n" + //
+				"        WHERE g.niveau = 0\r\n" + //
+				"  )\r\n" + //
+				"  AND id_utilisateur IN (\r\n" + //
+				"        SELECT u.id_utilisateur\r\n" + //
+				"        FROM Utilisateur u\r\n" + //
+				"        WHERE u.pseudo = ?\r\n" + //
+				"  );";
 
 		try (Connection conn = DriverManager.getConnection(URL);
+				Statement stmt = conn.createStatement();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-			pstmt.execute("PRAGMA foreign_keys = ON");
+			stmt.execute("PRAGMA foreign_keys = ON");
 			pstmt.setString(1, pseudo);
 
 			pstmt.executeUpdate();
