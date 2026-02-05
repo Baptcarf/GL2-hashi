@@ -140,7 +140,7 @@ public class Ile {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Ile ile)) return false;
+        if (!(o instanceof Ile)) return false;
         return false;
     }
 

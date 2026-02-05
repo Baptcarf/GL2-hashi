@@ -1,5 +1,6 @@
 package hashiGRP3.Logic;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
@@ -44,8 +45,8 @@ public class IleTest {
     @Test //Teste la comparaison entre une île et un objet non-île
     public void testEqualsWithNonIle() {
         Ile ile = new Ile(new Coordonnees(0, 0), 3);
-        String nonIle = "Not an island";
-        assert(!ile.equals(nonIle));
+        Object nonIle = "Not an island";
+        assertFalse(ile.equals(nonIle));
     }
 
     @Test //Teste l'égalité d'une île avec elle-même
