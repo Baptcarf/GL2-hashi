@@ -14,6 +14,7 @@ import hashiGRP3.SceneManager;
 public class ManageController {
 
         private SceneManager sceneManager;
+        private String utilisateur;
 
         /**
          * Ajouter un scène manager dans les controllers
@@ -47,12 +48,22 @@ public class ManageController {
                 return sceneManager;
         }
 
+        public void setUtilisateur(String pseudo) {
+                utilisateur = pseudo;
+        }
+
+        public String getUtilisateur() {
+                return utilisateur;
+        }
+
         /**
          * méthode pour quitter l'application
          */
         @FXML
         private void quitApp() {
+                sceneManager.getBD().resetLastTutoriel("utilisateur");
                 System.exit(0);
+
         }
 
 }

@@ -88,6 +88,7 @@ public class DatabaseManager {
 				URL);
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+			pstmt.execute("PRAGMA foreign_keys = ON");
 			pstmt.setString(1, pseudo);
 
 			pstmt.executeUpdate();
@@ -154,6 +155,22 @@ public class DatabaseManager {
 			return null;
 		}
 
+	}
+
+	public void resetLastTutoriel(String pseudo) {
+
+		String sql = "DELETE FROM Partie NATURAL JOIN utilisateur NATURAL JOIN Grille WHERE pseudo = ? AND niveau = 0 AND statut = 1";
+
+		try (Connection conn = DriverManager.getConnection(URL);
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+			pstmt.execute("PRAGMA foreign_keys = ON");
+			pstmt.setString(1, pseudo);
+
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
