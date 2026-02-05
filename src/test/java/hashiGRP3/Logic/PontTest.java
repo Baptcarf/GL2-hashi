@@ -1,6 +1,7 @@
 package hashiGRP3.Logic;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 public class PontTest {
@@ -93,8 +94,38 @@ public class PontTest {
         Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
         Ile ile2 = new Ile(new Coordonnees(0, 2), 3);
         Pont pont1 = new Pont(ile1, ile2, EtatDuPont.VIDE);
-        String notAPont = "Je ne suis pas un pont";
-        assert(!pont1.equals(notAPont));
+        Object notAPont = "Je ne suis pas un pont";
+        assertFalse(pont1.equals(notAPont));
+    }
+
+    @Test
+    void testPontEstPossibleNoConflit() {
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 1);
+        Ile ile2 = new Ile(new Coordonnees(0, 1), 1);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        assertTrue(pont.pontEstPossible());
+    }
+
+    @Test
+    void testPontEstPossibleConflitAvecPontOccupe() {
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 1);
+        Ile ile2 = new Ile(new Coordonnees(0, 1), 1);
+        Ile ile3 = new Ile(new Coordonnees(0, 2), 1);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        Pont pontConflit = new Pont(ile2, ile3, EtatDuPont.SIMPLE);
+        pont.ajouterConflit(pontConflit);
+        assertFalse(pont.pontEstPossible());
+    }
+
+    @Test
+    void testPontEstPossibleConflitAvecPontVide() {
+        Ile ile1 = new Ile(new Coordonnees(0, 0), 1);
+        Ile ile2 = new Ile(new Coordonnees(0, 1), 1);
+        Ile ile3 = new Ile(new Coordonnees(0, 2), 1);
+        Pont pont = new Pont(ile1, ile2, EtatDuPont.VIDE);
+        Pont pontConflit = new Pont(ile2, ile3, EtatDuPont.VIDE);
+        pont.ajouterConflit(pontConflit);
+        assertTrue(pont.pontEstPossible());
     }
 
     @Test //Test du ToString
