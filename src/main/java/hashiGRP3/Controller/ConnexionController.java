@@ -1,16 +1,15 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
+
+
 //Imports
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,9 +23,12 @@ import javafx.scene.Scene;
 import hashiGRP3.SceneManager;
 import hashiGRP3.DatabaseManager;
 import hashiGRP3.compDB.Utilisateur;
+import hashiGRP3.Scene.CreerUtilisateur;
 
 import java.sql.*;
 import java.util.List;
+
+
 
 /* Class */
 public class ConnexionController extends ManageController {
@@ -238,78 +240,29 @@ public class ConnexionController extends ManageController {
 
         }
 
-        private void creerUtilisateur(Circle c) {
-                // Créer une nouvelle fenêtre
-                Stage s = new Stage();
-                s.initModality(Modality.APPLICATION_MODAL);
-                s.initOwner(hbox.getScene().getWindow());
-                s.setTitle("Creer un compte");
 
-                GridPane grid = new GridPane();
-                grid.setHgap(10);
-                grid.setVgap(10);
-                grid.setAlignment(Pos.CENTER);
+	private void creerUtilisateur(Circle c) {
+		CreerUtilisateur dialog = new CreerUtilisateur();
 
-                s.setOnCloseRequest(ev -> {
-                        hbox.getChildren().remove(c);
-                });
+		dialog.showAndWait(hbox.getScene().getWindow()).ifPresent(result -> {
+			DatabaseManager db = getSceneManager().getBD();
 
-                TextField pseudofield = new TextField();
-                ColorPicker cpfield = new ColorPicker(Color.WHITE);
-                CheckBox cbfield = new CheckBox();
-                Button b = new Button("Commencé l'aventure");
+			db.insertUser(result.pseudo(), colorToString(result.color()));
+			c.setFill(result.color());
+			createBoxUser(c, result.pseudo());
 
-                cbfield.setSelected(true);
-                Label messageLabel = new Label();
-                messageLabel.setTextFill(Color.RED);
+			nbCount++;
+			if (nbCount == 5) {
+			    creer.setFill(Color.web("#DFDFDFDF"));
+			}
 
-                grid.addRow(0, new Label("Pseudo:"), pseudofield);
-                grid.addRow(1, new Label("Couleur du compte:"), cpfield);
-                grid.addRow(2, new Label("Je n'ai jamais joué au Hashi : "), cbfield);
-                grid.add(b, 0, 3, 2, 1);
-                grid.add(messageLabel, 0, 4, 2, 1);
+			if (result.isNewPlayer()) {
+			    getSceneManager().changeScene("selectTutoriel");
+			} else {
+			    getSceneManager().changeScene("accueil");
+			}
+		});
+	}
 
-                // Logique de la fenêtre
-                b.setOnAction(ev -> {
-                        try {
-                                String pseudo = pseudofield.getText();
-                                String couleur = colorToString(cpfield.getValue());
-                                c.setFill(cpfield.getValue());
-
-                                DatabaseManager db = getSceneManager().getBD();
-
-                                if ((!pseudo.equals("")) && (!db.userExist(pseudo))) {
-                                        db.insertUser(pseudo, couleur);
-                                        createBoxUser(c, pseudo);
-                                        nbCount += 1;
-                                        if (nbCount == 5) {
-                                                creer.setFill(Color.web("#DFDFDFDF"));
-                                        }
-                                        s.close();
-                                        if (cbfield.isSelected()) {
-                                                getSceneManager().changeScene("selectTutoriel");
-                                        } else {
-                                                getSceneManager().changeScene("accueil");
-                                        }
-                                }
-                                messageLabel.setTextFill(Color.RED);
-                                if (pseudo.equals("")) {
-                                        messageLabel.setText("Erreur : Pseudo non renseigné");
-                                } else {
-                                        messageLabel.setText("Erreur : Pseudo déjà pris");
-
-                                }
-
-                        } catch (NumberFormatException ex) {
-                                messageLabel.setTextFill(Color.RED);
-                                messageLabel.setText("Erreur : saisie invalide pour les champs numériques !");
-                        }
-                });
-
-                // Afficher la fenêtre
-                Scene sc = new Scene(grid, 400, 400);
-                s.setScene(sc);
-                s.show();
-        }
 
 }
