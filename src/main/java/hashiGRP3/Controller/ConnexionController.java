@@ -108,6 +108,19 @@ public class ConnexionController extends ManageController {
                 circle.setOnMouseClicked(event -> {
                         if (sup) {
 
+                                VBox parentVBox = (VBox) circle.getParent();
+                                Label lab = null;
+
+                                // Parcours les enfants du VBox
+                                for (Node node : parentVBox.getChildren()) {
+                                        if (node instanceof Label) {
+                                                lab = (Label) node;
+                                                break;
+                                        }
+                                }
+
+                                setUtilisateur(lab.getText());
+
                                 supprimerCompte(circle);
 
                         } else {
