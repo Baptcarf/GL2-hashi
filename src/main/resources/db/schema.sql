@@ -10,7 +10,8 @@ CREATE TABLE Utilisateur(
 CREATE TABLE Grille(
         id_grille INTEGER PRIMARY KEY AUTOINCREMENT,
         niveau INT NOT NULL, -- Le niveau de difficulté de la grille
-        grille_dep BLOB NOT NULL -- la grille de départ
+        grille String NOT NULL, -- le nom de la grille
+        nbIle INT NOT NULL
 );
 
 
@@ -42,3 +43,10 @@ CREATE TABLE Coup(
             REFERENCES Partie(id_partie)
             ON DELETE CASCADE
 );
+
+
+
+INSERT INTO Grille VALUES (DEFAULT,1,"hashi1",12);
+INSERT INTO Grille VALUES (DEFAULT,1,"hashi2",5);
+INSERT INTO Grille VALUES (DEFAULT,1,"hashi3",10);
+INSERT INTO Grille VALUES (DEFAULT,1,"hashi4",11);
