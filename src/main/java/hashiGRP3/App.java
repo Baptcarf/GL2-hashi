@@ -3,8 +3,8 @@ package hashiGRP3;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import hashiGRP3.Logic.Direction;
 import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Pont;
 import hashiGRP3.Logic.InOut.Import;
 
 /**
@@ -12,33 +12,16 @@ import hashiGRP3.Logic.InOut.Import;
  */
 public class App {
     public static void main(String[] args) throws IOException  {
-        Path chemin = Path.of("src/main/java/hashiGRP3/Ressources/7x7/hashi2.txt");
+        Path chemin = Path.of("src/main/java/hashiGRP3/Ressources/7x7/hashi5.txt");
 
         Hashi hashi = Import.chargerFichier(chemin);
         hashi.initialisationToutLesConflits();
 
-        hashi.toString();
+        for (Pont pont : hashi.getPonts()){
+            pont.setEtatActuel(pont.getEtatCorrect());
+        }
+        
+        System.out.println(hashi);
 
-        var pont = hashi.getIle(1, 1).getPont(Direction.DROITE);
-
-        System.out.println("\nJouer: Pose un pont simple");
-        hashi.jouer(pont);
-        System.out.println(hashi.toString());
-
-        System.out.println("\n Jouer: Pose un pont double ");
-        hashi.jouer(pont);
-        System.out.println(hashi.toString());
-
-        System.out.println("\n UNDO Retour au pont simple ");
-        hashi.undo();
-        System.out.println(hashi.toString());
-
-        System.out.println("\n UNDO Retour à l'état vide ");
-        hashi.undo();
-        System.out.println(hashi.toString());
-
-        System.out.println("\n REDO Rétablit le pont simple ");
-        hashi.redo();
-        System.out.println(hashi.toString());
     }
 }
