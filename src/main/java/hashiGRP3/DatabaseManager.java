@@ -25,8 +25,7 @@ public class DatabaseManager {
 	/**
 	 * Constructeur
 	 */
-	public DatabaseManager() {
-	}
+	public DatabaseManager() {}
 
 	/**
 	 * Initialise la base de données avec le schéma construit.
@@ -37,11 +36,12 @@ public class DatabaseManager {
 			try (Connection conn = DriverManager.getConnection(URL);
 					Statement stmt = conn.createStatement()) {
 
-				// Lire le fichier SQL depuis resources
+				//Lire le fichier SQL depuis resources
 				InputStream is = DatabaseManager.class.getResourceAsStream("/db/schema.sql");
 				if (is == null)
 					throw new FileNotFoundException("schema.sql introuvable");
 
+				//Commande
 				String sql = new String(is.readAllBytes());
 				stmt.executeUpdate(sql);
 
@@ -82,7 +82,6 @@ public class DatabaseManager {
 
 	/**
 	 * Supprime un utilisateur de la base de donnée.
-	 * 
 	 * @param pseudo le pseudo du compte utilisateur
 	 */
 	public void deleteUser(String pseudo) {
@@ -105,7 +104,6 @@ public class DatabaseManager {
 
 	/**
 	 * Renvoie tout les utilisateurs de la base de donnée.
-	 * 
 	 * @return la liste de tout les utilsiateurs
 	 */
 	public List<Utilisateur> findAllUser() {
@@ -132,8 +130,7 @@ public class DatabaseManager {
 	}
 
 	/**
-	 * test si un utilisateur existe déjà avec un certain pseudo
-	 * 
+	 * Test si un utilisateur existe déjà avec un certain pseudo.
 	 * @param pseudo
 	 * @return true si un utilisateur existe déjà avec un pseudo x
 	 */
@@ -159,6 +156,9 @@ public class DatabaseManager {
 
 	}
 
+	/**
+	 * Reset le tutoriel
+	 */
 	public void resetLastTutoriel(String pseudo) {
 
 		String sql = "DELETE FROM Partie\r\n" + //
@@ -187,8 +187,10 @@ public class DatabaseManager {
 		}
 	}
 
-	// Obtient le meilleur score d'un joueur (via pseudo) sur une grille donnée
-	// retourne -1 si aucun score
+	/**
+	 * Obtient le meilleur score d'un joueur (via pseudo) sur une grille donnée
+	 * @return -1 si aucun score.
+	 */
 	public int obtenirScore(int id_grille, String pseudo) {
 
 		int meilleurScore = -1;
@@ -226,7 +228,9 @@ public class DatabaseManager {
 
 
 
-	// retourne true si la grille est complétée par le joueur (via pseudo)
+	/**
+	 * Retourne true si la grille est complétée par le joueur (via pseudo)
+	 */
 	public boolean grilleCompletee(int id_grille, String pseudo) {
 
 		int id_utilisateur = getIdUtilisateur(pseudo);
@@ -258,35 +262,40 @@ public class DatabaseManager {
 	}
 
 
-	//recupere l'id_utilisateur depuis le pseudo de l'utilisateur 
-    public int getIdUtilisateur(String pseudo) {
+	/**
+	* Recupere l'id_utilisateur depuis le pseudo de l'utilisateur 
+	*/
+    	public int getIdUtilisateur(String pseudo) {
+
 		System.out.println("Récupération de l'id_utilisateur pour le pseudo : " + pseudo);
-        int idUtilisateur = -1;
+        	int idUtilisateur = -1;
 
-        String sql = "SELECT id_utilisateur FROM Utilisateur WHERE pseudo = ?";
+        	String sql = "SELECT id_utilisateur FROM Utilisateur WHERE pseudo = ?";
 
-        try (Connection conn = DriverManager.getConnection(URL);
-            PreparedStatement ps = conn.prepareStatement(sql)) {
+        	try (Connection conn = DriverManager.getConnection(URL);
+            		PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, pseudo);
+            		ps.setString(1, pseudo);
 
-            ResultSet rs = ps.executeQuery();
+            		ResultSet rs = ps.executeQuery();
 
-            if (rs.next()) {
-                idUtilisateur = rs.getInt("id_utilisateur");
-            }
+            		if (rs.next()) {
+                		idUtilisateur = rs.getInt("id_utilisateur");
+            		}
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        	} catch (SQLException e) {
+            		e.printStackTrace();
+        	}
 		System.out.println("id_utilisateur récupéré : " + idUtilisateur);
-        return idUtilisateur;
-    }
 
+        	return idUtilisateur;
+	}
+
+	/**
+	 * TO DO!
+	 */
 	public int obtenirNombreIle(int id_grille) { 
 		return -1; //TODO
 	}
-
-
 
 }

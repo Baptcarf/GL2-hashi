@@ -32,7 +32,6 @@ public class SceneManager {
 
         /**
          * Création du sceneManager
-         * 
          * @param stage : Le stage (la scène principale).
          * @param db    : La base de donnée.
          */
@@ -46,7 +45,6 @@ public class SceneManager {
 
         /**
          * Ajout d'une scène dans le gestionnaire de scène.
-         * 
          * @param name : le nom du fichier source de la scène (.fxml)
          */
         public void addScene(String name) {
@@ -77,10 +75,9 @@ public class SceneManager {
         }
 
         /**
-         * Trouver une scène par son nom.
-         * 
-         * @param name le nom de la scène à trouver
-         * @return la scène correspondante si trouver sinon null
+         * Trouver un composant par son nom.
+         * @param name Le nom du composant à trouver
+         * @return Le composant correspondant si trouver, sinon null.
          */
         public Composante findComposant(String name) {
                 for (Composante c : allScene) {
@@ -91,9 +88,11 @@ public class SceneManager {
                 return null;
         }
 
+	/**
+	 * Trouver une scène par son nom.
+	 */
         public Scene findScene(String name) {
                 return findComposant(name).getScene();
-
         }
 
         /**
@@ -124,7 +123,6 @@ public class SceneManager {
 
         /**
          * Setter du pleine écran.
-         * 
          * @param value : la nouvelle valeur
          */
         public void setFullScreen(boolean value) {
@@ -133,7 +131,6 @@ public class SceneManager {
 
         /**
          * Getter de la base de donnée.
-         * 
          * @return la base de donnée
          */
         public DatabaseManager getBD() {
@@ -158,15 +155,14 @@ public class SceneManager {
          */
         private class Composante {
 
-                // la scène en elle même
+                //La scène en elle même
                 private Scene scene;
 
-                // le nom donnée à la scène
+                //Le nom donnée à la scène
                 private String nom;
 
                 /**
-                 * Créeation du composant scène
-                 * 
+                 * Création du composant scène
                  * @param scene
                  * @param nom
                  */
@@ -176,8 +172,7 @@ public class SceneManager {
                 }
 
                 /**
-                 * getter de la scène
-                 * 
+                 * Getter de la scène
                  * @return la scène
                  */
                 public Scene getScene() {
@@ -185,14 +180,11 @@ public class SceneManager {
                 }
 
                 /**
-                 * getter du nom de la scène
-                 * 
+                 * Getter du nom de la scène
                  * @return le nom de la scène
                  */
                 public String getNom() {
                         return nom;
                 }
-
         }
-
 }

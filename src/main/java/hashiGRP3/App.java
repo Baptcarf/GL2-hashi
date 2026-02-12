@@ -41,37 +41,7 @@ public class App extends Application {
 	}
 
 	public static void main(String[] args) throws IOException {
-		//Menu
+		//??
 		launch(args);
-		
-		//Logic
-		Path chemin = Path.of("src/main/java/hashiGRP3/Ressources/7x7/hashi2.txt");
-
-		Hashi hashi = Import.chargerFichier(chemin);
-		hashi.initialisationToutLesConflits();
-
-		hashi.toString();
-
-		var pont = hashi.getIle(1, 1).getPont(Direction.DROITE);
-
-		System.out.println("\nJouer: Pose un pont simple");
-		hashi.jouer(pont);
-		System.out.println(hashi.toString());
-
-		System.out.println("\n Jouer: Pose un pont double ");
-		hashi.jouer(pont);
-		System.out.println(hashi.toString());
-
-		System.out.println("\n UNDO Retour au pont simple ");
-		hashi.undo();
-		System.out.println(hashi.toString());
-
-		System.out.println("\n UNDO Retour à l'état vide ");
-		hashi.undo();
-		System.out.println(hashi.toString());
-
-		System.out.println("\n REDO Rétablit le pont simple ");
-		hashi.redo();
-		System.out.println(hashi.toString());
 	}
 }
