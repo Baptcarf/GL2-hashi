@@ -1,7 +1,13 @@
 package hashiGRP3.Logic;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.nio.file.Path;
+
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
+
+import hashiGRP3.Logic.InOut.Import;
 
 
 public class HashiTest {
@@ -424,5 +430,22 @@ public class HashiTest {
         assertTrue(h.getPonts().contains(ile1.getPont(Direction.BAS)) && 
                    h.getPonts().contains(ile2.getPont(Direction.HAUT)) && 
                    h.getPonts().size()==1); 
+    }
+
+    
+    @Test
+    public void testToStringAvecFichier() throws IOException {
+        // On charge le fichier comme dans ton main
+        Path chemin = Path.of("src/main/java/hashiGRP3/Ressources/10x10/hashi3.txt");
+        Hashi hashi = Import.chargerFichier(chemin);
+
+        // Initialisation des conflits pour parcourir le maximum du code
+        hashi.initialisationToutLesConflits();
+
+        // On appelle toString() pour le parcourir
+        String s = hashi.toString();
+
+        // Vérifie juste que la chaîne n'est pas nulle ou vide
+        assert s != null && !s.isEmpty();
     }
 }
