@@ -231,7 +231,7 @@ public class HashiTest {
                    ile4.getPont(Direction.GAUCHE).getConflits().size()==0);
     }
 
-    
+
     @Test //Test de estGagne dans le cas où la grille ne contient aucune île
     public void testEstGagneGrilleVide(){
         Hashi h = new Hashi();
@@ -329,7 +329,7 @@ public class HashiTest {
     }
 
     @Test //Test de jouer() dans un cas possible
-    public void testgetPonts(){
+    public void testJouer(){
         Hashi h = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(0, 0), 2); 
         Ile ile2 = new Ile(new Coordonnees(0, 2), 1);
@@ -341,7 +341,7 @@ public class HashiTest {
     }
 
     @Test //Test de jouer() dans un cas où le pont qui vient d'être tenté de jouer entre en conflit avec un autre
-    public void testgetPontsCasConflit(){
+    public void testJouerCasConflit(){
         Hashi h = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(2, 0), 2); 
         Ile ile2 = new Ile(new Coordonnees(2, 4), 1);
@@ -358,5 +358,71 @@ public class HashiTest {
         assertTrue(ile1.getPont(hashiGRP3.Logic.Direction.BAS).getEtatActuel()==EtatDuPont.VIDE);
     }
 
+    @Test //Test de Undo => Cas où aucune actions n'a été faite avant
+    public void testUndoVide(){
+        Hashi h = new Hashi();
+        Ile ile1 = new Ile(new Coordonnees(2, 0), 2); 
+        Ile ile2 = new Ile(new Coordonnees(2, 4), 1);
+        h.ajouterIle(ile1);
+        h.ajouterIle(ile2);
+        h.initialisationToutLesPonts();
+        assertFalse(h.undo());
+    }
 
+    @Test //Test de Undo => Cas ou une action a été faite avant
+    public void testUndo(){
+        Hashi h = new Hashi();
+        Ile ile1 = new Ile(new Coordonnees(2, 0), 2); 
+        Ile ile2 = new Ile(new Coordonnees(2, 4), 1);
+        h.ajouterIle(ile1);
+        h.ajouterIle(ile2);
+        h.initialisationToutLesPonts();
+        h.jouer(ile1.getPont(Direction.BAS));
+        assertTrue(h.undo());
+        assertTrue(ile1.getPont(Direction.BAS).getEtatActuel()==EtatDuPont.VIDE);
+    }
+
+    @Test //Test de Redo => Cas où aucune actions n'a été annulée avant
+    public void testRedoVide(){
+        Hashi h = new Hashi();
+        Ile ile1 = new Ile(new Coordonnees(2, 0), 2); 
+        Ile ile2 = new Ile(new Coordonnees(2, 4), 1);
+        h.ajouterIle(ile1);
+        h.ajouterIle(ile2);
+        h.initialisationToutLesPonts();
+        assertFalse(h.redo());
+        assertTrue(ile1.getPont(Direction.BAS).getEtatActuel()==EtatDuPont.VIDE);
+    }
+
+    @Test //Test de Undo => Cas ou une action a été annulée avant
+    public void testRedo(){
+        Hashi h = new Hashi();
+        Ile ile1 = new Ile(new Coordonnees(2, 0), 2); 
+        Ile ile2 = new Ile(new Coordonnees(2, 4), 1);
+        h.ajouterIle(ile1);
+        h.ajouterIle(ile2);
+        h.initialisationToutLesPonts();
+        h.jouer(ile1.getPont(Direction.BAS));
+        h.undo();
+        assertTrue(h.redo());
+        assertTrue(ile1.getPont(Direction.BAS).getEtatActuel()==EtatDuPont.SIMPLE);
+    }
+
+    @Test //Test de getPonts => Cas où la liste des ponts est vide
+    public void testgetPontsVide(){ 
+        Hashi h = new Hashi(); 
+        assertTrue(h.getPonts().isEmpty()); } 
+    
+    @Test //Test de getPonts => Cas où la liste des ponts contient des ponts 
+    public void testgetPonts(){ 
+        Hashi h = new Hashi();
+        Ile ile1 = new Ile(new Coordonnees(2, 0), 2);
+        Ile ile2 = new Ile(new Coordonnees(2, 4), 1);
+        h.ajouterIle(ile1);
+        h.ajouterIle(ile2);
+        h.initialisationToutLesPonts();
+        assertTrue(h.getPonts().contains(ile1.getPont(Direction.BAS)) && 
+                   h.getPonts().contains(ile2.getPont(Direction.HAUT)) && 
+                   h.getPonts().size()==1); 
+    }
 }
