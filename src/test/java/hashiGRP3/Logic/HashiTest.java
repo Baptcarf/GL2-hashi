@@ -442,6 +442,9 @@ public class HashiTest {
         // Initialisation des conflits pour parcourir le maximum du code
         hashi.initialisationToutLesConflits();
 
+        for (Pont pont : hashi.getPonts()){
+            pont.setEtatActuel(pont.getEtatCorrect());
+        }
         // On appelle toString() pour le parcourir
         String s = hashi.toString();
 
