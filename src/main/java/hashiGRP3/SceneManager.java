@@ -195,8 +195,6 @@ public class SceneManager {
                 public String getNom() {
                         return nom;
                 }
-<<<<<<< Updated upstream
-=======
 
                 public ManageController getController() {
                         return controller;
@@ -204,6 +202,5 @@ public class SceneManager {
 
                 
 
->>>>>>> Stashed changes
         }
 }
