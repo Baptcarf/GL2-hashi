@@ -18,7 +18,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="15.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#changeScene" text="&lt;-" userData="accueil">
+                        <Button mnemonicParsing="false" onAction="#retourArriere" text="&lt;-">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>

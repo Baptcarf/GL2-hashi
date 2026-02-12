@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import java.io.IOException;
 import java.util.List;
+import java.util.Stack;
 import java.util.ArrayList;
 
 import hashiGRP3.Controller.*;
@@ -21,6 +22,8 @@ public class SceneManager {
         private List<Composante> allScene;
         private DatabaseManager db;
         private Stage stage;
+        private Stack<Composante> history = new Stack<>();
+        private Composante currentScene;
         private boolean boolFull;
 
         /**
@@ -34,6 +37,7 @@ public class SceneManager {
                 this.stage = stage;
                 this.boolFull = false;
                 this.db = db;
+                currentScene = null;
         }
 
         /**
@@ -74,13 +78,18 @@ public class SceneManager {
          * @param name le nom de la scène à trouver
          * @return la scène correspondante si trouver sinon null
          */
-        public Scene findScene(String name) {
+        public Composante findComposant(String name) {
                 for (Composante c : allScene) {
                         if (name.equals(c.getNom())) {
-                                return c.getScene();
+                                return c;
                         }
                 }
                 return null;
+        }
+
+        public Scene findScene(String name) {
+                return findComposant(name).getScene();
+
         }
 
         /**
@@ -89,7 +98,13 @@ public class SceneManager {
          * @param name la nouvelle scène principal
          */
         public void changeScene(String name) {
-                Scene s = findScene(name);
+                Composante c = findComposant(name);
+
+                if (currentScene != null) {
+                        history.push(currentScene);
+                }
+                currentScene = c;
+                Scene s = c.getScene();
                 if (s == null) {
                         System.out.println("Scène introuvable : " + name);
                         return;
@@ -120,6 +135,16 @@ public class SceneManager {
          */
         public DatabaseManager getBD() {
                 return db;
+        }
+
+        public void retourArriere() {
+                if (history.isEmpty()) {
+                        System.out.println("Aucun retour possible.");
+                        return;
+                }
+
+                currentScene = history.pop();
+                changeScene(currentScene.nom);
         }
 
         /**

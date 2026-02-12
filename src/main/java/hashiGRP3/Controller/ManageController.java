@@ -40,6 +40,20 @@ public class ManageController {
         }
 
         /**
+         * Changement de scène depuis un fichier fxml
+         * 
+         * @param event
+         */
+        @FXML
+        private void retourArriere(ActionEvent event) {
+                if (sceneManager == null) {
+                        System.out.println("SceneManager non injecté");
+                        return;
+                }
+                sceneManager.retourArriere();
+        }
+
+        /**
          * Getter du scène manager
          * 
          * @return le scène manager

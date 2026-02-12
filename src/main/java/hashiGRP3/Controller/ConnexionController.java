@@ -1,8 +1,6 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-
-
 //Imports
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -27,8 +25,6 @@ import hashiGRP3.Scene.CreerUtilisateur;
 
 import java.sql.*;
 import java.util.List;
-
-
 
 /* Class */
 public class ConnexionController extends ManageController {
@@ -253,29 +249,27 @@ public class ConnexionController extends ManageController {
 
         }
 
+        private void creerUtilisateur(Circle c) {
+                CreerUtilisateur dialog = new CreerUtilisateur();
 
-	private void creerUtilisateur(Circle c) {
-		CreerUtilisateur dialog = new CreerUtilisateur();
+                dialog.showAndWait(hbox.getScene().getWindow()).ifPresent(result -> {
+                        DatabaseManager db = getSceneManager().getBD();
 
-		dialog.showAndWait(hbox.getScene().getWindow()).ifPresent(result -> {
-			DatabaseManager db = getSceneManager().getBD();
+                        db.insertUser(result.pseudo(), colorToString(result.color()));
+                        c.setFill(result.color());
+                        createBoxUser(c, result.pseudo());
 
-			db.insertUser(result.pseudo(), colorToString(result.color()));
-			c.setFill(result.color());
-			createBoxUser(c, result.pseudo());
+                        nbCount++;
+                        if (nbCount == 5) {
+                                creer.setFill(Color.web("#DFDFDFDF"));
+                        }
 
-			nbCount++;
-			if (nbCount == 5) {
-			    creer.setFill(Color.web("#DFDFDFDF"));
-			}
-
-			if (result.isNewPlayer()) {
-			    getSceneManager().changeScene("selectTutoriel");
-			} else {
-			    getSceneManager().changeScene("accueil");
-			}
-		});
-	}
-
+                        if (result.isNewPlayer()) {
+                                getSceneManager().changeScene("selectTutoriel");
+                        } else {
+                                getSceneManager().changeScene("accueil");
+                        }
+                });
+        }
 
 }
