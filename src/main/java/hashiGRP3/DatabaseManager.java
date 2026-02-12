@@ -183,4 +183,106 @@ public class DatabaseManager {
 		}
 	}
 
+	// Obtient le meilleur score d'un joueur (via pseudo) sur une grille donnée
+	// retourne -1 si aucun score
+	public int obtenirScore(int id_grille, String pseudo) {
+
+		int meilleurScore = -1;
+		int id_utilisateur = getIdUtilisateur(pseudo);
+
+		// Si utilisateur inexistant
+		if (id_utilisateur == -1) {
+			return -1;
+		}
+
+		String sql = "SELECT MAX(score) AS meilleurScore " +
+					"FROM Partie " +
+					"WHERE id_grille = ? " +
+					"AND id_utilisateur = ? " +
+					"AND statut = 2";
+
+		try (Connection conn = DriverManager.getConnection(URL);
+			PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setInt(1, id_grille);
+			ps.setInt(2, id_utilisateur);
+
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				meilleurScore = rs.getInt("meilleurScore");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return meilleurScore;
+	}
+
+
+
+	// retourne true si la grille est complétée par le joueur (via pseudo)
+	public boolean grilleCompletee(int id_grille, String pseudo) {
+
+		int id_utilisateur = getIdUtilisateur(pseudo);
+
+		// Si l'utilisateur n'existe pas
+		if (id_utilisateur == -1) {
+			return false;
+		}
+
+		String sql = "SELECT 1 FROM Partie " +
+					"WHERE id_grille = ? " +
+					"AND id_utilisateur = ? " +
+					"AND statut = 2";
+
+		try (Connection conn = DriverManager.getConnection(URL);
+			PreparedStatement ps = conn.prepareStatement(sql)) {
+
+			ps.setInt(1, id_grille);
+			ps.setInt(2, id_utilisateur);
+
+			ResultSet rs = ps.executeQuery();
+			return rs.next(); // true si au moins une ligne existe
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return false;
+	}
+
+
+	//recupere l'id_utilisateur depuis le pseudo de l'utilisateur 
+    public int getIdUtilisateur(String pseudo) {
+		System.out.println("Récupération de l'id_utilisateur pour le pseudo : " + pseudo);
+        int idUtilisateur = -1;
+
+        String sql = "SELECT id_utilisateur FROM Utilisateur WHERE pseudo = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, pseudo);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                idUtilisateur = rs.getInt("id_utilisateur");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+		System.out.println("id_utilisateur récupéré : " + idUtilisateur);
+        return idUtilisateur;
+    }
+
+	public int obtenirNombreIle(int id_grille) { 
+		return -1; //TODO
+	}
+
+
+
 }

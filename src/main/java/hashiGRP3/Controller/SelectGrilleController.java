@@ -10,8 +10,19 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import hashiGRP3.DatabaseManager;
 
 public class SelectGrilleController extends ManageController {
+
+    /* ===================== DATABASE ===================== */
+
+    private DatabaseManager databaseManager = new DatabaseManager();
 
     /* ===================== LEADERBOARD ===================== */
 
@@ -26,71 +37,80 @@ public class SelectGrilleController extends ManageController {
     @FXML private GridPane grilleMoyen;
     @FXML private GridPane grilleDifficile;
 
-
     private static final int COLONNES = 4;
-
 
     @FXML
     public void initialize() {
-        // État initial du panneau de droite
         labelGrilleSelected.setText("");
         imageGrilleSelected.setVisible(false);
         labelNombreIle.setText("Nombre d'île : None");
         labelTempsPerso.setText("Temps perso : None");
 
-        // Création dynamique des boutons
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
     }
 
-    
-    // Créer les cartes de grille dans un conteneur donné
+    /* ===================== GRILLES ===================== */
+
     private void creerGrilles(GridPane container,
-                          int debut,
-                          int fin,
-                          String styleClass) {
+                              int debut,
+                              int fin,
+                              String styleClass) {
 
         int col = 0;
         int row = 0;
 
         for (int i = debut; i <= fin; i++) {
             VBox carte = creerCarteGrille(i, styleClass);
-
             container.add(carte, col, row);
 
             col++;
-            if (col == 4) {
+            if (col == COLONNES) {
                 col = 0;
                 row++;
             }
         }
     }
 
+    // Méthode pour rafraîchir les grilles (ex: après avoir complété une grille, ou après s'être connecté)
+    public void refreshGrilles() {
 
-    //Affiche la grille selectionnée dans le leaderboard
+        grilleFacile.getChildren().clear();
+        grilleMoyen.getChildren().clear();
+        grilleDifficile.getChildren().clear();
+
+        creerGrilles(grilleFacile, 1, 4, "sectionFacile");
+        creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
+        creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
+    }
+
+
     private void afficherGrilleSelectionnee(int numeroGrille) {
+
         labelGrilleSelected.setText("Grille " + numeroGrille);
         imageGrilleSelected.setVisible(true);
 
-        labelNombreIle.setText("Nombre d'île : " + obtenirNombreIle(numeroGrille));
-        labelTempsPerso.setText("Temps perso : " + obtenirScore(numeroGrille));
+        labelNombreIle.setText(
+                "Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille)
+        );
+
+        labelTempsPerso.setText(
+                "Temps perso : " + databaseManager.obtenirScore(numeroGrille, getUtilisateur())
+        );
     }
 
-    //Genere les grilles dans les 3 sections (facile, moyen, difficile)
     private VBox creerCarteGrille(int numeroGrille, String styleClass) {
 
         VBox box = new VBox(10);
         box.setPrefWidth(155);
         box.setPadding(new Insets(12));
 
-        // Titre
         Label titre = new Label("Grille " + numeroGrille);
         titre.setStyle("-fx-font-size: 15px; -fx-font-weight: bold;");
         titre.setAlignment(Pos.CENTER);
         titre.setMaxWidth(Double.MAX_VALUE);
 
-        // Bouton avec image
         ImageView image = new ImageView(
                 new Image(getClass().getResourceAsStream("/hashiGRP3/images/pointHashi.png"))
         );
@@ -104,7 +124,6 @@ public class SelectGrilleController extends ManageController {
         bouton.getStyleClass().add(styleClass);
         bouton.setOnAction(e -> afficherGrilleSelectionnee(numeroGrille));
 
-        // Score
         Label score = new Label();
         score.setStyle("-fx-font-size: 12px;");
         score.setAlignment(Pos.CENTER);
@@ -113,8 +132,9 @@ public class SelectGrilleController extends ManageController {
         score.setVisible(false);
         score.setManaged(false);
 
-        if (grilleCompletee(numeroGrille)) {
-            score.setText("Score : " + obtenirScore(numeroGrille));
+        if (databaseManager.grilleCompletee(numeroGrille, getUtilisateur())) {
+            score.setText("Score : " +
+                    databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + " sec");
             score.setVisible(true);
             score.setManaged(true);
         }
@@ -124,33 +144,8 @@ public class SelectGrilleController extends ManageController {
         return box;
     }
 
-
     
 
-    /* ===================== MÉTHODES TEMPORAIRES ===================== */
 
-    private int obtenirScore(int numeroGrille) {
-       /* String sql = "SELECT id_
-        return -1;*/
-        return -1;
-    }
-
-    private int obtenirNombreIle(int numeroGrille) {
-        // TODO : valeur réelle
-        return -1;
-    }
-
-    
-
-    private boolean grilleCompletee(int numeroGrille) {
-        // TODO : vérifier dans la base de données
-        return false;
-    }
-
-
-
-
-
-    
 
 }
