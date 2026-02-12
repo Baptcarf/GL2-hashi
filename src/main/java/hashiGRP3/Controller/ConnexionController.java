@@ -84,6 +84,7 @@ public class ConnexionController extends ManageController {
 		}
     	}
 
+<<<<<<< Updated upstream
 	/**
 	* Créer un cercle stylisé pour afficher un joueur.
 	*/
@@ -99,6 +100,8 @@ public class ConnexionController extends ManageController {
 
 		hbox.getChildren().add(0, v);
 	}
+=======
+>>>>>>> Stashed changes
 
 	/**
 	* Creer un cercle de connexion à afficher.
@@ -128,6 +131,7 @@ public class ConnexionController extends ManageController {
 
 			setUtilisateur(lab.getText());
 
+<<<<<<< Updated upstream
 			supprimerCompte(circle);
 
 		    } else {
@@ -149,6 +153,26 @@ public class ConnexionController extends ManageController {
 	    		endSupp();
 
 	    		Circle circle = createCircle("#eaf5ff");
+=======
+        // Logique
+        circle.setOnMouseClicked(event -> {
+            if (sup) {
+                supprimerCompte(circle);
+
+            } else {
+                VBox parentVBox = (VBox) circle.getParent();
+                Label lab = null;
+                // Parcours les enfants du VBox
+                for (Node node : parentVBox.getChildren()) {
+                    if (node instanceof Label) {
+                        lab = (Label) node;
+                        break;
+                    }
+                }
+                setUtilisateur(lab.getText());
+                getSceneManager().changeScene("accueil");
+            }
+>>>>>>> Stashed changes
 
 			this.creerUtilisateur(circle);
 		}

@@ -234,7 +234,7 @@ public class DatabaseManager {
 	public boolean grilleCompletee(int id_grille, String pseudo) {
 
 		int id_utilisateur = getIdUtilisateur(pseudo);
-
+		
 		// Si l'utilisateur n'existe pas
 		if (id_utilisateur == -1) {
 			return false;
@@ -252,6 +252,7 @@ public class DatabaseManager {
 			ps.setInt(2, id_utilisateur);
 
 			ResultSet rs = ps.executeQuery();
+			
 			return rs.next(); // true si au moins une ligne existe
 
 		} catch (SQLException e) {
@@ -262,6 +263,7 @@ public class DatabaseManager {
 	}
 
 
+<<<<<<< Updated upstream
 	/**
 	* Recupere l'id_utilisateur depuis le pseudo de l'utilisateur 
 	*/
@@ -271,6 +273,12 @@ public class DatabaseManager {
         	int idUtilisateur = -1;
 
         	String sql = "SELECT id_utilisateur FROM Utilisateur WHERE pseudo = ?";
+=======
+	//recupere l'id_utilisateur depuis le pseudo de l'utilisateur 
+    public int getIdUtilisateur(String pseudo) {
+        int idUtilisateur = -1;
+        String sql = "SELECT id_utilisateur FROM Utilisateur WHERE pseudo = ?";
+>>>>>>> Stashed changes
 
         	try (Connection conn = DriverManager.getConnection(URL);
             		PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -283,10 +291,18 @@ public class DatabaseManager {
                 		idUtilisateur = rs.getInt("id_utilisateur");
             		}
 
+<<<<<<< Updated upstream
         	} catch (SQLException e) {
             		e.printStackTrace();
         	}
 		System.out.println("id_utilisateur récupéré : " + idUtilisateur);
+=======
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idUtilisateur;
+    }
+>>>>>>> Stashed changes
 
         	return idUtilisateur;
 	}
@@ -298,4 +314,8 @@ public class DatabaseManager {
 		return -1; //TODO
 	}
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 }

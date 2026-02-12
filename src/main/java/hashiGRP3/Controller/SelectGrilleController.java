@@ -1,6 +1,7 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
+import javafx.event.ActionEvent;
 //Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -60,7 +61,18 @@ public class SelectGrilleController extends ManageController {
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
     }
 
+
     /* ===================== GRILLES ===================== */
+
+    @Override
+    public void refreshGrilles() {
+        grilleFacile.getChildren().clear();
+        grilleMoyen.getChildren().clear();
+        grilleDifficile.getChildren().clear();
+        creerGrilles(grilleFacile, 1, 4, "sectionFacile");
+        creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
+        creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
+    }
 
     private void creerGrilles(GridPane container,
             int debut,
@@ -83,18 +95,6 @@ public class SelectGrilleController extends ManageController {
         }
     }
 
-    // Méthode pour rafraîchir les grilles (ex: après avoir complété une grille, ou
-    // après s'être connecté)
-    public void refreshGrilles() {
-
-        grilleFacile.getChildren().clear();
-        grilleMoyen.getChildren().clear();
-        grilleDifficile.getChildren().clear();
-
-        creerGrilles(grilleFacile, 1, 4, "sectionFacile");
-        creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
-        creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
-    }
 
     private void afficherGrilleSelectionnee(int numeroGrille) {
 
@@ -138,7 +138,6 @@ public class SelectGrilleController extends ManageController {
 
         score.setVisible(false);
         score.setManaged(false);
-
         if (databaseManager.grilleCompletee(numeroGrille, getUtilisateur())) {
             score.setText("Score : " +
                     databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + " sec");

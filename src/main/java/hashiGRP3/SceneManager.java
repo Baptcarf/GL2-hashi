@@ -67,7 +67,7 @@ public class SceneManager {
                         }
 
                         final Scene s = new Scene(root, 1600, 900);
-                        allScene.add(new Composante(s, name));
+                        allScene.add(new Composante(s, name, (ManageController)controller));
 
                 } catch (IOException ex) {
                         System.err.println("Erreur au chargement: " + ex);
@@ -112,7 +112,11 @@ public class SceneManager {
                         return;
                 }
                 s.getStylesheets().add(getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
-
+                if(name.equals("selectGrille")) {
+                        Composante comp = findComposant("selectGrille");
+                        comp.getController().refreshGrilles();
+                }
+                
                 stage.setScene(s);
 
                 if (this.boolFull && stage.isFullScreen() == false)
@@ -161,14 +165,19 @@ public class SceneManager {
                 //Le nom donnée à la scène
                 private String nom;
 
+                // le controller de la scène
+                private ManageController controller;
+
+
                 /**
                  * Création du composant scène
                  * @param scene
                  * @param nom
                  */
-                Composante(Scene scene, String nom) {
+                Composante(Scene scene, String nom, ManageController controller) { 
                         this.scene = scene;
                         this.nom = nom;
+                        this.controller = controller;
                 }
 
                 /**
@@ -186,5 +195,15 @@ public class SceneManager {
                 public String getNom() {
                         return nom;
                 }
+<<<<<<< Updated upstream
+=======
+
+                public ManageController getController() {
+                        return controller;
+                }
+
+                
+
+>>>>>>> Stashed changes
         }
 }

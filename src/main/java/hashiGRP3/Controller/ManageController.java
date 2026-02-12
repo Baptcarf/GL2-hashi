@@ -33,7 +33,7 @@ public class ManageController {
          * @param event : Un événement reçu.
          */
         @FXML
-        private void changeScene(ActionEvent event) {
+        public void changeScene(ActionEvent event) {
                 Button btn = (Button) event.getSource();
                 String sceneName = (String) btn.getUserData();
                 if (sceneManager != null && sceneName != null) {
@@ -81,6 +81,7 @@ public class ManageController {
 
         }
 
-        
-
+        //méthode pour rafraîchir les scores (ex: après avoir complété une grille, ou après s'être connecté)
+        public void refreshGrilles(){ 
+        }
 }
