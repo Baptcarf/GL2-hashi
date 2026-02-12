@@ -18,7 +18,7 @@ import hashiGRP3.SceneManager;
 public class ManageController {
 
         private SceneManager sceneManager;
-        private String utilisateur;
+        private static String utilisateur;
 
         /**
          * Ajouter un scène manager dans les controllers
@@ -80,5 +80,7 @@ public class ManageController {
                 System.exit(0);
 
         }
+
+        
 
 }
