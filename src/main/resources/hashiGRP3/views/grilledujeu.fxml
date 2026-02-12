@@ -99,7 +99,7 @@
         <items>
             <StackPane style="-fx-background-color: #eaeaea;">
                <children>
-                  <Pane maxHeight="450.0" maxWidth="631.0" minHeight="300.0" minWidth="300.0" prefHeight="426.0" prefWidth="631.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0); -fx-background-radius: 10;" />
+                  <Pane fx:id="gamePane"  maxHeight="450.0" maxWidth="631.0" minHeight="300.0" minWidth="300.0" prefHeight="426.0" prefWidth="631.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0); -fx-background-radius: 10;" />
                </children>
                <padding>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
