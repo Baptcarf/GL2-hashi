@@ -17,28 +17,28 @@ public class App {
         Hashi hashi = Import.chargerFichier(chemin);
         hashi.initialisationToutLesConflits();
 
-        hashi.afficherPlateau();
+        hashi.toString();
 
         var pont = hashi.getIle(1, 1).getPont(Direction.DROITE);
 
         System.out.println("\nJouer: Pose un pont simple");
         hashi.jouer(pont);
-        hashi.afficherPlateau();
+        System.out.println(hashi.toString());
 
         System.out.println("\n Jouer: Pose un pont double ");
         hashi.jouer(pont);
-        hashi.afficherPlateau();
+        System.out.println(hashi.toString());
 
         System.out.println("\n UNDO Retour au pont simple ");
         hashi.undo();
-        hashi.afficherPlateau();
+        System.out.println(hashi.toString());
 
         System.out.println("\n UNDO Retour à l'état vide ");
         hashi.undo();
-        hashi.afficherPlateau();
+        System.out.println(hashi.toString());
 
         System.out.println("\n REDO Rétablit le pont simple ");
         hashi.redo();
-        hashi.afficherPlateau();
+        System.out.println(hashi.toString());
     }
 }

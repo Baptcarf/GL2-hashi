@@ -36,89 +36,6 @@ public class Hashi {
         taille = new Coordonnees(newX, newY);
     }
     
-    /**
-     * Affiche le plateau de jeu dans la console de manière stylisée.
-     * Visualise les îles, les ponts simples et doubles, ainsi que les ponts possibles.
-     */
-    public void afficherPlateau() {
-        String[][] grilleAffichage = new String[taille.y + 1][taille.x + 1];
-
-        
-        for (int y = 0; y <= taille.y; y++) {
-            for (int x = 0; x <= taille.x; x++) {
-                grilleAffichage[y][x] = " "; 
-            }
-        }
-
-        
-        for (Ile ile : iles.values()) {
-            int x = ile.getCoordonnees().x;
-            int y = ile.getCoordonnees().y;
-            grilleAffichage[y][x] = String.valueOf(ile.getNbPontsRequis());
-        }
-
-        
-        for (Pont pont : ponts) {
-            Ile a = pont.getileA();
-            Ile b = pont.getileB();
-            int x1 = a.getCoordonnees().x;
-            int y1 = a.getCoordonnees().y;
-            int x2 = b.getCoordonnees().x;
-            int y2 = b.getCoordonnees().y;
-            if (pont.getOrientation() == Pont.Orientation.HORIZONTAL) {
-                String c;
-                if (pont.getEtatActuel() == EtatDuPont.SIMPLE) {
-                    c = "─";
-                } else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) {
-                    c = "═";
-                } else {
-                    c = ".";
-                }
-                int minX = Math.min(x1, x2) + 1;
-                int maxX = Math.max(x1, x2);
-                for (int x = minX; x < maxX; x++) {
-                    grilleAffichage[y1][x] = c;
-                }
-            } else {
-                String c;
-                if (pont.getEtatActuel() == EtatDuPont.SIMPLE) {
-                    c = "|";
-                } else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) {
-                    c = "║";
-                } else {
-                    c = ".";
-                }
-                int minY = Math.min(y1, y2) + 1;
-                int maxY = Math.max(y1, y2);
-                for (int y = minY; y < maxY; y++) {
-                    grilleAffichage[y][x1] = c;
-                }
-            }
-        }
-
-
-        System.out.print("    "); 
-        for (int x = 0; x <= taille.x; x++) {
-            System.out.print(x + " ");
-        }
-        System.out.println();
-
-        System.out.print("  ┌");
-        for (int i = 0; i <= taille.x * 2 + 2; i++) System.out.print("─");
-        System.out.println("┐");
-
-        for (int y = 0; y <= taille.y; y++) {
-            System.out.print(y + " │ "); 
-            for (int x = 0; x <= taille.x; x++) {
-                System.out.print(grilleAffichage[y][x] + " ");
-            }
-            System.out.println("│");
-        }
-
-        System.out.print("  └");
-        for (int i = 0; i <= taille.x * 2 + 2; i++) System.out.print("─");
-        System.out.println("┘");
-    }
 
     /**
      * Trouve l'île voisine d'une île donnée dans une direction spécifiée.
@@ -308,6 +225,80 @@ public class Hashi {
      */
     public boolean redo() {
         return historique.redo();
+    }
+
+     // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
+
+
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        String[][] grilleAffichage = new String[taille.y + 1][taille.x + 1];
+
+        // Grille vide
+        for (int y = 0; y <= taille.y; y++)
+            for (int x = 0; x <= taille.x; x++)
+                grilleAffichage[y][x] = " ";
+
+        // Placer les îles
+        for (Ile ile : iles.values()) {
+            int x = ile.getCoordonnees().x;
+            int y = ile.getCoordonnees().y;
+
+            grilleAffichage[y][x] = String.valueOf(ile.getNbPontsRequis());
+        }
+
+        // Placer les ponts
+        for (Pont pont : ponts) {
+            Ile a = pont.getileA();
+            Ile b = pont.getileB();
+            int x1 = a.getCoordonnees().x;
+            int y1 = a.getCoordonnees().y;
+            int x2 = b.getCoordonnees().x;
+            int y2 = b.getCoordonnees().y;
+
+            String c;
+
+            if (pont.getEtatActuel() == EtatDuPont.SIMPLE) c = pont.getOrientation() == Pont.Orientation.HORIZONTAL ? "─" : "|";
+            else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) c = pont.getOrientation() == Pont.Orientation.HORIZONTAL ? "═" : "║";
+            else c = ".";
+
+            if (pont.getOrientation() == Pont.Orientation.HORIZONTAL) {
+                for (int x = Math.min(x1, x2) + 1; x < Math.max(x1, x2); x++)
+                    // Vérifie que le pont n'en écrase pas un autre
+                    if (grilleAffichage[y1][x].equals(" ") || grilleAffichage[y1][x].equals(".")){
+                        grilleAffichage[y1][x] = c;
+                    }  
+            } else {
+                for (int y = Math.min(y1, y2) + 1; y < Math.max(y1, y2); y++)
+                    if (grilleAffichage[y][x1].equals(" ") || grilleAffichage[y][x1].equals(".")){
+                        grilleAffichage[y][x1] = c;
+                    }  
+            }
+        }
+
+        // Affichage stylé avec coordonnées
+        sb.append("    ");
+
+        for (int x = 0; x <= taille.x; x++) sb.append(x).append(" ");
+
+        sb.append("\n  ┌");
+        for (int i = 0; i <= taille.x * 2 + 2; i++) sb.append("─");
+        sb.append("┐\n");
+
+
+        for (int y = 0; y <= taille.y; y++) {
+            sb.append(y).append(" │ ");
+            for (int x = 0; x <= taille.x; x++) sb.append(grilleAffichage[y][x]).append(" ");
+            sb.append("│\n");
+        }
+
+        sb.append("  └");
+        for (int i = 0; i <= taille.x * 2 + 2; i++) sb.append("─");
+        sb.append("┘\n");
+
+        return sb.toString();
     }
 }
 
