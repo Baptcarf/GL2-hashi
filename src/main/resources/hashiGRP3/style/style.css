@@ -1,0 +1,131 @@
+/* ======================
+   Style des Labels
+   ====================== */
+.titre {
+        -fx-font-size: 41px;
+        /* taille du titre */
+        -fx-font-weight: bold;
+        /* gras */
+        -fx-alignment: center;
+        /* centre le texte dans le Label */
+        -fx-text-fill: #333333;
+        /* couleur du texte */
+}
+
+/* ======================
+   Style des boutons
+   ====================== */
+.button {
+        -fx-background-color: #ffffff;
+        /* fond blanc */
+        -fx-background-radius: 12px;
+        /* coins arrondis */
+        -fx-border-radius: 12px;
+        /* bord arrondi */
+        -fx-border-color: #000000;
+        /* bordure noire */
+        -fx-border-width: 2px;
+        -fx-font-size: 16px;
+        /* taille du texte */
+        -fx-font-weight: bold;
+        /* texte gras */
+        -fx-text-fill: #000000;
+        /* couleur du texte */
+        -fx-cursor: hand;
+        /* curseur au survol */
+}
+
+/* Effet hover pour le bouton */
+.button:hover {
+        -fx-background-color: #4CAF50;
+        /* fond vert au survol */
+        -fx-text-fill: white;
+        /* texte blanc au survol */
+}
+
+/* ======================
+   Style du cercle avec "+"
+   ====================== */
+#myCircle {
+        -fx-fill: #e9f4fc;
+        /* couleur de fond du cercle */
+        -fx-stroke: #000000;
+        /* bordure noire */
+        -fx-stroke-width: 2px;
+}
+
+/* Label "+" à l'intérieur du cercle */
+.plus-label {
+        -fx-font-size: 48px;
+        /* taille du "+" */
+        -fx-font-weight: bold;
+        /* gras */
+        -fx-text-fill: black;
+        /* couleur du texte */
+}
+
+/* ======================
+   Layout centré (StackPane / VBox)
+   ====================== */
+.centered {
+        -fx-alignment: center;
+        /* centre horizontal et vertical */
+}
+
+/* ======================
+        Style des boutons des grilles
+   ====================== */
+
+.sectionFacile {
+        /* fond vert pour facile */
+        -fx-border-color: rgb(25, 129, 25);
+        -fx-border-width: 5px;
+}
+
+.sectionMoyen {
+        /* fond orange pour moyen */
+        -fx-border-color: rgb(255, 140, 0);
+        -fx-border-width: 5px;
+
+}
+
+.sectionDifficile {
+        /* fond rouge pour difficile */
+        -fx-border-color: rgb(139, 0, 0);
+        -fx-border-width: 5px;
+
+}
+
+/* ======================
+        Style des section des tutoriels
+   ====================== */
+
+   .sous-section-btn {
+    -fx-background-color: transparent;
+    -fx-padding: 5 10 5 10;
+}
+
+.sous-section-btn:hover {
+    -fx-background-color: #eeeeee;
+    -fx-cursor: hand;
+}
+
+.sous-section-text {
+    -fx-font-size: 17px;
+    -fx-text-fill: #333333;
+}
+
+/* ======================
+        Style bouton du menu toturiel
+   ====================== */
+.button:disabled {
+    -fx-opacity: 0.5;
+}
+
+.button.locked {
+    -fx-text-fill: #888888;
+}
+
+.button.unlocked {
+    -fx-text-fill: #000000;
+}

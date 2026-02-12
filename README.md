@@ -1,8 +1,7 @@
 # GL2-hashi
 
 ## Contexte
-Dans le cadre de notre troisième année de licence informatique à l’Uni-
-versité du Mans, et de la matière Génie Logiciel 2, nous sommes amenés à
+Dans le cadre de notre troisième année de licence informatique à l’Université du Mans, et de la matière Génie Logiciel 2, nous sommes amenés à
 concevoir une application informatique en groupe de 7.
 Le projet porte sur le développement d’un système d’aide pour un jeu
 japonais axé sur le puzzle et la logique nommé le “Hashi”. Ce jeu consiste à
