@@ -1,6 +1,8 @@
 //Attribut au packet
 package hashiGRP3.Scene;
 
+
+
 //Imports
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,6 +19,8 @@ import javafx.stage.Window;
 import java.util.Optional;
 
 import hashiGRP3.DatabaseManager;
+
+
 
 /* Class */
 public class CreerUtilisateur {

@@ -1,6 +1,8 @@
 //Attribut au packet
 package hashiGRP3;
 
+
+
 //Imports
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,8 @@ import java.util.Stack;
 import java.util.ArrayList;
 
 import hashiGRP3.Controller.*;
+
+
 
 /**
  * Classe de gestion des fenêtres.
@@ -29,8 +33,8 @@ public class SceneManager {
         /**
          * Création du sceneManager
          * 
-         * @param stage : le stage
-         * @param db    : la base de donnée
+         * @param stage : Le stage (la scène principale).
+         * @param db    : La base de donnée.
          */
         SceneManager(Stage stage, DatabaseManager db) {
                 allScene = new ArrayList<>();
@@ -41,7 +45,7 @@ public class SceneManager {
         }
 
         /**
-         * Ajoiut d'une scène dans le scène controller
+         * Ajout d'une scène dans le gestionnaire de scène.
          * 
          * @param name : le nom du fichier source de la scène (.fxml)
          */
@@ -73,7 +77,7 @@ public class SceneManager {
         }
 
         /**
-         * trouver une scène par son nom
+         * Trouver une scène par son nom.
          * 
          * @param name le nom de la scène à trouver
          * @return la scène correspondante si trouver sinon null
@@ -93,9 +97,8 @@ public class SceneManager {
         }
 
         /**
-         * Changer de scènne
-         * 
-         * @param name la nouvelle scène principal
+         * Change la scène avec celle donnée.
+         * @param name La nouvelle scène principale.
          */
         public void changeScene(String name) {
                 Composante c = findComposant(name);
@@ -120,7 +123,7 @@ public class SceneManager {
         }
 
         /**
-         * Seteur du pleine écran
+         * Setter du pleine écran.
          * 
          * @param value : la nouvelle valeur
          */
@@ -129,7 +132,7 @@ public class SceneManager {
         }
 
         /**
-         * geter de la base de donnée
+         * Getter de la base de donnée.
          * 
          * @return la base de donnée
          */
@@ -137,6 +140,9 @@ public class SceneManager {
                 return db;
         }
 
+	/**
+	 * Permet de retourner à la scène d'avant.
+	 */
         public void retourArriere() {
                 if (history.isEmpty()) {
                         System.out.println("Aucun retour possible.");
@@ -148,7 +154,7 @@ public class SceneManager {
         }
 
         /**
-         * classe représentant une scène
+         * Classe représentant une scène.
          */
         private class Composante {
 

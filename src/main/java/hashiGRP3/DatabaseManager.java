@@ -1,6 +1,8 @@
 //Attribut au paquet
 package hashiGRP3;
 
+
+
 //Imports
 import java.sql.*;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.nio.file.*;
 import java.io.*;
 
 import hashiGRP3.compDB.*;
+
+
 
 /* Class */
 public class DatabaseManager {

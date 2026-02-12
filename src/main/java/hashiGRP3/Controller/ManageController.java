@@ -1,12 +1,16 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
+
+
 //Imports
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 import hashiGRP3.SceneManager;
+
+
 
 /**
  * Classe parent des controleurs.
@@ -18,8 +22,7 @@ public class ManageController {
 
         /**
          * Ajouter un scène manager dans les controllers
-         * 
-         * @param sm : le scène manager
+         * @param sm : Le scène manager.
          */
         public void setSceneManager(SceneManager sm) {
                 this.sceneManager = sm;
@@ -27,8 +30,7 @@ public class ManageController {
 
         /**
          * Changement de scène depuis un fichier fxml
-         * 
-         * @param event
+         * @param event : Un événement reçu.
          */
         @FXML
         private void changeScene(ActionEvent event) {
@@ -40,8 +42,7 @@ public class ManageController {
         }
 
         /**
-         * Changement de scène depuis un fichier fxml
-         * 
+         * Changement de scène depuis un fichier fxml, retour en arrière.
          * @param event
          */
         @FXML

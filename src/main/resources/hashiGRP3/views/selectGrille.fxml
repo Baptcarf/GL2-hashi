@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 
 
-<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hashiGRP3.Controller.SelectGrilleController">
+<BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hashiGRP3.Controller.SelectGrilleController">
 
     <!-- ===================== BAS FIXE ===================== -->
     <bottom>

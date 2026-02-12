@@ -1,5 +1,9 @@
+//Attribut au packet
 package hashiGRP3.Controller;
 
+
+
+//Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,27 +15,29 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-public class grilleController extends ManageController {
+
+
+/* Class */
+public class GrilleController extends ManageController {
 
     @FXML
     private VBox sidePanel; 
-
     
 
     @FXML
     protected void onHypothesisClick() {
-        // 1. Create Title
+        //Create Title
         Label title = createTitle("Mode Hypothèse");
         
-        // 2. Create Description
+        //Create Description
         Text desc = new Text("lorem ipsum dolor sit amet, consectetur adipiscing");
         desc.setWrappingWidth(180);
 
-        // 3. Create Buttons (Validate / Cancel)
+        //Create Buttons (Validate / Cancel)
         Button btnValidate = new Button("Valider");
         Button btnCancel = new Button("Annuler");
 
-        // Style the buttons
+        //Style the buttons
         btnValidate.setStyle(" -fx-text-fill: #005500;");
         btnCancel.setStyle(" -fx-text-fill: #8b0000;");
         
@@ -42,7 +48,7 @@ public class grilleController extends ManageController {
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
 
-        // 4. Update Panel
+        //Update Panel
         updateSidePanel(title, desc, buttonBox);
     }
 
@@ -79,11 +85,9 @@ public class grilleController extends ManageController {
         
         Label title = createTitle("Indice");
 
-       
         Text hintText = new Text("lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, ");
         hintText.setWrappingWidth(180);
 
-        
         updateSidePanel(title, new Separator(), hintText);
     }
 
