@@ -1,7 +1,9 @@
 package hashiGRP3.Logic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -179,6 +181,14 @@ public class Hashi {
             }
         }
         return null;
+    }
+
+    public List<Ile> getIles() {
+        return new ArrayList<>(iles.values());
+    }
+
+    public Coordonnees getTaille() {
+        return taille;
     }
 
     /**

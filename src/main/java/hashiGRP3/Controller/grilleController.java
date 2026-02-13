@@ -1,99 +1,107 @@
 package hashiGRP3.Controller;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import java.util.ArrayList;
-import java.util.List;
 
 public class grilleController extends ManageController {
+    private Hashi hashi;
 
     @FXML
     private VBox sidePanel; 
     @FXML
     private Pane gamePane;  
-    
-    private static final int CELL_SIZE = 55; // Distance between islands
-    private static final int MARGIN_X = 30;  // Left offset
-    private static final int MARGIN_Y = 30;  // Top offset
-    private static final int RADIUS = 20;    // Size of the circles
-
-    // --- DATA MODEL (Inner Class) ---
-    private static class Island {
-        int x, y, value;
-        public Island(int x, int y, int value) {
-            this.x = x; this.y = y; this.value = value;
-        }
-    }
 
     @FXML
     public void initialize() {
-        System.out.println("GrilleController initialized.");
-        List<Island> islands = load_grille();
-        drawGrid(islands);
+        URL url = getClass().getResource("/hashiGRP3/7x7/hashi2.txt");
+        if (url == null) {
+            System.err.println("Fichier hashi2.txt non trouvé dans les ressources !");
+            return;
+        }
+        
+        Path chemin;
+        try {
+            chemin = Path.of(url.toURI());
+            hashi = Import.chargerFichier(chemin);
+            hashi.initialisationToutLesConflits();
+
+            // Quand on change la taille on redessine
+            gamePane.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+                drawGrid(hashi, newBounds.getWidth());
+            });
+
+        } catch (URISyntaxException | java.io.IOException ex) {
+            System.err.println("Erreur au chargement de la grille : " + ex.getMessage());
+        }
     }
 
     // --- GRID DRAWING LOGIC ---
-    private void drawGrid(List<Island> islands) {
-        if (gamePane == null) {
-            System.err.println("ERREUR");
-            return;
-        }
+    private void drawGrid(Hashi hashi, double paneWidth) {
+        int nbColonnes = hashi.getTaille().x;
+        int nbLignes = hashi.getTaille().y;
+        
+        // Calcul d'une taille de cellule proportionnelle pour couvrir le pane
+        double cellSize = paneWidth / (nbColonnes + 1);
 
         gamePane.getChildren().clear();
 
-        for (Island island : islands) {
-            double pixelX = (island.y - 1) * CELL_SIZE + MARGIN_X;
-            double pixelY = (island.x - 1) * CELL_SIZE + MARGIN_Y;
+        dessinerGrille(nbColonnes, nbLignes, cellSize);
+        dessinerPonts(hashi, cellSize);
+        dessinerIle(hashi, cellSize);
+    }
 
-            Circle circle = new Circle(RADIUS);
-            circle.setFill(Color.WHITE);
-            circle.setStroke(Color.BLACK);
-            circle.setStrokeWidth(2);
-
-            Label label = new Label(String.valueOf(island.value));
-            label.setFont(Font.font("System", FontWeight.BOLD, 18));
-
-            StackPane group = new StackPane(circle, label);
-            group.setLayoutX(pixelX);
-            group.setLayoutY(pixelY);
-
-            group.setOnMouseEntered(e -> {
-                circle.setFill(Color.LIGHTYELLOW);
-                gamePane.getScene().setCursor(javafx.scene.Cursor.HAND);
-            });
-            group.setOnMouseExited(e -> {
-                circle.setFill(Color.WHITE);
-                gamePane.getScene().setCursor(javafx.scene.Cursor.DEFAULT);
-            });
-            gamePane.getChildren().add(group);
+    private void dessinerGrille(int cols, int rows, double size) {
+        for (int y = 0; y <= rows; y++) {
+            for (int x = 0; x <= cols; x++) {
+                Rectangle cell = new Rectangle(size, size);
+                cell.setTranslateX(x * size);
+                cell.setTranslateY(y * size);
+                cell.setFill(Color.WHITE);
+                cell.setStroke(Color.web("#E0E0E0"));
+                gamePane.getChildren().add(cell);
+            }
         }
     }
 
-    private List<Island> load_grille() {
-                List<Island> list = new ArrayList<>();
-                list.add(new Island(1, 1, 4));
-                list.add(new Island(1, 5, 3));
-                list.add(new Island(1, 7, 2)); 
-                list.add(new Island(3, 1, 5)); 
-                list.add(new Island(3, 4, 4));
-                list.add(new Island(5, 1, 5));
-                list.add(new Island(5, 5, 2)); 
-                list.add(new Island(6, 2, 1)); 
-                list.add(new Island(6, 6, 3)); 
-                list.add(new Island(7, 1, 2)); 
-                list.add(new Island(7, 4, 1)); 
-                list.add(new Island(7, 7, 2));
-                return list;
+    private void dessinerPonts(Hashi hashi, double size) {
+        for (var pont : hashi.getPonts()) {
+            pontGraphique pg = new pontGraphique(pont);
+            gamePane.getChildren().add(pg.draw(size, this::onPontClicked));
+        }
     }
 
+    private void onPontClicked(Pont pont) {
+        hashi.jouer(pont);
+        drawGrid(hashi, gamePane.getWidth());
+    }
+
+    private void dessinerIle(Hashi hashi, double size) {
+        for (Ile island : hashi.getIles()) {
+            ileGraphique ig = new ileGraphique(island);
+            gamePane.getChildren().add(ig.draw(size));
+        }
+    }
 
     // --- SIDE PANEL LOGIC ---
 
