@@ -61,6 +61,10 @@ public class HistoriqueManager {
         return true;
     }
     
+    public boolean isEmpty() {
+        return undoStack.isEmpty() && redoStack.isEmpty();
+    }
+
     /**
      * Vide tout l'historique
      */
