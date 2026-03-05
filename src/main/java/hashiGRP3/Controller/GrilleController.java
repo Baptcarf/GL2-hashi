@@ -37,8 +37,11 @@ import javafx.scene.text.Text;
 /* Code de class */
 public class GrilleController extends ManageController {
     private Hashi hashi;
+	boolean gagne = false;
+
     AnimationTimer animationTimer;
     double startup;
+
 
     //FXML
     @FXML
@@ -49,6 +52,9 @@ public class GrilleController extends ManageController {
 
     @FXML
     private Label timer;
+
+    @FXML
+    private Label win;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
         KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
@@ -156,7 +162,13 @@ public class GrilleController extends ManageController {
     }
 
     private void onPontClicked(Pont pont) {
-        hashi.jouer(pont);
+        if(gagne == false) {
+	    	hashi.jouer(pont);
+		if(hashi.estGagne()) {
+			gagne = true;
+			win.setVisible(true);
+		}
+	}
         drawGrid(hashi, gamePane.getWidth());
     }
 
