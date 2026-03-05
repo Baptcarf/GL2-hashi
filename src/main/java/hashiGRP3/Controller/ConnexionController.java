@@ -29,10 +29,12 @@ import java.util.List;
 /* Class */
 public class ConnexionController extends ManageController {
 
+	//var
         private int nbCount;
-
         private boolean sup = false;
         private boolean mod = false;
+
+
         @FXML
         private HBox hbox;
 
@@ -44,6 +46,7 @@ public class ConnexionController extends ManageController {
 
         @FXML
         private Button supprimer;
+
 
         public void setSceneManager(SceneManager sm) {
                 super.setSceneManager(sm);
@@ -64,16 +67,9 @@ public class ConnexionController extends ManageController {
 
         }
 
-        @FXML
-        private void changeScene(ActionEvent event) {
-                Button btn = (Button) event.getSource();
-                String sceneName = (String) btn.getUserData();
-                if (getSceneManager() != null && sceneName != null) {
-                        getSceneManager().changeScene(sceneName);
-                }
-
-        }
-
+	/**
+	 * Créer le conteneur d'utilisateur.
+	 */
         private void createBoxUser(Circle c, String val) {
 
                 VBox v = new VBox();
@@ -271,5 +267,4 @@ public class ConnexionController extends ManageController {
                         }
                 });
         }
-
 }

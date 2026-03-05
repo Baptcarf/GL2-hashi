@@ -20,7 +20,7 @@ import java.io.InputStream;
 /**
  * Controlleur de la page des techniques
  */
-public class TechniqueControler extends ManageController {
+public class TechniqueController extends ManageController {
 
     @FXML
     private VBox instructionBox; 
