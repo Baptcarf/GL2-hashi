@@ -31,7 +31,7 @@ public class pontGraphique {
      * @param onClick callback appele quand le pont est clique
      * @return un Group JavaFX representant le pont
      */
-    public Group draw(double cellSize, Consumer<Pont> onClick, boolean cheat) {
+    public Group draw(double cellSize, Consumer<Pont> onClick) {
         var a = pont.getileA().getCoordonnees();
         var b = pont.getileB().getCoordonnees();
         double ax = a.x * cellSize + cellSize / 2;
@@ -47,9 +47,6 @@ public class pontGraphique {
 
         Group group = new Group();
 
-        if (cheat) {
-            pont.setEtatActuel(pont.getEtatCorrect());
-        }
 
         // Ajout des traits selon l'etat du pont
         EtatDuPont etat = pont.getEtatActuel();

@@ -138,6 +138,11 @@ public class GrilleController extends ManageController {
         dessinerGrille(nbColonnes, nbLignes, cellSize);
         dessinerPonts(hashi, cellSize);
         dessinerIle(hashi, cellSize);
+        
+        if (hashi.estGagne()) {
+            win.setVisible(true);
+        }
+
     }
 
     private void dessinerGrille(int cols, int rows, double size) {
@@ -157,18 +162,17 @@ public class GrilleController extends ManageController {
     private void dessinerPonts(Hashi hashi, double size) {
         for (var pont : hashi.getPonts()) {
             pontGraphique pg = new pontGraphique(pont);
-            gamePane.getChildren().add(pg.draw(size, this::onPontClicked, isKonamiCodeEntered()));
+
+            if (konamiActivated) {
+                pont.setEtatActuel(pont.getEtatCorrect());
+            }
+
+            gamePane.getChildren().add(pg.draw(size, this::onPontClicked));
         }
     }
 
     private void onPontClicked(Pont pont) {
-        if(gagne == false) {
-	    	hashi.jouer(pont);
-		if(hashi.estGagne()) {
-			gagne = true;
-			win.setVisible(true);
-		}
-	}
+        hashi.jouer(pont);
         drawGrid(hashi, gamePane.getWidth());
     }
 
