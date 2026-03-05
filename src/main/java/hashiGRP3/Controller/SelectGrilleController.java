@@ -68,7 +68,6 @@ public class SelectGrilleController extends ManageController {
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
     }
 
-
     /* ===================== GRILLES ===================== */
 
     @Override
@@ -102,7 +101,6 @@ public class SelectGrilleController extends ManageController {
             }
         }
     }
-
 
     private void afficherGrilleSelectionnee(int numeroGrille) {
 

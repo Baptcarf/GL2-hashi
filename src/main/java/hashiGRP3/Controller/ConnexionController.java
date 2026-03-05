@@ -1,8 +1,6 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-
-
 //Imports
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -25,10 +23,10 @@ import hashiGRP3.DatabaseManager;
 import hashiGRP3.compDB.Utilisateur;
 import hashiGRP3.Scene.CreerUtilisateur;
 
+import hashiGRP3.Logic.General;
+
 import java.sql.*;
 import java.util.List;
-
-
 
 /* Class */
 public class ConnexionController extends ManageController {
@@ -55,7 +53,7 @@ public class ConnexionController extends ManageController {
         Tooltip.install(creer, new Tooltip("Créer un compte"));
         Tooltip.install(supprimer, new Tooltip("supprimer un compte"));
 
-        List<Utilisateur> au = sm.getBD().findAllUser();
+        List<Utilisateur> au = General.getDb().findAllUser();
 
         for (Utilisateur u : au) {
             Circle c = createCircle(u.getColor());
@@ -67,8 +65,6 @@ public class ConnexionController extends ManageController {
         }
 
     }
-
-    
 
     private void createBoxUser(Circle c, String val) {
 
@@ -103,7 +99,7 @@ public class ConnexionController extends ManageController {
                 supprimerCompte(circle);
 
             } else {
-				VBox parentVBox = (VBox) circle.getParent();
+                VBox parentVBox = (VBox) circle.getParent();
                 Label lab = null;
 
                 // Parcours les enfants du VBox
@@ -115,6 +111,7 @@ public class ConnexionController extends ManageController {
                 }
 
                 setUtilisateur(lab.getText());
+                General.setIdUtilisateur(General.getDb().getIdUtilisateur(getUtilisateur()));
                 getSceneManager().changeScene("accueil");
             }
 
@@ -202,7 +199,7 @@ public class ConnexionController extends ManageController {
         });
 
         bo.setOnAction(ev -> {
-            DatabaseManager db = getSceneManager().getBD();
+            DatabaseManager db = General.getDb();
 
             VBox parentVBox = (VBox) circle.getParent();
             Label lab = null;
@@ -247,8 +244,8 @@ public class ConnexionController extends ManageController {
     private void creerUtilisateur(Circle c) {
         CreerUtilisateur dialog = new CreerUtilisateur();
 
-        dialog.showAndWait(hbox.getScene().getWindow(), getSceneManager().getBD()).ifPresent(result -> {
-            DatabaseManager db = getSceneManager().getBD();
+        dialog.showAndWait(hbox.getScene().getWindow(), General.getDb()).ifPresent(result -> {
+            DatabaseManager db = General.getDb();
 
             db.insertUser(result.pseudo(), colorToString(result.color()));
             c.setFill(result.color());

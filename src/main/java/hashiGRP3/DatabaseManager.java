@@ -11,6 +11,9 @@ import javax.print.DocFlavor.STRING;
 import java.nio.file.*;
 import java.io.*;
 
+import hashiGRP3.Logic.Historique.HistoriqueManager;
+
+import hashiGRP3.Logic.Hashi;
 import hashiGRP3.compDB.*;
 
 /* Class */
@@ -22,6 +25,7 @@ public class DatabaseManager {
      * Constructeur
      */
     public DatabaseManager() {
+        this.init();
     }
 
     /**
@@ -299,13 +303,39 @@ public class DatabaseManager {
         return -1;
     }
 
+    public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha) {
+
+        String sql = "SELECT node_dep,node_arr,val_coup FROM Coup NATURAL JOIN partie NATURAL JOIN Utilisateur WHERE id_utilisateur = ? ORDER BY num_coup DESC";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, Integer.toString(idUtilisateur));
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int nodeDep = rs.getInt("node_dep");
+                int nodeArr = rs.getInt("node_arr");
+                int valCoup = rs.getInt("val_coup");
+
+                System.out.println("Départ: " + nodeDep + ", Arrivée: " + nodeArr + ", Valeur: " + valCoup);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * Récupère les 5 meilleurs scores de tous les temps
+     * 
      * @return une liste de chaînes au format "pseudo score"
      */
     public List<String> obtenirTop5Scores() {
         List<String> scores = new ArrayList<>();
-        
+
         String sql = "SELECT u.pseudo, p.score " +
                 "FROM Partie p " +
                 "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
@@ -333,12 +363,13 @@ public class DatabaseManager {
 
     /**
      * Récupère les 5 meilleurs scores pour une grille spécifique
+     * 
      * @param id_grille l'ID de la grille
      * @return une liste de chaînes au format "pseudo score"
      */
     public List<String> obtenirTop5ScoresParGrille(int id_grille) {
         List<String> scores = new ArrayList<>();
-        
+
         String sql = "SELECT u.pseudo, p.score " +
                 "FROM Partie p " +
                 "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
