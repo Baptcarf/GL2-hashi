@@ -4,16 +4,6 @@ package hashiGRP3.Controller;
 
 
 //Imports
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,14 +19,27 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 
 
 
 /* Code de class */
 public class GrilleController extends ManageController {
     private Hashi hashi;
+	boolean gagne = false;
+
     AnimationTimer animationTimer;
     double startup;
+
 
     //FXML
     @FXML
@@ -47,6 +50,9 @@ public class GrilleController extends ManageController {
 
     @FXML
     private Label timer;
+
+    @FXML
+    private Label win;
 
     @FXML
     public void initialize() {
@@ -137,7 +143,13 @@ public class GrilleController extends ManageController {
     }
 
     private void onPontClicked(Pont pont) {
-        hashi.jouer(pont);
+        if(gagne == false) {
+	    	hashi.jouer(pont);
+		if(hashi.estGagne()) {
+			gagne = true;
+			win.setVisible(true);
+		}
+	}
         drawGrid(hashi, gamePane.getWidth());
     }
 

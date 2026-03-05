@@ -27,7 +27,7 @@ public class SelectGrilleController extends ManageController {
     @FXML private GridPane grilleDifficile;
 
 
-    private static final int COLONNES = 4;
+    private static final int COLONNES = 5;
 
 
     @FXML
@@ -60,7 +60,7 @@ public class SelectGrilleController extends ManageController {
             container.add(carte, col, row);
 
             col++;
-            if (col == 4) {
+            if (col == COLONNES) {
                 col = 0;
                 row++;
             }

@@ -7,12 +7,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.GridPane?>
-
 
 <BorderPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hashiGRP3.Controller.SelectGrilleController">
 
@@ -30,8 +29,8 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button text="Retour" onAction="#changeScene" userData="accueil"/>
-                <Button text="Jouer" onAction="#changeScene" userData="grilledujeu"/>
+                <Button onAction="#changeScene" text="Retour" userData="accueil" />
+                <Button onAction="#changeScene" text="Jouer" userData="grilledujeu" />
 
             </children>
         </HBox>
@@ -62,33 +61,21 @@
                            <VBox spacing="30">
                               <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Facile (5x5)" />
 
-                              <GridPane fx:id="grilleFacile"
-                                       hgap="15"
-                                       vgap="15"
-                                       minWidth="700"
-                                       alignment="CENTER"/>
+                              <GridPane fx:id="grilleFacile" alignment="CENTER" hgap="15" minWidth="700" vgap="15" />
                            </VBox>
 
                            <!-- ================= SECTION 2 ================= -->
                            <VBox spacing="30">
-                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Intermédiaire (8x9)" />
+                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Intermédiaire (10x10)" />
 
-                              <GridPane fx:id="grilleMoyen"
-                                       hgap="15"
-                                       vgap="15"
-                                       minWidth="700"
-                                       alignment="CENTER"/>
+                              <GridPane fx:id="grilleMoyen" alignment="CENTER" hgap="15" minWidth="700" vgap="15" />
                            </VBox>
 
                            <!-- ================= SECTION 3 ================= -->
                            <VBox spacing="30">
                               <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Difficile (12x12)" />
 
-                              <GridPane fx:id="grilleDifficile"
-                                       hgap="15"
-                                       vgap="15"
-                                       minWidth="700"
-                                       alignment="CENTER"/>
+                              <GridPane fx:id="grilleDifficile" alignment="CENTER" hgap="15" minWidth="700" vgap="15" />
                            </VBox>
 
 
