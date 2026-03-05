@@ -53,7 +53,11 @@ public class GrilleController extends ManageController {
 
     @FXML
     private Label win;
+    @FXML
+    private Button undoButton;
 
+    @FXML
+    private Button redoButton;
     @FXML
     public void initialize() {
 	    //On charge une grille
@@ -69,7 +73,8 @@ public class GrilleController extends ManageController {
             chemin = Path.of(url.toURI());
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesConflits();
-
+            undoButton.setDisable(true);
+            redoButton.setDisable(true);
             // Quand on change la taille on redessine
             gamePane.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
                 drawGrid(hashi, newBounds.getWidth());
@@ -151,6 +156,8 @@ public class GrilleController extends ManageController {
 		}
 	}
         drawGrid(hashi, gamePane.getWidth());
+        redoButton.setDisable(hashi.isRedoEmpty());
+        undoButton.setDisable(hashi.isUndoEmpty());
     }
 
     private void dessinerIle(Hashi hashi, double size) {
@@ -159,7 +166,29 @@ public class GrilleController extends ManageController {
             gamePane.getChildren().add(ig.draw(size));
         }
     }
+    @FXML
+    private void onUndoClick(){
+        hashi.undo();
+        drawGrid(hashi, gamePane.getWidth());
+        undoButton.setDisable(hashi.isUndoEmpty());
+        redoButton.setDisable(hashi.isRedoEmpty());
+    }
 
+    @FXML
+    private void onRedoClick(){
+        hashi.redo();
+        drawGrid(hashi, gamePane.getWidth());
+        redoButton.setDisable(hashi.isRedoEmpty());
+        undoButton.setDisable(hashi.isUndoEmpty());
+    }
+
+    @FXML
+    private void onResetClick() {
+        hashi.Reset();
+        drawGrid(hashi, gamePane.getWidth());
+        undoButton.setDisable(true);
+        redoButton.setDisable(true);
+    }
     /* Panel Hypothese */
     @FXML
     protected void onHypothesisClick() {
