@@ -44,6 +44,11 @@ public class SelectGrilleController extends ManageController {
     @FXML
     private Label labelScore5;
 
+    /* ===================== BOUTTONS ===================== */
+
+    @FXML
+    private Button boutonJouer;
+
     /* ===================== SECTION DES GRILLES ===================== */
 
     @FXML
@@ -57,13 +62,14 @@ public class SelectGrilleController extends ManageController {
 
     @FXML
     public void initialize() {
-
         General.setId_grille(1);
-
+        // Plus d'appel à afficherGrilleSelectionnee ici
+        // Plus de boutonJouer.setDisable ici (géré dans refreshGrilles)
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
-        afficherGrilleSelectionnee(1);
+        chargerLeaderboardVide();
+        boutonJouer.setDisable(true);
     }
 
     /* ===================== GRILLES ===================== */
@@ -73,10 +79,14 @@ public class SelectGrilleController extends ManageController {
         grilleFacile.getChildren().clear();
         grilleMoyen.getChildren().clear();
         grilleDifficile.getChildren().clear();
-        chargerLeaderboardVide();
+
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
+
+        // Déplacé ici depuis initialize() — l'utilisateur est connu à ce stade
+        afficherGrilleSelectionnee(General.getId_grille());
+        boutonJouer.setDisable(true);
     }
 
     private void creerGrilles(GridPane container,
@@ -139,6 +149,7 @@ public class SelectGrilleController extends ManageController {
         bouton.setOnAction(e -> {
             General.setId_grille(numeroGrille);
             afficherGrilleSelectionnee(numeroGrille);
+            boutonJouer.setDisable(false);
         });
 
         Label score = new Label();
