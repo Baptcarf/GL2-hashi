@@ -107,6 +107,9 @@ public class GrilleController extends ManageController {
             newScene.setOnKeyPressed(
                 e -> {handleKonamiKey(e.getCode());
                 if (isKonamiCodeEntered()) {
+                    for (var pont : hashi.getPonts()) {
+                        pont.setEtatActuel(pont.getEtatCorrect());
+                    }
                     drawGrid(hashi, gamePane.getWidth());
                 }}
             );
@@ -167,11 +170,6 @@ public class GrilleController extends ManageController {
     private void dessinerPonts(Hashi hashi, double size) {
         for (var pont : hashi.getPonts()) {
             pontGraphique pg = new pontGraphique(pont);
-
-            if (konamiActivated) {
-                pont.setEtatActuel(pont.getEtatCorrect());
-            }
-
             gamePane.getChildren().add(pg.draw(size, this::onPontClicked));
         }
     }
