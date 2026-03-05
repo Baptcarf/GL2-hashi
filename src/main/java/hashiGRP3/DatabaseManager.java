@@ -334,6 +334,66 @@ public class DatabaseManager {
 
     }
 
+    public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres) {
+
+        String sql = "SELECT num_coup,id_partie FROM Coup NATURAL JOIN partie NATURAL JOIN Utilisateur WHERE id_utilisateur = ?  AND id_grille = ? ORDER BY num_coup DESC LIMIT 1";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, Integer.toString(id_utilisateur));
+            ps.setString(2, Integer.toString(id_grille));
+
+            ResultSet rs = ps.executeQuery();
+
+            int numCoup = 0;
+            int idPartie = 0;
+            if (rs.next()) {
+                numCoup = rs.getInt("num_coup") + 1;
+                idPartie = rs.getInt("id_partie");
+            }
+            /**
+             * Cas où on à pas de coup dans la base il faut trouver l'id de la partie
+             */
+            if (numCoup == 0) {
+                sql = "SELECT id_partie FROM partie WHERE id_utilisateur = ? AND id_grille = ? ";
+
+                try (Connection conn2 = DriverManager.getConnection(URL);
+                        PreparedStatement ps2 = conn.prepareStatement(sql)) {
+
+                    ps2.setString(1, Integer.toString(id_utilisateur));
+                    ps2.setString(2, Integer.toString(id_grille));
+
+                    rs = ps2.executeQuery();
+
+                    if (rs.next()) {
+                        idPartie = rs.getInt("id_partie");
+                    }
+
+                }
+
+            }
+            sql = "INSERT INTO COUP VALUES (?,?,?,?,?,?)";
+
+            try (Connection conn3 = DriverManager.getConnection(URL);
+                    PreparedStatement ps3 = conn.prepareStatement(sql)) {
+
+                ps3.setString(1, Integer.toString(idPartie));
+                ps3.setString(2, Integer.toString(numCoup));
+                ps3.setString(3, Integer.toString(id_dep));
+                ps3.setString(4, Integer.toString(id_arr));
+                ps3.setString(5, Integer.toString(valCoupAvant));
+                ps3.setString(6, Integer.toString(valCoupApres));
+
+                ps3.executeQuery();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * Récupère les 5 meilleurs scores de tous les temps
      * 
