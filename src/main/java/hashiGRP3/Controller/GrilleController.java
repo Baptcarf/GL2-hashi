@@ -4,8 +4,19 @@ package hashiGRP3.Controller;
 
 
 //Imports
-import javafx.fxml.FXML;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -18,25 +29,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.animation.AnimationTimer;
-
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 
 
 
 /* Code de class */
 public class GrilleController extends ManageController {
-    
-    //
     private Hashi hashi;
     AnimationTimer animationTimer;
     double startup;
@@ -51,17 +48,16 @@ public class GrilleController extends ManageController {
     @FXML
     private Label timer;
 
-
     @FXML
     public void initialize() {
-	//On charge une grille
+	    //On charge une grille
         URL url = getClass().getResource("/hashiGRP3/7x7/hashi2.txt");
         if (url == null) {
             System.err.println("Fichier hashi2.txt non trouvé dans les ressources !");
             return;
         }
         
-	//On l'importe
+	    //On l'importe
         Path chemin;
         try {
             chemin = Path.of(url.toURI());
@@ -77,8 +73,8 @@ public class GrilleController extends ManageController {
             System.err.println("Erreur au chargement de la grille : " + ex.getMessage());
         }
 
-	//On init un timer
-	animationTimer = new AnimationTimer() {
+        //On init un timer
+        animationTimer = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
                 double t = (currentTime - startup) / 1000000000;
@@ -87,20 +83,21 @@ public class GrilleController extends ManageController {
         };
     }
 
+    @Override
     protected void changeScene(ActionEvent event) {
-	stop_timer();
-	super.changeScene(event);
+        stop_timer();
+        super.changeScene(event);
     }
 
     // Démarre le timer
     public void start_timer() {
-	startup = System.nanoTime();
-	animationTimer.start();
+        startup = System.nanoTime();
+        animationTimer.start();
     }
 
     // Stop le timer
     public void stop_timer() {
-	animationTimer.stop();
+        animationTimer.stop();
     }
 
     // Dessin de grille
