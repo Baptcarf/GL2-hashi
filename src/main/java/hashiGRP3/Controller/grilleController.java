@@ -1,16 +1,11 @@
+//Attribut au packet
 package hashiGRP3.Controller;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
+
+//Imports
 import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -23,23 +18,50 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.animation.AnimationTimer;
 
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
+
+
+
+/* Code de class */
 public class grilleController extends ManageController {
+    
+    //
     private Hashi hashi;
+    AnimationTimer animationTimer;
+    double startup;
 
+    //FXML
     @FXML
     private VBox sidePanel; 
+    
     @FXML
-    private Pane gamePane;  
+    private Pane gamePane; 
+
+    @FXML
+    private Label timer;
+
 
     @FXML
     public void initialize() {
+	//On charge une grille
         URL url = getClass().getResource("/hashiGRP3/7x7/hashi2.txt");
         if (url == null) {
             System.err.println("Fichier hashi2.txt non trouvé dans les ressources !");
             return;
         }
         
+	//On l'importe
         Path chemin;
         try {
             chemin = Path.of(url.toURI());
@@ -54,9 +76,25 @@ public class grilleController extends ManageController {
         } catch (URISyntaxException | java.io.IOException ex) {
             System.err.println("Erreur au chargement de la grille : " + ex.getMessage());
         }
+
+	//On init un timer
+	animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long currentTime) {
+                double t = (currentTime - startup) / 1000000000;
+                timer.setText("Chrono : " + (int)t);
+            }
+        };
     }
 
-    // --- GRID DRAWING LOGIC ---
+    // Démarre le timer
+    public void start_timer() {
+	startup = System.nanoTime();
+	animationTimer.start();
+    }
+
+
+    // Dessin de grille
     private void drawGrid(Hashi hashi, double paneWidth) {
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
@@ -84,6 +122,7 @@ public class grilleController extends ManageController {
         }
     }
 
+    //Fonctions de ponts
     private void dessinerPonts(Hashi hashi, double size) {
         for (var pont : hashi.getPonts()) {
             pontGraphique pg = new pontGraphique(pont);
@@ -103,8 +142,7 @@ public class grilleController extends ManageController {
         }
     }
 
-    // --- SIDE PANEL LOGIC ---
-
+    /* Panel Hypothese */
     @FXML
     protected void onHypothesisClick() {
         Label title = createTitle("Mode Hypothèse");
