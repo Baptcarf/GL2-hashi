@@ -152,8 +152,7 @@ public class ConnexionController extends ManageController {
         String couleurCSS = colorToString(c);
 
         String value = String.format("-fx-background-color:%s;", couleurCSS);
-        getSceneManager().findScene("connexion").getRoot()
-                .setStyle(value);
+         hbox.getScene().getRoot().setStyle(value);
 
     }
 

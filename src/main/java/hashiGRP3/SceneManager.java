@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
 import java.io.IOException;
 import java.util.List;
 import java.util.Stack;
@@ -26,17 +27,26 @@ public class SceneManager {
     private Composante currentScene;
     private boolean boolFull;
 
+    //   Un seul conteneur racine et une seule scène pour éviter le bug fullscreen macOS
+    private final StackPane rootContainer = new StackPane();
+    private final Scene mainScene = new Scene(rootContainer, 1600, 900);
+
     /**
      * Création du sceneManager
      * 
      * @param stage : Le stage (la scène principale).
-     * @param db    : La base de donnée.
      */
     SceneManager(Stage stage) {
         allScene = new ArrayList<>();
         this.stage = stage;
         this.boolFull = false;
         currentScene = null;
+
+        // On set la scène unique une seule fois ici, et on ajoute le CSS global
+        mainScene.getStylesheets().add(
+            getClass().getResource("/hashiGRP3/style/style.css").toExternalForm()
+        );
+        stage.setScene(mainScene);
     }
 
     /**
@@ -63,8 +73,8 @@ public class SceneManager {
                 manageController.setSceneManager(this);
             }
 
-            final Scene s = new Scene(root, 1600, 900);
-            allScene.add(new Composante(s, name, (ManageController) controller));
+            // On stocke le Parent (contenu FXML) directement, plus besoin de créer une Scene
+            allScene.add(new Composante(root, name, (ManageController) controller));
 
         } catch (IOException ex) {
             System.err.println("Erreur au chargement: " + ex);
@@ -87,10 +97,11 @@ public class SceneManager {
     }
 
     /**
-     * Trouver une scène par son nom.
+     * Retourne la scène principale unique.
+     * Remplace findScene() — tous les nœuds partagent désormais la même scène.
      */
-    public Scene findScene(String name) {
-        return findComposant(name).getScene();
+    public Scene getMainScene() {
+        return mainScene;
     }
 
     /**
@@ -101,25 +112,24 @@ public class SceneManager {
     public void changeScene(String name) {
         Composante c = findComposant(name);
 
+        if (c == null) {
+            System.out.println("Scène introuvable : " + name);
+            return;
+        }
+
         if (currentScene != null) {
             history.push(currentScene);
         }
         currentScene = c;
-        Scene s = c.getScene();
-        if (s == null) {
-            System.out.println("Scène introuvable : " + name);
-            return;
-        }
-        s.getStylesheets().add(getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
+
         if (name.equals("selectGrille")) {
             Composante comp = findComposant("selectGrille");
             comp.getController().refreshGrilles();
         }
 
-        stage.setScene(s);
-
-        if (this.boolFull && stage.isFullScreen() == false)
-            stage.setFullScreen(true);
+        //   On swap uniquement le contenu dans le StackPane racine
+        // Le fullscreen n'est jamais interrompu
+        rootContainer.getChildren().setAll(c.getRoot());
 
         stage.show();
     }
@@ -131,6 +141,7 @@ public class SceneManager {
      */
     public void setFullScreen(boolean value) {
         boolFull = value;
+        stage.setFullScreen(value);
     }
 
     /**
@@ -142,8 +153,10 @@ public class SceneManager {
             return;
         }
 
-        currentScene = history.pop();
-        changeScene(currentScene.nom);
+        // On pop la scène précédente sans la re-push dans l'historique
+        Composante previous = history.pop();
+        currentScene = null;
+        changeScene(previous.getNom());
     }
 
     /**
@@ -151,8 +164,8 @@ public class SceneManager {
      */
     private class Composante {
 
-        // La scène en elle même
-        private Scene scene;
+        // Le contenu FXML de la vue
+        private Parent root;
 
         // Le nom donnée à la scène
         private String nom;
@@ -163,22 +176,23 @@ public class SceneManager {
         /**
          * Création du composant scène
          * 
-         * @param scene
+         * @param root
          * @param nom
+         * @param controller
          */
-        Composante(Scene scene, String nom, ManageController controller) {
-            this.scene = scene;
+        Composante(Parent root, String nom, ManageController controller) {
+            this.root = root;
             this.nom = nom;
             this.controller = controller;
         }
 
         /**
-         * Getter de la scène
+         * Getter du contenu FXML
          * 
-         * @return la scène
+         * @return le Parent racine du FXML
          */
-        public Scene getScene() {
-            return scene;
+        public Parent getRoot() {
+            return root;
         }
 
         /**
