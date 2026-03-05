@@ -281,7 +281,7 @@ public class Hashi {
         // Affichage stylé avec coordonnées
         sb.append("    ");
 
-        for (int x = 0; x <= taille.x; x++) sb.append(x).append(" ");
+        for (int x = 0; x <= taille.x; x++) sb.append(x%10).append(" ");
 
         sb.append("\n  ┌");
         for (int i = 0; i <= taille.x * 2 + 2; i++) sb.append("─");
@@ -289,7 +289,7 @@ public class Hashi {
 
 
         for (int y = 0; y <= taille.y; y++) {
-            sb.append(y).append(" │ ");
+            sb.append(y%10).append(" │ ");
             for (int x = 0; x <= taille.x; x++) sb.append(grilleAffichage[y][x]).append(" ");
             sb.append("│\n");
         }
