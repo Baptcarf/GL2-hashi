@@ -239,7 +239,18 @@ public class Hashi {
 
      // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
 
+    public boolean isUndoEmpty() {
+        return historique.isUndoEmpty();}
 
+    public boolean isRedoEmpty() {
+        return historique.isRedoEmpty();}
+
+    public void Reset() {
+        historique.clear();
+        for (Pont p : ponts) {
+            p.setEtatActuel(EtatDuPont.VIDE);
+        }
+    }
 
     @Override
     public String toString(){

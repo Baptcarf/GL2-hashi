@@ -50,7 +50,16 @@
             <Region HBox.hgrow="ALWAYS" />
 
             <HBox alignment="CENTER_RIGHT" spacing="20.0">
-               <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+               <Button fx:id="redoButton" onAction="#onRedoClick" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
+                   <graphic>
+                       <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                               <Image url="@../images/redo.png" />
+                           </image>
+                       </ImageView>
+                   </graphic>
+               </Button>
+               <Button fx:id="undoButton" onAction="#onUndoClick" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" style="-fx-background-radius: 10; -fx-border-radius: 10;">
                    <graphic>
                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -125,7 +134,7 @@
                </font>
             </Label>
             
-            <Button layoutX="806.0" layoutY="15.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Reset" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0" />
+            <Button onAction="#onResetClick" layoutX="806.0" layoutY="15.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Reset" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="15.0" />
          </children>
       </AnchorPane>
    </bottom>
