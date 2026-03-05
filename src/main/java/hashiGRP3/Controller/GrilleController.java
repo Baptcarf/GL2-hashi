@@ -4,12 +4,24 @@ package hashiGRP3.Controller;
 
 
 //Imports
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.List;
+
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -19,16 +31,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 
 
 
@@ -55,6 +57,14 @@ public class GrilleController extends ManageController {
     private Label win;
     @FXML
     private Button undoButton;
+
+    private static final List<KeyCode> KONAMI_CODE = List.of(
+        KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
+        KeyCode.Q, KeyCode.D, KeyCode.Q, KeyCode.D,
+        KeyCode.B, KeyCode.A
+    );
+    private int konamiIndex = 0;
+    private boolean konamiActivated = false;
 
     @FXML
     private Button redoButton;
@@ -92,6 +102,15 @@ public class GrilleController extends ManageController {
                 timer.setText("Chrono : " + (int)t);
             }
         };
+
+        gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            newScene.setOnKeyPressed(
+                e -> {handleKonamiKey(e.getCode());
+                if (isKonamiCodeEntered()) {
+                    drawGrid(hashi, gamePane.getWidth());
+                }}
+            );
+        });
     }
 
     @Override
@@ -143,7 +162,7 @@ public class GrilleController extends ManageController {
     private void dessinerPonts(Hashi hashi, double size) {
         for (var pont : hashi.getPonts()) {
             pontGraphique pg = new pontGraphique(pont);
-            gamePane.getChildren().add(pg.draw(size, this::onPontClicked));
+            gamePane.getChildren().add(pg.draw(size, this::onPontClicked, isKonamiCodeEntered()));
         }
     }
 
@@ -257,5 +276,21 @@ public class GrilleController extends ManageController {
         label.setFont(Font.font("System", FontWeight.BOLD, 16));
         label.setStyle("-fx-text-fill: #333333;");
         return label;
+    }
+
+    private void handleKonamiKey(KeyCode key) {
+        if (konamiActivated) return;
+        if (key == KONAMI_CODE.get(konamiIndex)) {
+            konamiIndex++;
+            if (konamiIndex == KONAMI_CODE.size()) {
+                konamiActivated = true;
+            }
+        } else {
+            konamiIndex = (key == KONAMI_CODE.get(0)) ? 1 : 0;
+        }
+    }
+
+    public boolean isKonamiCodeEntered() {
+        return konamiActivated;
     }
 }
