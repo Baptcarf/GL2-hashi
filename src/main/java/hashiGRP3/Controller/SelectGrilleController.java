@@ -140,17 +140,9 @@ public class SelectGrilleController extends ManageController {
         return -1;
     }
 
-    
-
     private boolean grilleCompletee(int numeroGrille) {
         // TODO : vérifier dans la base de données
         return false;
     }
-
-
-
-
-
-    
 
 }

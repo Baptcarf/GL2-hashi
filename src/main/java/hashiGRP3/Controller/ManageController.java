@@ -31,7 +31,7 @@ public class ManageController {
          * @param event
          */
         @FXML
-        private void changeScene(ActionEvent event) {
+        protected void changeScene(ActionEvent event) {
                 Button btn = (Button) event.getSource();
                 String sceneName = (String) btn.getUserData();
                 if (sceneManager != null && sceneName != null) {

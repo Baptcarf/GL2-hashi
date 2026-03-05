@@ -34,7 +34,7 @@ import hashiGRP3.ObjectGraphique.pontGraphique;
 
 
 /* Code de class */
-public class grilleController extends ManageController {
+public class GrilleController extends ManageController {
     
     //
     private Hashi hashi;
@@ -87,12 +87,21 @@ public class grilleController extends ManageController {
         };
     }
 
+    protected void changeScene(ActionEvent event) {
+	stop_timer();
+	super.changeScene(event);
+    }
+
     // Démarre le timer
     public void start_timer() {
 	startup = System.nanoTime();
 	animationTimer.start();
     }
 
+    // Stop le timer
+    public void stop_timer() {
+	animationTimer.stop();
+    }
 
     // Dessin de grille
     private void drawGrid(Hashi hashi, double paneWidth) {
