@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.EnumSet;
 import hashiGRP3.Logic.Historique.HistoriqueManager;
 
 /**
@@ -207,7 +207,7 @@ public class Hashi {
         EtatDuPont apres = pont.getEtatActuel();
         
         if (avant != apres) {
-            historique.ajouterAction(pont, avant, apres);
+            historique.ajouterAction(pont, avant, apres, EnumSet.of(Mode.HISTORIQUE)); //EnumSet à voir si c'est la bonne valeur
         }
     }
     

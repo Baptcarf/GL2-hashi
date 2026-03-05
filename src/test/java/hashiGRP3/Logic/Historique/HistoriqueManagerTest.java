@@ -4,12 +4,16 @@ import hashiGRP3.Logic.Coordonnees;
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
+import hashiGRP3.Logic.Mode;
+
+import java.util.EnumSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//Les EnumSets sont temporaires (j'en avait marre de voir les erreurs)
 public class HistoriqueManagerTest {
 
     private HistoriqueManager historique;
@@ -39,7 +43,7 @@ public class HistoriqueManagerTest {
     @Test
     public void ajouterAction_thenUndo_shouldRestoreEtatAvant() {
 
-        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE);
+        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE, EnumSet.of(Mode.HISTORIQUE));
 
         pont.setEtatActuel(EtatDuPont.SIMPLE);
 
@@ -50,7 +54,7 @@ public class HistoriqueManagerTest {
     @Test
     public void ajouterAction_thenUndo_thenRedo_shouldRestoreEtatApres() {
 
-        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE);
+        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE, EnumSet.of(Mode.HISTORIQUE));
 
         pont.setEtatActuel(EtatDuPont.SIMPLE);
 
@@ -64,7 +68,7 @@ public class HistoriqueManagerTest {
     @Test
     public void clear_shouldEmptyUndoAndRedoStacks() {
 
-        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE);
+        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE, EnumSet.of(Mode.HISTORIQUE));
 
         historique.undo(); // met une action dans redoStack
 
@@ -77,11 +81,11 @@ public class HistoriqueManagerTest {
     @Test
     public void ajouterNouvelleAction_shouldClearRedoStack() {
 
-        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE);
+        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE, EnumSet.of(Mode.HISTORIQUE));
         historique.undo();
 
         // Nouvelle action → doit effacer redo
-        historique.ajouterAction(pont, EtatDuPont.SIMPLE, EtatDuPont.DOUBLE);
+        historique.ajouterAction(pont, EtatDuPont.SIMPLE, EtatDuPont.DOUBLE, EnumSet.of(Mode.HISTORIQUE));
 
         assertFalse(historique.redo());
     }
@@ -89,10 +93,10 @@ public class HistoriqueManagerTest {
     @Test
     public void multipleActions_shouldRespectLIFO() {
 
-        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE);
+        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE, EnumSet.of(Mode.HISTORIQUE));
         pont.setEtatActuel(EtatDuPont.SIMPLE);
 
-        historique.ajouterAction(pont, EtatDuPont.SIMPLE, EtatDuPont.DOUBLE);
+        historique.ajouterAction(pont, EtatDuPont.SIMPLE, EtatDuPont.DOUBLE, EnumSet.of(Mode.HISTORIQUE));
         pont.setEtatActuel(EtatDuPont.DOUBLE);
 
         // Undo 1 → SIMPLE
@@ -120,8 +124,8 @@ public class HistoriqueManagerTest {
 
         Pont pont2 = new Pont(ile3, ile4, EtatDuPont.VIDE);
 
-        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE);
-        historique.ajouterAction(pont2, EtatDuPont.VIDE, EtatDuPont.DOUBLE);
+        historique.ajouterAction(pont, EtatDuPont.VIDE, EtatDuPont.SIMPLE, EnumSet.of(Mode.HISTORIQUE));
+        historique.ajouterAction(pont2, EtatDuPont.VIDE, EtatDuPont.DOUBLE, EnumSet.of(Mode.HISTORIQUE));
 
         pont.setEtatActuel(EtatDuPont.SIMPLE);
         pont2.setEtatActuel(EtatDuPont.DOUBLE);
