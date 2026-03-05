@@ -2,9 +2,11 @@ package hashiGRP3.Logic.Historique;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.EnumSet;
 
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Pont;
+import hashiGRP3.Logic.Mode;
 
 /**
  * Gestionnaire d'historique pour les opérations 
@@ -16,11 +18,20 @@ public class HistoriqueManager {
         final Pont pont;
         final EtatDuPont etatAvant;
         final EtatDuPont etatApres;
-        
-        Action(Pont pont, EtatDuPont etatAvant, EtatDuPont etatApres) {
+        private EnumSet<Mode> modes;
+        Action(Pont pont, EtatDuPont etatAvant, EtatDuPont etatApres, EnumSet<Mode> modes) {
             this.pont = pont;
             this.etatAvant = etatAvant;
             this.etatApres = etatApres;
+            this.modes = modes;
+        }
+
+        public EnumSet<Mode> getModes() {
+            return modes;
+        }
+
+        public Boolean isMode(Mode mode) {
+            return modes.contains(mode);
         }
     }
 
@@ -30,8 +41,8 @@ public class HistoriqueManager {
     /**
      * Enregistre une nouvelle action dans l'historique
      */
-    public void ajouterAction(Pont pont, EtatDuPont avant, EtatDuPont apres) {
-        undoStack.push(new Action(pont, avant, apres));
+    public void ajouterAction(Pont pont, EtatDuPont avant, EtatDuPont apres, EnumSet<Mode> modes) {
+        undoStack.push(new Action(pont, avant, apres, modes));
         redoStack.clear(); // Nouvelle action = on perd le futur (redo)
     }
     
