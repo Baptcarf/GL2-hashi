@@ -115,6 +115,11 @@
     -fx-text-fill: #333333;
 }
 
+.section-title {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
 /* ======================
         Style bouton du menu toturiel
    ====================== */

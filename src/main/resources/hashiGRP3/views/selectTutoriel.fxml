@@ -26,9 +26,7 @@
 
                     <!-- SECTION 1 -->
                     <VBox alignment="CENTER" prefWidth="450" spacing="10">
-                        <Label style="-fx-font-weight: bold;" text="Les bases">
-                            <font><Font size="30" /></font>
-                        </Label>
+                        <Label styleClass="section-title" text="Les bases" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
                             <Button text="Règles du jeu" />
@@ -43,9 +41,7 @@
 
                     <!-- SECTION 2 -->
                     <VBox alignment="CENTER" prefWidth="450" spacing="10">
-                        <Label style="-fx-font-weight: bold;" text="Techniques de démarrage">
-                            <font><Font size="30" /></font>
-                        </Label>
+                        <Label styleClass="section-title" text="Techniques de démarrage" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
                             <Button text="Îles avec 4 dans le coin, 6 sur le côté et 8 au milieu" />
@@ -55,9 +51,7 @@
 
                     <!-- SECTION 3 -->
                     <VBox alignment="CENTER" prefWidth="450" spacing="10">
-                        <Label style="-fx-font-weight: bold;" text="Techniques de base">
-                            <font><Font size="30" /></font>
-                        </Label>
+                        <Label styleClass="section-title" text="Techniques de base" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
                             <Button text="Îles avec un seul voisin" />
@@ -87,9 +81,7 @@
 
                     <!-- SECTION 4 -->
                     <VBox alignment="CENTER" prefWidth="450" spacing="10">
-                        <Label style="-fx-font-weight: bold;" text="Techniques d’isolement">
-                            <font><Font size="30" /></font>
-                        </Label>
+                        <Label styleClass="section-title" text="Techniques d’isolement" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
                             <Button text="Isolement d'un segment à deux îles" />
@@ -114,9 +106,7 @@
 
                     <!-- SECTION 5 -->
                     <VBox alignment="CENTER" prefWidth="450" spacing="10">
-                        <Label style="-fx-font-weight: bold;" text="Techniques avancées">
-                            <font><Font size="30" /></font>
-                        </Label>
+                        <Label styleClass="section-title" text="Techniques avancées" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
                             <Button text="Isoler un segment en bloquant un pont" />

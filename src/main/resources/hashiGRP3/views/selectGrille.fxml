@@ -52,7 +52,7 @@
                     <children>
 
                         <!-- CONTENU QUI SCROLL -->
-                        <VBox maxWidth="705.0" minWidth="700.0" prefHeight="858.0" prefWidth="705.0" spacing="45">
+                        <VBox maxWidth="1000.0" minWidth="1000.0" prefHeight="858.0" prefWidth="1000.0" spacing="45">
 
                             <padding>
                                 <Insets bottom="20" left="20" right="20" top="20" />
@@ -62,33 +62,39 @@
                            <VBox spacing="30">
                               <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Facile (5x5)" />
 
-                              <GridPane fx:id="grilleFacile"
-                                       hgap="15"
-                                       vgap="15"
-                                       minWidth="700"
-                                       alignment="CENTER"/>
+                              <HBox alignment="CENTER">
+                                 <GridPane fx:id="grilleFacile"
+                                          hgap="20"
+                                          vgap="20"
+                                          prefWidth="920"
+                                          alignment="CENTER"/>
+                              </HBox>
                            </VBox>
 
                            <!-- ================= SECTION 2 ================= -->
                            <VBox spacing="30">
                               <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Intermédiaire (8x9)" />
 
-                              <GridPane fx:id="grilleMoyen"
-                                       hgap="15"
-                                       vgap="15"
-                                       minWidth="700"
-                                       alignment="CENTER"/>
+                              <HBox alignment="CENTER">
+                                 <GridPane fx:id="grilleMoyen"
+                                          hgap="20"
+                                          vgap="20"
+                                          prefWidth="920"
+                                          alignment="CENTER"/>
+                              </HBox>
                            </VBox>
 
                            <!-- ================= SECTION 3 ================= -->
                            <VBox spacing="30">
                               <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Difficile (12x12)" />
 
-                              <GridPane fx:id="grilleDifficile"
-                                       hgap="15"
-                                       vgap="15"
-                                       minWidth="700"
-                                       alignment="CENTER"/>
+                              <HBox alignment="CENTER">
+                                 <GridPane fx:id="grilleDifficile"
+                                          hgap="20"
+                                          vgap="20"
+                                          prefWidth="920"
+                                          alignment="CENTER"/>
+                              </HBox>
                            </VBox>
 
 

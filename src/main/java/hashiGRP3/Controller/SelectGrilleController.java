@@ -1,7 +1,7 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-import javafx.event.ActionEvent;
+
 //Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,12 +12,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import hashiGRP3.DatabaseManager;
 
@@ -58,7 +54,6 @@ public class SelectGrilleController extends ManageController {
     private GridPane grilleDifficile;
 
     private static final int COLONNES = 4;
-    private int grilleSelectionnee = -1;
 
     @FXML
     public void initialize() {
@@ -81,7 +76,6 @@ public class SelectGrilleController extends ManageController {
         grilleFacile.getChildren().clear();
         grilleMoyen.getChildren().clear();
         grilleDifficile.getChildren().clear();
-        grilleSelectionnee = -1;
         chargerLeaderboardVide();
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
@@ -112,7 +106,6 @@ public class SelectGrilleController extends ManageController {
 
     private void afficherGrilleSelectionnee(int numeroGrille) {
 
-        grilleSelectionnee = numeroGrille;
         labelGrilleSelected.setText("Grille " + numeroGrille);
         imageGrilleSelected.setVisible(true);
 
@@ -128,8 +121,9 @@ public class SelectGrilleController extends ManageController {
     private VBox creerCarteGrille(int numeroGrille, String styleClass) {
 
         VBox box = new VBox(10);
-        box.setPrefWidth(155);
+        box.setPrefWidth(210);
         box.setPadding(new Insets(12));
+        box.setAlignment(Pos.CENTER);
 
         Label titre = new Label("Grille " + numeroGrille);
         titre.setStyle("-fx-font-size: 15px; -fx-font-weight: bold;");
@@ -162,7 +156,14 @@ public class SelectGrilleController extends ManageController {
             score.setManaged(true);
         }
 
-        box.getChildren().addAll(titre, bouton, score);
+        // Utiliser un StackPane pour superposer le score sur le bouton sans affecter la hauteur
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().add(bouton);
+        stackPane.getChildren().add(score);
+        StackPane.setAlignment(score, Pos.BOTTOM_CENTER);
+        StackPane.setMargin(score, new Insets(0, 0, -15, 0)); // Descendre le score de 15 pixels
+
+        box.getChildren().addAll(titre, stackPane);
 
         return box;
     }

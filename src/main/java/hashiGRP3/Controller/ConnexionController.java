@@ -91,7 +91,7 @@ public class ConnexionController extends ManageController {
     private Circle createCircle(String color) {
         // Apparence
         Circle circle = new Circle();
-        circle.setRadius(100); // même taille que rightCircle
+        circle.setRadius(70); // même taille que rightCircle
         circle.setFill(Color.web(color));
         circle.setStroke(Color.BLACK);
         circle.setStrokeWidth(2);
@@ -129,7 +129,7 @@ public class ConnexionController extends ManageController {
      */
     @FXML
     private void addCount() {
-        if (nbCount < 6) {
+        if (nbCount < 5) {
             endSupp();
 
             Circle circle = createCircle("#eaf5ff");
