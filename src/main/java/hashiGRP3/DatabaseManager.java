@@ -299,4 +299,70 @@ public class DatabaseManager {
         return -1;
     }
 
+    /**
+     * Récupère les 5 meilleurs scores de tous les temps
+     * @return une liste de chaînes au format "pseudo score"
+     */
+    public List<String> obtenirTop5Scores() {
+        List<String> scores = new ArrayList<>();
+        
+        String sql = "SELECT u.pseudo, p.score " +
+                "FROM Partie p " +
+                "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
+                "WHERE p.statut = 2 AND p.score IS NOT NULL " +
+                "ORDER BY p.score ASC " +
+                "LIMIT 5";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String pseudo = rs.getString("pseudo");
+                int score = rs.getInt("score");
+                scores.add(pseudo + " " + score + "s");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return scores;
+    }
+
+    /**
+     * Récupère les 5 meilleurs scores pour une grille spécifique
+     * @param id_grille l'ID de la grille
+     * @return une liste de chaînes au format "pseudo score"
+     */
+    public List<String> obtenirTop5ScoresParGrille(int id_grille) {
+        List<String> scores = new ArrayList<>();
+        
+        String sql = "SELECT u.pseudo, p.score " +
+                "FROM Partie p " +
+                "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
+                "WHERE p.id_grille = ? AND p.statut = 2 AND p.score IS NOT NULL " +
+                "ORDER BY p.score ASC " +
+                "LIMIT 5";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id_grille);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String pseudo = rs.getString("pseudo");
+                int score = rs.getInt("score");
+                scores.add(pseudo + " " + score + "s");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return scores;
+    }
+
 }

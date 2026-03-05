@@ -37,6 +37,16 @@ public class SelectGrilleController extends ManageController {
     private Label labelNombreIle;
     @FXML
     private Label labelTempsPerso;
+    @FXML
+    private Label labelScore1;
+    @FXML
+    private Label labelScore2;
+    @FXML
+    private Label labelScore3;
+    @FXML
+    private Label labelScore4;
+    @FXML
+    private Label labelScore5;
 
     /* ===================== SECTION DES GRILLES ===================== */
 
@@ -48,6 +58,7 @@ public class SelectGrilleController extends ManageController {
     private GridPane grilleDifficile;
 
     private static final int COLONNES = 4;
+    private int grilleSelectionnee = -1;
 
     @FXML
     public void initialize() {
@@ -56,6 +67,7 @@ public class SelectGrilleController extends ManageController {
         labelNombreIle.setText("Nombre d'île : None");
         labelTempsPerso.setText("Temps perso : None");
 
+        chargerLeaderboardVide();
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
@@ -69,6 +81,8 @@ public class SelectGrilleController extends ManageController {
         grilleFacile.getChildren().clear();
         grilleMoyen.getChildren().clear();
         grilleDifficile.getChildren().clear();
+        grilleSelectionnee = -1;
+        chargerLeaderboardVide();
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
@@ -98,6 +112,7 @@ public class SelectGrilleController extends ManageController {
 
     private void afficherGrilleSelectionnee(int numeroGrille) {
 
+        grilleSelectionnee = numeroGrille;
         labelGrilleSelected.setText("Grille " + numeroGrille);
         imageGrilleSelected.setVisible(true);
 
@@ -105,7 +120,9 @@ public class SelectGrilleController extends ManageController {
                 "Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
 
         labelTempsPerso.setText(
-                "Temps perso : " + databaseManager.obtenirScore(numeroGrille, getUtilisateur()));
+                "Score : " + databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s" );
+        
+        chargerLeaderboard(numeroGrille);
     }
 
     private VBox creerCarteGrille(int numeroGrille, String styleClass) {
@@ -140,7 +157,7 @@ public class SelectGrilleController extends ManageController {
         score.setManaged(false);
         if (databaseManager.grilleCompletee(numeroGrille, getUtilisateur())) {
             score.setText("Score : " +
-                    databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + " sec");
+                    databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s");
             score.setVisible(true);
             score.setManaged(true);
         }
@@ -148,6 +165,34 @@ public class SelectGrilleController extends ManageController {
         box.getChildren().addAll(titre, bouton, score);
 
         return box;
+    }
+
+    /**
+     * Charge le leaderboard vide pour la page d'accueil (aucune grille sélectionnée)
+     */
+    private void chargerLeaderboardVide() {
+        Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
+        
+        for (int i = 0; i < 5; i++) {
+            labels[i].setText((i + 1) + ".");
+        }
+    }
+
+    /**
+     * Charge le leaderboard avec les 5 meilleurs scores pour une grille spécifique
+     */
+    private void chargerLeaderboard(int numeroGrille) {
+        java.util.List<String> top5 = databaseManager.obtenirTop5ScoresParGrille(numeroGrille);
+        
+        Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
+        
+        for (int i = 0; i < 5; i++) {
+            if (i < top5.size()) {
+                labels[i].setText((i + 1) + ". " + top5.get(i));
+            } else {
+                labels[i].setText((i + 1) + ".");
+            }
+        }
     }
 
 }

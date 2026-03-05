@@ -129,23 +129,22 @@
    <!-- INFOS SUPPLÉMENTAIRES -->
    <VBox alignment="CENTER" spacing="5">
       <Label fx:id="labelNombreIle" style="-fx-font-size: 14px;" text="Nombre d'île : None" />
-      <Label fx:id="labelTempsPerso" style="-fx-font-size: 14px;" text="Temps perso : None" />
+      <Label fx:id="labelTempsPerso" style="-fx-font-size: 14px;" text="Score : None" />
    </VBox>
 
 
     <!-- LEADERBOARD PARTICIPANTS -->
-    <VBox alignment="CENTER" prefHeight="245.0" prefWidth="205.0" spacing="5">
+    <VBox alignment="TOP_CENTER" prefHeight="245.0" prefWidth="205.0" spacing="5">
                <Label alignment="CENTER" prefHeight="76.0" prefWidth="205.0" text="Tableau des scores ">
                   <font>
                      <Font size="23.0" />
                   </font>
                </Label>
-        <Label alignment="CENTER" style="-fx-font-size: 14px;" text="1. pseudo score" />
-        <Label alignment="CENTER" style="-fx-font-size: 14px;" text="2. pseudo score" />
-        <Label alignment="CENTER" style="-fx-font-size: 14px;" text="3. pseudo score" />
-               <Label alignment="CENTER" style="-fx-font-size: 14px;" text="4. pseudo score" />
-               <Label alignment="CENTER" style="-fx-font-size: 14px;" text="5. pseudo score" />
-        <!-- rajoute autant de labels que nécessaire -->
+        <Label fx:id="labelScore1" alignment="CENTER_LEFT" style="-fx-font-size: 14px;" text="1." />
+        <Label fx:id="labelScore2" alignment="CENTER_LEFT" style="-fx-font-size: 14px;" text="2." />
+        <Label fx:id="labelScore3" alignment="CENTER_LEFT" style="-fx-font-size: 14px;" text="3." />
+               <Label fx:id="labelScore4" alignment="CENTER_LEFT" style="-fx-font-size: 14px;" text="4." />
+               <Label fx:id="labelScore5" alignment="CENTER_LEFT" style="-fx-font-size: 14px;" text="5." />
     </VBox>
 
 </VBox>
