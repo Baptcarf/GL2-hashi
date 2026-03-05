@@ -51,7 +51,7 @@ public class GrilleController extends ManageController {
     @FXML
     public void initialize() {
 	    //On charge une grille
-        URL url = getClass().getResource("/hashiGRP3/7x7/hashi2.txt");
+        URL url = getClass().getResource("/hashiGRP3/7x7/hashi1.txt");
         if (url == null) {
             System.err.println("Fichier hashi2.txt non trouvé dans les ressources !");
             return;
