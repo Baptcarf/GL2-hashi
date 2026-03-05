@@ -56,11 +56,8 @@ public class pontGraphique {
                 group.getChildren().add(createLine(seg, etat, cellSize, offset));
                 group.getChildren().add(createLine(seg, etat, cellSize, -offset));
             }
-            case VIDE -> {
-                Line preview = createLine(seg, etat, cellSize, 0);
-                preview.setOpacity(0.18);
-                group.getChildren().add(preview);
-            }
+            case VIDE -> {}
+
         }
 
         // Ajout d'une hitbox invisible pour le clic
@@ -69,6 +66,8 @@ public class pontGraphique {
         hitBox.setStrokeWidth(Math.max(10, cellSize * 0.25));
         hitBox.setCursor(Cursor.HAND);
         hitBox.setOnMouseClicked(e -> onClick.accept(pont));
+        hitBox.setOnMouseEntered(e -> hitBox.setStroke(Color.web(pont.pontEstPossible() ?  "#9b9b97" : "#ff0000"  , 0.5)));
+        hitBox.setOnMouseExited(e -> hitBox.setStroke(Color.TRANSPARENT));
         group.getChildren().add(hitBox);
 
         return group;
