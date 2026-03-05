@@ -1,7 +1,7 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-
+import javafx.event.ActionEvent;
 //Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,8 +14,8 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 
-
 import hashiGRP3.DatabaseManager;
+import hashiGRP3.Logic.General;
 
 public class SelectGrilleController extends ManageController {
 
@@ -57,15 +57,13 @@ public class SelectGrilleController extends ManageController {
 
     @FXML
     public void initialize() {
-        labelGrilleSelected.setText("");
-        imageGrilleSelected.setVisible(false);
-        labelNombreIle.setText("Nombre d'île : None");
-        labelTempsPerso.setText("Temps perso : None");
 
-        chargerLeaderboardVide();
+        General.setId_grille(1);
+
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
+        afficherGrilleSelectionnee(1);
     }
 
     /* ===================== GRILLES ===================== */
@@ -111,8 +109,8 @@ public class SelectGrilleController extends ManageController {
                 "Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
 
         labelTempsPerso.setText(
-                "Score : " + databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s" );
-        
+                "Score : " + databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s");
+
         chargerLeaderboard(numeroGrille);
     }
 
@@ -138,7 +136,10 @@ public class SelectGrilleController extends ManageController {
         bouton.setGraphic(image);
         bouton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
         bouton.getStyleClass().add(styleClass);
-        bouton.setOnAction(e -> afficherGrilleSelectionnee(numeroGrille));
+        bouton.setOnAction(e -> {
+            General.setId_grille(numeroGrille);
+            afficherGrilleSelectionnee(numeroGrille);
+        });
 
         Label score = new Label();
         score.setStyle("-fx-font-size: 12px;");
@@ -154,7 +155,8 @@ public class SelectGrilleController extends ManageController {
             score.setManaged(true);
         }
 
-        // Utiliser un StackPane pour superposer le score sur le bouton sans affecter la hauteur
+        // Utiliser un StackPane pour superposer le score sur le bouton sans affecter la
+        // hauteur
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(bouton);
         stackPane.getChildren().add(score);
@@ -167,11 +169,12 @@ public class SelectGrilleController extends ManageController {
     }
 
     /**
-     * Charge le leaderboard vide pour la page d'accueil (aucune grille sélectionnée)
+     * Charge le leaderboard vide pour la page d'accueil (aucune grille
+     * sélectionnée)
      */
     private void chargerLeaderboardVide() {
         Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
-        
+
         for (int i = 0; i < 5; i++) {
             labels[i].setText((i + 1) + ".");
         }
@@ -182,9 +185,9 @@ public class SelectGrilleController extends ManageController {
      */
     private void chargerLeaderboard(int numeroGrille) {
         java.util.List<String> top5 = databaseManager.obtenirTop5ScoresParGrille(numeroGrille);
-        
+
         Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
-        
+
         for (int i = 0; i < 5; i++) {
             if (i < top5.size()) {
                 labels[i].setText((i + 1) + ". " + top5.get(i));
@@ -192,6 +195,20 @@ public class SelectGrilleController extends ManageController {
                 labels[i].setText((i + 1) + ".");
             }
         }
+    }
+
+    /**
+     * Changement de scène depuis un fichier fxml
+     * 
+     * @param event : Un événement reçu.
+     */
+    @FXML
+    public void lancerGrille(ActionEvent event) {
+
+        General.getHashi().remplirHistorique();
+
+        this.changeScene(event);
+
     }
 
 }

@@ -156,6 +156,10 @@ public class Hashi {
         return ponts;
     }
 
+    public void ajouterActionHistorique(Pont pont, EtatDuPont avant, EtatDuPont apres) {
+        historique.ajouterAction(pont, avant, apres);
+    }
+
     /**
      * Récupère une île à partir de ses coordonnées.
      * 
@@ -165,6 +169,21 @@ public class Hashi {
      */
     public Ile getIle(int x, int y) {
         return iles.get(new Coordonnees(x, y));
+    }
+
+    /**
+     * Récupère une île à partir de don id.
+     * 
+     * @param id l'id de l'ile
+     * @return l'île d'id spécifiées, ou null si aucune île n'existe
+     */
+    public Ile getIleById(int id) {
+        for (Ile ile : iles.values()) {
+            if (ile.getId() == id) {
+                return ile;
+            }
+        }
+        return null;
     }
 
     /**

@@ -12,9 +12,9 @@ import java.nio.file.*;
 import java.io.*;
 
 import hashiGRP3.Logic.Historique.HistoriqueManager;
-
+import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
-import hashiGRP3.compDB.*;
+import hashiGRP3.compDB.*;;
 
 /* Class */
 public class DatabaseManager {
@@ -303,23 +303,29 @@ public class DatabaseManager {
         return -1;
     }
 
-    public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha) {
+    public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha, int id_grille) {
 
-        String sql = "SELECT node_dep,node_arr,val_coup FROM Coup NATURAL JOIN partie NATURAL JOIN Utilisateur WHERE id_utilisateur = ? ORDER BY num_coup DESC";
+        String sql = "SELECT node_dep,node_arr,val_coup_avant,val_coup_apres FROM Coup NATURAL JOIN partie NATURAL JOIN Utilisateur WHERE id_utilisateur = ?  AND id_grille = ? ORDER BY num_coup";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, Integer.toString(idUtilisateur));
+            ps.setString(2, Integer.toString(id_grille));
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 int nodeDep = rs.getInt("node_dep");
                 int nodeArr = rs.getInt("node_arr");
-                int valCoup = rs.getInt("val_coup");
+                int valCoupAvant = rs.getInt("val_coup_avant");
+                int valCoupApres = rs.getInt("val_coup_avant");
 
-                System.out.println("Départ: " + nodeDep + ", Arrivée: " + nodeArr + ", Valeur: " + valCoup);
+                /*
+                 * ha.ajouterActionHistorique(ha.getPont(ha.getIleById(nodeDep),
+                 * ha.getIleById(nodeArr)),
+                 * EtatDuPont.fromValue(valCoupAvant), EtatDuPont.fromValue(valCoupApres));
+                 */
             }
 
         } catch (SQLException e) {

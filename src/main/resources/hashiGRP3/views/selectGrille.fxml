@@ -31,7 +31,7 @@
                 <Region HBox.hgrow="ALWAYS" />
 
                 <Button text="Retour" onAction="#changeScene" userData="accueil"/>
-                <Button text="Jouer" onAction="#changeScene" userData="grilledujeu"/>
+                <Button text="Jouer" onAction="#lancerGrille" userData="grilledujeu"/>
 
             </children>
         </HBox>

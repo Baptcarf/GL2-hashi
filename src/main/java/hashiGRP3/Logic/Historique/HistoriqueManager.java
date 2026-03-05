@@ -33,7 +33,7 @@ public class HistoriqueManager {
     private final Deque<Action> redoStack = new ArrayDeque<>();
 
     public void remplir() {
-        General.getDb().remplirCoup(this, General.getIdUtilisateur(), General.getHashi());
+        General.getDb().remplirCoup(this, General.getIdUtilisateur(), General.getHashi(), General.getId_grille());
 
     }
 

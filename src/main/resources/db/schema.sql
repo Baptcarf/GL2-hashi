@@ -35,18 +35,12 @@ CREATE TABLE Partie(
 CREATE TABLE Coup(
         id_partie BIGINT,
         num_coup BIGINT, -- Le numéro du coûp
-        node_dep VARCHAR(20), -- le noeud de départ de l'arréte
-        node_arr VARCHAR(20), -- le noeud d'arrivé de l'arréte
-        val_coup INTEGER, -- la valeur de l'arréte (0 : vide, 1 : 1 arrêtes, 2 : 2 arrêtes)
+        node_dep Int, -- le noeud de départ de l'arréte
+        node_arr Int, -- le noeud d'arrivé de l'arréte
+        val_coup_avant INTEGER, -- la valeur de l'arréte (0 : vide, 1 : 1 arrêtes, 2 : 2 arrêtes)
+        val_coup_apres INTEGER, -- la valeur de l'arréte (0 : vide, 1 : 1 arrêtes, 2 : 2 arrêtes)
         PRIMARY KEY(id_partie,num_coup),
         FOREIGN KEY (id_partie)
             REFERENCES Partie(id_partie)
             ON DELETE CASCADE
 );
-
-
-
-INSERT INTO Grille VALUES (1,1,"hashi1",12);
-INSERT INTO Grille VALUES (2,1,"hashi2",5);
-INSERT INTO Grille VALUES (3,1,"hashi3",10);
-INSERT INTO Grille VALUES (4,1,"hashi4",11);
