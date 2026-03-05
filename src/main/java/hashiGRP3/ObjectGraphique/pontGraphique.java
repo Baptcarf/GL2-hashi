@@ -63,7 +63,7 @@ public class pontGraphique {
         // Ajout d'une hitbox invisible pour le clic
         Line hitBox = new Line(seg.startX, seg.startY, seg.endX, seg.endY);
         hitBox.setStroke(Color.TRANSPARENT);
-        hitBox.setStrokeWidth(Math.max(10, cellSize * 0.25));
+        hitBox.setStrokeWidth(Math.max(10, cellSize * 0.35));
         hitBox.setCursor(Cursor.HAND);
         hitBox.setOnMouseClicked(e -> onClick.accept(pont));
         hitBox.setOnMouseEntered(e -> hitBox.setStroke(Color.web(pont.pontEstPossible() ?  "#9b9b97" : "#ff0000"  , 0.5)));

@@ -21,10 +21,19 @@ public class ileGraphique {
      * @param cellSize taille d'une case de la grille
      * @return un Group JavaFX representant l'ile
      */
-    public StackPane draw(double  gridCellSize) {
-        Circle circle = new Circle(gridCellSize/2);
-        circle.setFill(Color.WHITE);
-        circle.setStroke(Color.BLACK);
+    public StackPane draw(double gridCellSize) {
+        Circle circle = new Circle(gridCellSize / 2);
+
+        if (ile.estSurchargee()) {
+            circle.setFill(Color.web("#FFCCCC"));
+            circle.setStroke(Color.RED);
+        } else if (ile.estComplet()) {
+            circle.setFill(Color.web("#CCFFCC"));
+            circle.setStroke(Color.GREEN);
+        } else {
+            circle.setFill(Color.WHITE);
+            circle.setStroke(Color.BLACK);
+        }
         circle.setStrokeWidth(2);
 
         Label label = new Label(String.valueOf(ile.getNbPontsRequis()));
