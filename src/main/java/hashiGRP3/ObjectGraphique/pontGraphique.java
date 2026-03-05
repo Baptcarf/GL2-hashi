@@ -52,9 +52,9 @@ public class pontGraphique {
         switch (etat) {
             case SIMPLE -> group.getChildren().add(createLine(seg, etat, cellSize, 0));
             case DOUBLE -> {
-                group.getChildren().add(createLine(seg, etat, cellSize, 0));
-                double offset = Math.max(3, cellSize * 0.1);
+                double offset = Math.max(3, cellSize * 0.05);
                 group.getChildren().add(createLine(seg, etat, cellSize, offset));
+                group.getChildren().add(createLine(seg, etat, cellSize, -offset));
             }
             case VIDE -> {
                 Line preview = createLine(seg, etat, cellSize, 0);
