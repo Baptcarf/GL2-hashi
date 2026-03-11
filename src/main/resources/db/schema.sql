@@ -10,7 +10,7 @@ CREATE TABLE Utilisateur(
 CREATE TABLE Grille(
         id_grille INTEGER PRIMARY KEY AUTOINCREMENT,
         niveau INT NOT NULL, -- Le niveau de difficulté de la grille
-        grille String NOT NULL, -- le nom de la grille
+        grille Text NOT NULL, -- le nom de la grille
         nbIle INT NOT NULL
 );
 

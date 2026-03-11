@@ -42,6 +42,13 @@ public class HistoriqueManager {
      */
     public void ajouterAction(Pont pont, EtatDuPont avant, EtatDuPont apres) {
         undoStack.push(new Action(pont, avant, apres));
+        General.getDb().addCoup(General.getIdUtilisateur(), General.getId_grille(), pont.getileA().getId(),
+                pont.getileB().getId(), avant.getValue(), apres.getValue());
+        redoStack.clear(); // Nouvelle action = on perd le futur (redo)
+    }
+
+    public void ajouterActionNotSave(Pont pont, EtatDuPont avant, EtatDuPont apres) {
+        undoStack.push(new Action(pont, avant, apres));
         redoStack.clear(); // Nouvelle action = on perd le futur (redo)
     }
 

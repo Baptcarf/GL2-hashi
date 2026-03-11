@@ -14,6 +14,8 @@ import java.io.*;
 import hashiGRP3.Logic.Historique.HistoriqueManager;
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.Pont;
 import hashiGRP3.compDB.*;;
 
 /* Class */
@@ -305,13 +307,13 @@ public class DatabaseManager {
 
     public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha, int id_grille) {
 
-        String sql = "SELECT node_dep,node_arr,val_coup_avant,val_coup_apres FROM Coup NATURAL JOIN partie NATURAL JOIN Utilisateur WHERE id_utilisateur = ?  AND id_grille = ? ORDER BY num_coup";
+        String sql = "SELECT node_dep,node_arr,val_coup_avant,val_coup_apres FROM Coup JOIN Partie p ON p.id_partie = coup.id_partie WHERE id_utilisateur = ?  AND id_grille = ? ORDER BY num_coup";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, Integer.toString(idUtilisateur));
-            ps.setString(2, Integer.toString(id_grille));
+            ps.setInt(1, idUtilisateur);
+            ps.setInt(2, id_grille);
 
             ResultSet rs = ps.executeQuery();
 
@@ -319,13 +321,18 @@ public class DatabaseManager {
                 int nodeDep = rs.getInt("node_dep");
                 int nodeArr = rs.getInt("node_arr");
                 int valCoupAvant = rs.getInt("val_coup_avant");
-                int valCoupApres = rs.getInt("val_coup_avant");
+                int valCoupApres = rs.getInt("val_coup_apres");
 
-                /*
-                 * ha.ajouterActionHistorique(ha.getPont(ha.getIleById(nodeDep),
-                 * ha.getIleById(nodeArr)),
-                 * EtatDuPont.fromValue(valCoupAvant), EtatDuPont.fromValue(valCoupApres));
-                 */
+                Ile dep = ha.getIleById(nodeDep);
+                Ile arr = ha.getIleById(nodeArr);
+
+                Pont pont = ha.getPont(dep, arr);
+
+                ha.ajouterActionHistorique(pont, EtatDuPont.fromValue(valCoupAvant),
+                        EtatDuPont.fromValue(valCoupApres));
+
+                System.out.println("je suis passé");
+
             }
 
         } catch (SQLException e) {
@@ -336,13 +343,19 @@ public class DatabaseManager {
 
     public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres) {
 
-        String sql = "SELECT num_coup,id_partie FROM Coup NATURAL JOIN partie NATURAL JOIN Utilisateur WHERE id_utilisateur = ?  AND id_grille = ? ORDER BY num_coup DESC LIMIT 1";
+        String sql = "SELECT c.num_coup, p.id_partie\r\n" + //
+                "FROM Coup c\r\n" + //
+                "JOIN Partie p ON c.id_partie = p.id_partie\r\n" + //
+                "WHERE p.id_utilisateur = ?\r\n" + //
+                "AND p.id_grille = ?\r\n" + //
+                "ORDER BY c.num_coup DESC\r\n" + //
+                "LIMIT 1";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, Integer.toString(id_utilisateur));
-            ps.setString(2, Integer.toString(id_grille));
+            ps.setInt(1, id_utilisateur);
+            ps.setInt(2, id_grille);
 
             ResultSet rs = ps.executeQuery();
 
@@ -356,13 +369,12 @@ public class DatabaseManager {
              * Cas où on à pas de coup dans la base il faut trouver l'id de la partie
              */
             if (numCoup == 0) {
-                sql = "SELECT id_partie FROM partie WHERE id_utilisateur = ? AND id_grille = ? ";
+                sql = "SELECT id_partie FROM partie WHERE id_utilisateur = ? AND id_grille = ? AND  statut=1";
 
-                try (Connection conn2 = DriverManager.getConnection(URL);
-                        PreparedStatement ps2 = conn.prepareStatement(sql)) {
+                try (PreparedStatement ps2 = conn.prepareStatement(sql)) {
 
-                    ps2.setString(1, Integer.toString(id_utilisateur));
-                    ps2.setString(2, Integer.toString(id_grille));
+                    ps2.setInt(1, id_utilisateur);
+                    ps2.setInt(2, id_grille);
 
                     rs = ps2.executeQuery();
 
@@ -375,17 +387,16 @@ public class DatabaseManager {
             }
             sql = "INSERT INTO COUP VALUES (?,?,?,?,?,?)";
 
-            try (Connection conn3 = DriverManager.getConnection(URL);
-                    PreparedStatement ps3 = conn.prepareStatement(sql)) {
+            try (PreparedStatement ps3 = conn.prepareStatement(sql)) {
 
-                ps3.setString(1, Integer.toString(idPartie));
-                ps3.setString(2, Integer.toString(numCoup));
-                ps3.setString(3, Integer.toString(id_dep));
-                ps3.setString(4, Integer.toString(id_arr));
-                ps3.setString(5, Integer.toString(valCoupAvant));
-                ps3.setString(6, Integer.toString(valCoupApres));
+                ps3.setInt(1, idPartie);
+                ps3.setInt(2, numCoup);
+                ps3.setInt(3, id_dep);
+                ps3.setInt(4, id_arr);
+                ps3.setInt(5, valCoupAvant);
+                ps3.setInt(6, valCoupApres);
 
-                ps3.executeQuery();
+                ps3.executeUpdate();
 
             }
         } catch (SQLException e) {

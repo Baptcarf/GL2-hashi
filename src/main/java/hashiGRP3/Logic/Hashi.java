@@ -157,7 +157,7 @@ public class Hashi {
     }
 
     public void ajouterActionHistorique(Pont pont, EtatDuPont avant, EtatDuPont apres) {
-        historique.ajouterAction(pont, avant, apres);
+        historique.ajouterActionNotSave(pont, avant, apres);
     }
 
     /**
