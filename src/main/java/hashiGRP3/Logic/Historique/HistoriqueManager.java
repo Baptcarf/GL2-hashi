@@ -23,6 +23,21 @@ public class HistoriqueManager {
      * Représente une action élémentaire sur un pont pour l'historique.
      * Stocke l'état avant et après pour permettre la réversibilité.
      */
+
+import hashiGRP3.Logic.EtatDuPont;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Logic.Pont;
+
+import hashiGRP3.DatabaseManager;
+
+import hashiGRP3.Logic.Hashi;
+
+/**
+ * Gestionnaire d'historique pour les opérations
+ * Utilise deux piles pour garder trace des commandes
+ */
+public class HistoriqueManager {
+
     private static class Action {
         final Pont pont;
         final EtatDuPont etatAvant;
@@ -106,6 +121,46 @@ public class HistoriqueManager {
     public boolean undo() {
         if (undoStack.isEmpty()) return false;
         
+
+        Action(Pont pont, EtatDuPont etatAvant, EtatDuPont etatApres) {
+            this.pont = pont;
+            this.etatAvant = etatAvant;
+            this.etatApres = etatApres;
+        }
+    }
+
+    private final Deque<Action> undoStack = new ArrayDeque<>();
+    private final Deque<Action> redoStack = new ArrayDeque<>();
+
+    public void remplir() {
+        General.getDb().remplirCoup(this, General.getIdUtilisateur(), General.getHashi(), General.getId_grille());
+
+    }
+
+    /**
+     * Enregistre une nouvelle action dans l'historique
+     */
+    public void ajouterAction(Pont pont, EtatDuPont avant, EtatDuPont apres) {
+        undoStack.push(new Action(pont, avant, apres));
+        General.getDb().addCoup(General.getIdUtilisateur(), General.getId_grille(), pont.getileA().getId(),
+                pont.getileB().getId(), avant.getValue(), apres.getValue());
+        redoStack.clear(); // Nouvelle action = on perd le futur (redo)
+    }
+
+    public void ajouterActionNotSave(Pont pont, EtatDuPont avant, EtatDuPont apres) {
+        undoStack.push(new Action(pont, avant, apres));
+        redoStack.clear(); // Nouvelle action = on perd le futur (redo)
+    }
+
+    /**
+     * Annule la dernière action (Ctrl+Z)
+     * 
+     * @return true si annulé, false sinon
+     */
+    public boolean undo() {
+        if (undoStack.isEmpty())
+            return false;
+
         Action action = undoStack.pop();
         action.pont.setEtatActuel(action.etatAvant);
         redoStack.push(action);
@@ -132,6 +187,20 @@ public class HistoriqueManager {
     /**
      * Vide intégralement l'historique (undo et redo).
      * Utile lors de la réinitialisation d'une grille ou du chargement d'une nouvelle partie.
+    public boolean isEmpty() {
+        return undoStack.isEmpty() && redoStack.isEmpty();
+    }
+        
+    public boolean isUndoEmpty() {
+        return undoStack.isEmpty();
+    }
+
+    public boolean isRedoEmpty() {
+        return redoStack.isEmpty();
+    }
+
+    /**
+     * Vide tout l'historique
      */
     public void clear() {
         undoStack.clear();

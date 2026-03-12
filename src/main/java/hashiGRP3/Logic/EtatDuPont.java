@@ -45,4 +45,13 @@ public enum EtatDuPont {
             case DOUBLE -> "DOUBLE";
         };
     }
+
+    public static EtatDuPont fromValue(int value) {
+        for (EtatDuPont etat : EtatDuPont.values()) {
+            if (etat.getValue() == value) {
+                return etat;
+            }
+        }
+        return null;
+    }
 }

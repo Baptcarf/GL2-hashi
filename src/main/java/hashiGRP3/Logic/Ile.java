@@ -103,6 +103,24 @@ public class Ile {
         return this.coordonnees.compareTo(autre.coordonnees);
     }
 
+    /** 
+     * Regarde si l'ile est complete
+     * 
+     * @return true si l'ile a atteint son nombre de ponts requis 
+     */
+    public boolean estComplet() {
+        return getNbPontsActuels() >= nbPontsRequis;
+    }
+
+    /**
+     *  Regarde si l'ile est surchargé
+     * 
+     *  @return true si l'ile a TROP de ponts
+     * */
+    public boolean estSurchargee() {
+        return getNbPontsActuels() > nbPontsRequis;
+    }
+
     /**
      * Retourne les coordonnées de cette île sur la grille
      * 

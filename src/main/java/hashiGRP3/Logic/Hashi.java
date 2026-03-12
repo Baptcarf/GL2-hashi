@@ -19,9 +19,11 @@ public class Hashi {
     /** Ensemble des ponts reliant les îles */
     private final Set<Pont> ponts = new HashSet<>();
     /** Taille maximale du plateau (largeur, hauteur) */
-    private Coordonnees taille = new Coordonnees(0,0);
+    private Coordonnees taille = new Coordonnees(0, 0);
     /** Historique de la partie */
     private final HistoriqueManager historique = new HistoriqueManager();
+    /** Id de l'utilisateur en cours */
+    private int idUtilisateur;
 
     /**
      * Ajoute une île au plateau de jeu.
@@ -143,7 +145,11 @@ public class Hashi {
     public Set<Pont> getPonts() {
         return ponts;
     }
-    
+
+    public void ajouterActionHistorique(Pont pont, EtatDuPont avant, EtatDuPont apres) {
+        historique.ajouterActionNotSave(pont, avant, apres);
+    }
+
     /**
      * Récupère une île à partir de ses coordonnées.
      * 
@@ -153,6 +159,21 @@ public class Hashi {
      */
     public Ile getIle(int x, int y) {
         return iles.get(new Coordonnees(x, y));
+    }
+
+    /**
+     * Récupère une île à partir de don id.
+     * 
+     * @param id l'id de l'ile
+     * @return l'île d'id spécifiées, ou null si aucune île n'existe
+     */
+    public Ile getIleById(int id) {
+        for (Ile ile : iles.values()) {
+            if (ile.getId() == id) {
+                return ile;
+            }
+        }
+        return null;
     }
 
     /**
@@ -182,6 +203,14 @@ public class Hashi {
         return null;
     }
 
+    public List<Ile> getIles() {
+        return new ArrayList<>(iles.values());
+    }
+
+    public Coordonnees getTaille() {
+        return taille;
+    }
+
     /**
      * Vérifie si la partie est gagnée.
      * La partie est gagnée si tous les ponts sont correctement connectés
@@ -189,9 +218,9 @@ public class Hashi {
      * 
      * @return true si la partie est gagnée, false sinon
      */
-    public boolean estGagne(){
-        for(Pont p : ponts){
-            if (!p.estCorrect()){
+    public boolean estGagne() {
+        for (Pont p : ponts) {
+            if (!p.estCorrect()) {
                 return false;
             }
         }
@@ -230,10 +259,21 @@ public class Hashi {
 
      // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
 
+    public boolean isUndoEmpty() {
+        return historique.isUndoEmpty();}
 
+    public boolean isRedoEmpty() {
+        return historique.isRedoEmpty();}
+
+    public void Reset() {
+        historique.clear();
+        for (Pont p : ponts) {
+            p.setEtatActuel(EtatDuPont.VIDE);
+        }
+    }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         String[][] grilleAffichage = new String[taille.y + 1][taille.x + 1];
 
@@ -261,45 +301,50 @@ public class Hashi {
 
             String c;
 
-            if (pont.getEtatActuel() == EtatDuPont.SIMPLE) c = pont.getOrientation() == Pont.Orientation.HORIZONTAL ? "─" : "|";
-            else if (pont.getEtatActuel() == EtatDuPont.DOUBLE) c = pont.getOrientation() == Pont.Orientation.HORIZONTAL ? "═" : "║";
-            else c = ".";
+            if (pont.getEtatActuel() == EtatDuPont.SIMPLE)
+                c = pont.getOrientation() == Pont.Orientation.HORIZONTAL ? "─" : "|";
+            else if (pont.getEtatActuel() == EtatDuPont.DOUBLE)
+                c = pont.getOrientation() == Pont.Orientation.HORIZONTAL ? "═" : "║";
+            else
+                c = ".";
 
             if (pont.getOrientation() == Pont.Orientation.HORIZONTAL) {
                 for (int x = Math.min(x1, x2) + 1; x < Math.max(x1, x2); x++)
                     // Vérifie que le pont n'en écrase pas un autre
-                    if (grilleAffichage[y1][x].equals(" ") || grilleAffichage[y1][x].equals(".")){
+                    if (grilleAffichage[y1][x].equals(" ") || grilleAffichage[y1][x].equals(".")) {
                         grilleAffichage[y1][x] = c;
-                    }  
+                    }
             } else {
                 for (int y = Math.min(y1, y2) + 1; y < Math.max(y1, y2); y++)
-                    if (grilleAffichage[y][x1].equals(" ") || grilleAffichage[y][x1].equals(".")){
+                    if (grilleAffichage[y][x1].equals(" ") || grilleAffichage[y][x1].equals(".")) {
                         grilleAffichage[y][x1] = c;
-                    }  
+                    }
             }
         }
 
         // Affichage stylé avec coordonnées
         sb.append("    ");
 
-        for (int x = 0; x <= taille.x; x++) sb.append(x).append(" ");
+        for (int x = 0; x <= taille.x; x++)
+            sb.append(x).append(" ");
 
         sb.append("\n  ┌");
-        for (int i = 0; i <= taille.x * 2 + 2; i++) sb.append("─");
+        for (int i = 0; i <= taille.x * 2 + 2; i++)
+            sb.append("─");
         sb.append("┐\n");
-
 
         for (int y = 0; y <= taille.y; y++) {
             sb.append(y).append(" │ ");
-            for (int x = 0; x <= taille.x; x++) sb.append(grilleAffichage[y][x]).append(" ");
+            for (int x = 0; x <= taille.x; x++)
+                sb.append(grilleAffichage[y][x]).append(" ");
             sb.append("│\n");
         }
 
         sb.append("  └");
-        for (int i = 0; i <= taille.x * 2 + 2; i++) sb.append("─");
+        for (int i = 0; i <= taille.x * 2 + 2; i++)
+            sb.append("─");
         sb.append("┘\n");
 
         return sb.toString();
     }
 }
-

@@ -13,6 +13,13 @@ import hashiGRP3.Logic.InOut.Import;
 public class HashiTest {
     @Test
     public void testConflitListePontsUniquee() { //Test de la génération des conflits dans le cas où la liste de ponts ne contient qu'un seul élément  
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+
+
+public class HashiTest {
+    @Test
+    public void testConflitListePontsUniquee() { //Test de la génération des conflit dans le cas où la liste de ponts ne contient qu'un seul élément  
         Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(0, 20), 2);
         Ile ile2 = new Ile(new Coordonnees(30, 20), 2);
@@ -25,7 +32,7 @@ public class HashiTest {
     }
 
     @Test
-    public void testConflitCroisementMultiple() { //Test de la génération des conflits dans le cas où un pont croise plusieurs ponts
+    public void testConflitCroisementMultiple() { //Test de la génération des conflit dans le cas où un pont croise plusieurs ponts
         Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(0, 20), 2);
         Ile ile2 = new Ile(new Coordonnees(30, 20), 2);
@@ -64,7 +71,7 @@ public class HashiTest {
     }
 
     @Test
-    public void testConflitCroisementSimple() { //Test de la génération des conflits dans le cas où un pont croise un seul autre pont
+    public void testConflitCroisementSimple() { //Test de la génération des conflit dans le cas où un pont croise un seul autre pont
         Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(1, 0), 2);
         Ile ile2 = new Ile(new Coordonnees(1, 2), 2);
@@ -90,7 +97,7 @@ public class HashiTest {
     }
 
     @Test
-    public void testConflitPontParallele() { //Test de la génération des conflits dans le cas où un pont est parallèle à un autre pont
+    public void testConflitPontParallele() { //Test de la génération des conflit dans le cas où un pont est parallèle à un autre pont
         Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(0, 0), 2);
         Ile ile2 = new Ile(new Coordonnees(0, 2), 2);
@@ -113,7 +120,7 @@ public class HashiTest {
     }
 
     @Test
-    public void testConflitIleCommune(){//Test de la génération des conflits dans le cas où deux ponts partagent une même île
+    public void testConflitIleCommune(){//Test de la génération des conflit dans le cas où deux ponts partagent une même île
          Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(0, 0), 4);
         Ile ile2 = new Ile(new Coordonnees(0, 2), 2);
@@ -130,7 +137,7 @@ public class HashiTest {
                    ile3.getPont(hashiGRP3.Logic.Direction.GAUCHE).getConflits().isEmpty() == true); //teste que la liste des conflit du pont entre ile1 et ile3 vide
     }
 
-    @Test //Test de la génération des conflits dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 1
+    @Test //Test de la génération des conflit dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 1
     public void testConflitPontPerpendiculaireSansCroisement1(){ //Pont vertical à gauche du pont horizontal
         Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(3, 1), 2);
@@ -153,7 +160,7 @@ public class HashiTest {
                    ile4.getPont(hashiGRP3.Logic.Direction.GAUCHE).getConflits().isEmpty() == true);  //teste que la liste des conflit du pont de ile3 et ile4 est bien vide
     }
 
-    @Test //Test de la génération des conflits dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 2
+    @Test //Test de la génération des conflit dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 2
     public void testConflitPontPerpendiculaireSansCroisement2(){ //Pont vertical à droite du pont horizontal
         Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(7, 3), 2);
@@ -176,26 +183,30 @@ public class HashiTest {
                    ile4.getPont(hashiGRP3.Logic.Direction.GAUCHE).getConflits().isEmpty() == true);  //teste que la liste des conflit du pont de ile3 et ile4 est bien vide
     }
 
-    @Test //Test de la génération des conflits dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 3
+    @Test //Test de la génération des conflit dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 3
     public void testConflitPontPerpendiculaireSansCroisement3(){ //Pont vertical au dessus du pont horizontal
-        Hashi hashi = new Hashi(); 
-        Ile ile1 = new Ile(new Coordonnees(2, 5), 2); 
-        Ile ile2 = new Ile(new Coordonnees(8, 5), 2);
-        Ile ile3 = new Ile(new Coordonnees(4, 2), 2);
-        Ile ile4 = new Ile(new Coordonnees(4, 3), 2); 
-        hashi.ajouterIle(ile1); 
-        hashi.ajouterIle(ile2); 
+        Hashi hashi = new Hashi();
+        Ile ile1 = new Ile(new Coordonnees(3, 6), 2);
+        Ile ile2 = new Ile(new Coordonnees(8, 6), 2);
+        Ile ile3 = new Ile(new Coordonnees(10, 3), 2);
+        Ile ile4 = new Ile(new Coordonnees(10, 8), 2);
+        hashi.ajouterIle(ile1);
+        hashi.ajouterIle(ile2);
         hashi.ajouterIle(ile3);
         hashi.ajouterIle(ile4);
         hashi.initialisationToutLesPonts();
         hashi.initialisationToutLesConflits();
-        assertTrue(ile1.getPont(Direction.DROITE).getConflits().size()==0 &&
-                   ile2.getPont(Direction.GAUCHE).getConflits().size()==0 &&
-                   ile3.getPont(Direction.BAS).getConflits().size()==0 &&
-                   ile4.getPont(Direction.HAUT).getConflits().size()==0);
+
+        assertTrue(ile1.getPont(hashiGRP3.Logic.Direction.DROITE).getConflits().isEmpty() == true && //teste que la liste des conflit du pont entre ile1 et ile2 est bien vide
+
+                   ile2.getPont(hashiGRP3.Logic.Direction.GAUCHE).getConflits().isEmpty() == true && //teste que la liste des conflit du pont de ile1 et ile2 est bien vide
+
+                   ile3.getPont(hashiGRP3.Logic.Direction.BAS).getConflits().isEmpty() == true && //teste que la liste des conflit du pont de ile3 et ile4 est bien vide
+
+                   ile4.getPont(hashiGRP3.Logic.Direction.HAUT).getConflits().isEmpty() == true);  //teste que la liste des conflit du pont de ile3 et ile4 est bien vide
     }
 
-    @Test //Test de la génération des conflits dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 4
+    @Test //Test de la génération des conflit dans le cas où un pont est perpendiculaire à un autre pont sans pour autant le croiser: cas 4
     public void testConflitPontPerpendiculaireSansCroisement4(){ //Pont vertical en dessous du pont horizontal
         Hashi hashi = new Hashi();
         Ile ile1 = new Ile(new Coordonnees(5, 11), 2);
