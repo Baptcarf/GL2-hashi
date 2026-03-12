@@ -6,7 +6,6 @@ import java.util.EnumSet;
 
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Pont;
-import hashiGRP3.Logic.Mode;
 
 /**
  * Gestionnaire d'historique pour les opérations 
@@ -32,6 +31,15 @@ public class HistoriqueManager {
 
         public Boolean isMode(Mode mode) {
             return modes.contains(mode);
+        }
+
+        public Boolean retireTemporaire(){
+            if (modes.contains(Mode.TEMPORAIRE)) {
+                modes.remove(Mode.TEMPORAIRE);
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

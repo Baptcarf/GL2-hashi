@@ -4,7 +4,6 @@ import hashiGRP3.Logic.Coordonnees;
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
-import hashiGRP3.Logic.Mode;
 
 import java.util.EnumSet;
 

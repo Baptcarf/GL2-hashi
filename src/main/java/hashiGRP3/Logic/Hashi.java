@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.EnumSet;
 import hashiGRP3.Logic.Historique.HistoriqueManager;
+import hashiGRP3.Logic.Historique.Mode;
 
 /**
  * Représente le jeu Hashi avec la grille, les îles et les ponts.

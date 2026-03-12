@@ -1,4 +1,4 @@
-package hashiGRP3.Logic;
+package hashiGRP3.Logic.Historique;
 
 public enum Mode {
     HISTORIQUE,
