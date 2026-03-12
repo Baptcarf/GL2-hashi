@@ -132,12 +132,12 @@ public class Ile {
 
     /**
      * Retourne le nombre de ponts requis pour connecter cette île
-     * 
      * @return le nombre de ponts requis pour cette île
      */
     public int getNbPontsRequis() {return nbPontsRequis;}
        
     /**
+     * Getter sur la liste de ponts.
      * @param direction la direction du pont à récupérer
      * @return le pont connecté dans la direction donnée, ou null s'il n'y en a pas
      */
@@ -145,7 +145,6 @@ public class Ile {
 
     /**
      * Retourne l'identifiant unique de cette île
-     * 
      * @return l'identifiant unique de cette île
      */
     public int getId() {return id;}

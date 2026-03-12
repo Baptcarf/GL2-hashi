@@ -158,13 +158,18 @@ public class Hashi {
         return ponts;
     }
 
+    /**
+     * Ajout d'une action à enregistrer dans l'historique.
+     * @param pont Un objet pont logique
+     * @param avant L'etat avant
+     * @param apres L'etat apres
+     */
     public void ajouterActionHistorique(Pont pont, EtatDuPont avant, EtatDuPont apres) {
         historique.ajouterActionNotSave(pont, avant, apres);
     }
 
     /**
      * Récupère une île à partir de ses coordonnées.
-     * 
      * @param x la coordonnée x
      * @param y la coordonnée y
      * @return l'île aux coordonnées spécifiées, ou null si aucune île n'existe
@@ -175,7 +180,6 @@ public class Hashi {
 
     /**
      * Récupère une île à partir de don id.
-     * 
      * @param id l'id de l'ile
      * @return l'île d'id spécifiées, ou null si aucune île n'existe
      */
@@ -190,7 +194,6 @@ public class Hashi {
 
     /**
      * Récupère le pont reliant deux îles.
-     * 
      * @param ileA la première île
      * @param ileB la deuxième île
      * @return le pont reliant les deux îles, ou null s'il n'existe pas
@@ -202,7 +205,6 @@ public class Hashi {
 
     /**
      * Cherche un pont égal au pont donné en paramètre.
-     * 
      * @param recherche le pont à rechercher
      * @return le pont trouvé, ou null s'il n'existe pas
      */
@@ -233,9 +235,7 @@ public class Hashi {
 
     /**
      * Vérifie si la partie est gagnée.
-     * La partie est gagnée si tous les ponts sont correctement connectés
-     * selon les contraintes des îles.
-     * 
+     * La partie est gagnée si tous les ponts sont correctement connectés selon les contraintes des îles.
      * @return true si la partie est gagnée, false sinon
      */
     public boolean estGagne() {

@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
 * Représente un pont reliant deux iles
 * Un pont possede une orientation, un état actuel, et un état correcte 
-* et peut être en conflit avec d'autres ponts
+* et peut être en conflit avec d'autres ponts.
 */
 public class Pont {
 
@@ -97,31 +97,73 @@ public class Pont {
      * Getter sur la première ile.
      * @return Première île reliée 
      */
-    public Ile getileA() {return ileA;}
-    /** Getter @return Deuxième île reliée */
-    public Ile getileB() {return ileB;}
-    /** Getter @return Etat actuel du pont */
-    public EtatDuPont getEtatActuel() {return etatActuel;}
-    /** Getter @return Etat correct du pont */
-    public EtatDuPont getEtatCorrect() {return etatCorrect;}
-    /** Getter @return True si le pont est dans l'etat correcte */
-    public boolean estCorrect(){return getEtatActuel()==getEtatCorrect();}
-    /** Getter @return Orientation du pont */
-    public Orientation getOrientation() {return orientation;}
-    /** Getter @return Liste des ponts en conflit */
-    public List<Pont> getConflits() {return conflits;}
+    public Ile getileA() {
+	    return ileA;
+    }
+    
+    /** 
+     * Getter sur la seconde ile.
+     * @return Deuxième île reliée 
+     */
+    public Ile getileB() {
+	    return ileB;
+    }
+    
+    /** 
+     * Getter qui retourne l'etat du pont.
+     * @return Etat actuel du pont 
+     */
+    public EtatDuPont getEtatActuel() {
+	    return etatActuel;
+    }
+
+    /** 
+     * Getter 
+     * @return Etat correct du pont 
+     */
+    public EtatDuPont getEtatCorrect() {
+	    return etatCorrect;
+    }
+
+    /** 
+     * Getter 
+     * @return True si le pont est dans l'etat correcte 
+     */
+    public boolean estCorrect(){
+	    return getEtatActuel() == getEtatCorrect();
+    }
+
+    /** 
+     * Getter 
+     * @return Orientation du pont 
+     */
+    public Orientation getOrientation() {
+	    return orientation;
+    }
+
+    /** 
+     * Getter 
+     * @return Liste des ponts en conflit 
+     */
+    public List<Pont> getConflits() {
+	    return conflits;
+    }
 
     /**
      * Modifie l'état actuel du pont
      * @param etat Nouvel état
      */
-    public void setEtatActuel(EtatDuPont etat) { this.etatActuel = etat; }
+    public void setEtatActuel(EtatDuPont etat) {
+	    this.etatActuel = etat;
+    }
 
     /**
      * Modifie l'état correct du pont
      * @param etat Nouvel état correct
      */
-    public void setEtatCorrect(EtatDuPont etat) { this.etatCorrect = etat; }
+    public void setEtatCorrect(EtatDuPont etat) {
+	    this.etatCorrect = etat;
+    }
 
     /**
      * Cycle l'état actuelle du pont : VIDE - SIMPLE - DOUBLE - VIDE

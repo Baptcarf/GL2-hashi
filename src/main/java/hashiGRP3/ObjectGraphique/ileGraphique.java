@@ -1,5 +1,7 @@
+//Attribut au paquet
 package hashiGRP3.ObjectGraphique;
 
+//Import
 import hashiGRP3.Logic.Ile;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -8,17 +10,22 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+/** Classe d'un ilot avec JavaFX */
 public class ileGraphique {
 
     private final Ile ile;
 
+    /** 
+     * Constructeur de classe.
+     * @param ile Une objet ile logique.
+     */
     public ileGraphique(Ile ile) {
         this.ile = ile;
     }
 
     /**
      * Crée le dessin de l'ile
-     * @param cellSize taille d'une case de la grille
+     * @param gridCellSize taille d'une case de la grille
      * @return un Group JavaFX representant l'ile
      */
     public StackPane draw(double gridCellSize) {
