@@ -110,15 +110,17 @@ public class GrilleController extends ManageController {
         };
 
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            newScene.setOnKeyPressed(
-                e -> {handleKonamiKey(e.getCode());
-                if (isKonamiCodeEntered()) {
-                    for (var pont : hashi.getPonts()) {
-                        pont.setEtatActuel(pont.getEtatCorrect());
+            if (newScene != null) {
+                newScene.setOnKeyPressed(e -> {
+                    handleKonamiKey(e.getCode());
+                    if (isKonamiCodeEntered()) {
+                        for (var pont : hashi.getPonts()) {
+                            pont.setEtatActuel(pont.getEtatCorrect());
+                        }
+                        drawGrid(hashi, gamePane.getWidth());
                     }
-                    drawGrid(hashi, gamePane.getWidth());
-                }}
-            );
+                });
+            }
         });
     }
 

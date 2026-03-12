@@ -11,6 +11,7 @@ import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
+import hashiGRP3.Logic.General;
 
 /**
  * Classe pour importer une grille Hashi depuis un fichier texte.
@@ -42,6 +43,9 @@ public class Import {
         ajouterIles(HashiGrille, lignesIles);
         HashiGrille.initialisationToutLesPonts();
         ajouterPonts(HashiGrille, lignesPonts);
+
+        General.getDb().creerGrille(1, chemin.toString(), lignesIles.size());
+
 
         return HashiGrille;
     }

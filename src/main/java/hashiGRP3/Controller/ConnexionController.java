@@ -172,7 +172,7 @@ public class ConnexionController extends ManageController {
                 creer.setFill(Color.web("#DFDFDFDF"));
             }
 
-
+            General.setIdUtilisateur(General.getDb().getIdUtilisateur(result.pseudo()));
             if (result.isNewPlayer()) {
                 getSceneManager().changeScene("selectTutoriel");
             } else {

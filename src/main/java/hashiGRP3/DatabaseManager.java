@@ -80,6 +80,78 @@ public class DatabaseManager {
         }
     }
 
+
+    public void creerPartie(int id_utilisateur, int id_grille) {
+        int idPartie = -1;
+
+        String sqlCheck = "SELECT id_partie FROM Partie WHERE id_utilisateur = ? AND id_grille = ? AND statut = 1 LIMIT 1";
+        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut) VALUES (?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(URL)) {
+
+            try (PreparedStatement psCheck = conn.prepareStatement(sqlCheck)) {
+                psCheck.setInt(1, id_utilisateur);
+                psCheck.setInt(2, id_grille);
+
+                try (ResultSet rs = psCheck.executeQuery()) {
+                    if (rs.next()) {
+                        return ;
+                    }
+                }
+            }
+
+            try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
+                psInsert.setInt(1, id_utilisateur);
+                psInsert.setInt(2, id_grille);
+                psInsert.setInt(3, 1); // statut = 1 pour "en cours"
+
+                int affectedRows = psInsert.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("La création de la partie a échoué, aucune ligne insérée.");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void creerGrille(int niveau, String nomGrille, int nbIle) {
+        int idGrille = -1;
+
+        String sqlCheck = "SELECT id_grille FROM Grille WHERE grille = ? LIMIT 1";
+        String sqlInsert = "INSERT INTO Grille (niveau, grille, nbIle) VALUES (?, ?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(URL)) {
+
+            try (PreparedStatement psCheck = conn.prepareStatement(sqlCheck)) {
+                psCheck.setString(1, nomGrille);
+                try (ResultSet rs = psCheck.executeQuery()) {
+                    if (rs.next()) {
+                        return ;
+                    }
+                }
+            }
+
+            try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
+                psInsert.setInt(1, niveau);
+                psInsert.setString(2, nomGrille);
+                psInsert.setInt(3, nbIle);
+
+                int affectedRows = psInsert.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("La création de la grille a échoué, aucune ligne insérée.");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
     /**
      * Supprime un utilisateur de la base de donnée.
      * 
@@ -334,6 +406,8 @@ public class DatabaseManager {
                 int valCoupAvant = rs.getInt("val_coup_avant");
                 int valCoupApres = rs.getInt("val_coup_apres");
 
+
+                System.out.println()
                 Ile dep = ha.getIleById(nodeDep);
                 Ile arr = ha.getIleById(nodeArr);
 
@@ -368,33 +442,33 @@ public class DatabaseManager {
             ps.setInt(1, id_utilisateur);
             ps.setInt(2, id_grille);
 
-            ResultSet rs = ps.executeQuery();
 
-            int numCoup = 0;
-            int idPartie = 0;
-            if (rs.next()) {
-                numCoup = rs.getInt("num_coup") + 1;
-                idPartie = rs.getInt("id_partie");
+
+            int numCoup = 1;
+            int idPartie = -1;
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    numCoup = rs.getInt("num_coup") + 1;
+                    idPartie = rs.getInt("id_partie");
+                }
             }
-            /**
-             * Cas où on à pas de coup dans la base il faut trouver l'id de la partie
-             */
-            if (numCoup == 0) {
-                sql = "SELECT id_partie FROM partie WHERE id_utilisateur = ? AND id_grille = ? AND  statut=1";
 
-                try (PreparedStatement ps2 = conn.prepareStatement(sql)) {
-
+            // Cas où aucun coup n'existe encore pour cette partie
+            if (idPartie == -1) {
+                String sqlPartie = "SELECT id_partie FROM Partie WHERE id_utilisateur = ? AND id_grille = ? AND statut = 1 LIMIT 1";
+                try (PreparedStatement ps2 = conn.prepareStatement(sqlPartie)) {
                     ps2.setInt(1, id_utilisateur);
                     ps2.setInt(2, id_grille);
-
-                    rs = ps2.executeQuery();
-
-                    if (rs.next()) {
-                        idPartie = rs.getInt("id_partie");
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        if (rs2.next()) {
+                            idPartie = rs2.getInt("id_partie");
+                            numCoup = 0; // premier coup
+                        } else {
+                            throw new SQLException("Aucune partie active trouvée pour cet utilisateur et cette grille");
+                        }
                     }
-
                 }
-
             }
             sql = "INSERT INTO COUP VALUES (?,?,?,?,?,?)";
 
@@ -413,6 +487,7 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
 
     }
 
@@ -462,7 +537,7 @@ public class DatabaseManager {
                 "FROM Partie p " +
                 "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
                 "WHERE p.id_grille = ? AND p.statut = 2 AND p.score IS NOT NULL " +
-                "ORDER BY p.score ASC " +
+                "ORDER BY p.score DESC " +
                 "LIMIT 5";
 
         try (Connection conn = DriverManager.getConnection(URL);
