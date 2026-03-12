@@ -1,5 +1,7 @@
+//Attribut au paquet
 package hashiGRP3.Logic;
 
+//Imports
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,8 +103,7 @@ public class Hashi {
 
     /**
      * Initialise tous les conflits possibles entre les ponts.
-     * Un conflit existe lorsque deux ponts perpendiculaires se croisent sur le
-     * plateau.
+     * Un conflit existe lorsque deux ponts perpendiculaires se croisent sur le plateau.
      */
     public void initialisationToutLesConflits() {
         for (Pont pontA : ponts) {
@@ -151,7 +152,6 @@ public class Hashi {
 
     /**
      * Retourne l'ensemble de tous les ponts du plateau.
-     * 
      * @return l'ensemble des ponts
      */
     public Set<Pont> getPonts() {
@@ -215,10 +215,18 @@ public class Hashi {
         return null;
     }
 
+    /**
+     * Getter sur les ilots de la grille.
+     * @return Une liste contenant les ilots.
+     */
     public List<Ile> getIles() {
         return new ArrayList<>(iles.values());
     }
 
+    /**
+     * Getter sur la taille de la grille.
+     * @return Les coordonées de la grille.
+     */
     public Coordonnees getTaille() {
         return taille;
     }
@@ -241,7 +249,6 @@ public class Hashi {
 
     /**
      * Joue un coup sur un pont et l'enregistre dans l'historique
-     * 
      * @param pont Le pont sur lequel jouer
      */
     public void jouer(Pont pont) {
@@ -254,13 +261,13 @@ public class Hashi {
         }
     }
 
+    /** Rempli l'historique des actions de la grille. */
     public void remplirHistorique() {
         historique.remplir();
     }
 
     /**
      * Annule le dernier coup (Ctrl+Z)
-     * 
      * @return true si un coup a été annulé, false si rien à annuler
      */
     public boolean undo() {
@@ -269,28 +276,29 @@ public class Hashi {
 
     /**
      * Remet le dernier coup annulé (Ctrl+Y)
-     * 
      * @return true si un coup a été remit, false si rien à ete remit
      */
     public boolean redo() {
         return historique.redo();
     }
-
-     // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
-
+	
+    /** Verifie qu'on a aucune action anterieure */
     public boolean isUndoEmpty() {
         return historique.isUndoEmpty();}
 
+    /** Verifie qu'on a aucune action à remettre */
     public boolean isRedoEmpty() {
         return historique.isRedoEmpty();}
 
+    /** Reinitialise la grille */
     public void Reset() {
         historique.clear();
         for (Pont p : ponts) {
             p.setEtatActuel(EtatDuPont.VIDE);
         }
     }
-
+	
+    // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -27,7 +27,7 @@ public class SceneManager {
     private Composante currentScene;
     private boolean boolFull;
 
-    //   Un seul conteneur racine et une seule scène pour éviter le bug fullscreen macOS
+    //Un seul conteneur racine et une seule scène pour éviter le bug fullscreen macOS
     private final StackPane rootContainer = new StackPane();
     private final Scene mainScene = new Scene(rootContainer, 1600, 900);
 
@@ -99,6 +99,7 @@ public class SceneManager {
     /**
      * Retourne la scène principale unique.
      * Remplace findScene() — tous les nœuds partagent désormais la même scène.
+     * @return mainScene
      */
     public Scene getMainScene() {
         return mainScene;

@@ -1,4 +1,7 @@
+//Attribut au paquet
 package hashiGRP3.Logic;
+
+
 
 /**
  * Les directions possibles sur la grille

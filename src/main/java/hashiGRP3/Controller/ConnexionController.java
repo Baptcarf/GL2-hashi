@@ -1,9 +1,9 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
+
+
 //Imports
-import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.Node;
@@ -14,6 +14,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.event.ActionEvent;
+
+
 import hashiGRP3.SceneManager;
 import hashiGRP3.DatabaseManager;
 import hashiGRP3.compDB.Utilisateur;

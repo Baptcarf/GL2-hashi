@@ -18,7 +18,6 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -41,6 +40,7 @@ import hashiGRP3.ObjectGraphique.pontGraphique;
 /* Class */
 public class GrilleController extends ManageController {
 
+	//Var
 	private Hashi hashi;
 	boolean gagne = false;
 
@@ -72,6 +72,7 @@ public class GrilleController extends ManageController {
     @FXML
     private Button redoButton;
 
+    /** Initialisation de la grille */
     @FXML
     public void initialize() {
 	    //On charge une grille
@@ -127,18 +128,22 @@ public class GrilleController extends ManageController {
         super.changeScene(event);
     }*/
 
-    // Démarre le timer
+    /** Démarre le timer */
     public void start_timer() {
         startup = System.nanoTime();
         animationTimer.start();
     }
 
-    // Stop le timer
+    /** Stop le timer */
     public void stop_timer() {
         animationTimer.stop();
     }
 
-    // Dessin de grille
+    /**
+     * Dessine la grille.
+     * @param hashi La grille à dessiner.
+     * @param paneWidth La taille du pane où on dessine la grille.
+     */
     private void drawGrid(Hashi hashi, double paneWidth) {
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
@@ -167,6 +172,7 @@ public class GrilleController extends ManageController {
 
     }
 
+    /** Dessine le grillage d'arrière plan */
     private void dessinerGrille(int cols, int rows, double size) {
         for (int y = 0; y <= rows; y++) {
             for (int x = 0; x <= cols; x++) {
@@ -180,7 +186,7 @@ public class GrilleController extends ManageController {
         }
     }
 
-    //Fonctions de ponts
+    /** Dessine les ponts */
     private void dessinerPonts(Hashi hashi, double size) {
         for (var pont : hashi.getPonts()) {
             pontGraphique pg = new pontGraphique(pont);
@@ -188,6 +194,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /** Trigger function */
     private void onPontClicked(Pont pont) {
         hashi.jouer(pont);
         drawGrid(hashi, gamePane.getWidth());
@@ -195,6 +202,7 @@ public class GrilleController extends ManageController {
         undoButton.setDisable(hashi.isUndoEmpty());
     }
 
+    /** Dessine les ilots */
     private void dessinerIle(Hashi hashi, double size) {
         for (Ile island : hashi.getIles()) {
             ileGraphique ig = new ileGraphique(island);

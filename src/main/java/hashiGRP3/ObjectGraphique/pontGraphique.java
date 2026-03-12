@@ -1,7 +1,8 @@
+//Att
 package hashiGRP3.ObjectGraphique;
 
+//Imports
 import java.util.function.Consumer;
-
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Pont;
 import javafx.scene.Cursor;
@@ -9,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
+/** Classe d'un pont avec JavaFX */
 public class pontGraphique {
 
     private static class Segment {
@@ -21,6 +23,10 @@ public class pontGraphique {
 
     private final Pont pont;
 
+    /**
+     * Constructeur d'un pont 
+     * @param pont Un objet pont logique.
+     */
     public pontGraphique(Pont pont) {
         this.pont = pont;
     }

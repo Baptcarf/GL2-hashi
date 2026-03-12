@@ -90,7 +90,7 @@ public class SelectGrilleController extends ManageController {
     /** Nombre de colonnes dans les GridPane de grilles. */
     private static int COLONNES = 5;
 
-    //* Initialise les éléments de la scène */
+    /** Initialise les éléments de la scène */
     @FXML
     public void initialize() {
         General.setId_grille(1);

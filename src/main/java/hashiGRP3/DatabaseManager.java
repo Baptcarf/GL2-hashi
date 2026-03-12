@@ -6,8 +6,6 @@ import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
 
-import javax.print.DocFlavor.STRING;
-
 import java.nio.file.*;
 import java.io.*;
 
@@ -16,9 +14,9 @@ import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
-import hashiGRP3.compDB.*;;
+import hashiGRP3.compDB.*;
 
-/* Class */
+/* Classe pour la gestion de la base de donnée. */
 public class DatabaseManager {
 
     private static final String URL = "jdbc:sqlite:data/Hashi.db";
@@ -134,7 +132,7 @@ public class DatabaseManager {
     }
 
     /**
-     * test si un utilisateur existe déjà avec un certain pseudo
+     * Test si un utilisateur existe déjà avec un certain pseudo.
      * 
      * @param pseudo
      * @return true si un utilisateur existe déjà avec un pseudo x
@@ -161,6 +159,9 @@ public class DatabaseManager {
 
     }
 
+    /**
+     * Supprime le status des parties d'un joueur.
+     */
     public void resetLastTutoriel(String pseudo) {
 
         String sql = "DELETE FROM Partie\r\n" + //
@@ -189,8 +190,10 @@ public class DatabaseManager {
         }
     }
 
-    // Obtient le meilleur score d'un joueur (via pseudo) sur une grille donnée
-    // retourne -1 si aucun score
+    /**
+     * Obtient le meilleur score d'un joueur (via pseudo) sur une grille donnée
+     * @return -1 si on a aucun score.
+     */
     public int obtenirScore(int id_grille, String pseudo) {
 
         int meilleurScore = -1;
@@ -226,7 +229,10 @@ public class DatabaseManager {
         return meilleurScore;
     }
 
-    // retourne true si la grille est complétée par le joueur (via pseudo)
+    /**
+     * Check si une grille de la base de donnée est complète.
+     * @return true si la grille est complétée par le joueur (via pseudo)
+     */
     public boolean grilleCompletee(int id_grille, String pseudo) {
 
         int id_utilisateur = getIdUtilisateur(pseudo);
@@ -257,7 +263,9 @@ public class DatabaseManager {
         return false;
     }
 
-    // recupere l'id_utilisateur depuis le pseudo de l'utilisateur
+    /**
+     * Recupere l'id_utilisateur depuis le pseudo de l'utilisateur
+     */
     public int getIdUtilisateur(String pseudo) {
 
         int idUtilisateur = -1;
@@ -283,6 +291,9 @@ public class DatabaseManager {
         return idUtilisateur;
     }
 
+    /**
+     * Getter pour obtenir le nombre d'ilot d'une grille.
+     */
     public int obtenirNombreIle(int id_grille) {
 
         String sql = "SELECT nbIle FROM Grille WHERE id_grille = ?";

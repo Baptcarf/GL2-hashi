@@ -1,5 +1,7 @@
+//Att
 package hashiGRP3.Logic;
 
+//imports
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +13,7 @@ import java.util.Objects;
 */
 public class Pont {
 
-    /**
-     * Les orientations possibles d'un pont.
-     */
+    /** Les orientations possibles d'un pont.*/
     public enum Orientation {
         HORIZONTAL,
         VERTICAL
@@ -36,7 +36,7 @@ public class Pont {
      * Construit un pont entre deux ile
      * Les iles doivent être alignées horizontalement ou verticalement
      * 
-     * L'ordre des iles est normalisé pour que A<=>B soit la meme chose que B<=>A a la création
+     * L'ordre des iles est normalisé pour que A=B soit la meme chose que B=A a la création
      * La normalisation se fait en plaçant l'ile la plus à gauche (ou la plus haute)
      * en premier, selon l'ordre défini par comparePositionDesIles
      * 
@@ -83,7 +83,6 @@ public class Pont {
 
     /**
      * Vérifie si un pont peut être ajouté sans entrer en conflit avec d'autres ponts existants
-     * 
      * @return true si il est possible de rajouter un pont, false si un pont empeche le placement
      */
     public boolean pontEstPossible() {
@@ -94,19 +93,22 @@ public class Pont {
         return total == 0;
     }
 
-    /** @return Première île reliée */
+    /** 
+     * Getter sur la première ile.
+     * @return Première île reliée 
+     */
     public Ile getileA() {return ileA;}
-    /** @return Deuxième île reliée */
+    /** Getter @return Deuxième île reliée */
     public Ile getileB() {return ileB;}
-    /** @return Etat actuel du pont */
+    /** Getter @return Etat actuel du pont */
     public EtatDuPont getEtatActuel() {return etatActuel;}
-    /** @return Etat correct du pont */
+    /** Getter @return Etat correct du pont */
     public EtatDuPont getEtatCorrect() {return etatCorrect;}
-    /** @return True si le pont est dans l'etat correcte */
+    /** Getter @return True si le pont est dans l'etat correcte */
     public boolean estCorrect(){return getEtatActuel()==getEtatCorrect();}
-    /** @return Orientation du pont */
+    /** Getter @return Orientation du pont */
     public Orientation getOrientation() {return orientation;}
-    /** @return Liste des ponts en conflit */
+    /** Getter @return Liste des ponts en conflit */
     public List<Pont> getConflits() {return conflits;}
 
     /**
@@ -122,7 +124,7 @@ public class Pont {
     public void setEtatCorrect(EtatDuPont etat) { this.etatCorrect = etat; }
 
     /**
-     * Cycle l'état actuelle du pont : VIDE -> SIMPLE -> DOUBLE -> VIDE
+     * Cycle l'état actuelle du pont : VIDE - SIMPLE - DOUBLE - VIDE
      * Si le pont est vide, on doit verifier si il est possible de mettre un pont
      */
     public void cycler() {
@@ -134,7 +136,7 @@ public class Pont {
     }
 
     /**
-     * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A<=>B ou B<=>A
+     * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A=B ou B=A
      * @param o Objet à comparer
      * @return true si les ponts relient les memes iles, false sinon
      */

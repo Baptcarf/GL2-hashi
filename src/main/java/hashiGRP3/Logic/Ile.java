@@ -1,5 +1,7 @@
+//Attribut au paquet
 package hashiGRP3.Logic;
 
+//Imports
 import java.util.HashMap;
 import java.util.Map;
 
