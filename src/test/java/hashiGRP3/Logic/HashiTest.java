@@ -9,15 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import hashiGRP3.Logic.InOut.Import;
 
-
-public class HashiTest {
-    @Test
-    public void testConflitListePontsUniquee() { //Test de la génération des conflits dans le cas où la liste de ponts ne contient qu'un seul élément  
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.Test;
-
-
-public class HashiTest {
+public class HashiTest{
     @Test
     public void testConflitListePontsUniquee() { //Test de la génération des conflit dans le cas où la liste de ponts ne contient qu'un seul élément  
         Hashi hashi = new Hashi();
