@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -127,6 +128,7 @@ public class GrilleController extends ManageController {
             chemin = Path.of(url.toURI());
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesConflits();
+            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation()));
             undoButton.setDisable(true);
             redoButton.setDisable(true);
             StackPane parent = (StackPane) gamePane.getParent();
