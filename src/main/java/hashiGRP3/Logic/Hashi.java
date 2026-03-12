@@ -1,10 +1,14 @@
+//Att
 package hashiGRP3.Logic;
 
+//Imports
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.ArrayList;
 import hashiGRP3.Logic.Historique.HistoriqueManager;
 import hashiGRP3.Logic.Historique.Mode;
 
@@ -270,6 +274,10 @@ public class Hashi {
         for (Pont p : ponts) {
             p.setEtatActuel(EtatDuPont.VIDE);
         }
+    }
+
+public void remplirHistorique() {
+        historique.remplir();
     }
 
     @Override
