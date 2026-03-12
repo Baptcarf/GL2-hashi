@@ -31,12 +31,14 @@ import java.util.List;
 /* Class */
 public class ConnexionController extends ManageController {
 
-    private int nbCount;
+	//var
+        private int nbCount;
+        private boolean sup = false;
+        private boolean mod = false;
 
-    private boolean sup = false;
-    private boolean mod = false;
-    @FXML
-    private HBox hbox;
+
+        @FXML
+        private HBox hbox;
 
     @FXML
     private Circle creer;
@@ -47,11 +49,12 @@ public class ConnexionController extends ManageController {
     @FXML
     private Button supprimer;
 
-    public void setSceneManager(SceneManager sm) {
-        super.setSceneManager(sm);
-        nbCount = 0;
-        Tooltip.install(creer, new Tooltip("Créer un compte"));
-        Tooltip.install(supprimer, new Tooltip("supprimer un compte"));
+
+        public void setSceneManager(SceneManager sm) {
+                super.setSceneManager(sm);
+                nbCount = 0;
+                Tooltip.install(creer, new Tooltip("Créer un compte"));
+                Tooltip.install(supprimer, new Tooltip("supprimer un compte"));
 
         List<Utilisateur> au = General.getDb().findAllUser();
 
@@ -135,104 +138,10 @@ public class ConnexionController extends ManageController {
 
         }
 
-    }
-
-    public String colorToString(Color c) {
-
-        String couleurCSS = String.format("#%02X%02X%02X",
-                (int) (c.getRed() * 255),
-                (int) (c.getGreen() * 255),
-                (int) (c.getBlue() * 255));
-
-        return couleurCSS;
-
-    }
-
-    private void appliqueCouleur(Color c) {
-        String couleurCSS = colorToString(c);
-
-        String value = String.format("-fx-background-color:%s;", couleurCSS);
-         hbox.getScene().getRoot().setStyle(value);
-
-    }
-
-    @FXML
-    private void supCompte() {
-        appliqueCouleur(Color.web("#E57373"));
-        sup = true;
-    }
-
-    private void endSupp() {
-        appliqueCouleur(Color.WHITE);
-        sup = false;
-    }
-
-    private void supprimerCompte(Circle circle) {
-        Stage s = new Stage();
-
-        s.setTitle("Supprimer un compte");
-
-        s.setOnCloseRequest(ev -> {
-            endSupp();
-        });
-
-        VBox v = new VBox();
-        v.setAlignment(Pos.CENTER);
-        v.setSpacing(15);
-
-        HBox h = new HBox();
-        h.setAlignment(Pos.CENTER);
-        h.setSpacing(20);
-
-        Label l = new Label("Voulez-vous vraiment supprimer ce compte ?");
-        Button bn = new Button("Annuler");
-        Button bo = new Button("Valider");
-
-        h.getChildren().addAll(bn, bo);
-
-        v.getChildren().addAll(l, h);
-
-        bn.setOnAction(ev -> {
-            s.close();
-            endSupp();
-        });
-
-        bo.setOnAction(ev -> {
-            DatabaseManager db = General.getDb();
-
-            VBox parentVBox = (VBox) circle.getParent();
-            Label lab = null;
-
-            // Parcours les enfants du VBox
-            for (Node node : parentVBox.getChildren()) {
-                if (node instanceof Label) {
-                    lab = (Label) node;
-                    break;
-                }
-            }
-
-            db.deleteUser(lab.getText());
-
-            hbox.getChildren().remove(circle.getParent());
-            nbCount--;
-            s.close();
-            endSupp();
-            creer.setFill(Color.web("#eaf5ff"));
-        });
-
-        Scene sn = new Scene(v);
-        s.setScene(sn);
-        s.show();
-
-    }
-
-    @FXML
-    private void afficheMessage() {
-        if (nbCount == 5) {
-            labelCreer.setVisible(true);
-        }
-
-    }
+	/**
+	 * Créer le conteneur d'utilisateur.
+	 */
+        private void createBoxUser(Circle c, String val) {
 
     @FXML
     private void enleverMessage() {
@@ -255,12 +164,176 @@ public class ConnexionController extends ManageController {
                 creer.setFill(Color.web("#DFDFDFDF"));
             }
 
+
             if (result.isNewPlayer()) {
                 getSceneManager().changeScene("selectTutoriel");
             } else {
                 getSceneManager().changeScene("accueil");
             }
         });
-    }
+    
 
+
+		// Parcours les enfants du VBox
+		for (Node node : parentVBox.getChildren()) {
+			if (node instanceof Label) {
+				lab = (Label) node;
+				break;
+			}
+		}
+
+		setUtilisateur(lab.getText());
+
+		supprimerCompte(circle);
+
+		} else {
+			getSceneManager().changeScene("accueil");
+		}
+
+                // Retour
+                return circle;
+        }
+
+        /**
+         * Ajoute un cercle de connexion à la page d'accueil.
+         */
+        @FXML
+        private void addCount() {
+                if (nbCount < 6) {
+                        endSupp();
+
+                        Circle circle = createCircle("#eaf5ff");
+
+                        this.creerUtilisateur(circle);
+
+                }
+
+        }
+
+        public String colorToString(Color c) {
+
+                String couleurCSS = String.format("#%02X%02X%02X",
+                                (int) (c.getRed() * 255),
+                                (int) (c.getGreen() * 255),
+                                (int) (c.getBlue() * 255));
+
+                return couleurCSS;
+
+        }
+
+        private void appliqueCouleur(Color c) {
+                String couleurCSS = colorToString(c);
+
+                String value = String.format("-fx-background-color:%s;", couleurCSS);
+                getSceneManager().findScene("connexion").getRoot()
+                                .setStyle(value);
+
+        }
+
+        @FXML
+        private void supCompte() {
+                appliqueCouleur(Color.web("#E57373"));
+                sup = true;
+        }
+
+        private void endSupp() {
+                appliqueCouleur(Color.WHITE);
+                sup = false;
+        }
+
+        private void supprimerCompte(Circle circle) {
+                Stage s = new Stage();
+
+                s.setTitle("Supprimer un compte");
+
+                s.setOnCloseRequest(ev -> {
+                        endSupp();
+                });
+
+                VBox v = new VBox();
+                v.setAlignment(Pos.CENTER);
+                v.setSpacing(15);
+
+                HBox h = new HBox();
+                h.setAlignment(Pos.CENTER);
+                h.setSpacing(20);
+
+                Label l = new Label("Voulez-vous vraiment supprimer ce compte ?");
+                Button bn = new Button("Annuler");
+                Button bo = new Button("Valider");
+
+                h.getChildren().addAll(bn, bo);
+
+                v.getChildren().addAll(l, h);
+
+                bn.setOnAction(ev -> {
+                        s.close();
+                        endSupp();
+                });
+
+                bo.setOnAction(ev -> {
+                        DatabaseManager db = getSceneManager().getBD();
+
+                        VBox parentVBox = (VBox) circle.getParent();
+                        Label lab = null;
+
+                        // Parcours les enfants du VBox
+                        for (Node node : parentVBox.getChildren()) {
+                                if (node instanceof Label) {
+                                        lab = (Label) node;
+                                        break;
+                                }
+                        }
+
+                        db.deleteUser(lab.getText());
+
+                        hbox.getChildren().remove(circle.getParent());
+                        nbCount--;
+                        s.close();
+                        endSupp();
+                        creer.setFill(Color.web("#eaf5ff"));
+                });
+
+                Scene sn = new Scene(v);
+                s.setScene(sn);
+                s.show();
+
+        }
+
+        @FXML
+        private void afficheMessage() {
+                if (nbCount == 5) {
+                        labelCreer.setVisible(true);
+                }
+
+        }
+
+        @FXML
+        private void enleverMessage() {
+                labelCreer.setVisible(false);
+
+        }
+
+        private void creerUtilisateur(Circle c) {
+                CreerUtilisateur dialog = new CreerUtilisateur();
+
+                dialog.showAndWait(hbox.getScene().getWindow()).ifPresent(result -> {
+                        DatabaseManager db = getSceneManager().getBD();
+
+                        db.insertUser(result.pseudo(), colorToString(result.color()));
+                        c.setFill(result.color());
+                        createBoxUser(c, result.pseudo());
+
+                        nbCount++;
+                        if (nbCount == 5) {
+                                creer.setFill(Color.web("#DFDFDFDF"));
+                        }
+
+                        if (result.isNewPlayer()) {
+                                getSceneManager().changeScene("selectTutoriel");
+                        } else {
+                                getSceneManager().changeScene("accueil");
+                        }
+                });
+        }
 }

@@ -51,6 +51,18 @@ public class ManageController {
         if (sceneManager == null) {
             System.out.println("SceneManager non injecté");
             return;
+        /**
+         * Changement de scène depuis un fichier fxml
+         * 
+         * @param event
+         */
+        @FXML
+        protected void changeScene(ActionEvent event) {
+                Button btn = (Button) event.getSource();
+                String sceneName = (String) btn.getUserData();
+                if (sceneManager != null && sceneName != null) {
+                        sceneManager.changeScene(sceneName);
+                }
         }
         sceneManager.retourArriere();
     }

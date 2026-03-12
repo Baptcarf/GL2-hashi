@@ -58,7 +58,7 @@ public class SelectGrilleController extends ManageController {
     @FXML
     private GridPane grilleDifficile;
 
-    private static final int COLONNES = 4;
+    private static final int COLONNES = 5;
 
     @FXML
     public void initialize() {
@@ -219,7 +219,10 @@ public class SelectGrilleController extends ManageController {
         General.getHashi().remplirHistorique();
 
         this.changeScene(event);
+	}
 
+    private boolean grilleCompletee(int numeroGrille) {
+        // TODO : vérifier dans la base de données
+        return false;
     }
-
 }

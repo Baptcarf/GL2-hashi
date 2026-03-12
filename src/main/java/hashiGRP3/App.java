@@ -2,6 +2,8 @@
 package hashiGRP3;
 
 //Imports
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -35,8 +37,10 @@ public class App extends Application {
 
     }
 
-    public static void main(String[] args) throws IOException {
-        // ??
-        launch(args);
-    }
+	}
+
+	public static void main(String[] args) throws IOException {
+		//Menu
+		launch(args);
+	}
 }

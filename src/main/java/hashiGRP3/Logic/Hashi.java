@@ -1,7 +1,9 @@
 package hashiGRP3.Logic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -213,6 +215,14 @@ public class Hashi {
         return null;
     }
 
+    public List<Ile> getIles() {
+        return new ArrayList<>(iles.values());
+    }
+
+    public Coordonnees getTaille() {
+        return taille;
+    }
+
     /**
      * Vérifie si la partie est gagnée.
      * La partie est gagnée si tous les ponts sont correctement connectés
@@ -266,8 +276,20 @@ public class Hashi {
         return historique.redo();
     }
 
-    // Version d'affichage expériemental afin de visualiser le plateau dans la
-    // console en attnendant une interface graphique
+     // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
+
+    public boolean isUndoEmpty() {
+        return historique.isUndoEmpty();}
+
+    public boolean isRedoEmpty() {
+        return historique.isRedoEmpty();}
+
+    public void Reset() {
+        historique.clear();
+        for (Pont p : ponts) {
+            p.setEtatActuel(EtatDuPont.VIDE);
+        }
+    }
 
     @Override
     public String toString() {
