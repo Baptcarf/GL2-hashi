@@ -139,9 +139,14 @@ public class GrilleController extends ManageController {
     private void drawGrid(Hashi hashi, double paneWidth) {
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
-        
-        // Calcul d'une taille de cellule proportionnelle pour couvrir le pane
-        double cellSize = paneWidth / (nbColonnes + 1);
+
+        double paneHeight = gamePane.getHeight();
+
+        double cellSize = Math.min(paneWidth / (nbColonnes + 1), paneHeight / (nbLignes + 1));
+        double gridWidth  = cellSize * (nbColonnes + 1);
+        double gridHeight = cellSize * (nbLignes + 1);
+        gamePane.setPrefSize(gridWidth, gridHeight);
+        gamePane.setMaxSize(gridWidth, gridHeight);     
 
         gamePane.getChildren().clear();
 
