@@ -73,7 +73,6 @@ public class DatabaseManager {
             pstmt.setString(2, couleur);
 
             pstmt.executeUpdate();
-            System.out.println("Utilisateur insérées : ");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -168,7 +167,6 @@ public class DatabaseManager {
             pstmt.setString(1, pseudo);
 
             pstmt.executeUpdate();
-            System.out.println("Utilisateur supprimé : ");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -407,7 +405,6 @@ public class DatabaseManager {
                 int valCoupApres = rs.getInt("val_coup_apres");
 
 
-                System.out.println(nodeDep);
                 Ile dep = ha.getIleById(nodeDep);
                 Ile arr = ha.getIleById(nodeArr);
 
@@ -416,7 +413,6 @@ public class DatabaseManager {
                 ha.ajouterActionHistorique(pont, EtatDuPont.fromValue(valCoupAvant),
                         EtatDuPont.fromValue(valCoupApres));
 
-                System.out.println("je suis passé");
 
             }
 

@@ -20,6 +20,10 @@ public class General {
         return hashi;
     }
 
+    public static void setHashi(Hashi h) {
+        General.hashi = h;
+    }
+
     public static void setIdUtilisateur(int idUtilisateur) {
         General.idUtilisateur = idUtilisateur;
     }
@@ -35,5 +39,7 @@ public class General {
     public static void setId_grille(int id_grille) {
         General.id_grille = id_grille;
     }
+
+
 
 }

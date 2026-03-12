@@ -93,10 +93,6 @@ public class SelectGrilleController extends ManageController {
     /** Initialise les éléments de la scène */
     @FXML
     public void initialize() {
-        General.setId_grille(1);
-        creerGrilles(grilleFacile, 1, 4, "sectionFacile");
-        creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
-        creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
         chargerLeaderboardVide();
         boutonJouer.setDisable(true);
     }
@@ -111,11 +107,12 @@ public class SelectGrilleController extends ManageController {
         grilleMoyen.getChildren().clear();
         grilleDifficile.getChildren().clear();
 
-        creerGrilles(grilleFacile, 1, 4, "sectionFacile");
-        creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
-        creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
+        creerGrilles(grilleFacile, 1, 5, "sectionFacile");
+        creerGrilles(grilleMoyen, 6, 10, "sectionMoyen");
+        creerGrilles(grilleDifficile, 11, 15, "sectionDifficile");
 
         // Déplacé ici depuis initialize() — l'utilisateur est connu à ce stade
+        General.setId_grille(1);
         afficherGrilleSelectionnee(General.getId_grille());
         boutonJouer.setDisable(true);
     }
