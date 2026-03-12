@@ -143,6 +143,7 @@ public class GrilleController extends ManageController {
         // Mettre à jour General avec la nouvelle instance de Hashi
         General.setHashi(hashi);
         
+        
         // Remplir l'historique, en ignorant les erreurs si les données sont manquantes
         try {
             General.getHashi().remplirHistorique();
@@ -152,6 +153,11 @@ public class GrilleController extends ManageController {
         
         // Dessiner la grille immédiatement
         drawGrid(hashi, gamePane.getWidth());
+        hashi.remplirHistorique();
+        drawGrid(hashi, gamePane.getWidth());
+
+        undoButton.setDisable(hashi.isUndoEmpty());
+        redoButton.setDisable(hashi.isRedoEmpty());
     }
 
     /**

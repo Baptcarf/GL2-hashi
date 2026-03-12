@@ -19,6 +19,7 @@ public class General {
     public static Hashi getHashi() {
         return hashi;
     }
+    
 
     public static void setHashi(Hashi h) {
         General.hashi = h;

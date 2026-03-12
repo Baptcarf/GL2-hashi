@@ -264,6 +264,7 @@ public class Hashi {
     /** Rempli l'historique des actions de la grille. */
     public void remplirHistorique() {
         historique.remplir();
+        System.out.println("Nombre de ponts : " + this.getPonts().size());
     }
 
     /**

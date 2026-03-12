@@ -388,10 +388,16 @@ public class DatabaseManager {
 
     public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha, int id_grille) {
 
-        String sql = "SELECT node_dep,node_arr,val_coup_avant,val_coup_apres FROM Coup JOIN Partie p ON p.id_partie = coup.id_partie WHERE id_utilisateur = ?  AND id_grille = ? ORDER BY num_coup";
+        String sql = """
+            SELECT node_dep,node_arr,val_coup_avant,val_coup_apres
+            FROM Coup 
+            JOIN Partie p ON p.id_partie = coup.id_partie
+            WHERE id_utilisateur = ? AND id_grille = ?
+            ORDER BY num_coup
+            """;
 
         try (Connection conn = DriverManager.getConnection(URL);
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, idUtilisateur);
             ps.setInt(2, id_grille);
@@ -399,27 +405,32 @@ public class DatabaseManager {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+
                 int nodeDep = rs.getInt("node_dep");
                 int nodeArr = rs.getInt("node_arr");
-                int valCoupAvant = rs.getInt("val_coup_avant");
-                int valCoupApres = rs.getInt("val_coup_apres");
-
+                int valAvant = rs.getInt("val_coup_avant");
+                int valApres = rs.getInt("val_coup_apres");
 
                 Ile dep = ha.getIleById(nodeDep);
                 Ile arr = ha.getIleById(nodeArr);
 
+                if (dep == null || arr == null) continue;
+
                 Pont pont = ha.getPont(dep, arr);
 
-                ha.ajouterActionHistorique(pont, EtatDuPont.fromValue(valCoupAvant),
-                        EtatDuPont.fromValue(valCoupApres));
+                EtatDuPont avant = EtatDuPont.fromValue(valAvant);
+                EtatDuPont apres = EtatDuPont.fromValue(valApres);
 
+                // appliquer le coup sur la grille
+                pont.setEtatActuel(apres);
 
+                // reconstruire l'historique
+                h.ajouterActionNotSave(pont, avant, apres);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres) {
