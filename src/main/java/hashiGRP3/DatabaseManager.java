@@ -63,7 +63,7 @@ public class DatabaseManager {
      */
     public void insertUser(String pseudo, String couleur) {
 
-        String sql = "INSERT INTO Utilisateur(pseudo, Couleur) VALUES(?, ?)";// préparation de la requète
+        String sql = "INSERT INTO Utilisateur(pseudo, Couleur, id_avancement_tutoriel) VALUES(?, ?, 0)";// préparation de la requète
 
         try (Connection conn = DriverManager.getConnection(
                 URL);
@@ -73,7 +73,6 @@ public class DatabaseManager {
             pstmt.setString(2, couleur);
 
             pstmt.executeUpdate();
-            System.out.println("Utilisateur insérées : ");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -168,7 +167,6 @@ public class DatabaseManager {
             pstmt.setString(1, pseudo);
 
             pstmt.executeUpdate();
-            System.out.println("Utilisateur supprimé : ");
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -407,7 +405,6 @@ public class DatabaseManager {
                 int valCoupApres = rs.getInt("val_coup_apres");
 
 
-                System.out.println(nodeDep);
                 Ile dep = ha.getIleById(nodeDep);
                 Ile arr = ha.getIleById(nodeArr);
 
@@ -416,7 +413,6 @@ public class DatabaseManager {
                 ha.ajouterActionHistorique(pont, EtatDuPont.fromValue(valCoupAvant),
                         EtatDuPont.fromValue(valCoupApres));
 
-                System.out.println("je suis passé");
 
             }
 
@@ -557,6 +553,52 @@ public class DatabaseManager {
         }
 
         return scores;
+    }
+
+    /**
+     * Récupère l'avancement du tutoriel pour un utilisateur.
+     * @param pseudo le pseudo de l'utilisateur
+     * @return le numéro du dernier tutoriel complété (0-9), ou 0 si aucun n'a été complété
+     */
+    public int obtenirAvancementTutoriel(String pseudo) {
+        String sql = "SELECT id_avancement_tutoriel FROM Utilisateur WHERE pseudo = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, pseudo);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id_avancement_tutoriel");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0; // Par défaut, aucun tutoriel complété
+    }
+
+    /**
+     * Augmente l'avancement du tutoriel pour un utilisateur.
+     * @param pseudo le pseudo de l'utilisateur
+     * @param nouvelAvancement le nouvel avancement du tutoriel
+     */
+    public void incrementerAvancementTutoriel(String pseudo, int nouvelAvancement) {
+        String sql = "UPDATE Utilisateur SET id_avancement_tutoriel = ? WHERE pseudo = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, nouvelAvancement);
+            pstmt.setString(2, pseudo);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

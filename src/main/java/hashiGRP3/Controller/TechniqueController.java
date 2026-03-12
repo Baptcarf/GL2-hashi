@@ -246,4 +246,6 @@ public class TechniqueController extends ManageController {
             }
         }
     }
+
+    
 }

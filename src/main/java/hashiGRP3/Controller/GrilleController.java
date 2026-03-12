@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.InOut.Import;
@@ -75,32 +75,8 @@ public class GrilleController extends ManageController {
     /** Initialisation de la grille */
     @FXML
     public void initialize() {
-	    //On charge une grille
-        URL url = getClass().getResource("/hashiGRP3/10x10/hashi3.txt");
-        if (url == null) {
-            System.err.println("Fichier hashi2.txt non trouvé dans les ressources !");
-            return;
-        }
         
-	    //On l'importe
-        Path chemin;
-        try {
-            chemin = Path.of(url.toURI());
-            hashi = Import.chargerFichier(chemin);
-            hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation()));
-            undoButton.setDisable(true);
-            redoButton.setDisable(true);
-            // Quand on change la taille on redessine
-            StackPane parent = (StackPane) gamePane.getParent();
-            parent.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
-                drawGrid(hashi, newBounds.getWidth());
-            });
-
-        } catch (URISyntaxException | java.io.IOException ex) {
-            System.err.println("Erreur au chargement de la grille : " + ex.getMessage());
-        }
-
+        
         //On init un timer
         animationTimer = new AnimationTimer() {
             @Override
@@ -123,6 +99,65 @@ public class GrilleController extends ManageController {
                 });
             }
         });
+    }
+
+    /**
+     * Charge la grille basée sur le numéro sélectionné dans General.getId_grille()
+     */
+    private void chargerGrille() {
+        int gridId = General.getId_grille();
+        
+        
+        int folderIndex = (gridId - 1) / 5;
+        String[] folders = {"7x7", "10x10", "12x12"};
+        String folder = folders[folderIndex];
+        
+        int fileNumber = ((gridId - 1) % 5) + 1;
+        
+        String resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
+        
+        URL url = getClass().getResource(resourcePath);
+        if (url == null) {
+            System.err.println("Fichier " + resourcePath + " non trouvé dans les ressources !");
+            return;
+        }
+        
+        Path chemin;
+        try {
+            chemin = Path.of(url.toURI());
+            hashi = Import.chargerFichier(chemin);
+            hashi.initialisationToutLesConflits();
+            undoButton.setDisable(true);
+            redoButton.setDisable(true);
+            StackPane parent = (StackPane) gamePane.getParent();
+            parent.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+                drawGrid(hashi, newBounds.getWidth());
+            });
+
+        } catch (URISyntaxException | java.io.IOException ex) {
+            System.err.println("Erreur au chargement de la grille : " + ex.getMessage());
+        }
+
+        // Mettre à jour General avec la nouvelle instance de Hashi
+        General.setHashi(hashi);
+        
+        // Remplir l'historique, en ignorant les erreurs si les données sont manquantes
+        try {
+            General.getHashi().remplirHistorique();
+        } catch (Exception ex) {
+            System.err.println("Attention : Impossible de charger l'historique pour cette grille : " + ex.getMessage());
+        }
+        
+        // Dessiner la grille immédiatement
+        drawGrid(hashi, gamePane.getWidth());
+    }
+
+    /**
+     * Rafraîchit et charge la grille sélectionnée au moment d'arriver sur la scène
+     */
+    @Override
+    public void refreshGrilles() {
+        chargerGrille();
     }
 
     /*@Override

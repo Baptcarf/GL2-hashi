@@ -93,10 +93,6 @@ public class SelectGrilleController extends ManageController {
     /** Initialise les éléments de la scène */
     @FXML
     public void initialize() {
-        General.setId_grille(1);
-        creerGrilles(grilleFacile, 1, 4, "sectionFacile");
-        creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
-        creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
         chargerLeaderboardVide();
         boutonJouer.setDisable(true);
     }
@@ -111,11 +107,12 @@ public class SelectGrilleController extends ManageController {
         grilleMoyen.getChildren().clear();
         grilleDifficile.getChildren().clear();
 
-        creerGrilles(grilleFacile, 1, 4, "sectionFacile");
-        creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
-        creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
+        creerGrilles(grilleFacile, 1, 5, "sectionFacile");
+        creerGrilles(grilleMoyen, 6, 10, "sectionMoyen");
+        creerGrilles(grilleDifficile, 11, 15, "sectionDifficile");
 
         // Déplacé ici depuis initialize() — l'utilisateur est connu à ce stade
+        General.setId_grille(1);
         afficherGrilleSelectionnee(General.getId_grille());
         boutonJouer.setDisable(true);
     }
@@ -163,7 +160,7 @@ public class SelectGrilleController extends ManageController {
                 "Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
 
         labelTempsPerso.setText(
-                "Score : " + databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s");
+                "Score : " + formatScore(databaseManager.obtenirScore(numeroGrille, getUtilisateur())));
 
         chargerLeaderboard(numeroGrille);
     }
@@ -212,7 +209,7 @@ public class SelectGrilleController extends ManageController {
         score.setManaged(false);
         if (databaseManager.grilleCompletee(numeroGrille, getUtilisateur())) {
             score.setText("Score : " +
-                    databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s");
+                    formatScore(databaseManager.obtenirScore(numeroGrille, getUtilisateur())));
             score.setVisible(true);
             score.setManaged(true);
         }
@@ -251,7 +248,10 @@ public class SelectGrilleController extends ManageController {
 
         for (int i = 0; i < 5; i++) {
             if (i < top5.size()) {
-                labels[i].setText((i + 1) + ". " + top5.get(i));
+                String[] parts = top5.get(i).split(" ");
+                String pseudo = parts[0];
+                int score = Integer.parseInt(parts[1].replace("s", ""));
+                labels[i].setText((i + 1) + ". " + pseudo + " " + formatScore(score));
             } else {
                 labels[i].setText((i + 1) + ".");
             }
@@ -268,8 +268,13 @@ public class SelectGrilleController extends ManageController {
 
         General.getDb().creerPartie(General.getIdUtilisateur(),General.getId_grille());
 
-        General.getHashi().remplirHistorique();
-
         this.changeScene(event);
 	}
+
+    private String formatScore(int score) {
+        int minutes = score / 60;
+        int secondes = score % 60;
+        return String.format("%02d:%02d", minutes, secondes);
+
+    }
 }
