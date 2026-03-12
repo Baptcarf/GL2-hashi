@@ -17,6 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -88,7 +90,8 @@ public class GrilleController extends ManageController {
             undoButton.setDisable(true);
             redoButton.setDisable(true);
             // Quand on change la taille on redessine
-            gamePane.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+            StackPane parent = (StackPane) gamePane.getParent();
+            parent.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
                 drawGrid(hashi, newBounds.getWidth());
             });
 
@@ -140,13 +143,17 @@ public class GrilleController extends ManageController {
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
 
-        double paneHeight = gamePane.getHeight();
+        StackPane parent = (StackPane) gamePane.getParent();
+        double cellSize = Math.min(
+            (parent.getWidth()  - 40) / (nbColonnes + 1),
+            (parent.getHeight() - 40) / (nbLignes + 1)
+        );
 
-        double cellSize = Math.min(paneWidth / (nbColonnes + 1), paneHeight / (nbLignes + 1));
         double gridWidth  = cellSize * (nbColonnes + 1);
         double gridHeight = cellSize * (nbLignes + 1);
+
         gamePane.setPrefSize(gridWidth, gridHeight);
-        gamePane.setMaxSize(gridWidth, gridHeight);     
+        gamePane.setMaxSize(gridWidth, gridHeight);   
 
         gamePane.getChildren().clear();
 
