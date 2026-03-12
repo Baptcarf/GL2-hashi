@@ -268,8 +268,6 @@ public class SelectGrilleController extends ManageController {
 
         General.getDb().creerPartie(General.getIdUtilisateur(),General.getId_grille());
 
-        General.getHashi().remplirHistorique();
-
         this.changeScene(event);
 	}
 }

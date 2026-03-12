@@ -33,6 +33,7 @@ import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.InOut.Import;
 import hashiGRP3.Logic.Pont;
+import hashiGRP3.Logic.General;
 import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
 
@@ -122,6 +123,8 @@ public class GrilleController extends ManageController {
                 });
             }
         });
+
+        General.getHashi().remplirHistorique();
     }
 
     /*@Override
