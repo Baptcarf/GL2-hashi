@@ -407,7 +407,7 @@ public class DatabaseManager {
                 int valCoupApres = rs.getInt("val_coup_apres");
 
 
-                System.out.println()
+                System.out.println(nodeDep);
                 Ile dep = ha.getIleById(nodeDep);
                 Ile arr = ha.getIleById(nodeArr);
 
