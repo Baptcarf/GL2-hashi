@@ -98,9 +98,7 @@ public class ConnexionController extends ManageController {
         // Logique
         circle.setOnMouseClicked(event -> {
             if (sup) {
-
                 supprimerCompte(circle);
-
             } else {
                 VBox parentVBox = (VBox) circle.getParent();
                 Label lab = null;
@@ -124,29 +122,12 @@ public class ConnexionController extends ManageController {
         return circle;
     }
 
-    /**
-     * Ajoute un cercle de connexion à la page d'accueil.
-     */
-    @FXML
-    private void addCount() {
-        if (nbCount < 5) {
-            endSupp();
 
-            Circle circle = createCircle("#eaf5ff");
 
-            this.creerUtilisateur(circle);
-
-        }
-
-	/**
-	 * Créer le conteneur d'utilisateur.
-	 */
-        private void createBoxUser(Circle c, String val) {
 
     @FXML
     private void enleverMessage() {
         labelCreer.setVisible(false);
-
     }
 
     private void creerUtilisateur(Circle c) {
@@ -173,25 +154,6 @@ public class ConnexionController extends ManageController {
         });
     
 
-
-		// Parcours les enfants du VBox
-		for (Node node : parentVBox.getChildren()) {
-			if (node instanceof Label) {
-				lab = (Label) node;
-				break;
-			}
-		}
-
-		setUtilisateur(lab.getText());
-
-		supprimerCompte(circle);
-
-		} else {
-			getSceneManager().changeScene("accueil");
-		}
-
-                // Retour
-                return circle;
         }
 
         /**
@@ -222,12 +184,10 @@ public class ConnexionController extends ManageController {
         }
 
         private void appliqueCouleur(Color c) {
-                String couleurCSS = colorToString(c);
+        	String couleurCSS = colorToString(c);
 
-                String value = String.format("-fx-background-color:%s;", couleurCSS);
-                getSceneManager().findScene("connexion").getRoot()
-                                .setStyle(value);
-
+        	String value = String.format("-fx-background-color:%s;", couleurCSS);
+         				hbox.getScene().getRoot().setStyle(value); 
         }
 
         @FXML
@@ -272,7 +232,7 @@ public class ConnexionController extends ManageController {
                 });
 
                 bo.setOnAction(ev -> {
-                        DatabaseManager db = getSceneManager().getBD();
+                        DatabaseManager db = General.getDb();
 
                         VBox parentVBox = (VBox) circle.getParent();
                         Label lab = null;
@@ -306,34 +266,5 @@ public class ConnexionController extends ManageController {
                         labelCreer.setVisible(true);
                 }
 
-        }
-
-        @FXML
-        private void enleverMessage() {
-                labelCreer.setVisible(false);
-
-        }
-
-        private void creerUtilisateur(Circle c) {
-                CreerUtilisateur dialog = new CreerUtilisateur();
-
-                dialog.showAndWait(hbox.getScene().getWindow()).ifPresent(result -> {
-                        DatabaseManager db = getSceneManager().getBD();
-
-                        db.insertUser(result.pseudo(), colorToString(result.color()));
-                        c.setFill(result.color());
-                        createBoxUser(c, result.pseudo());
-
-                        nbCount++;
-                        if (nbCount == 5) {
-                                creer.setFill(Color.web("#DFDFDFDF"));
-                        }
-
-                        if (result.isNewPlayer()) {
-                                getSceneManager().changeScene("selectTutoriel");
-                        } else {
-                                getSceneManager().changeScene("accueil");
-                        }
-                });
         }
 }

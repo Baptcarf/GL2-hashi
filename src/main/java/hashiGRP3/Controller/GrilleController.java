@@ -118,11 +118,11 @@ public class GrilleController extends ManageController {
         });
     }
 
-    @Override
+    /*@Override
     protected void changeScene(ActionEvent event) {
         stop_timer();
         super.changeScene(event);
-    }
+    }*/
 
     // Démarre le timer
     public void start_timer() {
