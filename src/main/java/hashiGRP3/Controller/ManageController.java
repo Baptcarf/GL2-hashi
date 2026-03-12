@@ -5,9 +5,7 @@ package hashiGRP3.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import hashiGRP3.DatabaseManager;
 import hashiGRP3.SceneManager;
-
 import hashiGRP3.Logic.General;
 
 /**
@@ -15,7 +13,10 @@ import hashiGRP3.Logic.General;
  */
 public class ManageController {
 
+    /** Gestionnaire de scènes pour naviguer entre les différentes vues. */
     private SceneManager sceneManager;
+    
+    /** Pseudo de l'utilisateur actuellement connecté. */
     private static String utilisateur;
 
     /**
@@ -44,7 +45,7 @@ public class ManageController {
     /**
      * Changement de scène depuis un fichier fxml, retour en arrière.
      * 
-     * @param event
+     * @param event : Un événement reçu.
      */
     @FXML
     private void retourArriere(ActionEvent event) {
@@ -65,10 +66,20 @@ public class ManageController {
         return sceneManager;
     }
 
+    /**
+     * Setter du pseudo de l'utilisateur connecté
+     * 
+     * @param pseudo : le pseudo de l'utilisateur connecté
+     */
     public void setUtilisateur(String pseudo) {
         utilisateur = pseudo;
     }
 
+    /**
+     * Getter du pseudo de l'utilisateur connecté
+     * 
+     * @return le pseudo de l'utilisateur connecté
+     */
     public String getUtilisateur() {
         return utilisateur;
     }
@@ -83,8 +94,10 @@ public class ManageController {
 
     }
 
-    // méthode pour rafraîchir les scores (ex: après avoir complété une grille, ou
-    // après s'être connecté)
+    /**
+     * Méthode pour rafraîchir les scores (ex: après avoir complété une grille, ou
+     * après s'être connecté)
+     */
     public void refreshGrilles() {
     }
 }

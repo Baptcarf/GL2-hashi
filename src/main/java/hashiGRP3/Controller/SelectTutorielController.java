@@ -1,5 +1,7 @@
+//Attribut au packet
 package hashiGRP3.Controller;
 
+// Imports
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,34 +9,48 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/** Contrôleur pour la scène de sélection du tutoriel.
+ * Permet à l'utilisateur de voir  l'état des niveaux (bloqué, débloqué, complété),
+ * et de les sélectionner pour les jouer.
+ * Hérite de ManageController pour bénéficier des fonctionnalités de navigation entre les scènes
+ */
 public class SelectTutorielController extends ManageController {
-
-    /* ==================== ÉTATS LVL ==================== */
-
+    
+    /** États possibles pour chaque niveau. 
+     * LOCKED : niveau bloqué, non accessible
+     * UNLOCKED : niveau débloqué, accessible mais pas encore complété
+     * COMPLETED : niveau complété, accessible et marqué comme terminé
+    */
     private enum LevelState {
-        LOCKED,        // Niveau bloqué
-        UNLOCKED,      // Niveau accessible mais pas encore fait
-        COMPLETED      // Niveau terminé
+        LOCKED,       
+        UNLOCKED,     
+        COMPLETED      
     }
 
 
+    /** Pane défilant contenant les niveaux. */
     @FXML
     private ScrollPane scrollPane;
 
-
+    /** Liste des niveaux. */
     private final List<HBox> levels = new ArrayList<>();
+
+    /** Liste des états des niveaux. */
     private final List<LevelState> states = new ArrayList<>();
 
-
+    /** Images pour les différents états des niveaux. 
+     * imgLocked : image pour les niveaux bloqués
+     * imgLockOpen : image pour les niveaux débloqués
+     * imgCompleted : image pour les niveaux complétés
+    */
     private Image imgLocked;
     private Image imgLockOpen;
     private Image imgCompleted;
 
-
+    /** Initialiser le contrôleur. */
     @FXML
     public void initialize() {
         loadImages();
@@ -43,7 +59,7 @@ public class SelectTutorielController extends ManageController {
         setupProgression();
     }
 
-    //Charger les images pour les différents états des niveaux
+    /** Charger les images pour les différents états des niveaux. */
     private void loadImages() {
         imgLocked = new Image(
             SelectTutorielController.class
@@ -64,7 +80,7 @@ public class SelectTutorielController extends ManageController {
         );
     }
 
-    // Récupérer les HBox représentant les niveaux à partir du ScrollPane
+    /** Récupérer les HBox représentant les niveaux à partir du ScrollPane. */
     private void collectLevels() {
         VBox content = (VBox) scrollPane.getContent();
 
@@ -75,7 +91,7 @@ public class SelectTutorielController extends ManageController {
         });
     }
 
-    // Initialiser les états des niveaux (seul le premier est débloqué au départ)
+    /** Initialiser les états des niveaux. */
     private void initLevels() {
         states.clear();
 
@@ -87,7 +103,7 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
-    // Configurer les actions des boutons pour gérer la progression
+    /** Configurer les actions des boutons pour gérer la progression. */
     private void setupProgression() {
         for (int i = 0; i < levels.size(); i++) {
             final int index = i;
@@ -96,14 +112,20 @@ public class SelectTutorielController extends ManageController {
     }
 
 
-    // Gérer le clic sur un niveau : si débloqué, le marquer comme complété et débloquer le suivant
+    /**
+     * Gérer le clic sur un niveau : si débloqué, le marquer comme complété et débloquer le suivant
+     * @param index : l'index du niveau cliqué dans la liste des niveaux
+     */
     private void onLevelClicked(int index) {
         if (states.get(index) == LevelState.LOCKED) return;
 
         completeLevel(index);
     }
 
-    // Marquer un niveau comme complété et débloquer le suivant si nécessaire
+    /**
+     * Marquer un niveau comme complété et débloquer le suivant si nécessaire
+     * @param index : l'index du niveau à marquer comme complété
+     */
     private void completeLevel(int index) {
         if (states.get(index) == LevelState.COMPLETED) return;
 
@@ -120,6 +142,11 @@ public class SelectTutorielController extends ManageController {
 
 
     // Appliquer le style et l'image appropriés à un niveau en fonction de son état
+    /**
+     * Appliquer le style et l'image appropriés à un niveau en fonction de son état
+     * @param level : la HBox représentant le niveau à mettre à jour
+     * @param state : l'état à appliquer au niveau (LOCKED, UNLOCKED, COMPLETED)
+     */
     private void applyState(HBox level, LevelState state) {
         Button btn = getButton(level);
         ImageView img = getImage(level);
@@ -143,11 +170,20 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
-
+    /**
+     * getter du bouton d'une HBox de niveau
+     * @param level : la HBox représentant le niveau dont on veut récupérer le bouton
+     * @return le Button contenu dans la HBox du niveau
+     */
     private Button getButton(HBox level) {
         return (Button) level.getChildren().get(0);
     }
 
+    /**
+     * getter de l'image d'une HBox de niveau
+     * @param level : la HBox représentant le niveau dont on veut récupérer l'image
+     * @return l'ImageView contenu dans la HBox du niveau
+     */
     private ImageView getImage(HBox level) {
         return (ImageView) level.getChildren().get(1);
     }

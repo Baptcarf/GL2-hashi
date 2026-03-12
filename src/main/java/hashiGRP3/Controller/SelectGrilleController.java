@@ -1,8 +1,8 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-import javafx.event.ActionEvent;
 //Imports
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,58 +13,87 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
-
 import hashiGRP3.DatabaseManager;
 import hashiGRP3.Logic.General;
 
+/**
+ * Contrôleur pour la scène de sélection de grille. Permet à l'utilisateur de choisir une grille à jouer,
+ * d'afficher les détails de la grille sélectionnée, et de lancer le jeu avec la grille choisie.
+ * Permet également d'afficher le leaderboard pour chaque grille.
+ * Hérite de ManageController pour bénéficier des fonctionnalités de navigation entre les scènes
+ */
 public class SelectGrilleController extends ManageController {
 
-    /* ===================== DATABASE ===================== */
 
+    /** Gestionnaire de base de données pour accéder aux informations sur les grilles. */
     private DatabaseManager databaseManager = new DatabaseManager();
 
-    /* ===================== LEADERBOARD ===================== */
+    /* ===================== LABELS ===================== */
 
+    /** Label affichant la grille sélectionnée. */
     @FXML
     private Label labelGrilleSelected;
+
+    /** Image affichée à côté du label de la grille sélectionnée. */
     @FXML
     private ImageView imageGrilleSelected;
+
+    /** Label affichant le nombre d'îles dans la grille sélectionnée. */
     @FXML
     private Label labelNombreIle;
+
+    /** Label affichant le temps personnel pour la grille sélectionnée. */
     @FXML
     private Label labelTempsPerso;
+
+    /** Label affichant le score 1 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore1;
+
+    /** Label affichant le score 2 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore2;
+
+    /** Label affichant le score 3 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore3;
+
+    /** Label affichant le score 4 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore4;
+
+    /** Label affichant le score 5 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore5;
 
-    /* ===================== BOUTTONS ===================== */
+    /*================================================================ */
 
+
+    /** Bouton pour lancer la grille sélectionnée. */
     @FXML
     private Button boutonJouer;
 
     /* ===================== SECTION DES GRILLES ===================== */
 
+    /** GridPane contenant les grilles faciles. */
     @FXML
     private GridPane grilleFacile;
+
+    /** GridPane contenant les grilles moyennes. */
     @FXML
     private GridPane grilleMoyen;
+
+    /** GridPane contenant les grilles difficiles. */
     @FXML
     private GridPane grilleDifficile;
 
-    private static final int COLONNES = 5;
+    /** Nombre de colonnes dans les GridPane de grilles. */
+    private static int COLONNES = 5;
 
+    //* Initialise les éléments de la scène */
     @FXML
     public void initialize() {
         General.setId_grille(1);
-        // Plus d'appel à afficherGrilleSelectionnee ici
-        // Plus de boutonJouer.setDisable ici (géré dans refreshGrilles)
         creerGrilles(grilleFacile, 1, 4, "sectionFacile");
         creerGrilles(grilleMoyen, 5, 8, "sectionMoyen");
         creerGrilles(grilleDifficile, 9, 12, "sectionDifficile");
@@ -72,8 +101,10 @@ public class SelectGrilleController extends ManageController {
         boutonJouer.setDisable(true);
     }
 
-    /* ===================== GRILLES ===================== */
-
+    /** Rafraîchit les grilles affichées.
+     * Permet de mettre à jour les informations affichées (score personnel, leaderboard)
+     * après que l'utilisateur ait complété une grille ou se soit connecté.
+     */
     @Override
     public void refreshGrilles() {
         grilleFacile.getChildren().clear();
@@ -89,6 +120,15 @@ public class SelectGrilleController extends ManageController {
         boutonJouer.setDisable(true);
     }
 
+    /**
+     * Crée les cartes de grille et les ajoute au conteneur spécifié.
+     * Chaque carte de grille contient un titre, une image cliquable pour sélectionner la grille,
+     * et un label pour afficher le score si la grille est complétée.
+     * @param container : le GridPane dans lequel ajouter les cartes de grille
+     * @param debut : le numéro de la première grille à créer
+     * @param fin : le numéro de la dernière grille à créer
+     * @param styleClass : la classe CSS à appliquer aux boutons de grille pour le style
+     */
     private void creerGrilles(GridPane container,
             int debut,
             int fin,
@@ -110,6 +150,10 @@ public class SelectGrilleController extends ManageController {
         }
     }
 
+    /**
+     * Affiche les détails de la grille sélectionnée :  le nombre d'îles et le score personnel,
+     * @param numeroGrille : le numéro de la grille sélectionnée
+     */
     private void afficherGrilleSelectionnee(int numeroGrille) {
 
         labelGrilleSelected.setText("Grille " + numeroGrille);
@@ -124,6 +168,13 @@ public class SelectGrilleController extends ManageController {
         chargerLeaderboard(numeroGrille);
     }
 
+    /**
+     * Crée une carte de grille avec un titre, une image cliquable pour sélectionner la grille,
+     * et un label pour afficher le score si la grille est complétée.
+     * @param numeroGrille : le numéro de la grille à représenter
+     * @param styleClass : la classe CSS à appliquer au bouton de la grille pour le style
+     * @return une VBox représentant la carte de la grille
+     */
     private VBox creerCarteGrille(int numeroGrille, String styleClass) {
 
         VBox box = new VBox(10);
@@ -166,13 +217,12 @@ public class SelectGrilleController extends ManageController {
             score.setManaged(true);
         }
 
-        // Utiliser un StackPane pour superposer le score sur le bouton sans affecter la
-        // hauteur
+        // Utiliser un StackPane pour superposer le score sur le bouton sans affecter la hauteur
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(bouton);
         stackPane.getChildren().add(score);
         StackPane.setAlignment(score, Pos.BOTTOM_CENTER);
-        StackPane.setMargin(score, new Insets(0, 0, -15, 0)); // Descendre le score de 15 pixels
+        StackPane.setMargin(score, new Insets(0, 0, -15, 0)); 
 
         box.getChildren().addAll(titre, stackPane);
 
@@ -220,9 +270,4 @@ public class SelectGrilleController extends ManageController {
 
         this.changeScene(event);
 	}
-
-    private boolean grilleCompletee(int numeroGrille) {
-        // TODO : vérifier dans la base de données
-        return false;
-    }
 }
