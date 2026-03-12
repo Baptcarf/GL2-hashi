@@ -8,20 +8,27 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
+import hashiGRP3.Logic.Aide.IndiceResultat;
+import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -29,20 +36,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
-
 
 /* Class */
 public class GrilleController extends ManageController {
 
 	//Var
 	private Hashi hashi;
-	boolean gagne = false;
+	private MoteurIndice moteurIndice;
 
     AnimationTimer animationTimer;
     double startup;
@@ -76,7 +76,7 @@ public class GrilleController extends ManageController {
     @FXML
     public void initialize() {
 	    //On charge une grille
-        URL url = getClass().getResource("/hashiGRP3/7x7/hashi1.txt");
+        URL url = getClass().getResource("/hashiGRP3/10x10/hashi3.txt");
         if (url == null) {
             System.err.println("Fichier hashi2.txt non trouvé dans les ressources !");
             return;
@@ -88,6 +88,7 @@ public class GrilleController extends ManageController {
             chemin = Path.of(url.toURI());
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesConflits();
+            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation()));
             undoButton.setDisable(true);
             redoButton.setDisable(true);
             // Quand on change la taille on redessine
@@ -285,13 +286,25 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onHintClick() {
-
         Label title = createTitle("Indice");
 
-        Text hintText = new Text("lorem ipsum dolor sit amet, consectetur adipiscing elit...");
-        hintText.setWrappingWidth(180);
+        Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
 
-        updateSidePanel(title, new Separator(), hintText);
+        System.out.println(resultat);
+
+        if (resultat.isEmpty()) {
+            Text msg = new Text("Aucun indice disponible pour le moment.");
+            updateSidePanel(title, new Separator(), msg);
+            return;
+        }
+
+        IndiceResultat indice = resultat.get();
+
+        Label techniqueName = new Label(indice.getNomTechnique());
+        techniqueName.setWrapText(true);
+        Text explication = new Text(indice.getExplication());
+
+        updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
 
