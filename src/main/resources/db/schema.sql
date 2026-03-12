@@ -3,7 +3,8 @@
 CREATE TABLE Utilisateur(
         id_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
         pseudo VARCHAR(50) NOT NULL UNIQUE, 
-        couleur VARCHAR(7) NOT NULL -- La couleur du compte
+        couleur VARCHAR(7) NOT NULL, -- La couleur du compte
+        id_avancement_tutoriel INT NOT NULL -- Le niveau de tutoriel atteint par l'utilisateur
 );
 
 -- Table des grilles présent dans le jeu

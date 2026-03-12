@@ -128,6 +128,11 @@ public class SceneManager {
             comp.getController().refreshGrilles();
         }
 
+        if (name.equals("selectTutoriel")) {
+            Composante comp = findComposant("selectTutoriel");
+            comp.getController().refreshGrilles();
+        }
+
         //   On swap uniquement le contenu dans le StackPane racine
         // Le fullscreen n'est jamais interrompu
         rootContainer.getChildren().setAll(c.getRoot());

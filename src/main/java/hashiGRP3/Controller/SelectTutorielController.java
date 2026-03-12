@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
+import hashiGRP3.Logic.General;
+
 /** Contrôleur pour la scène de sélection du tutoriel.
  * Permet à l'utilisateur de voir  l'état des niveaux (bloqué, débloqué, complété),
  * et de les sélectionner pour les jouer.
@@ -55,8 +57,8 @@ public class SelectTutorielController extends ManageController {
     public void initialize() {
         loadImages();
         collectLevels();
-        initLevels();
-        setupProgression();
+        // Ne pas charger la progression ici - ce sera fait dans refreshGrilles()
+        // quand on arrivera vraiment sur la scène avec un utilisateur connecté
     }
 
     /** Charger les images pour les différents états des niveaux. */
@@ -103,6 +105,31 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
+    /**
+     * Charge la progression depuis la base de données et met à jour l'état des niveaux.
+     */
+    private void loadProgressionFromDatabase() {
+        // Vérifier que l'utilisateur est défini
+        String pseudo = getUtilisateur();
+        if (pseudo == null || pseudo.isEmpty()) {
+            return; // Utilisateur non défini, on initialise avec la valeur par défaut
+        }
+
+        int avancement = General.getDb().obtenirAvancementTutoriel(pseudo);
+
+        // Marquer tous les tutoriels jusqu'à l'avancement comme complétés
+        for (int i = 0; i < avancement && i < states.size(); i++) {
+            states.set(i, LevelState.COMPLETED);
+            applyState(levels.get(i), LevelState.COMPLETED);
+        }
+
+        // Débloquer le niveau suivant s'il existe
+        if (avancement < states.size()) {
+            states.set(avancement, LevelState.UNLOCKED);
+            applyState(levels.get(avancement), LevelState.UNLOCKED);
+        }
+    }
+
     /** Configurer les actions des boutons pour gérer la progression. */
     private void setupProgression() {
         for (int i = 0; i < levels.size(); i++) {
@@ -131,6 +158,9 @@ public class SelectTutorielController extends ManageController {
 
         states.set(index, LevelState.COMPLETED);
         applyState(levels.get(index), LevelState.COMPLETED);
+
+        // Enregistrer l'avancement dans la BD
+        General.getDb().incrementerAvancementTutoriel(getUtilisateur(), index + 1);
 
         if (index + 1 < states.size()
                 && states.get(index + 1) == LevelState.LOCKED) {
@@ -186,5 +216,15 @@ public class SelectTutorielController extends ManageController {
      */
     private ImageView getImage(HBox level) {
         return (ImageView) level.getChildren().get(1);
+    }
+
+    /**
+     * Rafraîchit la progression au moment de l'arrivée sur la scène.
+     */
+    @Override
+    public void refreshGrilles() {
+        initLevels();
+        loadProgressionFromDatabase();
+        setupProgression();
     }
 }

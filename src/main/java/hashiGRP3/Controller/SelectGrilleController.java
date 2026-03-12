@@ -163,7 +163,7 @@ public class SelectGrilleController extends ManageController {
                 "Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
 
         labelTempsPerso.setText(
-                "Score : " + databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s");
+                "Score : " + formatScore(databaseManager.obtenirScore(numeroGrille, getUtilisateur())));
 
         chargerLeaderboard(numeroGrille);
     }
@@ -212,7 +212,7 @@ public class SelectGrilleController extends ManageController {
         score.setManaged(false);
         if (databaseManager.grilleCompletee(numeroGrille, getUtilisateur())) {
             score.setText("Score : " +
-                    databaseManager.obtenirScore(numeroGrille, getUtilisateur()) + "s");
+                    formatScore(databaseManager.obtenirScore(numeroGrille, getUtilisateur())));
             score.setVisible(true);
             score.setManaged(true);
         }
@@ -251,7 +251,10 @@ public class SelectGrilleController extends ManageController {
 
         for (int i = 0; i < 5; i++) {
             if (i < top5.size()) {
-                labels[i].setText((i + 1) + ". " + top5.get(i));
+                String[] parts = top5.get(i).split(" ");
+                String pseudo = parts[0];
+                int score = Integer.parseInt(parts[1].replace("s", ""));
+                labels[i].setText((i + 1) + ". " + pseudo + " " + formatScore(score));
             } else {
                 labels[i].setText((i + 1) + ".");
             }
@@ -270,4 +273,11 @@ public class SelectGrilleController extends ManageController {
 
         this.changeScene(event);
 	}
+
+    private String formatScore(int score) {
+        int minutes = score / 60;
+        int secondes = score % 60;
+        return String.format("%02d:%02d", minutes, secondes);
+
+    }
 }
