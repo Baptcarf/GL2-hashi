@@ -12,12 +12,6 @@ import java.util.Map;
  */
 public class Ile {
 
-    /** Compteur statique pour générer des identifiants uniques pour les îles */
-    private static int compteurId = 0;
-
-    /** Identifiant unique de l'île */
-    private final int id;
-
     /** Coordonnées de l'île sur la grille, (0, 0) en haut à gauche */
     private final Coordonnees coordonnees;
 
@@ -27,6 +21,7 @@ public class Ile {
     /** Map associant chaque direction à un pont connecté à cette île */
     private Map<Direction, Pont> directionPonts;
 
+    
 
      /**
      * Construit une île avec des coordonnées et un nombre de ponts requis
@@ -45,7 +40,6 @@ public class Ile {
         if (coordonnees.x <0 || coordonnees.y < 0) {
             throw new IllegalArgumentException("Les coordonnées ne peuvent pas être négatives");
         }
-        this.id = ++compteurId;
         this.coordonnees = coordonnees;
         this.nbPontsRequis = nbPontsRequis;
         this.directionPonts = new HashMap<>();
@@ -146,8 +140,11 @@ public class Ile {
     /**
      * Retourne l'identifiant unique de cette île
      * @return l'identifiant unique de cette île
-     */
-    public int getId() {return id;}
+     * */
+    public int getId() {
+        return coordonnees.x * 1000 + coordonnees.y;
+    }
+
     
     /**
      * Vérifie l'égalité entre cette île et un autre objet
@@ -168,9 +165,9 @@ public class Ile {
      * 
      * @return le code de hachage de cette île
      */
-    @Override
+    @Override    
     public int hashCode() {
-        return java.util.Objects.hash(coordonnees, id);
+        return java.util.Objects.hash(coordonnees);
     }
 
     /**
@@ -182,7 +179,7 @@ public class Ile {
      */
     @Override
     public String toString() {
-        return "Ile n°" + id + "|" + coordonnees + ", (" + getNbPontsActuels() + "/" + nbPontsRequis + ") ponts connecté\n"  
+        return "Ile n°" + getId() + "|" + coordonnees + ", (" + getNbPontsActuels() + "/" + nbPontsRequis + ") ponts connecté\n"  
                 + directionPonts;
     }
 

@@ -15,6 +15,7 @@ import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 import hashiGRP3.compDB.*;
+import hashiGRP3.Logic.General;
 
 /* Classe pour la gestion de la base de donnée. */
 public class DatabaseManager {
@@ -80,39 +81,42 @@ public class DatabaseManager {
     }
 
 
-    public void creerPartie(int id_utilisateur, int id_grille) {
-        int idPartie = -1;
+    public int creerPartie(int id_utilisateur, int id_grille) {
 
-        String sqlCheck = "SELECT id_partie FROM Partie WHERE id_utilisateur = ? AND id_grille = ? AND statut = 1 LIMIT 1";
-        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut) VALUES (?, ?, ?)";
+    String sqlCheck = "SELECT id_partie FROM Partie WHERE id_utilisateur = ? AND id_grille = ? ORDER BY id_partie DESC LIMIT 1";
+    String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut) VALUES (?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(URL)) {
+    try (Connection conn = DriverManager.getConnection(URL)) {
 
-            try (PreparedStatement psCheck = conn.prepareStatement(sqlCheck)) {
-                psCheck.setInt(1, id_utilisateur);
-                psCheck.setInt(2, id_grille);
-
-                try (ResultSet rs = psCheck.executeQuery()) {
-                    if (rs.next()) {
-                        return ;
-                    }
+        // Si une partie existe déjà, on la retourne directement
+        try (PreparedStatement psCheck = conn.prepareStatement(sqlCheck)) {
+            psCheck.setInt(1, id_utilisateur);
+            psCheck.setInt(2, id_grille);
+            try (ResultSet rs = psCheck.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_partie");
                 }
             }
+        }
 
-            try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
-                psInsert.setInt(1, id_utilisateur);
-                psInsert.setInt(2, id_grille);
-                psInsert.setInt(3, 1); // statut = 1 pour "en cours"
+        // Sinon on en crée une nouvelle
+        try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
+            psInsert.setInt(1, id_utilisateur);
+            psInsert.setInt(2, id_grille);
+            psInsert.setInt(3, 1);
+            psInsert.executeUpdate();
 
-                int affectedRows = psInsert.executeUpdate();
-                if (affectedRows == 0) {
-                    throw new SQLException("La création de la partie a échoué, aucune ligne insérée.");
+            try (ResultSet rs = psInsert.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
                 }
             }
+        }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public void creerGrille(int niveau, String nomGrille, int nbIle) {
@@ -386,45 +390,42 @@ public class DatabaseManager {
         return -1;
     }
 
+    // Dans DatabaseManager
     public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha, int id_grille) {
 
+        for (Pont pont : ha.getPonts()) {
+            pont.setEtatActuel(EtatDuPont.VIDE);
+        }
+
+        int idPartie = General.getId_partie();
+
+        if (idPartie == -1) return;
+
         String sql = """
-            SELECT node_dep,node_arr,val_coup_avant,val_coup_apres
-            FROM Coup 
-            JOIN Partie p ON p.id_partie = coup.id_partie
-            WHERE id_utilisateur = ? AND id_grille = ?
+            SELECT node_dep, node_arr, val_coup_avant, val_coup_apres
+            FROM Coup
+            WHERE id_partie = ?
             ORDER BY num_coup
             """;
 
         try (Connection conn = DriverManager.getConnection(URL);
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, idUtilisateur);
-            ps.setInt(2, id_grille);
-
+            ps.setInt(1, idPartie);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
-                int nodeDep = rs.getInt("node_dep");
-                int nodeArr = rs.getInt("node_arr");
-                int valAvant = rs.getInt("val_coup_avant");
-                int valApres = rs.getInt("val_coup_apres");
-
-                Ile dep = ha.getIleById(nodeDep);
-                Ile arr = ha.getIleById(nodeArr);
-
+                Ile dep = ha.getIleById(rs.getInt("node_dep"));
+                Ile arr = ha.getIleById(rs.getInt("node_arr"));
                 if (dep == null || arr == null) continue;
 
                 Pont pont = ha.getPont(dep, arr);
+                if (pont == null) continue;
 
-                EtatDuPont avant = EtatDuPont.fromValue(valAvant);
-                EtatDuPont apres = EtatDuPont.fromValue(valApres);
+                EtatDuPont avant = EtatDuPont.fromValue(rs.getInt("val_coup_avant"));
+                EtatDuPont apres = EtatDuPont.fromValue(rs.getInt("val_coup_apres"));
 
-                // appliquer le coup sur la grille
                 pont.setEtatActuel(apres);
-
-                // reconstruire l'historique
                 h.ajouterActionNotSave(pont, avant, apres);
             }
 
@@ -435,67 +436,39 @@ public class DatabaseManager {
 
     public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres) {
 
-        String sql = "SELECT c.num_coup, p.id_partie\r\n" + //
-                "FROM Coup c\r\n" + //
-                "JOIN Partie p ON c.id_partie = p.id_partie\r\n" + //
-                "WHERE p.id_utilisateur = ?\r\n" + //
-                "AND p.id_grille = ?\r\n" + //
-                "ORDER BY c.num_coup DESC\r\n" + //
-                "LIMIT 1";
+    int idPartie = General.getId_partie();
+    if (idPartie == -1) {
+        System.err.println("Aucune partie active !");
+        return;
+    }
 
-        try (Connection conn = DriverManager.getConnection(URL);
-                PreparedStatement ps = conn.prepareStatement(sql)) {
+    // Trouver le prochain num_coup
+    String sqlMax = "SELECT COALESCE(MAX(num_coup), -1) + 1 AS next_num FROM Coup WHERE id_partie = ?";
+    String sqlInsert = "INSERT INTO Coup VALUES (?, ?, ?, ?, ?, ?)";
 
-            ps.setInt(1, id_utilisateur);
-            ps.setInt(2, id_grille);
+    try (Connection conn = DriverManager.getConnection(URL)) {
 
-
-
-            int numCoup = 1;
-            int idPartie = -1;
-
+        int numCoup = 0;
+        try (PreparedStatement ps = conn.prepareStatement(sqlMax)) {
+            ps.setInt(1, idPartie);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    numCoup = rs.getInt("num_coup") + 1;
-                    idPartie = rs.getInt("id_partie");
-                }
+                if (rs.next()) numCoup = rs.getInt("next_num");
             }
+        }
 
-            // Cas où aucun coup n'existe encore pour cette partie
-            if (idPartie == -1) {
-                String sqlPartie = "SELECT id_partie FROM Partie WHERE id_utilisateur = ? AND id_grille = ? AND statut = 1 LIMIT 1";
-                try (PreparedStatement ps2 = conn.prepareStatement(sqlPartie)) {
-                    ps2.setInt(1, id_utilisateur);
-                    ps2.setInt(2, id_grille);
-                    try (ResultSet rs2 = ps2.executeQuery()) {
-                        if (rs2.next()) {
-                            idPartie = rs2.getInt("id_partie");
-                            numCoup = 0; // premier coup
-                        } else {
-                            throw new SQLException("Aucune partie active trouvée pour cet utilisateur et cette grille");
-                        }
-                    }
-                }
-            }
-            sql = "INSERT INTO COUP VALUES (?,?,?,?,?,?)";
+        try (PreparedStatement ps = conn.prepareStatement(sqlInsert)) {
+            ps.setInt(1, idPartie);
+            ps.setInt(2, numCoup);
+            ps.setInt(3, id_dep);
+            ps.setInt(4, id_arr);
+            ps.setInt(5, valCoupAvant);
+            ps.setInt(6, valCoupApres);
+            ps.executeUpdate();
+        }
 
-            try (PreparedStatement ps3 = conn.prepareStatement(sql)) {
-
-                ps3.setInt(1, idPartie);
-                ps3.setInt(2, numCoup);
-                ps3.setInt(3, id_dep);
-                ps3.setInt(4, id_arr);
-                ps3.setInt(5, valCoupAvant);
-                ps3.setInt(6, valCoupApres);
-
-                ps3.executeUpdate();
-
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-
     }
 
     /**

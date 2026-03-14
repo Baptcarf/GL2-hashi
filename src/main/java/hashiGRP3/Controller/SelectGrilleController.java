@@ -265,11 +265,10 @@ public class SelectGrilleController extends ManageController {
      */
     @FXML
     public void lancerGrille(ActionEvent event) {
-
-        General.getDb().creerPartie(General.getIdUtilisateur(),General.getId_grille());
-
+        int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getId_grille());
+        General.setId_partie(idPartie);
         this.changeScene(event);
-	}
+    }
 
     private String formatScore(int score) {
         int minutes = score / 60;

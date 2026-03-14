@@ -1,9 +1,5 @@
-//Attribut au packet
 package hashiGRP3.Controller;
 
-
-
-//Imports
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -21,6 +17,8 @@ import hashiGRP3.Logic.Pont;
 import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
+import javafx.beans.value.ChangeListener;
+import javafx.geometry.Bounds;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,30 +35,22 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-
-/* Class */
 public class GrilleController extends ManageController {
 
-	//Var
-	private Hashi hashi;
-	private MoteurIndice moteurIndice;
+    // ← ICI au niveau de la classe, pas dans une méthode
+    private Hashi hashi;
+    private MoteurIndice moteurIndice;
+    private ChangeListener<Bounds> boundsListener;
 
     AnimationTimer animationTimer;
     double startup;
 
-    @FXML
-    private VBox sidePanel; 
-
-    @FXML
-    private Pane gamePane; 
-
-    @FXML
-    private Label timer;
-
-    @FXML
-    private Label win;
-    @FXML
-    private Button undoButton;
+    @FXML private VBox sidePanel;
+    @FXML private Pane gamePane;
+    @FXML private Label timer;
+    @FXML private Label win;
+    @FXML private Button undoButton;
+    @FXML private Button redoButton;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
         KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
@@ -71,14 +61,7 @@ public class GrilleController extends ManageController {
     private boolean konamiActivated = false;
 
     @FXML
-    private Button redoButton;
-
-    /** Initialisation de la grille */
-    @FXML
     public void initialize() {
-        
-        
-        //On init un timer
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
@@ -102,95 +85,66 @@ public class GrilleController extends ManageController {
         });
     }
 
-    /**
-     * Charge la grille basée sur le numéro sélectionné dans General.getId_grille()
-     */
     private void chargerGrille() {
         int gridId = General.getId_grille();
-        
-        
+
         int folderIndex = (gridId - 1) / 5;
         String[] folders = {"7x7", "10x10", "12x12"};
         String folder = folders[folderIndex];
-        
         int fileNumber = ((gridId - 1) % 5) + 1;
-        
         String resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
-        
+
         URL url = getClass().getResource(resourcePath);
         if (url == null) {
-            System.err.println("Fichier " + resourcePath + " non trouvé dans les ressources !");
+            System.err.println("Fichier " + resourcePath + " non trouvé !");
             return;
         }
-        
-        Path chemin;
+
         try {
-            chemin = Path.of(url.toURI());
+            Path chemin = Path.of(url.toURI());
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
             moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation()));
-            undoButton.setDisable(true);
-            redoButton.setDisable(true);
+
+            General.setHashi(hashi);
+            hashi.remplirHistorique();
+
+            undoButton.setDisable(hashi.isUndoEmpty());
+            redoButton.setDisable(hashi.isRedoEmpty());
+
             StackPane parent = (StackPane) gamePane.getParent();
-            parent.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+
+            // Supprimer l'ancien listener avant d'en ajouter un nouveau
+            if (boundsListener != null) {
+                parent.layoutBoundsProperty().removeListener(boundsListener);
+            }
+            boundsListener = (obs, oldBounds, newBounds) -> {
                 drawGrid(hashi, newBounds.getWidth());
-            });
+            };
+            parent.layoutBoundsProperty().addListener(boundsListener);
+
+            drawGrid(hashi, parent.getWidth());
 
         } catch (URISyntaxException | java.io.IOException ex) {
-            System.err.println("Erreur au chargement de la grille : " + ex.getMessage());
+            System.err.println("Erreur au chargement : " + ex.getMessage());
         }
-
-        // Mettre à jour General avec la nouvelle instance de Hashi
-        General.setHashi(hashi);
-        
-        
-        // Remplir l'historique, en ignorant les erreurs si les données sont manquantes
-        try {
-            General.getHashi().remplirHistorique();
-        } catch (Exception ex) {
-            System.err.println("Attention : Impossible de charger l'historique pour cette grille : " + ex.getMessage());
-        }
-        
-        // Dessiner la grille immédiatement
-        drawGrid(hashi, gamePane.getWidth());
-        hashi.remplirHistorique();
-        drawGrid(hashi, gamePane.getWidth());
-
-        undoButton.setDisable(hashi.isUndoEmpty());
-        redoButton.setDisable(hashi.isRedoEmpty());
     }
 
-    /**
-     * Rafraîchit et charge la grille sélectionnée au moment d'arriver sur la scène
-     */
     @Override
     public void refreshGrilles() {
         chargerGrille();
     }
 
-    /*@Override
-    protected void changeScene(ActionEvent event) {
-        stop_timer();
-        super.changeScene(event);
-    }*/
-
-    /** Démarre le timer */
     public void start_timer() {
         startup = System.nanoTime();
         animationTimer.start();
     }
 
-    /** Stop le timer */
     public void stop_timer() {
         animationTimer.stop();
     }
 
-    /**
-     * Dessine la grille.
-     * @param hashi La grille à dessiner.
-     * @param paneWidth La taille du pane où on dessine la grille.
-     */
     private void drawGrid(Hashi hashi, double paneWidth) {
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
@@ -205,21 +159,19 @@ public class GrilleController extends ManageController {
         double gridHeight = cellSize * (nbLignes + 1);
 
         gamePane.setPrefSize(gridWidth, gridHeight);
-        gamePane.setMaxSize(gridWidth, gridHeight);   
+        gamePane.setMaxSize(gridWidth, gridHeight);
 
         gamePane.getChildren().clear();
 
         dessinerGrille(nbColonnes, nbLignes, cellSize);
         dessinerPonts(hashi, cellSize);
         dessinerIle(hashi, cellSize);
-        
+
         if (hashi.estGagne()) {
             win.setVisible(true);
         }
-
     }
 
-    /** Dessine le grillage d'arrière plan */
     private void dessinerGrille(int cols, int rows, double size) {
         for (int y = 0; y <= rows; y++) {
             for (int x = 0; x <= cols; x++) {
@@ -233,7 +185,6 @@ public class GrilleController extends ManageController {
         }
     }
 
-    /** Dessine les ponts */
     private void dessinerPonts(Hashi hashi, double size) {
         for (var pont : hashi.getPonts()) {
             pontGraphique pg = new pontGraphique(pont);
@@ -241,7 +192,6 @@ public class GrilleController extends ManageController {
         }
     }
 
-    /** Trigger function */
     private void onPontClicked(Pont pont) {
         hashi.jouer(pont);
         drawGrid(hashi, gamePane.getWidth());
@@ -249,15 +199,15 @@ public class GrilleController extends ManageController {
         undoButton.setDisable(hashi.isUndoEmpty());
     }
 
-    /** Dessine les ilots */
     private void dessinerIle(Hashi hashi, double size) {
         for (Ile island : hashi.getIles()) {
             ileGraphique ig = new ileGraphique(island);
             gamePane.getChildren().add(ig.draw(size));
         }
     }
+
     @FXML
-    private void onUndoClick(){
+    private void onUndoClick() {
         hashi.undo();
         drawGrid(hashi, gamePane.getWidth());
         undoButton.setDisable(hashi.isUndoEmpty());
@@ -265,7 +215,7 @@ public class GrilleController extends ManageController {
     }
 
     @FXML
-    private void onRedoClick(){
+    private void onRedoClick() {
         hashi.redo();
         drawGrid(hashi, gamePane.getWidth());
         redoButton.setDisable(hashi.isRedoEmpty());
@@ -279,82 +229,60 @@ public class GrilleController extends ManageController {
         undoButton.setDisable(true);
         redoButton.setDisable(true);
     }
-    /* Panel Hypothese */
+
     @FXML
     protected void onHypothesisClick() {
         Label title = createTitle("Mode Hypothèse");
-        
         Text desc = new Text("lorem ipsum dolor sit amet, consectetur adipiscing");
         desc.setWrappingWidth(180);
-
         Button btnValidate = new Button("Valider");
         Button btnCancel = new Button("Annuler");
-
-        btnValidate.setStyle(" -fx-text-fill: #005500;");
-        btnCancel.setStyle(" -fx-text-fill: #8b0000;");
-        
+        btnValidate.setStyle("-fx-text-fill: #005500;");
+        btnCancel.setStyle("-fx-text-fill: #8b0000;");
         btnValidate.setMaxWidth(Double.MAX_VALUE);
         btnCancel.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(btnValidate, Priority.ALWAYS);
         HBox.setHgrow(btnCancel, Priority.ALWAYS);
-
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
-
-        //Update Panel
         updateSidePanel(title, desc, buttonBox);
     }
 
     @FXML
     protected void onCheckClick() {
-
         Label title = createTitle("Vérification");
-        
         Label status = new Label("Il y a X erreurs sur la grille.");
         status.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-
         Text question = new Text("Voulez-vous revenir au dernier état sans erreur ?");
         question.setWrappingWidth(180);
-
         Button btnYes = new Button("Oui");
         Button btnNo = new Button("Non");
-        
         btnYes.setStyle("-fx-base: #f0f0f0;");
         btnNo.setStyle("-fx-base: #f0f0f0;");
         btnYes.setPrefWidth(80);
         btnNo.setPrefWidth(80);
-
         HBox actionBox = new HBox(10, btnYes, btnNo);
-
         updateSidePanel(title, status, new Separator(), question, actionBox);
     }
 
     @FXML
     protected void onHintClick() {
         Label title = createTitle("Indice");
-
         Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
-
-        System.out.println(resultat);
-
         if (resultat.isEmpty()) {
             Text msg = new Text("Aucun indice disponible pour le moment.");
             updateSidePanel(title, new Separator(), msg);
             return;
         }
-
         IndiceResultat indice = resultat.get();
-
         Label techniqueName = new Label(indice.getNomTechnique());
         techniqueName.setWrapText(true);
         Text explication = new Text(indice.getExplication());
-
         updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
-
     private void updateSidePanel(javafx.scene.Node... nodes) {
-        sidePanel.getChildren().clear(); 
-        sidePanel.getChildren().addAll(nodes); 
+        sidePanel.getChildren().clear();
+        sidePanel.getChildren().addAll(nodes);
     }
 
     private Label createTitle(String text) {

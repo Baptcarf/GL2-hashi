@@ -7,6 +7,7 @@ public class General {
     private static Hashi hashi = new Hashi();
     private static DatabaseManager db = new DatabaseManager();
     private static int id_grille = 0;
+    private static int id_partie = -1;
 
     public General() {
         db.init();
@@ -43,4 +44,7 @@ public class General {
 
 
 
+
+    public static int getId_partie() { return id_partie; }
+    public static void setId_partie(int id) { id_partie = id; }
 }
