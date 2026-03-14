@@ -110,6 +110,8 @@ public class GrilleController extends ManageController {
             General.setHashi(hashi);
             hashi.remplirHistorique();
 
+            win.setVisible(false);
+
             undoButton.setDisable(hashi.isUndoEmpty());
             redoButton.setDisable(hashi.isRedoEmpty());
 
