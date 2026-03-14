@@ -127,6 +127,7 @@ public class GrilleController extends ManageController {
         try {
             chemin = Path.of(url.toURI());
             hashi = Import.chargerFichier(chemin);
+            hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
             moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation()));
             undoButton.setDisable(true);
