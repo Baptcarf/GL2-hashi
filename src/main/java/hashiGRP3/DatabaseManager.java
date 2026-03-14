@@ -22,6 +22,7 @@ public class DatabaseManager {
 
     private static final String URL = "jdbc:sqlite:data/Hashi.db";
 
+
     /**
      * Constructeur
      */
@@ -583,6 +584,20 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void resetCoupPartie(){
+        String sql = "DELETE FROM Coup WHERE id_partie = ? ";
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, General.getId_partie());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

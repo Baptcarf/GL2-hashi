@@ -296,6 +296,7 @@ public class Hashi {
         for (Pont p : ponts) {
             p.setEtatActuel(EtatDuPont.VIDE);
         }
+        General.getDb().resetCoupPartie();
     }
 	
     // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
