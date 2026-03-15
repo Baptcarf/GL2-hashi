@@ -84,32 +84,51 @@ public class DatabaseManager {
 
     public int creerPartie(int id_utilisateur, int id_grille) {
 
-    String sqlCheck = "SELECT id_partie FROM Partie WHERE id_utilisateur = ? AND id_grille = ? ORDER BY id_partie DESC LIMIT 1";
+    String sqlCheck = "SELECT id_partie, statut FROM Partie WHERE id_utilisateur = ? AND id_grille = ? ORDER BY id_partie DESC LIMIT 1";
     String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut) VALUES (?, ?, ?)";
+
+    boolean reset = false;
+    int id_partie = -1;
+    boolean creer = true;
 
     try (Connection conn = DriverManager.getConnection(URL)) {
 
-        // Si une partie existe déjà, on la retourne directement
         try (PreparedStatement psCheck = conn.prepareStatement(sqlCheck)) {
             psCheck.setInt(1, id_utilisateur);
             psCheck.setInt(2, id_grille);
+
             try (ResultSet rs = psCheck.executeQuery()) {
+
                 if (rs.next()) {
-                    return rs.getInt("id_partie");
+
+                    if (rs.getInt("statut") == 2) {
+                        id_partie = rs.getInt("id_partie");
+                        creer = false;
+                        reset = true;
+
+                    } else {
+                        return rs.getInt("id_partie");
+                    }
                 }
             }
         }
 
-        // Sinon on en crée une nouvelle
-        try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
-            psInsert.setInt(1, id_utilisateur);
-            psInsert.setInt(2, id_grille);
-            psInsert.setInt(3, 1);
-            psInsert.executeUpdate();
+        // créer une nouvelle partie
+        if (creer) {
 
-            try (ResultSet rs = psInsert.getGeneratedKeys()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
+            try (PreparedStatement psInsert = conn.prepareStatement(sqlInsert, Statement.RETURN_GENERATED_KEYS)) {
+
+                psInsert.setInt(1, id_utilisateur);
+                psInsert.setInt(2, id_grille);
+                psInsert.setInt(3, 1);
+
+                psInsert.executeUpdate();
+
+                try (ResultSet rs = psInsert.getGeneratedKeys()) {
+
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
                 }
             }
         }
@@ -117,6 +136,14 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        if (reset) {
+            General.setId_partie(id_partie);
+            resetCoupPartie();
+            changeStatutPartie(1);
+            return id_partie;
+        }
+
         return -1;
     }
 
@@ -391,7 +418,6 @@ public class DatabaseManager {
         return -1;
     }
 
-    // Dans DatabaseManager
     public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha, int id_grille) {
 
         for (Pont pont : ha.getPonts()) {
@@ -592,6 +618,21 @@ public class DatabaseManager {
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, General.getId_partie());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void changeStatutPartie(int status){
+        String sql = "UPDATE Partie SET statut = ? WHERE id_partie = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, status);
+            pstmt.setInt(2, General.getId_partie());
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

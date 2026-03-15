@@ -244,7 +244,10 @@ public class Hashi {
                 return false;
             }
         }
+        General.getDb().changeStatutPartie(2);
+        
         return true;
+
     }
 
     /**
