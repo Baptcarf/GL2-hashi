@@ -43,7 +43,7 @@ public class TechniqueIsolation extends AbstractTechnique {
             int nbVoisins = 0;
 
             for (Pont p : voisin) {
-                if (p.pontEstPossible()) {
+                if (p.pontEstPossible() || !p.estCorrect()) {
                     nbVoisins++;
                 }
             }
