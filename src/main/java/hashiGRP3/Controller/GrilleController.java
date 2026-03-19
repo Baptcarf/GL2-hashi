@@ -9,16 +9,19 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -27,13 +30,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 
 
 /* Class */
@@ -217,7 +213,9 @@ public class GrilleController extends ManageController {
     protected void onHypothesisClick() {
         Label title = createTitle("Mode Hypothèse");
         
-        Text desc = new Text("lorem ipsum dolor sit amet, consectetur adipiscing");
+        hashi.setModeHypothese(true); 
+
+        Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
 
         Button btnValidate = new Button("Valider");
@@ -230,6 +228,19 @@ public class GrilleController extends ManageController {
         btnCancel.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(btnValidate, Priority.ALWAYS);
         HBox.setHgrow(btnCancel, Priority.ALWAYS);
+
+        btnValidate.setOnAction(e -> {
+            System.out.println("Hypothèse validée");
+            hashi.validerHypothese(); 
+            drawGrid(hashi, gamePane.getWidth()); 
+            sidePanel.getChildren().clear();
+        });
+        btnCancel.setOnAction(e -> {
+            System.out.println("Hypothèse annulée");
+            hashi.annulerHypothese();
+            drawGrid(hashi, gamePane.getWidth());
+            sidePanel.getChildren().clear();
+        });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
 
@@ -271,7 +282,6 @@ public class GrilleController extends ManageController {
 
         updateSidePanel(title, new Separator(), hintText);
     }
-
 
     private void updateSidePanel(javafx.scene.Node... nodes) {
         sidePanel.getChildren().clear(); 

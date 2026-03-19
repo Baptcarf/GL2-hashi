@@ -8,9 +8,6 @@ import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Pont;
 
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.DatabaseManager;
-
 /**
  * Gestionnaire d'historique pour les opérations de pose de ponts.
  * <p>
@@ -28,6 +25,7 @@ public class HistoriqueManager {
         final Pont pont;
         final EtatDuPont etatAvant;
         final EtatDuPont etatApres;
+        final boolean etatHypoAvant;
         private EnumSet<Mode> modes;
 
         /**
@@ -41,6 +39,7 @@ public class HistoriqueManager {
             this.pont = pont;
             this.etatAvant = etatAvant;
             this.etatApres = etatApres;
+            this.etatHypoAvant = pont.isEstHypothese();
             this.modes = modes;
         }
 
@@ -96,7 +95,6 @@ public class HistoriqueManager {
         undoStack.push(new Action(pont, avant, apres, modes));
         redoStack.clear(); // Nouvelle action = on perd le futur (redo)
     }
-    
 
 	/**/
     public void remplir() {
@@ -127,11 +125,12 @@ public class HistoriqueManager {
      * @return {@code true} si une action a été annulée, {@code false} si l'historique est vide.
      */
     public boolean undo() {
-        if (undoStack.isEmpty())
+        if (undoStack.isEmpty()) 
             return false;
-
+        
         Action action = undoStack.pop();
         action.pont.setEtatActuel(action.etatAvant);
+        action.pont.setEstHypothese(action.etatHypoAvant); 
         redoStack.push(action);
         return true;
     }
@@ -145,10 +144,12 @@ public class HistoriqueManager {
      * @return {@code true} si une action a été rétablie, {@code false} si la pile redo est vide.
      */
     public boolean redo() {
-        if (redoStack.isEmpty()) return false;
-        
+        if (redoStack.isEmpty()) 
+            return false;
+    
         Action action = redoStack.pop();
         action.pont.setEtatActuel(action.etatApres);
+        action.pont.setEstHypothese(action.isMode(Mode.TEMPORAIRE));
         undoStack.push(action);
         return true;
     }
@@ -174,6 +175,24 @@ public class HistoriqueManager {
      */
     public void clear() {
         undoStack.clear();
+        redoStack.clear();
+    }
+
+    public void confirmerHypothese(){
+        for (Action action : undoStack) {
+            if (action.isMode(Mode.TEMPORAIRE)) {
+                action.retireTemporaire();
+                action.getModes().add(Mode.HISTORIQUE);
+                action.pont.setEstHypothese(false);
+            }
+        }
+        redoStack.clear();
+    }
+
+    public void annulerHypothese(){
+        while (!undoStack.isEmpty() && undoStack.peek().isMode(Mode.TEMPORAIRE)) {
+            this.undo();
+        }
         redoStack.clear();
     }
 }

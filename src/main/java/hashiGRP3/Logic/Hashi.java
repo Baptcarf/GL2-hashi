@@ -2,13 +2,14 @@
 package hashiGRP3.Logic;
 
 //Imports
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.ArrayList;
+
 import hashiGRP3.Logic.Historique.HistoriqueManager;
 import hashiGRP3.Logic.Historique.Mode;
 
@@ -28,6 +29,8 @@ public class Hashi {
     private final HistoriqueManager historique = new HistoriqueManager();
     /** Id de l'utilisateur en cours */
     private int idUtilisateur;
+    /** True si le modeHypoothese est actif, false sinon*/
+    private boolean modeHypothese = false;
 
     /**
      * Ajoute une île au plateau de jeu.
@@ -43,7 +46,6 @@ public class Hashi {
         taille = new Coordonnees(newX, newY);
     }
     
-
     /**
      * Trouve l'île voisine d'une île donnée dans une direction spécifiée.
      * 
@@ -241,7 +243,9 @@ public class Hashi {
         EtatDuPont apres = pont.getEtatActuel();
         
         if (avant != apres) {
-            historique.ajouterAction(pont, avant, apres, EnumSet.of(Mode.HISTORIQUE)); //EnumSet à voir si c'est la bonne valeur
+            Mode modeCoup = modeHypothese ? Mode.TEMPORAIRE : Mode.HISTORIQUE;//peut-être changer, pour adapter au mode "ERREUR"
+            historique.ajouterAction(pont, avant, apres, EnumSet.of(modeCoup));
+            pont.setEstHypothese(this.modeHypothese);
         }
     }
     
@@ -261,6 +265,20 @@ public class Hashi {
         return historique.redo();
     }
 
+    public void setModeHypothese(boolean actif) {
+        this.modeHypothese = actif;
+    }
+
+    public void validerHypothese() {
+        historique.confirmerHypothese();
+        this.setModeHypothese(false);
+    }
+
+    public void annulerHypothese() {
+        historique.annulerHypothese();
+        setModeHypothese(false);
+    }
+
      // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
 
     public boolean isUndoEmpty() {
@@ -276,7 +294,7 @@ public class Hashi {
         }
     }
 
-public void remplirHistorique() {
+    public void remplirHistorique() {
         historique.remplir();
     }
 
