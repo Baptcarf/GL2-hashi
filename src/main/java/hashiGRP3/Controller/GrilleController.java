@@ -46,20 +46,25 @@ public class GrilleController extends ManageController {
     AnimationTimer animationTimer;
     double startup;
 
-    @FXML private VBox sidePanel;
-    @FXML private Pane gamePane;
-    @FXML private Label timer;
-    @FXML private Label win;
-    @FXML private Button undoButton;
-    @FXML private Button redoButton;
+    @FXML
+    private VBox sidePanel;
+    @FXML
+    private Pane gamePane;
+    @FXML
+    private Label timer;
+    @FXML
+    private Label win;
+    @FXML
+    private Button undoButton;
+    @FXML
+    private Button redoButton;
 
     private boolean onCheck = false;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
-        KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
-        KeyCode.Q, KeyCode.D, KeyCode.Q, KeyCode.D,
-        KeyCode.B, KeyCode.A
-    );
+            KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
+            KeyCode.Q, KeyCode.D, KeyCode.Q, KeyCode.D,
+            KeyCode.B, KeyCode.A);
     private int konamiIndex = 0;
     private boolean konamiActivated = false;
 
@@ -69,7 +74,7 @@ public class GrilleController extends ManageController {
             @Override
             public void handle(long currentTime) {
                 double t = (currentTime - startup) / 1000000000;
-                timer.setText("Chrono : " + (int)t);
+                timer.setText("Chrono : " + (int) t);
             }
         };
 
@@ -89,12 +94,12 @@ public class GrilleController extends ManageController {
     }
 
     private void chargerGrille() {
-        int gridId = General.getId_grille();
+        int grid_num = General.getNum_grille();
 
-        int folderIndex = (gridId - 1) / 5;
-        String[] folders = {"7x7", "10x10", "12x12"};
+        int folderIndex = (grid_num - 1) / 5;
+        String[] folders = { "7x7", "10x10", "12x12" };
         String folder = folders[folderIndex];
-        int fileNumber = ((gridId - 1) % 5) + 1;
+        int fileNumber = ((grid_num - 1) % 5) + 1;
         String resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
 
         URL url = getClass().getResource(resourcePath);
@@ -108,7 +113,7 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(),new TechniqueIsolation()));
+            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(), new TechniqueIsolation()));
 
             General.setHashi(hashi);
             hashi.remplirHistorique();
@@ -156,11 +161,10 @@ public class GrilleController extends ManageController {
 
         StackPane parent = (StackPane) gamePane.getParent();
         double cellSize = Math.min(
-            (parent.getWidth()  - 40) / (nbColonnes + 1),
-            (parent.getHeight() - 40) / (nbLignes + 1)
-        );
+                (parent.getWidth() - 40) / (nbColonnes + 1),
+                (parent.getHeight() - 40) / (nbLignes + 1));
 
-        double gridWidth  = cellSize * (nbColonnes + 1);
+        double gridWidth = cellSize * (nbColonnes + 1);
         double gridHeight = cellSize * (nbLignes + 1);
 
         gamePane.setPrefSize(gridWidth, gridHeight);
@@ -254,10 +258,10 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onCheckClick() {
-        if(onCheck == false){
+        if (onCheck == false) {
             onCheck = true;
             Label title = createTitle("Vérification");
-            Label status = new Label("Il y a " + hashi.getNbErreur() +" erreurs sur la grille.");
+            Label status = new Label("Il y a " + hashi.getNbErreur() + " erreurs sur la grille.");
             status.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
             Text question = new Text("Voulez-vous revenir au dernier état sans erreur ?");
             question.setWrappingWidth(180);
@@ -269,11 +273,11 @@ public class GrilleController extends ManageController {
             btnNo.setPrefWidth(80);
             HBox actionBox = new HBox(10, btnYes, btnNo);
             updateSidePanel(title, status, new Separator(), question, actionBox);
-        }else{
+        } else {
             sidePanel.getChildren().clear();
             onCheck = false;
         }
-        
+
     }
 
     @FXML
@@ -305,7 +309,8 @@ public class GrilleController extends ManageController {
     }
 
     private void handleKonamiKey(KeyCode key) {
-        if (konamiActivated) return;
+        if (konamiActivated)
+            return;
         if (key == KONAMI_CODE.get(konamiIndex)) {
             konamiIndex++;
             if (konamiIndex == KONAMI_CODE.size()) {

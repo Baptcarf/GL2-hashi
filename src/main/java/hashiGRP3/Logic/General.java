@@ -7,6 +7,7 @@ public class General {
     private static Hashi hashi = new Hashi();
     private static DatabaseManager db = new DatabaseManager();
     private static int id_grille = 0;
+    private static int num_grille = 0;
     private static int id_partie = -1;
 
     public General() {
@@ -20,7 +21,6 @@ public class General {
     public static Hashi getHashi() {
         return hashi;
     }
-    
 
     public static void setHashi(Hashi h) {
         General.hashi = h;
@@ -42,9 +42,19 @@ public class General {
         General.id_grille = id_grille;
     }
 
+    public static int getId_partie() {
+        return id_partie;
+    }
 
+    public static void setId_partie(int id) {
+        id_partie = id;
+    }
 
+    public static int getNum_grille() {
+        return num_grille;
+    }
 
-    public static int getId_partie() { return id_partie; }
-    public static void setId_partie(int id) { id_partie = id; }
+    public static void setNum_grille(int num_grille) {
+        General.num_grille = num_grille;
+    }
 }

@@ -10,9 +10,9 @@ CREATE TABLE Utilisateur(
 -- Table des grilles présent dans le jeu
 CREATE TABLE Grille(
         id_grille INTEGER PRIMARY KEY AUTOINCREMENT,
-        niveau INT NOT NULL, -- Le niveau de difficulté de la grille
         grille Text NOT NULL, -- le nom de la grille
-        nbIle INT NOT NULL
+        nbIle INT NOT NULL,
+        numeroGrille INT NOT NULL
 );
 
 
