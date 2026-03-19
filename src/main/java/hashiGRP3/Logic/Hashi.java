@@ -301,6 +301,16 @@ public class Hashi {
         }
         General.getDb().resetCoupPartie();
     }
+
+    public int getNbErreur(){
+        int nbPont = 0;
+        for(Pont p :  ponts){
+            if(!p.estCorrect()){
+                nbPont ++;
+            }
+        }
+        return nbPont;
+    }
 	
     // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
     @Override

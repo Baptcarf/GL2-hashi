@@ -52,6 +52,8 @@ public class GrilleController extends ManageController {
     @FXML private Button undoButton;
     @FXML private Button redoButton;
 
+    private boolean onCheck = false;
+
     private static final List<KeyCode> KONAMI_CODE = List.of(
         KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
         KeyCode.Q, KeyCode.D, KeyCode.Q, KeyCode.D,
@@ -251,19 +253,26 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onCheckClick() {
-        Label title = createTitle("Vérification");
-        Label status = new Label("Il y a X erreurs sur la grille.");
-        status.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-        Text question = new Text("Voulez-vous revenir au dernier état sans erreur ?");
-        question.setWrappingWidth(180);
-        Button btnYes = new Button("Oui");
-        Button btnNo = new Button("Non");
-        btnYes.setStyle("-fx-base: #f0f0f0;");
-        btnNo.setStyle("-fx-base: #f0f0f0;");
-        btnYes.setPrefWidth(80);
-        btnNo.setPrefWidth(80);
-        HBox actionBox = new HBox(10, btnYes, btnNo);
-        updateSidePanel(title, status, new Separator(), question, actionBox);
+        if(onCheck == false){
+            onCheck = true;
+            Label title = createTitle("Vérification");
+            Label status = new Label("Il y a " + hashi.getNbErreur() +" erreurs sur la grille.");
+            status.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+            Text question = new Text("Voulez-vous revenir au dernier état sans erreur ?");
+            question.setWrappingWidth(180);
+            Button btnYes = new Button("Oui");
+            Button btnNo = new Button("Non");
+            btnYes.setStyle("-fx-base: #f0f0f0;");
+            btnNo.setStyle("-fx-base: #f0f0f0;");
+            btnYes.setPrefWidth(80);
+            btnNo.setPrefWidth(80);
+            HBox actionBox = new HBox(10, btnYes, btnNo);
+            updateSidePanel(title, status, new Separator(), question, actionBox);
+        }else{
+            sidePanel.getChildren().clear();
+            onCheck = false;
+        }
+        
     }
 
     @FXML
