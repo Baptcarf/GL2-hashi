@@ -32,6 +32,8 @@ public class Pont {
     /** Liste des ponts qui peuvent renter en conflit avec ce pont */
     private List<Pont> conflits;
 
+    private boolean estHypothese = false;
+
     /**
      * Construit un pont entre deux ile
      * Les iles doivent être alignées horizontalement ou verticalement
@@ -176,6 +178,10 @@ public class Pont {
             case DOUBLE -> EtatDuPont.VIDE;
         };
     }
+
+
+    public boolean isEstHypothese() { return estHypothese; }
+    public void setEstHypothese(boolean h) { this.estHypothese = h; }
 
     /**
      * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A=B ou B=A

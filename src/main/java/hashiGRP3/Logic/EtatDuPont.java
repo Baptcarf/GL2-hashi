@@ -19,7 +19,6 @@ public enum EtatDuPont {
 
     /**
      * Construit un etat de pont avec sa valeur associee
-     * 
      * @param value valeur de l'etat
      */
     EtatDuPont(int value) {
@@ -28,7 +27,6 @@ public enum EtatDuPont {
 
     /**
      * Retourne la valeur numerique de l'etat du pont
-     * 
      * @return valeur de l'etat (0, 1 ou 2)
      */
     public int getValue() {
@@ -36,8 +34,7 @@ public enum EtatDuPont {
     }
 
     /**
-     * La valeur du pont
-     * 
+     * La valeur du pont 
      * @return "vide", "simple", "double"
      */
     @Override

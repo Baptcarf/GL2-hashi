@@ -36,6 +36,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+
+/* Class */
 public class GrilleController extends ManageController {
 
     // ← ICI au niveau de la classe, pas dans une méthode
@@ -242,7 +244,10 @@ public class GrilleController extends ManageController {
     @FXML
     protected void onHypothesisClick() {
         Label title = createTitle("Mode Hypothèse");
-        Text desc = new Text("lorem ipsum dolor sit amet, consectetur adipiscing");
+        
+        hashi.setModeHypothese(true); 
+
+        Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
         Button btnValidate = new Button("Valider");
         Button btnCancel = new Button("Annuler");
@@ -252,6 +257,20 @@ public class GrilleController extends ManageController {
         btnCancel.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(btnValidate, Priority.ALWAYS);
         HBox.setHgrow(btnCancel, Priority.ALWAYS);
+
+        btnValidate.setOnAction(e -> {
+            System.out.println("Hypothèse validée");
+            hashi.validerHypothese(); 
+            drawGrid(hashi, gamePane.getWidth()); 
+            sidePanel.getChildren().clear();
+        });
+        btnCancel.setOnAction(e -> {
+            System.out.println("Hypothèse annulée");
+            hashi.annulerHypothese();
+            drawGrid(hashi, gamePane.getWidth());
+            sidePanel.getChildren().clear();
+        });
+
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
         updateSidePanel(title, desc, buttonBox);
     }

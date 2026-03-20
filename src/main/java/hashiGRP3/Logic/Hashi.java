@@ -3,6 +3,7 @@ package hashiGRP3.Logic;
 
 //Imports
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import hashiGRP3.Logic.Historique.HistoriqueManager;
+import hashiGRP3.Logic.Historique.Mode;
 
 /**
  * Représente le jeu Hashi avec la grille, les îles et les ponts.
@@ -27,6 +29,8 @@ public class Hashi {
     private final HistoriqueManager historique = new HistoriqueManager();
     /** Id de l'utilisateur en cours */
     private int idUtilisateur;
+    /** True si le modeHypoothese est actif, false sinon*/
+    private boolean modeHypothese = false;
 
     /**
      * Ajoute une île au plateau de jeu.
@@ -41,14 +45,13 @@ public class Hashi {
         int newY = Math.max(taille.y, ile.getCoordonnees().y);
         taille = new Coordonnees(newX, newY);
     }
-
+    
     /**
      * Trouve l'île voisine d'une île donnée dans une direction spécifiée.
      * 
-     * @param ile       l'île de départ
+     * @param ile l'île de départ
      * @param direction la direction dans laquelle chercher
-     * @return l'île voisine trouvée, ou null si aucune île n'existe dans cette
-     *         direction
+     * @return l'île voisine trouvée, ou null si aucune île n'existe dans cette direction
      */
     private Ile trouverVoisin(Ile ile, Direction direction) {
         Coordonnees deplacementTheorique = ile.getCoordonnees().additionner(direction.getDelta());
@@ -71,7 +74,7 @@ public class Hashi {
      */
     private Pont obtenirOuCreerPont(Ile ileA, Ile ileB) {
         Pont pont = getPont(ileA, ileB);
-
+        
         if (pont != null) {
             return pont;
         }
@@ -106,32 +109,22 @@ public class Hashi {
      * Un conflit existe lorsque deux ponts perpendiculaires se croisent sur le plateau.
      */
     public void initialisationToutLesConflits() {
-        for (Pont pontA : ponts) {
+        for(Pont pontA : ponts) {
             boolean isHorizontal = pontA.getOrientation() == Pont.Orientation.HORIZONTAL;
-            for (Pont pontB : ponts) {
+            for(Pont pontB : ponts) {
                 if (pontA.getOrientation() != pontB.getOrientation()) {
                     if (isHorizontal) {
-                        if (pontB.getileA().getCoordonnees().y < pontA.getileA().getCoordonnees().y
-                                && pontA.getileA().getCoordonnees().y < pontB.getileB().getCoordonnees().y // teste si
-                                                                                                           // Aay < Bay
-                                                                                                           // < Aby
-                                && pontA.getileA().getCoordonnees().x < pontB.getileA().getCoordonnees().x
-                                && pontB.getileA().getCoordonnees().x < pontA.getileB().getCoordonnees().x) {// teste si
-                                                                                                             // Bax <
-                                                                                                             // Aax <
-                                                                                                             // Bbx
+                        if(pontB.getileA().getCoordonnees().y<pontA.getileA().getCoordonnees().y 
+                        && pontA.getileA().getCoordonnees().y<pontB.getileB().getCoordonnees().y  // teste si Aay < Bay < Aby
+                        && pontA.getileA().getCoordonnees().x<pontB.getileA().getCoordonnees().x  
+                        && pontB.getileA().getCoordonnees().x<pontA.getileB().getCoordonnees().x){// teste si Bax < Aax < Bbx
                             pontA.ajouterConflit(pontB);
                         }
-                    } else {
-                        if (pontB.getileA().getCoordonnees().x < pontA.getileA().getCoordonnees().x
-                                && pontA.getileA().getCoordonnees().x < pontB.getileB().getCoordonnees().x // teste si
-                                                                                                           // Bax < Aax
-                                                                                                           // < Bbx
-                                && pontA.getileA().getCoordonnees().y < pontB.getileA().getCoordonnees().y
-                                && pontB.getileA().getCoordonnees().y < pontA.getileB().getCoordonnees().y) {// teste si
-                                                                                                             // Aay <
-                                                                                                             // Bay <
-                                                                                                             // Aby
+                    } else { 
+                        if(pontB.getileA().getCoordonnees().x<pontA.getileA().getCoordonnees().x  
+                        && pontA.getileA().getCoordonnees().x<pontB.getileB().getCoordonnees().x  // teste si Bax < Aax < Bbx
+                        && pontA.getileA().getCoordonnees().y<pontB.getileA().getCoordonnees().y  
+                        && pontB.getileA().getCoordonnees().y<pontA.getileB().getCoordonnees().y){// teste si Aay < Bay < Aby
                             pontA.ajouterConflit(pontB);
                         }
                     }
@@ -258,9 +251,11 @@ public class Hashi {
         EtatDuPont avant = pont.getEtatActuel();
         pont.cycler();
         EtatDuPont apres = pont.getEtatActuel();
-
+        
         if (avant != apres) {
-            historique.ajouterAction(pont, avant, apres);
+            Mode modeCoup = modeHypothese ? Mode.TEMPORAIRE : Mode.HISTORIQUE;//peut-être changer, pour adapter au mode "ERREUR"
+            historique.ajouterAction(pont, avant, apres, EnumSet.of(modeCoup));
+            pont.setEstHypothese(this.modeHypothese);
         }
     }
 
@@ -276,7 +271,7 @@ public class Hashi {
     public boolean undo() {
         return historique.undo();
     }
-
+    
     /**
      * Remet le dernier coup annulé (Ctrl+Y)
      * @return true si un coup a été remit, false si rien à ete remit
@@ -284,8 +279,23 @@ public class Hashi {
     public boolean redo() {
         return historique.redo();
     }
-	
-    /** Verifie qu'on a aucune action anterieure */
+
+    public void setModeHypothese(boolean actif) {
+        this.modeHypothese = actif;
+    }
+
+    public void validerHypothese() {
+        historique.confirmerHypothese();
+        this.setModeHypothese(false);
+    }
+
+    public void annulerHypothese() {
+        historique.annulerHypothese();
+        setModeHypothese(false);
+    }
+
+     // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
+
     public boolean isUndoEmpty() {
         return historique.isUndoEmpty();}
 
@@ -312,7 +322,8 @@ public class Hashi {
         return nbPont;
     }
 	
-    // Version d'affichage expériemental afin de visualiser le plateau dans la console en attnendant une interface graphique
+
+    //to String
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

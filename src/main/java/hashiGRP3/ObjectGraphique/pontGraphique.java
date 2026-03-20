@@ -56,15 +56,15 @@ public class pontGraphique {
 
         // Ajout des traits selon l'etat du pont
         EtatDuPont etat = pont.getEtatActuel();
+        boolean isHypothese = pont.isEstHypothese();
         switch (etat) {
-            case SIMPLE -> group.getChildren().add(createLine(seg, etat, cellSize, 0));
+            case SIMPLE -> group.getChildren().add(createLine(seg, cellSize, 0, isHypothese));
             case DOUBLE -> {
                 double offset = Math.max(3, cellSize * 0.05);
-                group.getChildren().add(createLine(seg, etat, cellSize, offset));
-                group.getChildren().add(createLine(seg, etat, cellSize, -offset));
+                group.getChildren().add(createLine(seg, cellSize, offset, isHypothese));
+                group.getChildren().add(createLine(seg, cellSize, -offset, isHypothese));
             }
             case VIDE -> {}
-
         }
 
         // Ajout d'une hitbox invisible pour le clic
@@ -97,19 +97,22 @@ public class pontGraphique {
         }
     }
 
-    /**
+/**
      * Crée un trait JavaFX pour un pont
+     * @param isHypothese définit si le trait doit être gris (mode hypothèse)
      */
-    private Line createLine(Segment seg, EtatDuPont etat, double cellSize, double offset) {
+    private Line createLine(Segment seg, double cellSize, double offset, boolean isHypothese) {
         Line line;
         if (seg.startY == seg.endY) {
-            // Horizontal
             line = new Line(seg.startX, seg.startY + offset, seg.endX, seg.endY + offset);
         } else {
-            // Vertical
             line = new Line(seg.startX + offset, seg.startY, seg.endX + offset, seg.endY);
         }
-        line.setStroke(etat == EtatDuPont.VIDE ? Color.GRAY : Color.BLACK);
+
+        // LOGIQUE DE COULEUR
+        // Si c'est une hypothèse, on met en GRIS, sinon en NOIR
+        line.setStroke(isHypothese ? Color.GRAY : Color.BLACK);
+        
         line.setStrokeWidth(Math.max(2, cellSize * 0.06));
         return line;
     }
