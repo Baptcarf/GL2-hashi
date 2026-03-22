@@ -3,13 +3,14 @@ package hashiGRP3;
 
 //Imports
 import java.sql.*;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.EnumSet;
 import java.nio.file.*;
 import java.io.*;
 
-import hashiGRP3.Logic.Historique.HistoriqueManager;
+import hashiGRP3.Logic.Historique.*;
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -464,7 +465,7 @@ public class DatabaseManager {
             return;
 
         String sql = """
-                SELECT node_dep, node_arr, val_coup_avant, val_coup_apres
+                SELECT node_dep, node_arr, val_coup_avant, val_coup_apres,mode_coup
                 FROM Coup
                 WHERE id_partie = ?
                 ORDER BY num_coup
@@ -479,6 +480,7 @@ public class DatabaseManager {
             while (rs.next()) {
                 Ile dep = ha.getIleById(rs.getInt("node_dep"));
                 Ile arr = ha.getIleById(rs.getInt("node_arr"));
+                int mode = rs.getInt("mode_coup");
                 if (dep == null || arr == null)
                     continue;
 
@@ -486,11 +488,23 @@ public class DatabaseManager {
                 if (pont == null)
                     continue;
 
+                EnumSet<Mode> modeSet;
+                if (mode == 1) {
+                    modeSet = EnumSet.of(Mode.TEMPORAIRE);
+                    General.getHashi().setModeHypothese(true);
+                } else {
+                    modeSet = EnumSet.of(Mode.HISTORIQUE);
+                }
+
                 EtatDuPont avant = EtatDuPont.fromValue(rs.getInt("val_coup_avant"));
                 EtatDuPont apres = EtatDuPont.fromValue(rs.getInt("val_coup_apres"));
 
+                if (mode == 1) {
+                    pont.setEstHypothese(true);
+
+                }
                 pont.setEtatActuel(apres);
-                h.ajouterActionNotSave(pont, avant, apres);
+                h.ajouterActionNotSave(pont, avant, apres, modeSet);
             }
 
         } catch (SQLException e) {
@@ -498,9 +512,23 @@ public class DatabaseManager {
         }
     }
 
-    public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres) {
+    public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres,
+            EnumSet<Mode> modes) {
 
         int idPartie = General.getId_partie();
+
+        int mode = 0;
+        boolean erreur = false;
+
+        if (modes.contains(Mode.TEMPORAIRE))
+            mode = 1;
+        else if (modes.contains(Mode.HISTORIQUE))
+            mode = 0;
+
+        if (modes.contains(Mode.ERREUR)) {
+            erreur = true;
+        }
+
         if (idPartie == -1) {
             System.err.println("Aucune partie active !");
             return;
@@ -508,7 +536,7 @@ public class DatabaseManager {
 
         // Trouver le prochain num_coup
         String sqlMax = "SELECT COALESCE(MAX(num_coup), -1) + 1 AS next_num FROM Coup WHERE id_partie = ?";
-        String sqlInsert = "INSERT INTO Coup VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlInsert = "INSERT INTO Coup VALUES (?, ?, ?, ?, ?, ?,?,?)";
 
         try (Connection conn = DriverManager.getConnection(URL)) {
 
@@ -528,6 +556,8 @@ public class DatabaseManager {
                 ps.setInt(4, id_arr);
                 ps.setInt(5, valCoupAvant);
                 ps.setInt(6, valCoupApres);
+                ps.setInt(7, mode);
+                ps.setBoolean(8, erreur);
                 ps.executeUpdate();
             }
 
@@ -699,6 +729,32 @@ public class DatabaseManager {
                 lignesPonts.add(ligne);
             }
         }
+    }
+
+    public void validerHypothese() {
+        String sql = "UPDATE Coup SET mode_coup = 0 WHERE id_partie = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, General.getId_partie());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void annulerHypothese() {
+        String sql = "DELETE FROM Coup where mode_coup = 1 and id_partie = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, General.getId_partie());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

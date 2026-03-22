@@ -36,7 +36,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-
 /* Class */
 public class GrilleController extends ManageController {
 
@@ -244,8 +243,8 @@ public class GrilleController extends ManageController {
     @FXML
     protected void onHypothesisClick() {
         Label title = createTitle("Mode Hypothèse");
-        
-        hashi.setModeHypothese(true); 
+
+        hashi.setModeHypothese(true);
 
         Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
@@ -260,13 +259,15 @@ public class GrilleController extends ManageController {
 
         btnValidate.setOnAction(e -> {
             System.out.println("Hypothèse validée");
-            hashi.validerHypothese(); 
-            drawGrid(hashi, gamePane.getWidth()); 
+            hashi.validerHypothese();
+            General.getDb().validerHypothese();
+            drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
         });
         btnCancel.setOnAction(e -> {
             System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
+            General.getDb().annulerHypothese();
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
         });

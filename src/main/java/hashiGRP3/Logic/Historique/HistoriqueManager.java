@@ -14,17 +14,19 @@ import hashiGRP3.Logic.Pont;
 /**
  * Gestionnaire d'historique pour les opérations de pose de ponts.
  * <p>
- * Cette classe implémente le pattern "Command" de manière simplifiée en utilisant
- * deux piles (LIFO) pour permettre les fonctionnalités d'annulation (undo) 
+ * Cette classe implémente le pattern "Command" de manière simplifiée en
+ * utilisant
+ * deux piles (LIFO) pour permettre les fonctionnalités d'annulation (undo)
  * et de rétablissement (redo).
  * </p>
  * * @author Groupe 3
+ * 
  * @version 1.0
  */
 
 public class HistoriqueManager {
 
-	/* Classe d'action à enregistrer */
+    /* Classe d'action à enregistrer */
     private static class Action {
         final Pont pont;
         final EtatDuPont etatAvant;
@@ -34,10 +36,12 @@ public class HistoriqueManager {
 
         /**
          * Crée une nouvelle instance d'action.
-         * @param pont Le pont concerné par l'action.
+         * 
+         * @param pont      Le pont concerné par l'action.
          * @param etatAvant L'état du pont avant modification.
          * @param etatApres L'état du pont après modification.
-         * @param modes L'ensemble des modes associés à cette action (ex: TEMPORAIRE).
+         * @param modes     L'ensemble des modes associés à cette action (ex:
+         *                  TEMPORAIRE).
          */
         Action(Pont pont, EtatDuPont etatAvant, EtatDuPont etatApres, EnumSet<Mode> modes) {
             this.pont = pont;
@@ -57,6 +61,7 @@ public class HistoriqueManager {
         /**
          * Vérifie si l'action possède un mode spécifique.
          * * @param mode Le mode à vérifier.
+         * 
          * @return {@code true} si le mode est présent, {@code false} sinon.
          */
         public Boolean isMode(Mode mode) {
@@ -65,9 +70,10 @@ public class HistoriqueManager {
 
         /**
          * Retire le mode TEMPORAIRE de l'action si celui-ci est présent.
-         * * @return {@code true} si le mode a été retiré, {@code false} s'il n'était pas présent.
+         * * @return {@code true} si le mode a été retiré, {@code false} s'il n'était
+         * pas présent.
          */
-        public Boolean retireTemporaire(){
+        public Boolean retireTemporaire() {
             if (modes.contains(Mode.TEMPORAIRE)) {
                 modes.remove(Mode.TEMPORAIRE);
                 return true;
@@ -76,27 +82,29 @@ public class HistoriqueManager {
             }
         }
     }
-	
 
     /** Pile des actions annulables. */
     private final Deque<Action> undoStack = new ArrayDeque<>();
-    
+
     /** Pile des actions rétablissables. */
     private final Deque<Action> redoStack = new ArrayDeque<>();
-    
+
     /**
      * Enregistre une nouvelle action dans l'historique.
      * <p>
-     * L'action est ajoutée à la pile {@code undoStack} et la pile {@code redoStack} 
+     * L'action est ajoutée à la pile {@code undoStack} et la pile {@code redoStack}
      * est vidée car une nouvelle branche d'actions est créée.
      * </p>
-     * @param pont Le pont qui a été modifié.
+     * 
+     * @param pont  Le pont qui a été modifié.
      * @param avant L'état initial du pont.
      * @param apres Le nouvel état du pont.
      * @param modes Les modes applicables à cette action.
      */
     public void ajouterAction(Pont pont, EtatDuPont avant, EtatDuPont apres, EnumSet<Mode> modes) {
         undoStack.push(new Action(pont, avant, apres, modes));
+        General.getDb().addCoup(General.getIdUtilisateur(), General.getId_grille(), pont.getileA().getId(),
+                pont.getileB().getId(), avant.getValue(), apres.getValue(), modes);
         redoStack.clear(); // Nouvelle action = on perd le futur (redo)
     }
 
@@ -106,77 +114,71 @@ public class HistoriqueManager {
     }
 
     /**
-     * Enregistre une nouvelle action dans l'historique
-     * @param pont Le pont sur lequel l'action a été faite.
-     * @param avant L'etat du pont avant l'action.
-     * @param apres L'etat du pont après l'action.
-     */
-    public void ajouterAction(Pont pont, EtatDuPont avant, EtatDuPont apres) {
-        undoStack.push(new Action(pont, avant, apres, EnumSet.of(Mode.HISTORIQUE)));
-        General.getDb().addCoup(General.getIdUtilisateur(), General.getId_grille(), pont.getileA().getId(),
-                pont.getileB().getId(), avant.getValue(), apres.getValue());
-        redoStack.clear(); // Nouvelle action = on perd le futur (redo)
-    }
-
-    /**
      * Enregistre une nouvelle action dans l'historique sans l'ajouté à la BDD.
-     * @param pont Le pont sur lequel l'action a été faite.
+     * 
+     * @param pont  Le pont sur lequel l'action a été faite.
      * @param avant L'etat du pont avant l'action.
      * @param apres L'etat du pont après l'action.
      */
-    public void ajouterActionNotSave(Pont pont, EtatDuPont avant, EtatDuPont apres) {
-        undoStack.push(new Action(pont, avant, apres, EnumSet.of(Mode.HISTORIQUE)));
+    public void ajouterActionNotSave(Pont pont, EtatDuPont avant, EtatDuPont apres, EnumSet<Mode> modes) {
+        undoStack.push(new Action(pont, avant, apres, modes));
         redoStack.clear(); // Nouvelle action = on perd le futur (redo)
     }
 
     /**
      * Annule la dernière action effectuée.
      * <p>
-     * L'état du pont est restauré à sa valeur précédente ({@code etatAvant}) 
+     * L'état du pont est restauré à sa valeur précédente ({@code etatAvant})
      * et l'action est transférée vers la pile de rétablissement.
      * </p>
-     * @return {@code true} si une action a été annulée, {@code false} si l'historique est vide.
+     * 
+     * @return {@code true} si une action a été annulée, {@code false} si
+     *         l'historique est vide.
      */
     public boolean undo() {
-        if (undoStack.isEmpty()) 
+        if (undoStack.isEmpty())
             return false;
-        
+
         Action action = undoStack.pop();
         action.pont.setEtatActuel(action.etatAvant);
-        action.pont.setEstHypothese(action.etatHypoAvant); 
+        action.pont.setEstHypothese(action.etatHypoAvant);
         redoStack.push(action);
         return true;
     }
-    
+
     /**
      * Rétablit la dernière action précédemment annulée.
      * <p>
-     * L'état du pont est remis à sa valeur "future" ({@code etatApres}) 
+     * L'état du pont est remis à sa valeur "future" ({@code etatApres})
      * et l'action est remise dans la pile d'annulation.
      * </p>
-     * @return {@code true} si une action a été rétablie, {@code false} si la pile redo est vide.
+     * 
+     * @return {@code true} si une action a été rétablie, {@code false} si la pile
+     *         redo est vide.
      */
     public boolean redo() {
-        if (redoStack.isEmpty()) 
+        if (redoStack.isEmpty())
             return false;
-    
+
         Action action = redoStack.pop();
         action.pont.setEtatActuel(action.etatApres);
         action.pont.setEstHypothese(action.isMode(Mode.TEMPORAIRE));
         undoStack.push(action);
         return true;
     }
-    
+
     /**
      * Renvoie si l'historique est vide ou non.
+     * 
      * @return bool
      */
     public boolean isEmpty() {
         return undoStack.isEmpty() && redoStack.isEmpty();
     }
-   
+
     /**
      * Renvoie si l'historique des anciens mouvements est vide.
+     * 
      * @return bool
      */
     public boolean isUndoEmpty() {
@@ -185,6 +187,7 @@ public class HistoriqueManager {
 
     /**
      * Renvoie si l'historique des mouvements annulés est vide.
+     * 
      * @return bool
      */
     public boolean isRedoEmpty() {
@@ -197,7 +200,7 @@ public class HistoriqueManager {
         redoStack.clear();
     }
 
-    public void confirmerHypothese(){
+    public void confirmerHypothese() {
         for (Action action : undoStack) {
             if (action.isMode(Mode.TEMPORAIRE)) {
                 action.retireTemporaire();
@@ -208,7 +211,7 @@ public class HistoriqueManager {
         redoStack.clear();
     }
 
-    public void annulerHypothese(){
+    public void annulerHypothese() {
         while (!undoStack.isEmpty() && undoStack.peek().isMode(Mode.TEMPORAIRE)) {
             this.undo();
         }

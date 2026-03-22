@@ -40,6 +40,8 @@ CREATE TABLE Coup(
         node_arr Int, -- le noeud d'arrivé de l'arréte
         val_coup_avant INTEGER, -- la valeur de l'arréte (0 : vide, 1 : 1 arrêtes, 2 : 2 arrêtes)
         val_coup_apres INTEGER, -- la valeur de l'arréte (0 : vide, 1 : 1 arrêtes, 2 : 2 arrêtes)
+        mode_coup INTEGER,
+        erreur boolean,
         PRIMARY KEY(id_partie,num_coup),
         FOREIGN KEY (id_partie)
             REFERENCES Partie(id_partie)
