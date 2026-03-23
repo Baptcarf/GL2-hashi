@@ -105,6 +105,7 @@ public class GrilleController extends ManageController {
     }
 
     private void chargerGrille() {
+        sidePanel.getChildren().clear();
         int grid_num = General.getNum_grille();
 
         int folderIndex = (grid_num - 1) / 5;
@@ -132,6 +133,11 @@ public class GrilleController extends ManageController {
             hashi.remplirHistorique();
 
             win.setVisible(false);
+
+            // si on est en mode hypothèse on remet la fenétre de base
+            if (General.getHashi().getHypothese()) {
+                onHypothesisClick();
+            }
 
             undoButton.setDisable(hashi.isUndoEmpty());
             redoButton.setDisable(hashi.isRedoEmpty());
@@ -259,6 +265,7 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onHypothesisClick() {
+        onCheck = false;
         Label title = createTitle("Mode Hypothèse");
 
         hashi.setModeHypothese(true);
@@ -347,6 +354,7 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onHintClick() {
+        onCheck = false;
         Label title = createTitle("Indice");
         Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
         if (resultat.isEmpty()) {
@@ -357,11 +365,13 @@ public class GrilleController extends ManageController {
         IndiceResultat indice = resultat.get();
         Label techniqueName = new Label(indice.getNomTechnique());
         techniqueName.setWrapText(true);
-        // limiter la largeur du label au width du sidePanel pour forcer le retour à la ligne
+        // limiter la largeur du label au width du sidePanel pour forcer le retour à la
+        // ligne
         techniqueName.maxWidthProperty().bind(sidePanel.widthProperty().subtract(30));
 
         Text explication = new Text(indice.getExplication());
-        // lier le wrapping de l'explication à la largeur du sidePanel pour éviter d'agrandir le panneau
+        // lier le wrapping de l'explication à la largeur du sidePanel pour éviter
+        // d'agrandir le panneau
         explication.wrappingWidthProperty().bind(sidePanel.widthProperty().subtract(30));
 
         updateSidePanel(title, new Separator(), techniqueName, explication);
