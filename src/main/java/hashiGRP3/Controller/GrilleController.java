@@ -63,6 +63,12 @@ public class GrilleController extends ManageController {
     private Button undoButton;
     @FXML
     private Button redoButton;
+    @FXML
+    private Button checkButton;
+    @FXML
+    private Button hintButton;
+    @FXML
+    private Button hypothesisButton;
 
     private boolean onCheck = false;
 
@@ -256,6 +262,10 @@ public class GrilleController extends ManageController {
         Label title = createTitle("Mode Hypothèse");
 
         hashi.setModeHypothese(true);
+        
+        if (hintButton != null) hintButton.setDisable(true);
+        if (checkButton != null) checkButton.setDisable(true);
+        if (hypothesisButton != null) hypothesisButton.setDisable(true);
 
         Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
@@ -274,13 +284,22 @@ public class GrilleController extends ManageController {
             General.getDb().validerHypothese();
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
+
+            if (hintButton != null) hintButton.setDisable(false);
+            if (checkButton != null) checkButton.setDisable(false);
+            if (hypothesisButton != null) hypothesisButton.setDisable(false);
         });
+        
         btnCancel.setOnAction(e -> {
             System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
             General.getDb().annulerHypothese();
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
+
+            if (hintButton != null) hintButton.setDisable(false);
+            if (checkButton != null) checkButton.setDisable(false);
+            if (hypothesisButton != null) hypothesisButton.setDisable(false);
         });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
