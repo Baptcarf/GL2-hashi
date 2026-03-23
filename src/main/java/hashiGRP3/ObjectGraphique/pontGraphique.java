@@ -3,6 +3,7 @@ package hashiGRP3.ObjectGraphique;
 
 //Imports
 import java.util.function.Consumer;
+
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Pont;
 import javafx.scene.Cursor;
@@ -97,22 +98,30 @@ public class pontGraphique {
         }
     }
 
-/**
+    /**
      * Crée un trait JavaFX pour un pont
      * @param isHypothese définit si le trait doit être gris (mode hypothèse)
      */
     private Line createLine(Segment seg, double cellSize, double offset, boolean isHypothese) {
         Line line;
-        if (seg.startY == seg.endY) {
+        
+        // On utilise l'orientation stockée dans l'objet pont pour savoir où appliquer l'offset
+        if (pont.getOrientation() == Pont.Orientation.HORIZONTAL) {
             line = new Line(seg.startX, seg.startY + offset, seg.endX, seg.endY + offset);
         } else {
             line = new Line(seg.startX + offset, seg.startY, seg.endX + offset, seg.endY);
         }
 
-        // LOGIQUE DE COULEUR
-        // Si c'est une hypothèse, on met en GRIS, sinon en NOIR
-        line.setStroke(isHypothese ? Color.GRAY : Color.BLACK);
-        
+        if (isHypothese) {
+            line.setStroke(Color.GRAY);
+            double dashLength = cellSize * 0.15; 
+            double gapLength = cellSize * 0.1;
+            line.getStrokeDashArray().setAll(dashLength, gapLength);
+        } else {
+            line.setStroke(Color.BLACK);
+            line.getStrokeDashArray().clear(); //
+        }
+
         line.setStrokeWidth(Math.max(2, cellSize * 0.06));
         return line;
     }
