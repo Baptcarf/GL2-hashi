@@ -217,4 +217,12 @@ public class HistoriqueManager {
         }
         redoStack.clear();
     }
+
+    public void retourEtatCorrect() {
+        while (!undoStack.isEmpty() && undoStack.peek().isMode(Mode.ERREUR)) {
+            this.undo();
+        }
+        redoStack.clear();
+    }
+
 }

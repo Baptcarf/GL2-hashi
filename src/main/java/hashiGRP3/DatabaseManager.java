@@ -465,7 +465,7 @@ public class DatabaseManager {
             return;
 
         String sql = """
-                SELECT node_dep, node_arr, val_coup_avant, val_coup_apres,mode_coup
+                SELECT node_dep, node_arr, val_coup_avant, val_coup_apres,mode_coup,erreur
                 FROM Coup
                 WHERE id_partie = ?
                 ORDER BY num_coup
@@ -481,6 +481,7 @@ public class DatabaseManager {
                 Ile dep = ha.getIleById(rs.getInt("node_dep"));
                 Ile arr = ha.getIleById(rs.getInt("node_arr"));
                 int mode = rs.getInt("mode_coup");
+                boolean erreur = rs.getBoolean("erreur");
                 if (dep == null || arr == null)
                     continue;
 
@@ -488,12 +489,18 @@ public class DatabaseManager {
                 if (pont == null)
                     continue;
 
-                EnumSet<Mode> modeSet;
+                ArrayList<Mode> modes = new ArrayList<>();
                 if (mode == 1) {
-                    modeSet = EnumSet.of(Mode.TEMPORAIRE);
+                    modes.add(Mode.TEMPORAIRE);
                     General.getHashi().setModeHypothese(true);
                 } else {
-                    modeSet = EnumSet.of(Mode.HISTORIQUE);
+                    modes.add(Mode.HISTORIQUE);
+                }
+
+                if (erreur) {
+                    modes.add(Mode.ERREUR);
+                    General.getHashi().setErreur(true);
+
                 }
 
                 EtatDuPont avant = EtatDuPont.fromValue(rs.getInt("val_coup_avant"));
@@ -501,10 +508,9 @@ public class DatabaseManager {
 
                 if (mode == 1) {
                     pont.setEstHypothese(true);
-
                 }
                 pont.setEtatActuel(apres);
-                h.ajouterActionNotSave(pont, avant, apres, modeSet);
+                h.ajouterActionNotSave(pont, avant, apres, EnumSet.copyOf(modes));
             }
 
         } catch (SQLException e) {
@@ -746,6 +752,19 @@ public class DatabaseManager {
 
     public void annulerHypothese() {
         String sql = "DELETE FROM Coup where mode_coup = 1 and id_partie = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, General.getId_partie());
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void retourEtatCorrect() {
+        String sql = "DELETE FROM Coup where erreur = true and id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, General.getId_partie());
