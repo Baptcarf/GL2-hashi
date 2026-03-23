@@ -9,6 +9,10 @@ import java.util.Optional;
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
@@ -114,7 +118,9 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(), new TechniqueIsolation()));
+            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(), new TechniqueIsolation(),
+                    new TechniqueSaturationMoinsDeux(), new TechniqueSaturationMoinsUn(),
+                    new TechniqueSaturationMoinsUnSpe(), new TechniqueSaturationQuatreCoin()));
 
             General.setHashi(hashi);
             hashi.remplirHistorique();
