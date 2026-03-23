@@ -316,6 +316,10 @@ public class Hashi {
         return historique.redo();
     }
 
+    public boolean getHypothese() {
+        return this.modeHypothese;
+    }
+
     public void setModeHypothese(boolean actif) {
         this.modeHypothese = actif;
     }
