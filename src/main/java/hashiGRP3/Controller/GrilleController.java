@@ -8,12 +8,12 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -23,8 +23,8 @@ import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
-import javafx.geometry.Bounds;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -338,7 +338,13 @@ public class GrilleController extends ManageController {
         IndiceResultat indice = resultat.get();
         Label techniqueName = new Label(indice.getNomTechnique());
         techniqueName.setWrapText(true);
+        // limiter la largeur du label au width du sidePanel pour forcer le retour à la ligne
+        techniqueName.maxWidthProperty().bind(sidePanel.widthProperty().subtract(30));
+
         Text explication = new Text(indice.getExplication());
+        // lier le wrapping de l'explication à la largeur du sidePanel pour éviter d'agrandir le panneau
+        explication.wrappingWidthProperty().bind(sidePanel.widthProperty().subtract(30));
+
         updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
