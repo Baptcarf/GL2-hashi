@@ -28,6 +28,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -39,6 +40,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 /* Class */
 public class GrilleController extends ManageController {
@@ -88,6 +90,27 @@ public class GrilleController extends ManageController {
                 timer.setText("Chrono : " + (int) t);
             }
         };
+
+        Tooltip t1 = new Tooltip("Annuler le dernier coup");
+        t1.setShowDelay(Duration.millis(300));
+        undoButton.setTooltip(t1);
+    
+        Tooltip t2 = new Tooltip("Rétablir le coup annulé");
+        t2.setShowDelay(Duration.millis(300));
+        redoButton.setTooltip(t2);
+    
+        Tooltip t3 = new Tooltip("Vérifier la grille et revenir à l'état sans erreur");
+        t3.setShowDelay(Duration.millis(300));
+        checkButton.setTooltip(t3);
+    
+        Tooltip t4 = new Tooltip("Afficher un indice pour la grille");
+        t4.setShowDelay(Duration.millis(300));
+        hintButton.setTooltip(t4);
+
+        Tooltip t5 = new Tooltip("Activer le mode hypothèse (coups temporaires)");
+        t5.setShowDelay(Duration.millis(300));
+        hypothesisButton.setTooltip(t5);
+        
 
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
