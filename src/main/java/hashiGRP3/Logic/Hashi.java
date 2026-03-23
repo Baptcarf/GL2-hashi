@@ -32,6 +32,9 @@ public class Hashi {
     /** True si le modeHypoothese est actif, false sinon */
     private boolean modeHypothese = false;
 
+    /** True si le modeErreyr est actif */
+    private boolean modeErreur = false;
+
     /**
      * Ajoute une île au plateau de jeu.
      * Met à jour la taille du plateau en fonction des coordonnées de l'île.
@@ -275,10 +278,17 @@ public class Hashi {
         pont.cycler();
         EtatDuPont apres = pont.getEtatActuel();
 
+        if (modeErreur == false && !pont.estCorrect() && pont.getEtatCorrect() == EtatDuPont.VIDE) {
+            modeErreur = true;
+        }
+
         if (avant != apres) {
-            Mode modeCoup = modeHypothese ? Mode.TEMPORAIRE : Mode.HISTORIQUE;// peut-être changer, pour adapter au mode
-                                                                              // "ERREUR"
-            historique.ajouterAction(pont, avant, apres, EnumSet.of(modeCoup));
+            ArrayList<Mode> modes = new ArrayList<>();
+            modes.add(modeHypothese ? Mode.TEMPORAIRE : Mode.HISTORIQUE);// peut-être changer, pour adapter au mode
+            if (modeErreur) {
+                modes.add(Mode.ERREUR);
+            } // "ERREUR"
+            historique.ajouterAction(pont, avant, apres, EnumSet.copyOf(modes));
             pont.setEstHypothese(this.modeHypothese);
         }
     }
@@ -318,6 +328,15 @@ public class Hashi {
     public void annulerHypothese() {
         historique.annulerHypothese();
         setModeHypothese(false);
+    }
+
+    public void setErreur(boolean b) {
+        this.modeErreur = b;
+    }
+
+    public void retourEtatCorrect() {
+        historique.retourEtatCorrect();
+        setErreur(false);
     }
 
     // Version d'affichage expériemental afin de visualiser le plateau dans la

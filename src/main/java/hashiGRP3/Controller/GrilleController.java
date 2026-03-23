@@ -213,6 +213,11 @@ public class GrilleController extends ManageController {
         drawGrid(hashi, gamePane.getWidth());
         redoButton.setDisable(hashi.isRedoEmpty());
         undoButton.setDisable(hashi.isUndoEmpty());
+        if (onCheck) {
+            onCheck = false;
+            onCheckClick();
+        }
+
     }
 
     private void dessinerIle(Hashi hashi, double size) {
@@ -297,6 +302,21 @@ public class GrilleController extends ManageController {
             btnNo.setStyle("-fx-base: #f0f0f0;");
             btnYes.setPrefWidth(80);
             btnNo.setPrefWidth(80);
+
+            btnYes.setOnAction(e -> {
+
+                System.out.println("retour à l'état correct");
+                hashi.retourEtatCorrect();
+                General.getDb().retourEtatCorrect();
+                drawGrid(hashi, gamePane.getWidth());
+                sidePanel.getChildren().clear();
+
+            });
+
+            btnNo.setOnAction(e -> {
+                sidePanel.getChildren().clear();
+                onCheck = false;
+            });
             HBox actionBox = new HBox(10, btnYes, btnNo);
             updateSidePanel(title, status, new Separator(), question, actionBox);
         } else {
