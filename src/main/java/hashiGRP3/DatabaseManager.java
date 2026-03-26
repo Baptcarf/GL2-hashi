@@ -662,20 +662,23 @@ public class DatabaseManager {
      * @param id_grille l'ID de la grille
      * @return une liste de chaînes au format "pseudo score"
      */
-    public List<String> obtenirTop5ScoresParGrille(int id_grille) {
+    public List<String> obtenirTop5ScoresParGrille(int numeroGrille) {
         List<String> scores = new ArrayList<>();
 
+        // On joint la table Grille pour filtrer sur le numeroGrille (1, 2, 3...) 
+        // et non sur l'id_grille (la clé primaire auto-incrémentée)
         String sql = "SELECT u.pseudo, p.score " +
-                "FROM Partie p " +
-                "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
-                "WHERE p.id_grille = ? AND p.statut = 2 AND p.score IS NOT NULL " +
-                "ORDER BY p.score DESC " +
-                "LIMIT 5";
+                    "FROM Partie p " +
+                    "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
+                    "JOIN Grille g ON p.id_grille = g.id_grille " +
+                    "WHERE g.numeroGrille = ? AND p.statut = 2 AND p.score IS NOT NULL " +
+                    "ORDER BY p.score ASC " + // ASC car le plus petit temps est le meilleur
+                    "LIMIT 5";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, id_grille);
+            ps.setInt(1, numeroGrille);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

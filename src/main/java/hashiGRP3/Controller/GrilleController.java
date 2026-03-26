@@ -256,6 +256,12 @@ public class GrilleController extends ManageController {
     /**Affiche une pop-op lorsqu'on gagne*/
     private void showWin() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        
+        // Attacher la pop-up à la fenêtre principale (mac)
+        if (gamePane.getScene() != null && gamePane.getScene().getWindow() != null) {
+            alert.initOwner(gamePane.getScene().getWindow());
+        }
+
         alert.setTitle("Victoire !");
         alert.setHeaderText("Félicitations, vous avez réussi la grille !");
         alert.setContentText("Que souhaitez-vous faire ?");

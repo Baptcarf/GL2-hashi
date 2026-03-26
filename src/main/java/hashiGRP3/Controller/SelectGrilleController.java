@@ -275,26 +275,51 @@ public class SelectGrilleController extends ManageController {
     }
 
     /**
-     * Charge le leaderboard avec les 5 meilleurs scores pour une grille spécifique
-     */
+    * Charge le leaderboard avec les 5 meilleurs scores pour une grille spécifique
+    */
     private void chargerLeaderboard(int numeroGrille) {
-        java.util.List<String> top5 = databaseManager.obtenirTop5ScoresParGrille(numeroGrille);
+        try {
+            java.util.List<String> top5 = databaseManager.obtenirTop5ScoresParGrille(numeroGrille);
+            Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
 
-        Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
-        top5.sort((a, b) -> {
-            int scoreA = Integer.parseInt(a.split(" ")[1].replace("s", ""));
-            int scoreB = Integer.parseInt(b.split(" ")[1].replace("s", ""));
-            return Integer.compare(scoreA, scoreB);
-        });
-        for (int i = 0; i < 5; i++) {
-            if (i < top5.size()) {
-                String[] parts = top5.get(i).split(" ");
-                String pseudo = parts[0];
-                int score = Integer.parseInt(parts[1].replace("s", ""));
-                labels[i].setText((i + 1) + ". " + pseudo + " " + formatScore(score));
-            } else {
-                labels[i].setText((i + 1) + ".");
+            // 1. On vide d'abord les labels pour éviter l'affichage d'anciens scores
+            for (Label l : labels) l.setText("");
+
+            if (top5 == null || top5.isEmpty()) {
+                chargerLeaderboardVide();
+                return;
             }
+
+            // 2. Tri sécurisé (on suppose que obtenirTop5ScoresParGrille renvoie "Pseudo ScoreEnSecondes")
+            top5.sort((a, b) -> {
+                try {
+                    int scoreA = Integer.parseInt(a.split(" ")[1].replaceAll("[^0-9]", ""));
+                    int scoreB = Integer.parseInt(b.split(" ")[1].replaceAll("[^0-9]", ""));
+                    return Integer.compare(scoreA, scoreB);
+                } catch (Exception e) {
+                    return 0;
+                }
+            });
+
+            // 3. Affichage
+            for (int i = 0; i < labels.length; i++) {
+                if (i < top5.size()) {
+                    String[] parts = top5.get(i).split(" ");
+                    String pseudo = parts[0];
+                    try {
+                        // On extrait uniquement les chiffres pour le score
+                        int scoreSecondes = Integer.parseInt(parts[1].replaceAll("[^0-9]", ""));
+                        labels[i].setText((i + 1) + ". " + pseudo + " (" + formatScore(scoreSecondes) + ")");
+                    } catch (Exception e) {
+                        labels[i].setText((i + 1) + ". " + pseudo + " " + parts[1]);
+                    }
+                } else {
+                    labels[i].setText((i + 1) + ". ---");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors du chargement du leaderboard : " + e.getMessage());
+            chargerLeaderboardVide();
         }
     }
 
