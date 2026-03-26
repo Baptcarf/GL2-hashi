@@ -10,15 +10,16 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationCapaciteMax;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -37,6 +38,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -48,7 +50,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
 
 
@@ -171,7 +172,7 @@ public class GrilleController extends ManageController {
                                                     new TechniqueSaturationMoinsDeux(), new TechniqueSaturationMoinsUn(),
                                                     new TechniqueSaturationMoinsUnSpe(),new TechniqueSaturationCapaciteMax(), 
                                                     new TechniqueIsolationDeuxIles(), new TechniqueIsolationTroisIles(), 
-                                                    new TechniqueIsolationSegmentIle()));
+                                                    new TechniqueIsolationSegmentIle(), new TechniqueIsolementSegment()));
 
             General.setHashi(hashi);
             hashi.remplirHistorique();
