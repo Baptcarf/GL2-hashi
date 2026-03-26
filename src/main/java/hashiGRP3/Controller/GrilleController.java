@@ -23,7 +23,6 @@ import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
@@ -42,6 +41,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.event.ActionEvent;
 
 /* Class */
 public class GrilleController extends ManageController {
@@ -74,6 +74,7 @@ public class GrilleController extends ManageController {
     private Button hypothesisButton;
 
     private boolean onCheck = false;
+    private boolean onAide = false;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
             KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
@@ -95,15 +96,15 @@ public class GrilleController extends ManageController {
         Tooltip t1 = new Tooltip("Annuler le dernier coup");
         t1.setShowDelay(Duration.millis(300));
         undoButton.setTooltip(t1);
-    
+
         Tooltip t2 = new Tooltip("Rétablir le coup annulé");
         t2.setShowDelay(Duration.millis(300));
         redoButton.setTooltip(t2);
-    
+
         Tooltip t3 = new Tooltip("Vérifier la grille et revenir à l'état sans erreur");
         t3.setShowDelay(Duration.millis(300));
         checkButton.setTooltip(t3);
-    
+
         Tooltip t4 = new Tooltip("Afficher un indice pour la grille");
         t4.setShowDelay(Duration.millis(300));
         hintButton.setTooltip(t4);
@@ -111,7 +112,6 @@ public class GrilleController extends ManageController {
         Tooltip t5 = new Tooltip("Activer le mode hypothèse (coups temporaires)");
         t5.setShowDelay(Duration.millis(300));
         hypothesisButton.setTooltip(t5);
-        
 
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -253,6 +253,11 @@ public class GrilleController extends ManageController {
             onCheck = false;
             onCheckClick();
         }
+        if (onAide) {
+            onAide = false;
+            sidePanel.getChildren().clear();
+
+        }
 
     }
 
@@ -293,10 +298,13 @@ public class GrilleController extends ManageController {
         Label title = createTitle("Mode Hypothèse");
 
         hashi.setModeHypothese(true);
-        
-        if (hintButton != null) hintButton.setDisable(true);
-        if (checkButton != null) checkButton.setDisable(true);
-        if (hypothesisButton != null) hypothesisButton.setDisable(true);
+
+        if (hintButton != null)
+            hintButton.setDisable(true);
+        if (checkButton != null)
+            checkButton.setDisable(true);
+        if (hypothesisButton != null)
+            hypothesisButton.setDisable(true);
 
         Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
@@ -316,11 +324,14 @@ public class GrilleController extends ManageController {
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
 
-            if (hintButton != null) hintButton.setDisable(false);
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
+            if (hintButton != null)
+                hintButton.setDisable(false);
+            if (checkButton != null)
+                checkButton.setDisable(false);
+            if (hypothesisButton != null)
+                hypothesisButton.setDisable(false);
         });
-        
+
         btnCancel.setOnAction(e -> {
             System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
@@ -328,9 +339,12 @@ public class GrilleController extends ManageController {
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
 
-            if (hintButton != null) hintButton.setDisable(false);
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
+            if (hintButton != null)
+                hintButton.setDisable(false);
+            if (checkButton != null)
+                checkButton.setDisable(false);
+            if (hypothesisButton != null)
+                hypothesisButton.setDisable(false);
         });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
@@ -379,26 +393,40 @@ public class GrilleController extends ManageController {
     @FXML
     protected void onHintClick() {
         onCheck = false;
-        Label title = createTitle("Indice");
-        Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
-        if (resultat.isEmpty()) {
-            Text msg = new Text("Aucun indice disponible pour le moment.");
-            updateSidePanel(title, new Separator(), msg);
-            return;
+        if (onAide == false) {
+            onAide = true;
+            Label title = createTitle("Indice");
+            if (General.getHashi().EstEtatErreur()) {
+                Text msg = new Text("Vous avez des erreurs veuillez corriger votre grille");
+                updateSidePanel(title, new Separator(), msg);
+                return;
+
+            }
+
+            Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
+            if (resultat.isEmpty()) {
+                Text msg = new Text("Aucun indice disponible pour le moment.");
+                updateSidePanel(title, new Separator(), msg);
+                return;
+            }
+            IndiceResultat indice = resultat.get();
+            Label techniqueName = new Label(indice.getNomTechnique());
+            techniqueName.setWrapText(true);
+            // limiter la largeur du label au width du sidePanel pour forcer le retour à la
+            // ligne
+            techniqueName.maxWidthProperty().bind(sidePanel.widthProperty().subtract(30));
+
+            Text explication = new Text(indice.getExplication());
+            // lier le wrapping de l'explication à la largeur du sidePanel pour éviter
+            // d'agrandir le panneau
+            explication.wrappingWidthProperty().bind(sidePanel.widthProperty().subtract(30));
+
+            updateSidePanel(title, new Separator(), techniqueName, explication);
+        } else {
+            sidePanel.getChildren().clear();
+            onAide = false;
         }
-        IndiceResultat indice = resultat.get();
-        Label techniqueName = new Label(indice.getNomTechnique());
-        techniqueName.setWrapText(true);
-        // limiter la largeur du label au width du sidePanel pour forcer le retour à la
-        // ligne
-        techniqueName.maxWidthProperty().bind(sidePanel.widthProperty().subtract(30));
 
-        Text explication = new Text(indice.getExplication());
-        // lier le wrapping de l'explication à la largeur du sidePanel pour éviter
-        // d'agrandir le panneau
-        explication.wrappingWidthProperty().bind(sidePanel.widthProperty().subtract(30));
-
-        updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
     private void updateSidePanel(javafx.scene.Node... nodes) {
@@ -430,14 +458,20 @@ public class GrilleController extends ManageController {
         return konamiActivated;
     }
 
-    /*réactive les bouttons quand l'utilisateur quite la grille (quand le mode hypothèse est actif)   */
+    /*
+     * réactive les bouttons quand l'utilisateur quite la grille (quand le mode
+     * hypothèse est actif)
+     */
     @FXML
     @Override
-    public void changeScene(ActionEvent event){
+    public void changeScene(ActionEvent event) {
         General.getHashi().setModeHypothese(false);
-        if (hintButton != null) hintButton.setDisable(false);
-        if (checkButton != null) checkButton.setDisable(false);
-        if (hypothesisButton != null) hypothesisButton.setDisable(false);
+        if (hintButton != null)
+            hintButton.setDisable(false);
+        if (checkButton != null)
+            checkButton.setDisable(false);
+        if (hypothesisButton != null)
+            hypothesisButton.setDisable(false);
         super.changeScene(event);
     }
 }

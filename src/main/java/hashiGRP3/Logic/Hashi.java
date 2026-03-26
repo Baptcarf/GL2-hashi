@@ -338,6 +338,10 @@ public class Hashi {
         this.modeErreur = b;
     }
 
+    public boolean EstEtatErreur() {
+        return this.modeErreur;
+    }
+
     public void retourEtatCorrect() {
         historique.retourEtatCorrect();
         setErreur(false);
