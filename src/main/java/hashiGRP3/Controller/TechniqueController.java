@@ -69,7 +69,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "2":
-                titleLabel.setText("Îles avec un seul voisin");
+                titleLabel.setText("ÎLES AVEC UN SEUL VOISIN ");
                 addSectionTitle("Une seule direction possible :");
                 addBodyText("Observez l'île '1' dans la rangée du bas : elle n'a qu'un seul voisin à sa droite. Elle est donc obligée de s'y connecter.\n\n" +
                     "Même logique pour le '2' en haut à droite : avec un seul voisin en dessous, il doit envoyer ses deux ponts vers lui pour être complet.\n\n" +
@@ -115,7 +115,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "7":
-                titleLabel.setText("Isolement d'un segment de deux îles");
+                titleLabel.setText("ISOLEMENT D'UN SEGMENT DE DEUX ÎLES");
                 addSectionTitle("Danger de fermeture prématurée !");
                 addBodyText("Le but du jeu est de relier TOUTES les îles en un seul réseau unique.\n\n" +
                             "Si vous reliez deux '1' directement entre eux, ils forment un couple satisfait (1-1) mais totalement coupé du monde. C'est une erreur fatale.");
@@ -124,7 +124,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "8":
-                titleLabel.setText("Isolement d'un segment de trois îles");
+                titleLabel.setText("ISOLEMENT D'UN SEGMENT DE TROIS ÎLES");
                 addSectionTitle("Éviter les mini-groupes fermés :");
                 addBodyText("Imaginez trois îles alignées (par exemple 1-2-1). Si vous les reliez toutes entre elles, le '2' central sera satisfait, et les '1' aussi.\n\n" +
                             "Problème : Ce trio forme un îlot autonome isolé du reste du puzzle. C'est impossible.");
@@ -133,7 +133,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "9":
-                titleLabel.setText("Isolement chaîne (connexion île)");
+                titleLabel.setText("ISOLEMENT CHAÎNE (CONNEXION ÎLE)");
                 addSectionTitle("La règle du circuit unique :");
                 addBodyText("Vous avez construit une longue chaîne d'îles qui serpente sur le plateau ? Attention aux extrémités !\n\n" +
                             "Si vous reliez les deux bouts de cette chaîne ensemble, vous créez une boucle fermée. Plus aucune île ne pourra rejoindre ce groupe.");
@@ -142,7 +142,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "10":
-                titleLabel.setText("Isolement (connexion segment)");
+                titleLabel.setText("ISOLEMENT (CONNEXION SEGMENT)");
                 addSectionTitle("Unification des réseaux :");
                 addBodyText("À un stade avancé du jeu, vous aurez souvent deux gros groupes d'îles séparés.\n\n" +
                             "Vous ne pouvez pas valider une connexion qui fermerait l'un des groupes sur lui-même. Vous devez chercher le pont qui permettra de FUSIONNER ces deux groupes.");
@@ -152,7 +152,7 @@ public class TechniqueController extends ManageController {
 
             // --- TECHNIQUES AVANCÉES ---
             case "11":
-                titleLabel.setText("Bloquer un pont");
+                titleLabel.setText("BLOQUER UN PONT");
                 addSectionTitle("Raisonnement par l'absurde :");
                 addBodyText("Regardez l'espace entre ces deux îles. Imaginez que vous traciez un pont ici (ligne rouge).\n\n" +
                             "Si ce pont coupe le chemin et empêche une autre île de se connecter au reste du jeu, alors ce pont est impossible. Il créerait une isolation.");
@@ -161,7 +161,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "12":
-                titleLabel.setText("Ajouter un pont forcé");
+                titleLabel.setText("AJOUTER UN PONT FORCÉ");
                 addSectionTitle("Sauver le groupe :");
                 addBodyText("Analysez la structure du réseau. Parfois, un groupe d'îles ne possède qu'une seule 'porte de sortie' vers le reste du plateau.\n\n" +
                             "Si vous ne mettez pas de pont à cet endroit précis, ce groupe mourra isolé.");
@@ -170,7 +170,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "13":
-                titleLabel.setText("Isoler une île avec des ponts");
+                titleLabel.setText("ISOLER UNE ÎLE AVEC DES PONTS");
                 addSectionTitle("Anticipation à un coup :");
                 addBodyText("Observez le '1'. S'il ne se connecte pas au '2' voisin, le '2' sera forcé de se connecter ailleurs.\n\n" +
                             "Mais si le '2' se connecte ailleurs et se sature, le '1' se retrouvera tout seul sans voisin disponible !");
@@ -179,7 +179,7 @@ public class TechniqueController extends ManageController {
                 break;
 
             case "14":
-                titleLabel.setText("Conflits de connexion");
+                titleLabel.setText("CONFLITS DE CONNEXION");
                 addSectionTitle("Gestion des incompatibilités :");
                 addBodyText("Faisons une hypothèse : Si je connecte l'île A vers la droite, cela force l'île B à aller vers le bas.\n\n" +
                             "Cependant, si cela laisse une troisième île C avec un nombre de ponts impossible à satisfaire, alors l'hypothèse de départ était fausse.");
