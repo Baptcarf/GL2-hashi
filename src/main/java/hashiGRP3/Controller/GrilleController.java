@@ -232,7 +232,7 @@ public class GrilleController extends ManageController {
         dessinerPonts(hashi, cellSize);
         dessinerIle(hashi, cellSize);
 
-        if (hashi.estGagne()) {
+        if (hashi.estGagne() && !hashi.getHypothese()) {
             //win.setVisible(true);
             showWin();
         }
