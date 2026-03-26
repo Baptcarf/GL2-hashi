@@ -3,6 +3,7 @@ package hashiGRP3.Logic.Historique;
 
 //Imports
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.EnumSet;
 
@@ -140,8 +141,19 @@ public class HistoriqueManager {
             return false;
 
         Action action = undoStack.pop();
+        EtatDuPont e = action.etatApres;
         action.pont.setEtatActuel(action.etatAvant);
         action.pont.setEstHypothese(action.etatHypoAvant);
+        ArrayList<Mode> modes = new ArrayList<>();
+
+        if (action.pont.isEstHypothese()) {
+            modes.add(Mode.TEMPORAIRE);
+        } else {
+            modes.add(Mode.HISTORIQUE);
+        }
+        General.getDb().addCoup(General.getIdUtilisateur(), General.getId_grille(), action.pont.getileA().getId(),
+                action.pont.getileB().getId(), e.getValue(), action.pont.getEtatActuel().getValue(),
+                EnumSet.copyOf(modes));
         redoStack.push(action);
         return true;
     }
