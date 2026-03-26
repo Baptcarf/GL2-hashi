@@ -23,6 +23,7 @@ import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
@@ -427,5 +428,16 @@ public class GrilleController extends ManageController {
 
     public boolean isKonamiCodeEntered() {
         return konamiActivated;
+    }
+
+    /*réactive les bouttons quand l'utilisateur quite la grille (quand le mode hypothèse est actif)   */
+    @FXML
+    @Override
+    public void changeScene(ActionEvent event){
+        General.getHashi().setModeHypothese(false);
+        if (hintButton != null) hintButton.setDisable(false);
+        if (checkButton != null) checkButton.setDisable(false);
+        if (hypothesisButton != null) hypothesisButton.setDisable(false);
+        super.changeScene(event);
     }
 }
