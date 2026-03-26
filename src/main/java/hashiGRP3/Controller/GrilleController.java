@@ -253,6 +253,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /**Affiche une pop-op lorsqu'on gagne*/
     private void showWin() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Victoire !");
@@ -331,11 +332,11 @@ public class GrilleController extends ManageController {
         hashi.Reset();
         animationTimer.stop();
         General.resetTimer();
-        timer.setText("Chrono : 0");
-
         General.getDb().updateScorePartie(0.0);
+        start_timer();
 
         drawGrid(hashi, gamePane.getWidth());
+
         undoButton.setDisable(true);
         redoButton.setDisable(true);
     }

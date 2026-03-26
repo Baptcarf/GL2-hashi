@@ -276,7 +276,11 @@ public class SelectGrilleController extends ManageController {
         java.util.List<String> top5 = databaseManager.obtenirTop5ScoresParGrille(numeroGrille);
 
         Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
-
+        top5.sort((a, b) -> {
+            int scoreA = Integer.parseInt(a.split(" ")[1].replace("s", ""));
+            int scoreB = Integer.parseInt(b.split(" ")[1].replace("s", ""));
+            return Integer.compare(scoreA, scoreB);
+        });
         for (int i = 0; i < 5; i++) {
             if (i < top5.size()) {
                 String[] parts = top5.get(i).split(" ");
