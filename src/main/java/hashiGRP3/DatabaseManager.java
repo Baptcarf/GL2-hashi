@@ -65,11 +65,10 @@ public class DatabaseManager {
      */
     public void insertUser(String pseudo, String couleur) {
 
-        String sql = "INSERT INTO Utilisateur(pseudo, Couleur, id_avancement_tutoriel) VALUES(?, ?, 0)";// préparation
-                                                                                                        // de la requète
+	//Préparation de la requête
+        String sql = "INSERT INTO Utilisateur(pseudo, Couleur, id_avancement_tutoriel) VALUES(?, ?, 0)";
 
-        try (Connection conn = DriverManager.getConnection(
-                URL);
+        try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, pseudo);
@@ -339,6 +338,7 @@ public class DatabaseManager {
 
     /**
      * Supprime le status des parties d'un joueur.
+     * <p> Note : non utiliser</p>
      */
     public void resetLastTutoriel(String pseudo) {
 
@@ -695,8 +695,7 @@ public class DatabaseManager {
      * Récupère l'avancement du tutoriel pour un utilisateur.
      * 
      * @param pseudo le pseudo de l'utilisateur
-     * @return le numéro du dernier tutoriel complété (0-9), ou 0 si aucun n'a été
-     *         complété
+     * @return le numéro du dernier tutoriel complété (0-9), ou 0 si aucun n'a été complété
      */
     public int obtenirAvancementTutoriel(String pseudo) {
         String sql = "SELECT id_avancement_tutoriel FROM Utilisateur WHERE pseudo = ?";
@@ -770,6 +769,7 @@ public class DatabaseManager {
 
     }
 
+    /**Separer les lignes correspondant à des ponts de celle correspondant à des iles d'un texte donné*/
     private static void separerLignes(String txt, List<String> lignesIles, List<String> lignesPonts) {
         String[] lignes = txt.split("\n");
         boolean isIles = true;
@@ -817,6 +817,7 @@ public class DatabaseManager {
 
     }
 
+    /** Supprime de la base de données les coups qui menaient à une grille fausse*/ 
     public void retourEtatCorrect() {
         String sql = "DELETE FROM Coup where erreur = true and id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);

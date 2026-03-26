@@ -21,14 +21,13 @@ import hashiGRP3.Logic.General;
  */
 public class SceneManager {
 
-    private List<Composante> allScene;
+    private List<Composante> allScene = new ArrayList<>();
     private Stage stage;
     private Stack<Composante> history = new Stack<>();
-    private Composante currentScene;
-    private boolean boolFull;
+    private Composante currentScene = null;
+    private boolean boolFull = false;
 
-    // Un seul conteneur racine et une seule scène pour éviter le bug fullscreen
-    // macOS
+    //Un seul conteneur racine et une seule scène pour éviter le bug fullscreen sur macOS
     private final StackPane rootContainer = new StackPane();
     private final Scene mainScene = new Scene(rootContainer, 1600, 900);
 
@@ -38,14 +37,10 @@ public class SceneManager {
      * @param stage : Le stage (la scène principale).
      */
     SceneManager(Stage stage) {
-        allScene = new ArrayList<>();
         this.stage = stage;
-        this.boolFull = false;
-        currentScene = null;
 
-        // On set la scène unique une seule fois ici, et on ajoute le CSS global
-        mainScene.getStylesheets().add(
-                getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
+        //On set la scène unique une seule fois ici, et on ajoute le CSS global
+        mainScene.getStylesheets().add(getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
         stage.setScene(mainScene);
     }
 
@@ -143,7 +138,6 @@ public class SceneManager {
         if (name.equals("techniqueWithChrono")) {
             Composante comp = findComposant("technique");
             comp.getController().startChrono();
-
         }
 
         if (name.equals("grilledujeu")) {

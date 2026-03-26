@@ -84,23 +84,23 @@ public class ManageController {
     }
 
     /**
-     * méthode pour quitter l'application
+     * Handler pour quitter l'application
      */
     @FXML
     private void quitApp() {
-        General.getDb().resetLastTutoriel("utilisateur");
         System.exit(0);
-
     }
 
     /**
-     * Méthode pour rafraîchir les scores (ex: après avoir complété une grille, ou
-     * après s'être connecté)
+     * Méthode pour rafraîchir les scores (ex: après avoir complété une grille, ou après s'être connecté), abstraite ?.
      */
     public void refreshGrilles() {
     }
 
     public void startChrono() {
 
-    }
+    /**
+     * Méthode pour démarer le chrono, abstraite ?.
+     */
+    public abstract void startChrono();
 }
