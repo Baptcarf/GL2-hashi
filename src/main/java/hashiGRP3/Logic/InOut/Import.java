@@ -1,5 +1,9 @@
+//Attribut au paquet
 package hashiGRP3.Logic.InOut;
 
+
+
+//Import
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +16,8 @@ import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 import hashiGRP3.Logic.General;
+
+
 
 /**
  * Classe pour importer une grille Hashi depuis un fichier texte.

@@ -12,7 +12,7 @@ import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.InOut.Import;
 import hashiGRP3.Logic.General;
 
-/* Point de démarrage de l'application */
+/** Point de démarrage de l'application */
 public class App extends Application {
 
 	private static SceneManager sn;

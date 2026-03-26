@@ -18,13 +18,13 @@ import hashiGRP3.Logic.Pont;
 import hashiGRP3.compDB.*;
 import hashiGRP3.Logic.General;
 
-/* Classe pour la gestion de la base de donnée. */
+/** Classe pour la gestion de la base de donnée. */
 public class DatabaseManager {
 
     private static final String URL = "jdbc:sqlite:data/Hashi.db";
 
     /**
-     * Constructeur
+     * Simple constructeur
      */
     public DatabaseManager() {
         this.init();
@@ -82,6 +82,7 @@ public class DatabaseManager {
         }
     }
 
+    /**Ajoute une partie dans la base de donnée*/
     public int creerPartie(int id_utilisateur, int numGrille) {
 
         String sqlCheck = "SELECT id_partie, statut FROM Partie JOIN Grille on partie.id_grille = Grille.id_grille WHERE id_utilisateur = ? AND numeroGrille = ? ORDER BY id_partie DESC LIMIT 1";
@@ -173,6 +174,7 @@ public class DatabaseManager {
         return -1;
     }
 
+    /**Ajoute une grille dans la base de donnée*/
     public int creerGrille(int numGrille, String nomGrille, int nbIle) {
         int idGrille = -1;
 
@@ -518,6 +520,10 @@ public class DatabaseManager {
         }
     }
 
+    /** Ajoute un coup dans l'historique de la base de donnée
+     * @param id_utilisateur L'id de l'utilisateur qui a réalisé le coup.
+     * @param id_grille L'il de la grille sur laquelle le joueur joue.
+     */
     public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres,
             EnumSet<Mode> modes) {
 
@@ -703,6 +709,7 @@ public class DatabaseManager {
 
     }
 
+    /**Change le status d'une partie ; la partie est soit en cours soit terminé.*/
     public void changeStatutPartie(int status) {
         String sql = "UPDATE Partie SET statut = ? WHERE id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -737,6 +744,7 @@ public class DatabaseManager {
         }
     }
 
+    /**Valide les coups réalisés lors du mode hypothèse*/
     public void validerHypothese() {
         String sql = "UPDATE Coup SET mode_coup = 0 WHERE id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -750,6 +758,7 @@ public class DatabaseManager {
 
     }
 
+    /**Supprimer les coups réalisés lors du mode hypothèse*/
     public void annulerHypothese() {
         String sql = "DELETE FROM Coup where mode_coup = 1 and id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);
