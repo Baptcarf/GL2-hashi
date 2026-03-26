@@ -26,7 +26,7 @@ public abstract class AbstractTechnique implements TechniqueIndice {
     }
 
     /**
-     * Méthode à implémenter par chaque technique :
+     * Méthode à implémenter pour chaque technique :
      * @return un indice si la technique s'applique, sinon Optional.empty()
      */
     protected abstract Optional<IndiceResultat> detecter(Hashi hashi);

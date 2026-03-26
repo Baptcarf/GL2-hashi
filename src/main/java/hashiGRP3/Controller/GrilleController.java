@@ -253,6 +253,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /**Affiche une pop-op lorsqu'on gagne*/
     private void showWin() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Victoire !");
