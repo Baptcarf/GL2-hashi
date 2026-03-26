@@ -151,8 +151,8 @@ public class TechniqueIsolationSegmentIle extends AbstractTechnique {
                         : pontObligatoire.getileB();
 
                 String explication = String.format(
-                    "Depuis le groupe d'îles connectées à (%d, %d), tous les ponts " +
-                    "possibles sauf un créeraient un groupe isolé du reste du puzzle. " +
+                    "Depuis le groupe d'îles connectées à (%d, %d), tous les ponts  " +
+                    "possibles sauf un créeraient un groupe isolé du reste du puzzle.  " +
                     "Le pont depuis (%d, %d) est donc obligatoire.",
                     ileSource.getCoordonnees().x, ileSource.getCoordonnees().y,
                     ileSource.getCoordonnees().x, ileSource.getCoordonnees().y

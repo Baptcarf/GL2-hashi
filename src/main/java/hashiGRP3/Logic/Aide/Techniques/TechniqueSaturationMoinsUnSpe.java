@@ -65,7 +65,7 @@ public class TechniqueSaturationMoinsUnSpe extends AbstractTechnique {
                             && pont2.getEtatActuel() == EtatDuPont.VIDE) {
 
                             String explication = String.format(
-                                "L'île en (%d, %d) a un voisin contraint à 1 pont. "
+                                "L'île en (%d, %d) a un voisin contraint à 1 pont.  "
                                 + "Les autres voisins reçoivent obligatoirement un pont double.",
                                 ile.getCoordonnees().x, ile.getCoordonnees().y
                             );

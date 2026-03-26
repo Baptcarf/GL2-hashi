@@ -70,8 +70,8 @@ public class TechniqueIsolationDeuxIles extends AbstractTechnique {
                             ? EtatDuPont.DOUBLE : EtatDuPont.SIMPLE;
                     if (pont.getEtatActuel() != etatCible) {
                         String explication = String.format(
-                            "L'île en (%d, %d) n'a qu'un seul voisin possible : " +
-                            "l'île en (%d, %d). Elle doit obligatoirement lui envoyer " +
+                            "L'île en (%d, %d) n'a qu'un seul voisin possible :  " +
+                            "l'île en (%d, %d). Elle doit obligatoirement lui envoyer  " +
                             "tous ses ponts.",
                             ile.getCoordonnees().x, ile.getCoordonnees().y,
                             voisin.getCoordonnees().x, voisin.getCoordonnees().y

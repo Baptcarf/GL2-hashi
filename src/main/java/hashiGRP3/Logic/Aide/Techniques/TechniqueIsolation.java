@@ -63,7 +63,7 @@ public class TechniqueIsolation extends AbstractTechnique {
                     Pont pont = ile.getPont(dir);
                     if (pont != null && pont.getEtatActuel() == EtatDuPont.VIDE) {
                         String explication = String.format(
-                                "Il y a une ile sur la grille qui a 1 voisin et qui a besoin de %d pont(s). ",
+                                "Il y a une ile sur la grille qui a 1 voisin  et qui a besoin de %d pont(s). ",
                                 ile.getNbPontsRequis());
                         return Optional.of(new IndiceResultat(
                                 getNom(),

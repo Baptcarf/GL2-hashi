@@ -51,7 +51,7 @@ public class TechniqueSaturation extends AbstractTechnique {
                     Pont pont = ile.getPont(dir);
                     if (pont != null && pont.getEtatActuel() != EtatDuPont.DOUBLE) {
                         String explication = String.format(
-                            "L'île en (%d, %d) requiert %d pont(s) et a %d voisin(s). "
+                            "L'île en (%d, %d) requiert %d pont(s) et a %d voisin(s).  "
                             + "Elle doit obligatoirement avoir un pont double vers chacun d'eux.",
                             ile.getCoordonnees().x, ile.getCoordonnees().y,
                             ile.getNbPontsRequis(), nbVoisins
