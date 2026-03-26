@@ -336,8 +336,6 @@ public class SelectGrilleController extends ManageController {
      */
     @FXML
     public void lancerGrille(ActionEvent event) {
-        int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
-        General.setId_partie(idPartie);
         this.changeScene(event);
     }
 

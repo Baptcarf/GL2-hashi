@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Objects;
 
 /**
-* Représente un pont reliant deux iles
-* Un pont possede une orientation, un état actuel, et un état correcte 
-* et peut être en conflit avec d'autres ponts.
-*/
+ * Représente un pont reliant deux iles
+ * Un pont possede une orientation, un état actuel, et un état correcte
+ * et peut être en conflit avec d'autres ponts.
+ */
 public class Pont {
 
-    /** Les orientations possibles d'un pont.*/
+    /** Les orientations possibles d'un pont. */
     public enum Orientation {
         HORIZONTAL,
         VERTICAL
@@ -26,24 +26,25 @@ public class Pont {
     /** Etat actuel du pont */
     private EtatDuPont etatActuel;
     /** Etat correct du pont */
-    private EtatDuPont etatCorrect = EtatDuPont.VIDE; 
-    /** Orientation du pont*/
+    private EtatDuPont etatCorrect = EtatDuPont.VIDE;
+    /** Orientation du pont */
     private final Orientation orientation;
     /** Liste des ponts qui peuvent renter en conflit avec ce pont */
     private List<Pont> conflits;
-    /** Flag qui sert à savoir si on est en mode hypothèse*/
+    /** Flag qui sert à savoir si on est en mode hypothèse */
     private boolean estHypothese = false;
 
     /**
      * Construit un pont entre deux ile
      * Les iles doivent être alignées horizontalement ou verticalement
      * 
-     * L'ordre des iles est normalisé pour que A=B soit la meme chose que B=A a la création
+     * L'ordre des iles est normalisé pour que A=B soit la meme chose que B=A a la
+     * création
      * La normalisation se fait en plaçant l'ile la plus à gauche (ou la plus haute)
      * en premier, selon l'ordre défini par comparePositionDesIles
      * 
-     * @param ileA Premiere île
-     * @param ileB Deuxieme île
+     * @param ileA       Premiere île
+     * @param ileB       Deuxieme île
      * @param EtatDuPont Etat initial du pont
      * @throws IllegalArgumentException si les iles sont identiques ou pas alignés
      */
@@ -74,9 +75,10 @@ public class Pont {
             throw new IllegalArgumentException("Les iles doivent être aligné verticalement ou horizontalement");
         }
     }
-    
+
     /**
      * Ajoute un pont a la liste des conflits de ce pont
+     * 
      * @param pont Pont en conflit
      */
     public void ajouterConflit(Pont pont) {
@@ -84,8 +86,11 @@ public class Pont {
     }
 
     /**
-     * Vérifie si un pont peut être ajouté sans entrer en conflit avec d'autres ponts existants
-     * @return true si il est possible de rajouter un pont, false si un pont empeche le placement
+     * Vérifie si un pont peut être ajouté sans entrer en conflit avec d'autres
+     * ponts existants
+     * 
+     * @return true si il est possible de rajouter un pont, false si un pont empeche
+     *         le placement
      */
     public boolean pontEstPossible() {
         int total = 0;
@@ -95,76 +100,85 @@ public class Pont {
         return total == 0;
     }
 
-    /** 
+    /**
      * Getter sur la première ile.
-     * @return Première île reliée 
+     * 
+     * @return Première île reliée
      */
     public Ile getileA() {
-	    return ileA;
+        return ileA;
     }
-    
-    /** 
+
+    /**
      * Getter sur la seconde ile.
-     * @return Deuxième île reliée 
+     * 
+     * @return Deuxième île reliée
      */
     public Ile getileB() {
-	    return ileB;
+        return ileB;
     }
-    
-    /** 
+
+    /**
      * Getter qui retourne l'etat du pont.
-     * @return Etat actuel du pont 
+     * 
+     * @return Etat actuel du pont
      */
     public EtatDuPont getEtatActuel() {
-	    return etatActuel;
+        return etatActuel;
     }
 
-    /** 
-     * Getter 
-     * @return Etat correct du pont 
+    /**
+     * Getter
+     * 
+     * @return Etat correct du pont
      */
     public EtatDuPont getEtatCorrect() {
-	    return etatCorrect;
+        return etatCorrect;
     }
 
-    /** 
-     * Getter 
-     * @return True si le pont est dans l'etat correcte 
+    /**
+     * Getter
+     * 
+     * @return True si le pont est dans l'etat correcte
      */
-    public boolean estCorrect(){
-	    return getEtatActuel() == getEtatCorrect();
+    public boolean estCorrect() {
+        return getEtatActuel() == getEtatCorrect();
     }
 
-    /** 
-     * Getter 
-     * @return Orientation du pont 
+    /**
+     * Getter
+     * 
+     * @return Orientation du pont
      */
     public Orientation getOrientation() {
-	    return orientation;
+        return orientation;
     }
 
-    /** 
-     * Getter 
-     * @return Liste des ponts en conflit 
+    /**
+     * Getter
+     * 
+     * @return Liste des ponts en conflit
      */
     public List<Pont> getConflits() {
-	    return conflits;
+        return conflits;
     }
 
     /**
      * Modifie l'état actuel du pont
+     * 
      * @param etat Nouvel état
      */
     public void setEtatActuel(EtatDuPont etat) {
-	    this.etatActuel = etat;
+        this.etatActuel = etat;
     }
 
     /**
      * Modifie l'état correct du pont
+     * 
      * @param etat Nouvel état correct
      */
     public void setEtatCorrect(EtatDuPont etat) {
-	    this.etatCorrect = etat;
+        this.etatCorrect = etat;
     }
 
     /**
@@ -176,39 +190,47 @@ public class Pont {
             case VIDE -> pontEstPossible() ? EtatDuPont.SIMPLE : EtatDuPont.VIDE;
             case SIMPLE -> EtatDuPont.DOUBLE;
             case DOUBLE -> EtatDuPont.VIDE;
+            case INTERDIT -> EtatDuPont.INTERDIT;
         };
     }
 
     /**
      * Renvoie si le mode est en hypothèse
+     * 
      * @return true si le mode est hypothèse.
      */
-    public boolean isEstHypothese() { 
-	    return estHypothese; 
+    public boolean isEstHypothese() {
+        return estHypothese;
     }
 
     /**
      * Active ou désactive le mode hypothèse.
+     * 
      * @param h Un boolean.
      */
-    public void setEstHypothese(boolean h) { 
-	    this.estHypothese = h; 
+    public void setEstHypothese(boolean h) {
+        this.estHypothese = h;
     }
 
     /**
-     * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A=B ou B=A
+     * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de
+     * l'ordre de la connection A=B ou B=A
+     * 
      * @param o Objet à comparer
      * @return true si les ponts relient les memes iles, false sinon
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Pont pont)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Pont pont))
+            return false;
         return ileA.equals(pont.ileA) && ileB.equals(pont.ileB);
     }
 
     /**
      * Hashcode base sur les deux iles
+     * 
      * @return hashcode
      */
     @Override
@@ -218,13 +240,14 @@ public class Pont {
 
     /**
      * Représentation en texte du pont.
+     * 
      * @return une string uqi decrit le pont
      */
     @Override
     public String toString() {
-        return ileA.getCoordonnees() + 
-               (orientation == Orientation.HORIZONTAL ? "-H-" : "-V-" ) + 
-               ileB.getCoordonnees() +
-               " [" + etatCorrect + "]";    
+        return ileA.getCoordonnees() +
+                (orientation == Orientation.HORIZONTAL ? "-H-" : "-V-") +
+                ileB.getCoordonnees() +
+                " [" + etatCorrect + "]";
     }
 }

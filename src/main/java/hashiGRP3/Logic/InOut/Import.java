@@ -1,8 +1,6 @@
 //Attribut au paquet
 package hashiGRP3.Logic.InOut;
 
-
-
 //Import
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,8 +14,6 @@ import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 import hashiGRP3.Logic.General;
-
-
 
 /**
  * Classe pour importer une grille Hashi depuis un fichier texte.
@@ -50,8 +46,7 @@ public class Import {
         HashiGrille.initialisationToutLesPonts();
         ajouterPonts(HashiGrille, lignesPonts);
 
-        General.getDb().creerGrille(1, chemin.toString(), lignesIles.size());
-
+        General.getDb().creerGrille(General.getNum_grille(), chemin.toString(), lignesIles.size());
 
         return HashiGrille;
     }
@@ -59,7 +54,7 @@ public class Import {
     /**
      * Ajoute les ponts à la grille Hashi à partir des lignes du fichier.
      *
-     * @param hashi la grille Hashi à compléter
+     * @param hashi       la grille Hashi à compléter
      * @param lignesPonts les lignes décrivant les ponts
      */
     private static void ajouterPonts(Hashi hashi, List<String> lignesPonts) {
@@ -67,25 +62,25 @@ public class Import {
             ligneVersPont(ligne, hashi); // transforme la ligne en Pont et applique l'état dans Hashi
         }
     }
-     
+
     /**
      * Ajoute les îles à la grille Hashi à partir des lignes du fichier.
      *
-     * @param hashi la grille Hashi à compléter
+     * @param hashi      la grille Hashi à compléter
      * @param lignesIles les lignes décrivant les îles
      */
     private static void ajouterIles(Hashi hashi, List<String> lignesIles) {
         for (String ligne : lignesIles) {
             Ile ile = ligneVersIle(ligne); // transforme "(x,y):nbPonts" en Ile
-            hashi.ajouterIle(ile);         // ajoute dans l'objet Hashi
+            hashi.ajouterIle(ile); // ajoute dans l'objet Hashi
         }
     }
 
     /**
      * Sépare les lignes du fichier en lignes d'îles et lignes de ponts.
      *
-     * @param txt toutes les lignes lues depuis le fichier
-     * @param lignesIles liste où stocker les lignes des îles
+     * @param txt         toutes les lignes lues depuis le fichier
+     * @param lignesIles  liste où stocker les lignes des îles
      * @param lignesPonts liste où stocker les lignes des ponts
      */
     private static void separerLignes(List<String> txt, List<String> lignesIles, List<String> lignesPonts) {
@@ -125,7 +120,7 @@ public class Import {
             throw new IllegalArgumentException("Ligne invalide : " + ligne);
         }
 
-        String coordPart = parts[0].trim();   // "(x,y)"
+        String coordPart = parts[0].trim(); // "(x,y)"
         int nbPonts = Integer.parseInt(parts[1].trim()); // ":p"
 
         // Supprimer les parenthèses et récupérer x et y
@@ -139,13 +134,13 @@ public class Import {
             throw new IllegalArgumentException("Coordonnées invalides : " + coordPart);
         }
 
-        // Prend x et y restant, le -1 car on à fait humainement les txt et pas avec index = 0
+        // Prend x et y restant, le -1 car on à fait humainement les txt et pas avec
+        // index = 0
         int x = Integer.parseInt(xy[0].trim());
         int y = Integer.parseInt(xy[1].trim());
 
         return new Ile(new Coordonnees(x, y), nbPonts);
     }
-
 
     /**
      * Transforme une ligne de fichier représentant un pont en objet Pont
@@ -153,7 +148,7 @@ public class Import {
      * La ligne doit être au format "(x1,y1)(x2,y2):nbPonts".
      *
      * @param ligne la ligne à convertir
-     * @param hash la grille Hashi contenant les îles et ponts
+     * @param hash  la grille Hashi contenant les îles et ponts
      * @return le pont mis à jour, ou null si le pont n'existe pas dans la grille
      * @throws IllegalArgumentException si la ligne ou les îles sont invalides
      */
@@ -172,8 +167,8 @@ public class Import {
 
         // Split "(x1,y1)(x2,y2)" en deux strings "(x1,y1)" et "(x2,y2)"
         String[] ileStrings = coordPart.split("\\)\\(");
-        ileStrings[0] = ileStrings[0].substring(1);       // enlever le "(" initial
-        ileStrings[1] = ileStrings[1].substring(0, ileStrings[1].length()-1); // enlever le ")" final
+        ileStrings[0] = ileStrings[0].substring(1); // enlever le "(" initial
+        ileStrings[1] = ileStrings[1].substring(0, ileStrings[1].length() - 1); // enlever le ")" final
 
         // Convertir en coordonnées
         String[] xy1 = ileStrings[0].split(",");
@@ -208,7 +203,6 @@ public class Import {
         // On applique l'état correct
         pontExistant.setEtatCorrect(etat);
 
-        
         return pontExistant;
     }
 }

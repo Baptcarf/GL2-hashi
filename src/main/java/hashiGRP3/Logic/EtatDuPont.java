@@ -13,13 +13,17 @@ public enum EtatDuPont {
     /** Pont simple */
     SIMPLE(1),
     /** Pont double */
-    DOUBLE(2);
+    DOUBLE(2),
+
+    // Pont interdit
+    INTERDIT(3);
 
     /** Valeur du pont */
     private final int value;
 
     /**
      * Construit un etat de pont avec sa valeur associee
+     * 
      * @param value valeur de l'etat
      */
     EtatDuPont(int value) {
@@ -28,6 +32,7 @@ public enum EtatDuPont {
 
     /**
      * Retourne la valeur numerique de l'etat du pont
+     * 
      * @return valeur de l'etat (0, 1 ou 2)
      */
     public int getValue() {
@@ -35,7 +40,8 @@ public enum EtatDuPont {
     }
 
     /**
-     * La valeur du pont 
+     * La valeur du pont
+     * 
      * @return "vide", "simple", "double"
      */
     @Override
@@ -44,6 +50,7 @@ public enum EtatDuPont {
             case VIDE -> "VIDE";
             case SIMPLE -> "SIMPLE";
             case DOUBLE -> "DOUBLE";
+            case INTERDIT -> "INTERDIT";
         };
     }
 

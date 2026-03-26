@@ -65,7 +65,7 @@ public class DatabaseManager {
      */
     public void insertUser(String pseudo, String couleur) {
 
-	//Préparation de la requête
+        // Préparation de la requête
         String sql = "INSERT INTO Utilisateur(pseudo, Couleur, id_avancement_tutoriel) VALUES(?, ?, 0)";
 
         try (Connection conn = DriverManager.getConnection(URL);
@@ -108,33 +108,6 @@ public class DatabaseManager {
 
                         } else {
                             return rs.getInt("id_partie");
-                        }
-                    }
-                }
-            }
-
-            String sqlCheckGrille = "SELECT id_grille FROM Grille WHERE numeroGrille = ?";
-            try (PreparedStatement psCheckGrille = conn.prepareStatement(sqlCheckGrille)) {
-                psCheckGrille.setInt(1, numGrille);
-                try (ResultSet rs = psCheckGrille.executeQuery()) {
-                    if (!rs.next()) {
-                        int folderIndex = (numGrille - 1) / 5;
-                        String[] folders = { "7x7", "10x10", "12x12" };
-                        String folder = folders[folderIndex];
-                        int fileNumber = ((numGrille - 1) % 5) + 1;
-                        String resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
-                        try (InputStream is = DatabaseManager.class.getResourceAsStream(resourcePath)) {
-                            if (is == null) {
-                                throw new SQLException("Grid file not found for numGrille " + numGrille);
-                            }
-                            String txt = new String(is.readAllBytes());
-                            List<String> lignesIles = new ArrayList<>();
-                            List<String> lignesPonts = new ArrayList<>();
-                            separerLignes(txt, lignesIles, lignesPonts);
-                            int nbIle = lignesIles.size();
-                            General.getDb().creerGrille(numGrille, resourcePath, nbIle);
-                        } catch (IOException e) {
-                            throw new SQLException("Error reading grid file", e);
                         }
                     }
                 }
@@ -338,7 +311,9 @@ public class DatabaseManager {
 
     /**
      * Supprime le status des parties d'un joueur.
-     * <p> Note : non utiliser</p>
+     * <p>
+     * Note : non utiliser
+     * </p>
      */
     public void resetLastTutoriel(String pseudo) {
 
@@ -665,16 +640,15 @@ public class DatabaseManager {
     public List<String> obtenirTop5ScoresParGrille(int numeroGrille) {
         List<String> scores = new ArrayList<>();
 
-        // On joint la table Grille pour filtrer sur le numeroGrille (1, 2, 3...) 
+        // On joint la table Grille pour filtrer sur le numeroGrille (1, 2, 3...)
         // et non sur l'id_grille (la clé primaire auto-incrémentée)
         String sql = "SELECT u.pseudo, p.score " +
-                    "FROM Partie p " +
-                    "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
-                    "JOIN Grille g ON p.id_grille = g.id_grille " +
-                    "WHERE g.numeroGrille = ? AND p.statut = 2 AND p.score IS NOT NULL " +
-                    "ORDER BY p.score ASC " + // ASC car le plus petit temps est le meilleur
-                    "LIMIT 5";
-
+                "FROM Partie p " +
+                "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
+                "JOIN Grille g ON p.id_grille = g.id_grille " +
+                "WHERE g.numeroGrille = ? AND p.statut = 2 AND p.score IS NOT NULL " +
+                "ORDER BY p.score DESC " +
+                "LIMIT 5";
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -698,7 +672,8 @@ public class DatabaseManager {
      * Récupère l'avancement du tutoriel pour un utilisateur.
      * 
      * @param pseudo le pseudo de l'utilisateur
-     * @return le numéro du dernier tutoriel complété (0-9), ou 0 si aucun n'a été complété
+     * @return le numéro du dernier tutoriel complété (0-9), ou 0 si aucun n'a été
+     *         complété
      */
     public int obtenirAvancementTutoriel(String pseudo) {
         String sql = "SELECT id_avancement_tutoriel FROM Utilisateur WHERE pseudo = ?";
@@ -772,7 +747,10 @@ public class DatabaseManager {
 
     }
 
-    /**Separer les lignes correspondant à des ponts de celle correspondant à des iles d'un texte donné*/
+    /**
+     * Separer les lignes correspondant à des ponts de celle correspondant à des
+     * iles d'un texte donné
+     */
     private static void separerLignes(String txt, List<String> lignesIles, List<String> lignesPonts) {
         String[] lignes = txt.split("\n");
         boolean isIles = true;
@@ -820,7 +798,7 @@ public class DatabaseManager {
 
     }
 
-    /** Supprime de la base de données les coups qui menaient à une grille fausse*/ 
+    /** Supprime de la base de données les coups qui menaient à une grille fausse */
     public void retourEtatCorrect() {
         String sql = "DELETE FROM Coup where erreur = true and id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);
