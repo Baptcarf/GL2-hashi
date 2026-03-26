@@ -13,7 +13,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
@@ -229,10 +232,32 @@ public class GrilleController extends ManageController {
         dessinerIle(hashi, cellSize);
 
         if (hashi.estGagne()) {
-            win.setVisible(true);
+            //win.setVisible(true);
+            showWin();
         }
     }
+    private void showWin() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Victoire !");
+        alert.setHeaderText("Félicitations, vous avez réussi la grille !");
+        alert.setContentText("Que souhaitez-vous faire ?");
 
+        ButtonType btnRejouer = new ButtonType("Rejouer", ButtonData.OK_DONE);
+        ButtonType btnMenu = new ButtonType("Retour au menu", ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(btnRejouer, btnMenu);
+
+        alert.showAndWait().ifPresent(result -> {
+            if (result == btnRejouer) {
+                onResetClick();  
+            } else if (result == btnMenu) {
+                Button dummyButton = new Button();
+                dummyButton.setUserData("selectGrille");
+                ActionEvent event = new ActionEvent(dummyButton, null);
+                changeScene(event);
+            }
+        });
+    }
     private void dessinerGrille(int cols, int rows, double size) {
         for (int y = 0; y <= rows; y++) {
             for (int x = 0; x <= cols; x++) {

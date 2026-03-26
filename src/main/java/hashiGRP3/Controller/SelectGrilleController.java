@@ -32,6 +32,7 @@ public class SelectGrilleController extends ManageController {
      * grilles.
      */
     private DatabaseManager databaseManager = new DatabaseManager();
+    private Button currentlySelectedButton = null;
 
     /* ===================== LABELS ===================== */
 
@@ -219,6 +220,11 @@ public class SelectGrilleController extends ManageController {
         bouton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
         bouton.getStyleClass().add(styleClass);
         bouton.setOnAction(e -> {
+            if (currentlySelectedButton != null) {
+                currentlySelectedButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+            }
+            bouton.setStyle("-fx-background-color: #4CAF50; -fx-cursor: hand; -fx-border-color: #4CAF50;");
+            currentlySelectedButton = bouton;
             General.setNum_grille(numeroGrille);
             afficherGrilleSelectionnee(numeroGrille);
             boutonJouer.setDisable(false);
