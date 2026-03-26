@@ -229,8 +229,8 @@ public class GrilleController extends ManageController {
 
         StackPane parent = (StackPane) gamePane.getParent();
         double cellSize = Math.min(
-                (parent.getWidth() - 40) / (nbColonnes + 1),
-                (parent.getHeight() - 40) / (nbLignes + 1));
+                (parent.getWidth() - 70) / (nbColonnes + 1),
+                (parent.getHeight() - 70) / (nbLignes + 1));
 
         double gridWidth = cellSize * (nbColonnes + 1);
         double gridHeight = cellSize * (nbLignes + 1);
@@ -239,11 +239,11 @@ public class GrilleController extends ManageController {
         gamePane.setMaxSize(gridWidth, gridHeight);
 
         gamePane.getChildren().clear();
-
+        
         dessinerGrille(nbColonnes, nbLignes, cellSize);
         dessinerPonts(hashi, cellSize);
         dessinerIle(hashi, cellSize);
-
+        dessinerIndices(nbColonnes, nbLignes, cellSize);
         if (hashi.estGagne() && !hashi.getHypothese()) {
             double score = stop_timer();
             General.getDb().updateScorePartie(score);
@@ -252,6 +252,34 @@ public class GrilleController extends ManageController {
             showWin();
         }
     }
+
+
+    private void dessinerIndices(int cols, int rows, double size) {
+    double fontSize = Math.min(14, Math.max(8, size * 0.5));
+    Color indexColor = Color.web("#888888");
+
+    for (int x = 0; x < cols+1; x++) {
+        String label = String.format("%02d", x);
+        double centerX = x * size + size / 2;
+        Text top = new Text(label);
+        top.setFont(Font.font("System", FontWeight.BOLD, fontSize));
+        top.setFill(indexColor);
+        top.setTranslateX(centerX - top.getLayoutBounds().getWidth() / 2);
+        top.setTranslateY(-size + size * 0.80);
+        gamePane.getChildren().add(top);
+    }
+
+    for (int y = 0; y < rows+1; y++) {
+        String label = String.format("%02d", y);
+        double centerY = y * size + size * 0.72;
+        Text left = new Text(label);
+        left.setFont(Font.font("System", FontWeight.BOLD, fontSize));
+        left.setFill(indexColor);
+        left.setTranslateX(-size + size * 0.28);
+        left.setTranslateY(centerY - left.getLayoutBounds().getHeight() / 2);
+        gamePane.getChildren().add(left);
+    }
+}
 
     /**Affiche une pop-op lorsqu'on gagne*/
     private void showWin() {
