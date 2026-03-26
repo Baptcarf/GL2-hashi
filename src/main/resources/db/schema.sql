@@ -2,7 +2,7 @@
 -- Table des informations de l'utilisateur
 CREATE TABLE Utilisateur(
         id_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
-        pseudo VARCHAR(50) NOT NULL UNIQUE, 
+        pseudo VARCHAR(12) NOT NULL UNIQUE, 
         couleur VARCHAR(7) NOT NULL, -- La couleur du compte
         id_avancement_tutoriel INT NOT NULL -- Le niveau de tutoriel atteint par l'utilisateur
 );
