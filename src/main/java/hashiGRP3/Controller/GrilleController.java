@@ -8,6 +8,21 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import hashiGRP3.Logic.Aide.IndiceResultat;
+import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -32,22 +47,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-import hashiGRP3.Logic.Aide.IndiceResultat;
-import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
-import hashiGRP3.Logic.General;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 
 
 /** Classe de controlleur d'une grille de jeu */
@@ -129,6 +128,8 @@ public class GrilleController extends ManageController {
                         for (var pont : hashi.getPonts()) {
                             pont.setEtatActuel(pont.getEtatCorrect());
                         }
+                        konamiActivated = false;
+                        konamiIndex = 0;
                         drawGrid(hashi, gamePane.getWidth());
                     }
                 });
