@@ -331,11 +331,11 @@ public class GrilleController extends ManageController {
         hashi.Reset();
         animationTimer.stop();
         General.resetTimer();
-        timer.setText("Chrono : 0");
-
         General.getDb().updateScorePartie(0.0);
+        start_timer();
 
         drawGrid(hashi, gamePane.getWidth());
+
         undoButton.setDisable(true);
         redoButton.setDisable(true);
     }
