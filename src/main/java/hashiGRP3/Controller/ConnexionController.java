@@ -4,27 +4,25 @@ package hashiGRP3.Controller;
 
 
 //Imports
+import java.util.List;
+
+import hashiGRP3.DatabaseManager;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Scene.CreerUtilisateur;
+import hashiGRP3.SceneManager;
+import hashiGRP3.compDB.Utilisateur;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.Node;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.event.ActionEvent;
-
-
-import hashiGRP3.SceneManager;
-import hashiGRP3.DatabaseManager;
-import hashiGRP3.compDB.Utilisateur;
-import hashiGRP3.Scene.CreerUtilisateur;
-import hashiGRP3.Logic.General;
-import java.util.List;
 
 /**
  * Contrôleur pour la scène de connexion des utilisateurs.
@@ -189,7 +187,7 @@ public class ConnexionController extends ManageController {
      */
     @FXML
     private void addCount() {
-            if (nbCount < 6) {
+            if (nbCount < 5) {
                     endSupp();
 
                     Circle circle = createCircle("#eaf5ff");
