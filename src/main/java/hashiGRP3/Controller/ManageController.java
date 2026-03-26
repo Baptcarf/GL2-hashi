@@ -94,13 +94,10 @@ public class ManageController {
     /**
      * Méthode pour rafraîchir les scores (ex: après avoir complété une grille, ou après s'être connecté), abstraite ?.
      */
-    public void refreshGrilles() {
-    }
-
-    public void startChrono() {
+    public void refreshGrilles() {}
 
     /**
      * Méthode pour démarer le chrono, abstraite ?.
      */
-    public abstract void startChrono();
+    public void startChrono() {}
 }
