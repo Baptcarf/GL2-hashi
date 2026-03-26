@@ -25,7 +25,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Label text="Grille numéro X">
+            <Label fx:id="labelTitreGrille" text="Grille numéro ">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>

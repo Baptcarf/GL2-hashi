@@ -1,17 +1,29 @@
-//Attribut au paquet
 package hashiGRP3.Controller;
 
-
-
-//Imports
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import hashiGRP3.Logic.Aide.IndiceResultat;
+import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
@@ -30,35 +42,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import javafx.event.ActionEvent;
 
-import hashiGRP3.Logic.Aide.IndiceResultat;
-import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
-import hashiGRP3.Logic.General;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
-
-
-
-/* Classe controlleur d'une grille de jeu */
+/* Class */
 public class GrilleController extends ManageController {
 
-    	/** La grille au niveau logique */
-	private Hashi hashi;
-
-	/** Le système d'aide*/
-	private MoteurIndice moteurIndice;
-    	private ChangeListener<Bounds> boundsListener;
+    // ← ICI au niveau de la classe, pas dans une méthode
+    private Hashi hashi;
+    private MoteurIndice moteurIndice;
+    private ChangeListener<Bounds> boundsListener;
 
     AnimationTimer animationTimer;
     double startup;
@@ -81,9 +72,10 @@ public class GrilleController extends ManageController {
     private Button hintButton;
     @FXML
     private Button hypothesisButton;
+    @FXML
+    private Label labelTitreGrille;
 
     private boolean onCheck = false;
-    private boolean onAide = false;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
             KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
@@ -105,15 +97,15 @@ public class GrilleController extends ManageController {
         Tooltip t1 = new Tooltip("Annuler le dernier coup");
         t1.setShowDelay(Duration.millis(300));
         undoButton.setTooltip(t1);
-
+    
         Tooltip t2 = new Tooltip("Rétablir le coup annulé");
         t2.setShowDelay(Duration.millis(300));
         redoButton.setTooltip(t2);
-
+    
         Tooltip t3 = new Tooltip("Vérifier la grille et revenir à l'état sans erreur");
         t3.setShowDelay(Duration.millis(300));
         checkButton.setTooltip(t3);
-
+    
         Tooltip t4 = new Tooltip("Afficher un indice pour la grille");
         t4.setShowDelay(Duration.millis(300));
         hintButton.setTooltip(t4);
@@ -121,6 +113,7 @@ public class GrilleController extends ManageController {
         Tooltip t5 = new Tooltip("Activer le mode hypothèse (coups temporaires)");
         t5.setShowDelay(Duration.millis(300));
         hypothesisButton.setTooltip(t5);
+        
 
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -140,6 +133,10 @@ public class GrilleController extends ManageController {
     private void chargerGrille() {
         sidePanel.getChildren().clear();
         int grid_num = General.getNum_grille();
+
+        if (labelTitreGrille != null) {
+            labelTitreGrille.setText("Grille numéro " + grid_num);
+        }
 
         int folderIndex = (grid_num - 1) / 5;
         String[] folders = { "7x7", "10x10", "12x12" };
@@ -262,11 +259,6 @@ public class GrilleController extends ManageController {
             onCheck = false;
             onCheckClick();
         }
-        if (onAide) {
-            onAide = false;
-            sidePanel.getChildren().clear();
-
-        }
 
     }
 
@@ -307,13 +299,10 @@ public class GrilleController extends ManageController {
         Label title = createTitle("Mode Hypothèse");
 
         hashi.setModeHypothese(true);
-
-        if (hintButton != null)
-            hintButton.setDisable(true);
-        if (checkButton != null)
-            checkButton.setDisable(true);
-        if (hypothesisButton != null)
-            hypothesisButton.setDisable(true);
+        
+        if (hintButton != null) hintButton.setDisable(true);
+        if (checkButton != null) checkButton.setDisable(true);
+        if (hypothesisButton != null) hypothesisButton.setDisable(true);
 
         Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
@@ -333,14 +322,11 @@ public class GrilleController extends ManageController {
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
 
-            if (hintButton != null)
-                hintButton.setDisable(false);
-            if (checkButton != null)
-                checkButton.setDisable(false);
-            if (hypothesisButton != null)
-                hypothesisButton.setDisable(false);
+            if (hintButton != null) hintButton.setDisable(false);
+            if (checkButton != null) checkButton.setDisable(false);
+            if (hypothesisButton != null) hypothesisButton.setDisable(false);
         });
-
+        
         btnCancel.setOnAction(e -> {
             System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
@@ -348,12 +334,9 @@ public class GrilleController extends ManageController {
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
 
-            if (hintButton != null)
-                hintButton.setDisable(false);
-            if (checkButton != null)
-                checkButton.setDisable(false);
-            if (hypothesisButton != null)
-                hypothesisButton.setDisable(false);
+            if (hintButton != null) hintButton.setDisable(false);
+            if (checkButton != null) checkButton.setDisable(false);
+            if (hypothesisButton != null) hypothesisButton.setDisable(false);
         });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
@@ -402,40 +385,26 @@ public class GrilleController extends ManageController {
     @FXML
     protected void onHintClick() {
         onCheck = false;
-        if (onAide == false) {
-            onAide = true;
-            Label title = createTitle("Indice");
-            if (General.getHashi().EstEtatErreur()) {
-                Text msg = new Text("Vous avez des erreurs veuillez corriger votre grille");
-                updateSidePanel(title, new Separator(), msg);
-                return;
-
-            }
-
-            Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
-            if (resultat.isEmpty()) {
-                Text msg = new Text("Aucun indice disponible pour le moment.");
-                updateSidePanel(title, new Separator(), msg);
-                return;
-            }
-            IndiceResultat indice = resultat.get();
-            Label techniqueName = new Label(indice.getNomTechnique());
-            techniqueName.setWrapText(true);
-            // limiter la largeur du label au width du sidePanel pour forcer le retour à la
-            // ligne
-            techniqueName.maxWidthProperty().bind(sidePanel.widthProperty().subtract(30));
-
-            Text explication = new Text(indice.getExplication());
-            // lier le wrapping de l'explication à la largeur du sidePanel pour éviter
-            // d'agrandir le panneau
-            explication.wrappingWidthProperty().bind(sidePanel.widthProperty().subtract(30));
-
-            updateSidePanel(title, new Separator(), techniqueName, explication);
-        } else {
-            sidePanel.getChildren().clear();
-            onAide = false;
+        Label title = createTitle("Indice");
+        Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
+        if (resultat.isEmpty()) {
+            Text msg = new Text("Aucun indice disponible pour le moment.");
+            updateSidePanel(title, new Separator(), msg);
+            return;
         }
+        IndiceResultat indice = resultat.get();
+        Label techniqueName = new Label(indice.getNomTechnique());
+        techniqueName.setWrapText(true);
+        // limiter la largeur du label au width du sidePanel pour forcer le retour à la
+        // ligne
+        techniqueName.maxWidthProperty().bind(sidePanel.widthProperty().subtract(30));
 
+        Text explication = new Text(indice.getExplication());
+        // lier le wrapping de l'explication à la largeur du sidePanel pour éviter
+        // d'agrandir le panneau
+        explication.wrappingWidthProperty().bind(sidePanel.widthProperty().subtract(30));
+
+        updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
     private void updateSidePanel(javafx.scene.Node... nodes) {
@@ -467,20 +436,14 @@ public class GrilleController extends ManageController {
         return konamiActivated;
     }
 
-    /*
-     * réactive les bouttons quand l'utilisateur quite la grille (quand le mode
-     * hypothèse est actif)
-     */
+    /*réactive les bouttons quand l'utilisateur quite la grille (quand le mode hypothèse est actif)   */
     @FXML
     @Override
-    public void changeScene(ActionEvent event) {
+    public void changeScene(ActionEvent event){
         General.getHashi().setModeHypothese(false);
-        if (hintButton != null)
-            hintButton.setDisable(false);
-        if (checkButton != null)
-            checkButton.setDisable(false);
-        if (hypothesisButton != null)
-            hypothesisButton.setDisable(false);
+        if (hintButton != null) hintButton.setDisable(false);
+        if (checkButton != null) checkButton.setDisable(false);
+        if (hypothesisButton != null) hypothesisButton.setDisable(false);
         super.changeScene(event);
     }
 }
