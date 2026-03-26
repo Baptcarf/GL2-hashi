@@ -1,26 +1,15 @@
+//Attribut au paquet
 package hashiGRP3.Controller;
 
+
+
+//Imports
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import hashiGRP3.Logic.Aide.IndiceResultat;
-import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
-import hashiGRP3.Logic.General;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -43,13 +32,33 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.event.ActionEvent;
 
-/* Class */
+import hashiGRP3.Logic.Aide.IndiceResultat;
+import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
+
+
+
+/* Classe controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
 
-    // ← ICI au niveau de la classe, pas dans une méthode
-    private Hashi hashi;
-    private MoteurIndice moteurIndice;
-    private ChangeListener<Bounds> boundsListener;
+    	/** La grille au niveau logique */
+	private Hashi hashi;
+
+	/** Le système d'aide*/
+	private MoteurIndice moteurIndice;
+    	private ChangeListener<Bounds> boundsListener;
 
     AnimationTimer animationTimer;
     double startup;
