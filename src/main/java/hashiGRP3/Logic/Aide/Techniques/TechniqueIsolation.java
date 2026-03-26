@@ -1,5 +1,9 @@
+//Attribut au paquet
 package hashiGRP3.Logic.Aide.Techniques;
 
+
+
+// Imports
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +16,8 @@ import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
+
+
 
 /**
  * Technique T2 Isolation des iles

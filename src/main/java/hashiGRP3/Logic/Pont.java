@@ -1,7 +1,7 @@
-//Att
+//Attribut au paquet
 package hashiGRP3.Logic;
 
-//imports
+//Imports
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +31,7 @@ public class Pont {
     private final Orientation orientation;
     /** Liste des ponts qui peuvent renter en conflit avec ce pont */
     private List<Pont> conflits;
-
+    /** Flag qui sert à savoir si on est en mode hypothèse*/
     private boolean estHypothese = false;
 
     /**
@@ -179,9 +179,21 @@ public class Pont {
         };
     }
 
+    /**
+     * Renvoie si le mode est en hypothèse
+     * @return true si le mode est hypothèse.
+     */
+    public boolean isEstHypothese() { 
+	    return estHypothese; 
+    }
 
-    public boolean isEstHypothese() { return estHypothese; }
-    public void setEstHypothese(boolean h) { this.estHypothese = h; }
+    /**
+     * Active ou désactive le mode hypothèse.
+     * @param h Un boolean.
+     */
+    public void setEstHypothese(boolean h) { 
+	    this.estHypothese = h; 
+    }
 
     /**
      * Deux ponts sont egaux s'ils relient les mêmes îles, mais on se fiche de l'ordre de la connection A=B ou B=A

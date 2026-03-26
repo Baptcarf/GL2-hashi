@@ -438,8 +438,8 @@ public class HashiTest{
     
     @Test
     public void testToStringAvecFichier() throws IOException {
-        // On charge le fichier comme dans ton main
-        Path chemin = Path.of("src/main/java/hashiGRP3/Ressources/10x10/hashi2.txt");
+        //On charge le fichier
+        Path chemin = Path.of("src/main/resources/hashiGRP3/10x10/hashi2.txt");
         Hashi hashi = Import.chargerFichier(chemin);
 
         // Initialisation des conflits pour parcourir le maximum du code

@@ -22,7 +22,7 @@ import hashiGRP3.DatabaseManager;
 
 
 
-/* Class */
+/** Classe d'une fenêtre pop-up pour la création d'un utilisateur. */
 public class CreerUtilisateur {
 
     public record Result(String pseudo, Color color, boolean isNewPlayer) {

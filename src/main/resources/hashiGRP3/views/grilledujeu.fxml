@@ -25,7 +25,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Label text="Grille numéro X">
+            <Label fx:id="labelTitreGrille" text="Grille numéro ">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -127,7 +127,7 @@
    <bottom>
       <AnchorPane prefHeight="60.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 1 0 0 0;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="20.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeScene" prefHeight="30.0" prefWidth="150.0" text="Technique" userData="technique" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
+            <Button layoutX="20.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeScene" prefHeight="30.0" prefWidth="150.0" text="Technique" userData="techniqueWithChrono" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="15.0" />
             <Label fx:id="win" alignment="CENTER" layoutX="319.0" layoutY="16.0" text="Vous avez réussi" textAlignment="CENTER" visible="false">
                <font>
                   <Font name="System Bold" size="20.0" />

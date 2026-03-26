@@ -24,7 +24,7 @@ public class MoteurIndice {
     /**
      * Propose le premier indice applicable sur la grille.
      * @param hashi Grille de jeu
-     * @return Optional<IndiceResultat> premier indice trouvé ou empty si aucun
+     * @return Une option de IndiceResultat: premier indice trouvé ou empty si aucun
      */
     public Optional<IndiceResultat> proposerProchainIndice(Hashi hashi) {
         for (TechniqueIndice technique : techniques) {
@@ -40,7 +40,7 @@ public class MoteurIndice {
      * Propose un indice en limitant la difficulté maximale.
      * @param hashi Grille de jeu
      * @param niveauMax Niveau de difficulté maximal
-     * @return Optional<IndiceResultat> premier indice trouvé ou empty si aucun
+     * @return Une option IndiceResultat : premier indice trouvé ou empty si aucun
      */
     public Optional<IndiceResultat> proposerIndiceDifficulteMax(Hashi hashi, NiveauDifficulte niveauMax) {
         for (TechniqueIndice technique : techniques) {

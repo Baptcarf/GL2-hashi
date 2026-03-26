@@ -15,7 +15,7 @@ public class ManageController {
 
     /** Gestionnaire de scènes pour naviguer entre les différentes vues. */
     private SceneManager sceneManager;
-    
+
     /** Pseudo de l'utilisateur actuellement connecté. */
     private static String utilisateur;
 
@@ -48,14 +48,13 @@ public class ManageController {
      * @param event : Un événement reçu.
      */
     @FXML
-    private void retourArriere(ActionEvent event) {
+    public void retourArriere(ActionEvent event) {
         if (sceneManager == null) {
             System.out.println("SceneManager non injecté");
             return;
-	}
+        }
         sceneManager.retourArriere();
     }
-
 
     /**
      * Getter du scène manager
@@ -99,5 +98,9 @@ public class ManageController {
      * après s'être connecté)
      */
     public void refreshGrilles() {
+    }
+
+    public void startChrono() {
+
     }
 }

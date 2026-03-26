@@ -27,7 +27,8 @@ public class SceneManager {
     private Composante currentScene;
     private boolean boolFull;
 
-    //Un seul conteneur racine et une seule scène pour éviter le bug fullscreen macOS
+    // Un seul conteneur racine et une seule scène pour éviter le bug fullscreen
+    // macOS
     private final StackPane rootContainer = new StackPane();
     private final Scene mainScene = new Scene(rootContainer, 1600, 900);
 
@@ -44,8 +45,7 @@ public class SceneManager {
 
         // On set la scène unique une seule fois ici, et on ajoute le CSS global
         mainScene.getStylesheets().add(
-            getClass().getResource("/hashiGRP3/style/style.css").toExternalForm()
-        );
+                getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
         stage.setScene(mainScene);
     }
 
@@ -73,7 +73,8 @@ public class SceneManager {
                 manageController.setSceneManager(this);
             }
 
-            // On stocke le Parent (contenu FXML) directement, plus besoin de créer une Scene
+            // On stocke le Parent (contenu FXML) directement, plus besoin de créer une
+            // Scene
             allScene.add(new Composante(root, name, (ManageController) controller));
 
         } catch (IOException ex) {
@@ -99,6 +100,7 @@ public class SceneManager {
     /**
      * Retourne la scène principale unique.
      * Remplace findScene() — tous les nœuds partagent désormais la même scène.
+     * 
      * @return mainScene
      */
     public Scene getMainScene() {
@@ -111,7 +113,12 @@ public class SceneManager {
      * @param name La nouvelle scène principale.
      */
     public void changeScene(String name) {
-        Composante c = findComposant(name);
+        Composante c;
+        if (name.equals("techniqueWithChrono")) {
+            c = findComposant("technique");
+        } else {
+            c = findComposant(name);
+        }
 
         if (c == null) {
             System.out.println("Scène introuvable : " + name);
@@ -133,12 +140,18 @@ public class SceneManager {
             comp.getController().refreshGrilles();
         }
 
+        if (name.equals("techniqueWithChrono")) {
+            Composante comp = findComposant("technique");
+            comp.getController().startChrono();
+
+        }
+
         if (name.equals("grilledujeu")) {
             Composante comp = findComposant("grilledujeu");
             comp.getController().refreshGrilles();
         }
 
-        //   On swap uniquement le contenu dans le StackPane racine
+        // On swap uniquement le contenu dans le StackPane racine
         // Le fullscreen n'est jamais interrompu
         rootContainer.getChildren().setAll(c.getRoot());
 

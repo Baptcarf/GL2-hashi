@@ -22,8 +22,7 @@ CREATE TABLE Partie(
         id_utilisateur BIGINT,
         id_grille BIGINT,
         statut INT NOT NULL, -- Le statut de la partie (0 pas commencé, 1 en cours, 2 terminé)
-        score INT , -- Le score de l'utilisateur si la partie est terminé
-        sauvegarde BLOB, -- le fichier contenant la sauvegarde de la partie du joueur
+        score REAL, -- Le score de l'utilisateur si la partie est terminé
         FOREIGN KEY (id_utilisateur)
             REFERENCES Utilisateur(id_utilisateur)
             ON DELETE CASCADE,
