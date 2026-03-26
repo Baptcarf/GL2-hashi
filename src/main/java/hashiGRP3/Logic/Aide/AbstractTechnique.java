@@ -1,6 +1,9 @@
-
+//Attribut au paquet
 package hashiGRP3.Logic.Aide;
 
+
+
+/* Imports */
 import java.util.Optional;
 import java.util.ArrayList;
 
@@ -9,6 +12,9 @@ import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 
+
+
+/** Classe abstraite représentant une technique */
 public abstract class AbstractTechnique implements TechniqueIndice {
 
     @Override
@@ -21,7 +27,7 @@ public abstract class AbstractTechnique implements TechniqueIndice {
 
     /**
      * Méthode à implémenter par chaque technique :
-     * retourne un indice si la technique s'applique, sinon Optional.empty()
+     * @return un indice si la technique s'applique, sinon Optional.empty()
      */
     protected abstract Optional<IndiceResultat> detecter(Hashi hashi);
 
@@ -37,6 +43,7 @@ public abstract class AbstractTechnique implements TechniqueIndice {
         return getVoisin(ile).size();
     }
 
+    /** Renvoie les voisins d'une ile donnée.*/
     protected ArrayList<Pont> getVoisin(Ile ile) {
         ArrayList<Pont> voisin = new ArrayList<>();
         for (Direction dir : Direction.values()) {
