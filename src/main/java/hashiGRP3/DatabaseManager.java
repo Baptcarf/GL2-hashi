@@ -82,11 +82,11 @@ public class DatabaseManager {
         }
     }
 
-    /**Ajoute une partie dans la base de donnée*/
+    /** Ajoute une partie dans la base de donnée */
     public int creerPartie(int id_utilisateur, int numGrille) {
 
         String sqlCheck = "SELECT id_partie, statut FROM Partie JOIN Grille on partie.id_grille = Grille.id_grille WHERE id_utilisateur = ? AND numeroGrille = ? ORDER BY id_partie DESC LIMIT 1";
-        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut) VALUES (?,(SELECT id_grille FROM Grille where numeroGrille = ?), ?)";
+        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut,score) VALUES (?,(SELECT id_grille FROM Grille where numeroGrille = ?), ?,0)";
 
         boolean reset = false;
         int id_partie = -1;
@@ -168,13 +168,56 @@ public class DatabaseManager {
             General.setId_partie(id_partie);
             resetCoupPartie();
             changeStatutPartie(1);
+            updateScorePartie(0.0);
             return id_partie;
         }
 
         return -1;
     }
 
-    /**Ajoute une grille dans la base de donnée*/
+    /** Ajoute une grille dans la base de donnée */
+    public double checkScorePartie() {
+        String sqlCheck = "SELECT Score from Partie WHERE id_partie = ?";
+
+        try (Connection conn = DriverManager.getConnection(
+                URL);
+                PreparedStatement pstmt = conn.prepareStatement(sqlCheck)) {
+
+            pstmt.setInt(1, General.getId_partie());
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble(1);
+                }
+
+            }
+            return 0.0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0.0;
+        }
+
+    }
+
+    public void updateScorePartie(Double score) {
+        String sqlCheck = "UPDATE Partie SET score = ? WHERE id_partie = ?";
+
+        try (Connection conn = DriverManager.getConnection(
+                URL);
+                PreparedStatement pstmt = conn.prepareStatement(sqlCheck)) {
+
+            pstmt.setDouble(1, score);
+            pstmt.setInt(2, General.getId_partie());
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public int creerGrille(int numGrille, String nomGrille, int nbIle) {
         int idGrille = -1;
 
@@ -520,9 +563,11 @@ public class DatabaseManager {
         }
     }
 
-    /** Ajoute un coup dans l'historique de la base de donnée
+    /**
+     * Ajoute un coup dans l'historique de la base de donnée
+     * 
      * @param id_utilisateur L'id de l'utilisateur qui a réalisé le coup.
-     * @param id_grille L'il de la grille sur laquelle le joueur joue.
+     * @param id_grille      L'il de la grille sur laquelle le joueur joue.
      */
     public void addCoup(int id_utilisateur, int id_grille, int id_dep, int id_arr, int valCoupAvant, int valCoupApres,
             EnumSet<Mode> modes) {
@@ -709,7 +754,7 @@ public class DatabaseManager {
 
     }
 
-    /**Change le status d'une partie ; la partie est soit en cours soit terminé.*/
+    /** Change le status d'une partie ; la partie est soit en cours soit terminé. */
     public void changeStatutPartie(int status) {
         String sql = "UPDATE Partie SET statut = ? WHERE id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -744,7 +789,7 @@ public class DatabaseManager {
         }
     }
 
-    /**Valide les coups réalisés lors du mode hypothèse*/
+    /** Valide les coups réalisés lors du mode hypothèse */
     public void validerHypothese() {
         String sql = "UPDATE Coup SET mode_coup = 0 WHERE id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -758,7 +803,7 @@ public class DatabaseManager {
 
     }
 
-    /**Supprimer les coups réalisés lors du mode hypothèse*/
+    /** Supprimer les coups réalisés lors du mode hypothèse */
     public void annulerHypothese() {
         String sql = "DELETE FROM Coup where mode_coup = 1 and id_partie = ?";
         try (Connection conn = DriverManager.getConnection(URL);

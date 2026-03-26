@@ -48,17 +48,20 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-
 /** Classe de controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
 
+    /** La grille au niveau logique */
     private Hashi hashi;
+
+    /** Le système d'aide */
     private MoteurIndice moteurIndice;
     private ChangeListener<Bounds> boundsListener;
 
     AnimationTimer animationTimer;
     double startup;
 
+    double elapsedBefore = 0;
     @FXML
     private VBox sidePanel;
     @FXML
@@ -94,7 +97,7 @@ public class GrilleController extends ManageController {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long currentTime) {
-                double t = (currentTime - startup) / 1000000000;
+                double t = General.getElapsedTime();
                 timer.setText("Chrono : " + (int) t);
             }
         };
@@ -102,15 +105,15 @@ public class GrilleController extends ManageController {
         Tooltip t1 = new Tooltip("Annuler le dernier coup");
         t1.setShowDelay(Duration.millis(300));
         undoButton.setTooltip(t1);
-    
+
         Tooltip t2 = new Tooltip("Rétablir le coup annulé");
         t2.setShowDelay(Duration.millis(300));
         redoButton.setTooltip(t2);
-    
+
         Tooltip t3 = new Tooltip("Vérifier la grille et revenir à l'état sans erreur");
         t3.setShowDelay(Duration.millis(300));
         checkButton.setTooltip(t3);
-    
+
         Tooltip t4 = new Tooltip("Afficher un indice pour la grille");
         t4.setShowDelay(Duration.millis(300));
         hintButton.setTooltip(t4);
@@ -118,7 +121,6 @@ public class GrilleController extends ManageController {
         Tooltip t5 = new Tooltip("Activer le mode hypothèse (coups temporaires)");
         t5.setShowDelay(Duration.millis(300));
         hypothesisButton.setTooltip(t5);
-        
 
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -190,6 +192,13 @@ public class GrilleController extends ManageController {
             };
             parent.layoutBoundsProperty().addListener(boundsListener);
 
+            this.elapsedBefore = General.getDb().checkScorePartie();
+
+            General.setElapsedTime(elapsedBefore);
+            this.start_timer();
+
+            System.out.println(this.startup);
+
             drawGrid(hashi, parent.getWidth());
 
         } catch (URISyntaxException | java.io.IOException ex) {
@@ -203,12 +212,15 @@ public class GrilleController extends ManageController {
     }
 
     public void start_timer() {
-        startup = System.nanoTime();
+        General.startTimer();
         animationTimer.start();
     }
 
-    public void stop_timer() {
+    public double stop_timer() {
         animationTimer.stop();
+        General.stopTimer();
+        double t = General.getElapsedTime();
+        return t;
     }
 
     private void drawGrid(Hashi hashi, double paneWidth) {
@@ -233,10 +245,14 @@ public class GrilleController extends ManageController {
         dessinerIle(hashi, cellSize);
 
         if (hashi.estGagne() && !hashi.getHypothese()) {
-            //win.setVisible(true);
+            double score = stop_timer();
+            General.getDb().updateScorePartie(score);
+            win.setVisible(true);
+            // win.setVisible(true);
             showWin();
         }
     }
+
     private void showWin() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Victoire !");
@@ -250,7 +266,7 @@ public class GrilleController extends ManageController {
 
         alert.showAndWait().ifPresent(result -> {
             if (result == btnRejouer) {
-                onResetClick();  
+                onResetClick();
             } else if (result == btnMenu) {
                 Button dummyButton = new Button();
                 dummyButton.setUserData("selectGrille");
@@ -259,6 +275,7 @@ public class GrilleController extends ManageController {
             }
         });
     }
+
     private void dessinerGrille(int cols, int rows, double size) {
         for (int y = 0; y <= rows; y++) {
             for (int x = 0; x <= cols; x++) {
@@ -317,6 +334,12 @@ public class GrilleController extends ManageController {
     @FXML
     private void onResetClick() {
         hashi.Reset();
+        animationTimer.stop();
+        General.resetTimer();
+        timer.setText("Chrono : 0");
+
+        General.getDb().updateScorePartie(0.0);
+
         drawGrid(hashi, gamePane.getWidth());
         undoButton.setDisable(true);
         redoButton.setDisable(true);
@@ -328,10 +351,13 @@ public class GrilleController extends ManageController {
         Label title = createTitle("Mode Hypothèse");
 
         hashi.setModeHypothese(true);
-        
-        if (hintButton != null) hintButton.setDisable(true);
-        if (checkButton != null) checkButton.setDisable(true);
-        if (hypothesisButton != null) hypothesisButton.setDisable(true);
+
+        if (hintButton != null)
+            hintButton.setDisable(true);
+        if (checkButton != null)
+            checkButton.setDisable(true);
+        if (hypothesisButton != null)
+            hypothesisButton.setDisable(true);
 
         Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
@@ -351,11 +377,14 @@ public class GrilleController extends ManageController {
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
 
-            if (hintButton != null) hintButton.setDisable(false);
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
+            if (hintButton != null)
+                hintButton.setDisable(false);
+            if (checkButton != null)
+                checkButton.setDisable(false);
+            if (hypothesisButton != null)
+                hypothesisButton.setDisable(false);
         });
-        
+
         btnCancel.setOnAction(e -> {
             System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
@@ -363,9 +392,12 @@ public class GrilleController extends ManageController {
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
 
-            if (hintButton != null) hintButton.setDisable(false);
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
+            if (hintButton != null)
+                hintButton.setDisable(false);
+            if (checkButton != null)
+                checkButton.setDisable(false);
+            if (hypothesisButton != null)
+                hypothesisButton.setDisable(false);
         });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
@@ -465,14 +497,23 @@ public class GrilleController extends ManageController {
         return konamiActivated;
     }
 
-    /*réactive les bouttons quand l'utilisateur quite la grille (quand le mode hypothèse est actif)   */
+    /*
+     * réactive les bouttons quand l'utilisateur quite la grille (quand le mode
+     * hypothèse est actif)
+     */
     @FXML
     @Override
-    public void changeScene(ActionEvent event){
+    public void changeScene(ActionEvent event) {
+        double score = stop_timer();
+        General.getDb().updateScorePartie(score);
+        General.resetTimer();
         General.getHashi().setModeHypothese(false);
-        if (hintButton != null) hintButton.setDisable(false);
-        if (checkButton != null) checkButton.setDisable(false);
-        if (hypothesisButton != null) hypothesisButton.setDisable(false);
+        if (hintButton != null)
+            hintButton.setDisable(false);
+        if (checkButton != null)
+            checkButton.setDisable(false);
+        if (hypothesisButton != null)
+            hypothesisButton.setDisable(false);
         super.changeScene(event);
     }
 }
