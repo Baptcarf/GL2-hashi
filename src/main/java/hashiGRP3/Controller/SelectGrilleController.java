@@ -175,11 +175,16 @@ public class SelectGrilleController extends ManageController {
      */
     private void afficherGrilleSelectionnee(int numeroGrille) {
 
+	//Titre et numéro de la grille
         labelGrilleSelected.setText("Grille " + numeroGrille);
         imageGrilleSelected.setVisible(true);
 
-        labelNombreIle.setText(
-                "Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
+	//Check le nombre d'ile, placer un holder au cas ou
+	int i = databaseManager.obtenirNombreIle(numeroGrille);
+	if (i == -1)
+		labelNombreIle.setText("Veuillez charger là grille.");
+	else
+        	labelNombreIle.setText("Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
 
         labelTempsPerso.setText(
                 "Score : " + formatScore(databaseManager.obtenirScore(numeroGrille, getUtilisateur())));

@@ -25,8 +25,7 @@ import hashiGRP3.DatabaseManager;
 /** Classe d'une fenêtre pop-up pour la création d'un utilisateur. */
 public class CreerUtilisateur {
 
-    public record Result(String pseudo, Color color, boolean isNewPlayer) {
-    }
+    public record Result(String pseudo, Color color, boolean isNewPlayer) {}
 
     private final TextField pseudoField = new TextField();
     private final ColorPicker cpField = new ColorPicker(Color.WHITE);

@@ -68,8 +68,7 @@ public class SceneManager {
                 manageController.setSceneManager(this);
             }
 
-            // On stocke le Parent (contenu FXML) directement, plus besoin de créer une
-            // Scene
+            // On stocke le Parent (contenu FXML) directement, plus besoin de créer une scene
             allScene.add(new Composante(root, name, (ManageController) controller));
 
         } catch (IOException ex) {
@@ -206,7 +205,6 @@ public class SceneManager {
 
         /**
          * Getter du contenu FXML
-         * 
          * @return le Parent racine du FXML
          */
         public Parent getRoot() {
@@ -215,7 +213,6 @@ public class SceneManager {
 
         /**
          * Getter du nom de la scène
-         * 
          * @return le nom de la scène
          */
         public String getNom() {
@@ -225,6 +222,5 @@ public class SceneManager {
         public ManageController getController() {
             return controller;
         }
-
     }
 }

@@ -84,7 +84,6 @@ public class ConnexionController extends ManageController {
      * @param val le pseudo de l'utilisateur
      */
     private void createBoxUser(Circle c, String val) {
-
         VBox v = new VBox();
         v.setAlignment(Pos.CENTER);
         v.setSpacing(8);
@@ -95,13 +94,14 @@ public class ConnexionController extends ManageController {
         v.getChildren().addAll(c, l);
 
         hbox.getChildren().add(0, v);
-
     }
 
     /**
-     * Crée un cercle de connexion avec les événements souris.
+     * Crée un cercle de connexion.
+     * <p>
      * Si le mode suppression est activé, clique pour supprimer le compte.
      * Sinon, clique pour se connecter au compte.
+     * </p>
      * @param color la couleur du cercle au format hexadécimal
      * @return le cercle créé avec les gestionnaires d'événements
      */
