@@ -10,15 +10,17 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationCapaciteMax;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniquesBloquePont;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -37,6 +39,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -48,9 +51,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.control.Tooltip;
 import javafx.util.Duration;
-
 
 /** Classe de controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
@@ -167,14 +168,16 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(),new TechniqueIsolation(),
-                                                    new TechniqueSaturationMoinsDeux(), new TechniqueSaturationMoinsUn(),
-                                                    new TechniqueSaturationMoinsUnSpe(),new TechniqueSaturationCapaciteMax(), 
-                                                    new TechniqueIsolationDeuxIles(), new TechniqueIsolationTroisIles(), 
-                                                    new TechniqueIsolationSegmentIle()));
+            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(), new TechniqueIsolation(),
+                    new TechniqueSaturationMoinsDeux(), new TechniqueSaturationMoinsUn(),
+                    new TechniqueSaturationMoinsUnSpe(), new TechniqueSaturationCapaciteMax(),
+                    new TechniqueIsolationDeuxIles(), new TechniqueIsolationTroisIles(),
+                    new TechniqueIsolationSegmentIle(), new TechniqueIsolementSegment(), new TechniquesBloquePont()));
 
             General.setHashi(hashi);
             hashi.remplirHistorique();
+            int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
+            General.setId_partie(idPartie);
 
             win.setVisible(false);
 
@@ -239,7 +242,7 @@ public class GrilleController extends ManageController {
         gamePane.setMaxSize(gridWidth, gridHeight);
 
         gamePane.getChildren().clear();
-        
+
         dessinerGrille(nbColonnes, nbLignes, cellSize);
         dessinerPonts(hashi, cellSize);
         dessinerIle(hashi, cellSize);
@@ -253,38 +256,37 @@ public class GrilleController extends ManageController {
         }
     }
 
-
     private void dessinerIndices(int cols, int rows, double size) {
-    double fontSize = Math.min(14, Math.max(8, size * 0.5));
-    Color indexColor = Color.web("#888888");
+        double fontSize = Math.min(14, Math.max(8, size * 0.5));
+        Color indexColor = Color.web("#888888");
 
-    for (int x = 0; x < cols+1; x++) {
-        String label = String.format("%02d", x);
-        double centerX = x * size + size / 2;
-        Text top = new Text(label);
-        top.setFont(Font.font("System", FontWeight.BOLD, fontSize));
-        top.setFill(indexColor);
-        top.setTranslateX(centerX - top.getLayoutBounds().getWidth() / 2);
-        top.setTranslateY(-size + size * 0.80);
-        gamePane.getChildren().add(top);
+        for (int x = 0; x < cols + 1; x++) {
+            String label = String.format("%02d", x);
+            double centerX = x * size + size / 2;
+            Text top = new Text(label);
+            top.setFont(Font.font("System", FontWeight.BOLD, fontSize));
+            top.setFill(indexColor);
+            top.setTranslateX(centerX - top.getLayoutBounds().getWidth() / 2);
+            top.setTranslateY(-size + size * 0.80);
+            gamePane.getChildren().add(top);
+        }
+
+        for (int y = 0; y < rows + 1; y++) {
+            String label = String.format("%02d", y);
+            double centerY = y * size + size * 0.72;
+            Text left = new Text(label);
+            left.setFont(Font.font("System", FontWeight.BOLD, fontSize));
+            left.setFill(indexColor);
+            left.setTranslateX(-size + size * 0.28);
+            left.setTranslateY(centerY - left.getLayoutBounds().getHeight() / 2);
+            gamePane.getChildren().add(left);
+        }
     }
 
-    for (int y = 0; y < rows+1; y++) {
-        String label = String.format("%02d", y);
-        double centerY = y * size + size * 0.72;
-        Text left = new Text(label);
-        left.setFont(Font.font("System", FontWeight.BOLD, fontSize));
-        left.setFill(indexColor);
-        left.setTranslateX(-size + size * 0.28);
-        left.setTranslateY(centerY - left.getLayoutBounds().getHeight() / 2);
-        gamePane.getChildren().add(left);
-    }
-}
-
-    /**Affiche une pop-op lorsqu'on gagne*/
+    /** Affiche une pop-op lorsqu'on gagne */
     private void showWin() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        
+
         // Attacher la pop-up à la fenêtre principale (mac)
         if (gamePane.getScene() != null && gamePane.getScene().getWindow() != null) {
             alert.initOwner(gamePane.getScene().getWindow());

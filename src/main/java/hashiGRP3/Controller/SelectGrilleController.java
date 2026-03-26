@@ -2,19 +2,19 @@
 package hashiGRP3.Controller;
 
 //Imports
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.StackPane;
 import hashiGRP3.DatabaseManager;
 import hashiGRP3.Logic.General;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  * Contrôleur pour la scène de sélection de grille. Permet à l'utilisateur de
@@ -228,7 +228,13 @@ public class SelectGrilleController extends ManageController {
             if (currentlySelectedButton != null) {
                 currentlySelectedButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
             }
-            bouton.setStyle("-fx-background-color: #4CAF50; -fx-cursor: hand; -fx-border-color: #4CAF50;");
+            if(numeroGrille <=5){
+                bouton.setStyle("-fx-background-color: #198119; -fx-cursor: hand; -fx-border-color: #198119;");
+            } else if (numeroGrille <=10) {
+                bouton.setStyle("-fx-background-color: #ff8c00; -fx-cursor: hand; -fx-border-color: #ff8c00;");
+            } else {
+                bouton.setStyle("-fx-background-color: #8b0000; -fx-cursor: hand; -fx-border-color: #8b0000;");
+            }
             currentlySelectedButton = bouton;
             General.setNum_grille(numeroGrille);
             afficherGrilleSelectionnee(numeroGrille);
@@ -330,8 +336,6 @@ public class SelectGrilleController extends ManageController {
      */
     @FXML
     public void lancerGrille(ActionEvent event) {
-        int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
-        General.setId_partie(idPartie);
         this.changeScene(event);
     }
 

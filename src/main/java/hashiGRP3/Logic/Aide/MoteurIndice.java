@@ -6,7 +6,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.Pont;
 
 public class MoteurIndice {
     private final List<TechniqueIndice> techniques;
@@ -30,43 +33,49 @@ public class MoteurIndice {
         for (TechniqueIndice technique : techniques) {
             Optional<IndiceResultat> res = technique.evaluer(hashi);
             if (res.isPresent()) {
-                return res;
+                IndiceResultat ir = res.get();
+                if (shouldAccept(ir, hashi)) {
+                    return res;
+                } else {
+                }
             }
         }
         return Optional.empty();
     }
 
     /**
-     * Propose un indice en limitant la difficulté maximale.
-     * @param hashi Grille de jeu
-     * @param niveauMax Niveau de difficulté maximal
-     * @return Une option IndiceResultat : premier indice trouvé ou empty si aucun
+     * Décide d'accepter ou non un indice négatif
+     * Un indice négatif (estInterdit == true) ne doit être proposé que si le pont concerné
+     * est actuellement dans l'état interdit (état suggéré). Cela centralise la règle :
+     * ne proposer un indice négatif que lorsque l'état interdit est effectivement présent
+     *
+     * @param ir    L'IndiceResultat à évaluer (potentiellement négatif)
+     * @param hashi La grille courante pour vérifier l'état réel du pont
+     * @return true si l'indice négatif doit être proposé, false sinon
      */
-    public Optional<IndiceResultat> proposerIndiceDifficulteMax(Hashi hashi, NiveauDifficulte niveauMax) {
-        for (TechniqueIndice technique : techniques) {
-            if (technique.getNiveauDifficulte().getValue() > niveauMax.getValue()) {
-                continue;
-            }
-            
-            Optional<IndiceResultat> res = technique.evaluer(hashi);
-            if (res.isPresent()) {
-                return res;
-            }
+    private boolean shouldAccept(IndiceResultat ir, Hashi hashi) {
+        if (!ir.isEstInterdit()) {
+            return true;
         }
-        return Optional.empty();
-    }
 
-    /**
-     * Retourne tous les indices applicables sur la grille.
-     * @param hashi Grille de jeu
-     * @return Liste des indices trouvés
-     */
-    public List<IndiceResultat> toutesLesTechniquesApplicables(Hashi hashi) {
-        List<IndiceResultat> resultats = new ArrayList<>();
-        for (TechniqueIndice technique : techniques) {
-            Optional<IndiceResultat> res = technique.evaluer(hashi);
-            res.ifPresent(resultats::add);
+        if (ir.getPontSuggere().isEmpty() || ir.getEtatSuggere().isEmpty()) {
+            return true;
         }
-        return resultats;
+
+        Pont pontSug = ir.getPontSuggere().get();
+        EtatDuPont etatSug = ir.getEtatSuggere().get();
+
+        Ile a = hashi.getIle(pontSug.getileA().getCoordonnees().x, pontSug.getileA().getCoordonnees().y);
+        Ile b = hashi.getIle(pontSug.getileB().getCoordonnees().x, pontSug.getileB().getCoordonnees().y);
+        if (a == null || b == null) {
+            return false;
+        }
+
+        Pont current = hashi.getPont(a, b);
+        if (current == null) {
+            return false;
+        }
+
+        return current.getEtatActuel() == etatSug;
     }
 }
