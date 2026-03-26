@@ -8,12 +8,9 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationQuatreCoin;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -23,12 +20,11 @@ import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
-import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -40,7 +36,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 /* Class */
 public class GrilleController extends ManageController {
@@ -65,12 +60,6 @@ public class GrilleController extends ManageController {
     private Button undoButton;
     @FXML
     private Button redoButton;
-    @FXML
-    private Button checkButton;
-    @FXML
-    private Button hintButton;
-    @FXML
-    private Button hypothesisButton;
 
     private boolean onCheck = false;
 
@@ -91,27 +80,6 @@ public class GrilleController extends ManageController {
             }
         };
 
-        Tooltip t1 = new Tooltip("Annuler le dernier coup");
-        t1.setShowDelay(Duration.millis(300));
-        undoButton.setTooltip(t1);
-    
-        Tooltip t2 = new Tooltip("Rétablir le coup annulé");
-        t2.setShowDelay(Duration.millis(300));
-        redoButton.setTooltip(t2);
-    
-        Tooltip t3 = new Tooltip("Vérifier la grille et revenir à l'état sans erreur");
-        t3.setShowDelay(Duration.millis(300));
-        checkButton.setTooltip(t3);
-    
-        Tooltip t4 = new Tooltip("Afficher un indice pour la grille");
-        t4.setShowDelay(Duration.millis(300));
-        hintButton.setTooltip(t4);
-
-        Tooltip t5 = new Tooltip("Activer le mode hypothèse (coups temporaires)");
-        t5.setShowDelay(Duration.millis(300));
-        hypothesisButton.setTooltip(t5);
-        
-
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 newScene.setOnKeyPressed(e -> {
@@ -128,7 +96,6 @@ public class GrilleController extends ManageController {
     }
 
     private void chargerGrille() {
-        sidePanel.getChildren().clear();
         int grid_num = General.getNum_grille();
 
         int folderIndex = (grid_num - 1) / 5;
@@ -148,19 +115,12 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(), new TechniqueIsolation(),
-                    new TechniqueSaturationMoinsDeux(), new TechniqueSaturationMoinsUn(),
-                    new TechniqueSaturationMoinsUnSpe(), new TechniqueSaturationQuatreCoin()));
+            moteurIndice = new MoteurIndice(List.of(new TechniqueIsolationSegmentIle()));
 
             General.setHashi(hashi);
             hashi.remplirHistorique();
 
             win.setVisible(false);
-
-            // si on est en mode hypothèse on remet la fenétre de base
-            if (General.getHashi().getHypothese()) {
-                onHypothesisClick();
-            }
 
             undoButton.setDisable(hashi.isUndoEmpty());
             redoButton.setDisable(hashi.isRedoEmpty());
@@ -248,11 +208,6 @@ public class GrilleController extends ManageController {
         drawGrid(hashi, gamePane.getWidth());
         redoButton.setDisable(hashi.isRedoEmpty());
         undoButton.setDisable(hashi.isUndoEmpty());
-        if (onCheck) {
-            onCheck = false;
-            onCheckClick();
-        }
-
     }
 
     private void dessinerIle(Hashi hashi, double size) {
@@ -288,14 +243,9 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onHypothesisClick() {
-        onCheck = false;
         Label title = createTitle("Mode Hypothèse");
 
         hashi.setModeHypothese(true);
-        
-        if (hintButton != null) hintButton.setDisable(true);
-        if (checkButton != null) checkButton.setDisable(true);
-        if (hypothesisButton != null) hypothesisButton.setDisable(true);
 
         Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
@@ -314,22 +264,13 @@ public class GrilleController extends ManageController {
             General.getDb().validerHypothese();
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
-
-            if (hintButton != null) hintButton.setDisable(false);
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
         });
-        
         btnCancel.setOnAction(e -> {
             System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
             General.getDb().annulerHypothese();
             drawGrid(hashi, gamePane.getWidth());
             sidePanel.getChildren().clear();
-
-            if (hintButton != null) hintButton.setDisable(false);
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
         });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
@@ -351,21 +292,6 @@ public class GrilleController extends ManageController {
             btnNo.setStyle("-fx-base: #f0f0f0;");
             btnYes.setPrefWidth(80);
             btnNo.setPrefWidth(80);
-
-            btnYes.setOnAction(e -> {
-
-                System.out.println("retour à l'état correct");
-                hashi.retourEtatCorrect();
-                General.getDb().retourEtatCorrect();
-                drawGrid(hashi, gamePane.getWidth());
-                sidePanel.getChildren().clear();
-
-            });
-
-            btnNo.setOnAction(e -> {
-                sidePanel.getChildren().clear();
-                onCheck = false;
-            });
             HBox actionBox = new HBox(10, btnYes, btnNo);
             updateSidePanel(title, status, new Separator(), question, actionBox);
         } else {
@@ -377,7 +303,6 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onHintClick() {
-        onCheck = false;
         Label title = createTitle("Indice");
         Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
         if (resultat.isEmpty()) {
@@ -388,15 +313,7 @@ public class GrilleController extends ManageController {
         IndiceResultat indice = resultat.get();
         Label techniqueName = new Label(indice.getNomTechnique());
         techniqueName.setWrapText(true);
-        // limiter la largeur du label au width du sidePanel pour forcer le retour à la
-        // ligne
-        techniqueName.maxWidthProperty().bind(sidePanel.widthProperty().subtract(30));
-
         Text explication = new Text(indice.getExplication());
-        // lier le wrapping de l'explication à la largeur du sidePanel pour éviter
-        // d'agrandir le panneau
-        explication.wrappingWidthProperty().bind(sidePanel.widthProperty().subtract(30));
-
         updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 

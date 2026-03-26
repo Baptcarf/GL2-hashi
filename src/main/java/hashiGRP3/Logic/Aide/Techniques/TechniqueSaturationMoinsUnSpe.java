@@ -13,7 +13,7 @@ import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 
 /**
- * Technique T3  Saturation moins un - voisin contraint
+ * Technique T5  Saturation moins un - voisin contraint
  *
  * Condition : nbPontsRequis == nbVoisins * 2 - 1
  *             ET un des voisins a un indice de 1

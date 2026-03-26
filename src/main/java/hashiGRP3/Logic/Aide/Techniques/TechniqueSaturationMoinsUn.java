@@ -13,7 +13,7 @@ import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 
 /**
- * Technique T2  Saturation moins un
+ * Technique T4  Saturation moins un
  *
  * Condition : nbPontsRequis == nbVoisins * 2 - 1
  * Si une île a exactement un pont de moins que le double de son nombre de voisins
