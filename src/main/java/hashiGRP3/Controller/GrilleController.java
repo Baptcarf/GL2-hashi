@@ -10,17 +10,7 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationCapaciteMax;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
-import hashiGRP3.Logic.Aide.Techniques.TechniquesBloquePont;
+import hashiGRP3.Logic.Aide.Techniques.*;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -168,16 +158,12 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(), new TechniqueIsolation(),
-                    new TechniqueSaturationMoinsDeux(), new TechniqueSaturationMoinsUn(),
-                    new TechniqueSaturationMoinsUnSpe(), new TechniqueSaturationCapaciteMax(),
-                    new TechniqueIsolationDeuxIles(), new TechniqueIsolationTroisIles(),
-                    new TechniqueIsolationSegmentIle(), new TechniqueIsolementSegment(), new TechniquesBloquePont()));
+            moteurIndice = new MoteurIndice(List.of(new TehcniqueIsolationIle()));
 
             General.setHashi(hashi);
-            hashi.remplirHistorique();
             int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
             General.setId_partie(idPartie);
+            hashi.remplirHistorique();
 
             win.setVisible(false);
 
@@ -211,7 +197,12 @@ public class GrilleController extends ManageController {
 
     @Override
     public void refreshGrilles() {
+        sidePanel.getChildren().clear();
         chargerGrille();
+        if (General.getHashi().getHypothese()) {
+            onHypothesisClick();
+        }
+
     }
 
     public void start_timer() {
