@@ -8,16 +8,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import hashiGRP3.Logic.Aide.IndiceResultat;
-import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.*;
-import hashiGRP3.Logic.General;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -42,6 +32,19 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import hashiGRP3.Logic.Aide.IndiceResultat;
+import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.*;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
+
+
 
 /** Classe de controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
@@ -158,7 +161,7 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TehcniqueIsolationIle()));
+            moteurIndice = new MoteurIndice(List.of(new TechniqueIsolationIle()));
 
             General.setHashi(hashi);
             int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
