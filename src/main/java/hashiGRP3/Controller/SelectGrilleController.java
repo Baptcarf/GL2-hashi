@@ -143,8 +143,7 @@ public class SelectGrilleController extends ManageController {
      * @param container  : le GridPane dans lequel ajouter les cartes de grille
      * @param debut      : le numéro de la première grille à créer
      * @param fin        : le numéro de la dernière grille à créer
-     * @param styleClass : la classe CSS à appliquer aux boutons de grille pour le
-     *                   style
+     * @param styleClass : la classe CSS à appliquer aux boutons de grille pour le style
      */
     private void creerGrilles(GridPane container,
             int debut,
@@ -168,9 +167,7 @@ public class SelectGrilleController extends ManageController {
     }
 
     /**
-     * Affiche les détails de la grille sélectionnée : le nombre d'îles et le score
-     * personnel,
-     * 
+     * Affiche les détails de la grille sélectionnée : le nombre d'îles et le score personnel.
      * @param numeroGrille : le numéro de la grille sélectionnée
      */
     private void afficherGrilleSelectionnee(int numeroGrille) {
@@ -343,6 +340,5 @@ public class SelectGrilleController extends ManageController {
         int minutes = score / 60;
         int secondes = score % 60;
         return String.format("%02d:%02d", minutes, secondes);
-
     }
 }
