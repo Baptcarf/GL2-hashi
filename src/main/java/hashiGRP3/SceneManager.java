@@ -1,6 +1,8 @@
 //Attribut au packet
 package hashiGRP3;
 
+
+
 //Imports
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +16,8 @@ import java.util.Stack;
 import java.util.ArrayList;
 
 import hashiGRP3.Controller.*;
-import hashiGRP3.Logic.General;
+
+
 
 /**
  * Classe de gestion des fenêtres.

@@ -383,7 +383,9 @@ public class Hashi {
         General.getDb().resetCoupPartie();
     }
 
-    /** Renvoie le nombre d'erreur */
+    /** Getteur sur le nombre d'erreur 
+     * @return Le nombre d'erreur sur le hashi.
+     */
     public int getNbErreur() {
         int nbPont = 0;
         for (Pont p : ponts) {
@@ -394,9 +396,7 @@ public class Hashi {
         return nbPont;
     }
 
-    /**
-     * Renvoie le hashi sous forme de string pour le CLI
-     */
+    /** Renvoie le hashi sous forme de string pour le CLI */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -473,6 +473,7 @@ public class Hashi {
         return sb.toString();
     }
 
+    /** Getter sur l'historique du jeu */
     public HistoriqueManager getHistoriqueManager() {
         return historique;
     }

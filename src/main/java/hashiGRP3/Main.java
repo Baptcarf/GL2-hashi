@@ -3,8 +3,9 @@ package hashiGRP3;
 
 
 
-/** Main */
+/** Point d'entrée du programme */
 public class Main {
+	/** Wrapper */
 	public static void main(String[] args) {
  		App.main(args);
  	}

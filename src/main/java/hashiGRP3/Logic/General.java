@@ -20,8 +20,12 @@ public class General {
     /** Id de la partie en cours */
     private static int id_partie = -1;
 
-    private static long startTime;
-    private static double elapsedBefore = 0;
+    /** Temps début du timer */
+    private static long startTime = -1;
+    /** Temps actuel du timer */
+    private static double elapsedBefore = 1;
+
+    /** Status du chronomètre */
     private static boolean running = false;
 
     /** Constructeur simple, lance la base de donnée. */
@@ -29,6 +33,7 @@ public class General {
         db.init();
     }
 
+    /** Démarre le timer */
     public static void startTimer() {
         if (!running) {
             startTime = System.nanoTime();
@@ -36,6 +41,7 @@ public class General {
         }
     }
 
+    /** Arrête le timer */
     public static void stopTimer() {
         if (running) {
             elapsedBefore += (System.nanoTime() - startTime) / 1_000_000_000.0;
@@ -43,6 +49,7 @@ public class General {
         }
     }
 
+    /** Renvoie le temps écoulé */
     public static double getElapsedTime() {
         if (running) {
             return elapsedBefore + (System.nanoTime() - startTime) / 1_000_000_000.0;
@@ -50,11 +57,13 @@ public class General {
         return elapsedBefore;
     }
 
+    /** Remet à zero le timer */
     public static void resetTimer() {
         elapsedBefore = 0;
         running = false;
     }
 
+    /** Setter sur le temps écoulé */
     public static void setElapsedTime(double el) {
         elapsedBefore = el;
     }

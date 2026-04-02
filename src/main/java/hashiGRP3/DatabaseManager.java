@@ -3,11 +3,9 @@ package hashiGRP3;
 
 //Imports
 import java.sql.*;
-import java.time.DayOfWeek;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.nio.file.*;
 import java.io.*;
 
 import hashiGRP3.Logic.Historique.*;
@@ -23,16 +21,12 @@ public class DatabaseManager {
 
     private static final String URL = "jdbc:sqlite:data/Hashi.db";
 
-    /**
-     * Simple constructeur
-     */
+    /** Simple constructeur */
     public DatabaseManager() {
         this.init();
     }
 
-    /**
-     * Initialise la base de données avec le schéma construit.
-     */
+    /** Initialise la base de données avec le schéma construit. */
     public void init() {
         File dbFile = new File("data/Hashi.db");
         if (!dbFile.exists()) {
@@ -172,6 +166,7 @@ public class DatabaseManager {
 
     }
 
+    /** Met à jour le score dans la base de donnée */
     public void updateScorePartie(Double score) {
         String sqlCheck = "UPDATE Partie SET score = ? WHERE id_partie = ?";
 
@@ -190,6 +185,7 @@ public class DatabaseManager {
 
     }
 
+    /** Créer une grille dans la base de donnée */
     public int creerGrille(int numGrille, String nomGrille, int nbIle) {
         int idGrille = -1;
 
@@ -311,9 +307,6 @@ public class DatabaseManager {
 
     /**
      * Supprime le status des parties d'un joueur.
-     * <p>
-     * Note : non utiliser
-     * </p>
      */
     public void resetLastTutoriel(String pseudo) {
 
@@ -473,6 +466,7 @@ public class DatabaseManager {
         return -1;
     }
 
+    /** Rempli l'historique de la BDD avec les coups */
     public void remplirCoup(HistoriqueManager h, int idUtilisateur, Hashi ha, int id_grille) {
 
         for (Pont pont : ha.getPonts()) {
@@ -717,6 +711,7 @@ public class DatabaseManager {
         }
     }
 
+    /** Efface tout les coups d'une partie */
     public void resetCoupPartie() {
         String sql = "DELETE FROM Coup WHERE id_partie = ? ";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -748,8 +743,7 @@ public class DatabaseManager {
     }
 
     /**
-     * Separer les lignes correspondant à des ponts de celle correspondant à des
-     * iles d'un texte donné
+     * Separer les lignes correspondant à des ponts de celle correspondant à des iles d'un texte donné
      */
     private static void separerLignes(String txt, List<String> lignesIles, List<String> lignesPonts) {
         String[] lignes = txt.split("\n");
@@ -809,7 +803,6 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
 }

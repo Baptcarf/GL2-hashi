@@ -1,5 +1,9 @@
+//Attribut au paquet
 package hashiGRP3.Logic.Aide;
 
+
+
+//Import
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,6 +15,9 @@ import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 
+
+
+/** Classe du système d'aide */
 public class MoteurIndice {
     private final List<TechniqueIndice> techniques;
 

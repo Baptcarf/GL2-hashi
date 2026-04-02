@@ -18,11 +18,10 @@ public class EtatDuPontTest {
     @Test
     void testEnumValues() {
         EtatDuPont[] values = EtatDuPont.values();
-        assertEquals(4, values.length);
+        assertEquals(3, values.length);
         assertEquals(EtatDuPont.VIDE, values[0]);
         assertEquals(EtatDuPont.SIMPLE, values[1]);
         assertEquals(EtatDuPont.DOUBLE, values[2]);
-	assertEquals(EtatDuPont.INTERDIT, values[3]);
     }
 
     @Test

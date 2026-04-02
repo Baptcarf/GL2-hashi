@@ -8,16 +8,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import hashiGRP3.Logic.Aide.IndiceResultat;
-import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.*;
-import hashiGRP3.Logic.General;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
@@ -42,6 +32,17 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import hashiGRP3.Logic.Aide.IndiceResultat;
+import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.*;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 
 /** Classe de controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
@@ -87,6 +88,7 @@ public class GrilleController extends ManageController {
     private int konamiIndex = 0;
     private boolean konamiActivated = false;
 
+    /** Constructor-like ?? */
     @FXML
     public void initialize() {
         animationTimer = new AnimationTimer() {
@@ -209,11 +211,13 @@ public class GrilleController extends ManageController {
 
     }
 
+    /** Démarre le timer */
     public void start_timer() {
         General.startTimer();
         animationTimer.start();
     }
 
+    /** Arrêt du timer */
     public double stop_timer() {
         animationTimer.stop();
         General.stopTimer();
@@ -221,6 +225,7 @@ public class GrilleController extends ManageController {
         return t;
     }
 
+    /** Dessine la grille */
     private void drawGrid(Hashi hashi, double paneWidth) {
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
@@ -308,6 +313,7 @@ public class GrilleController extends ManageController {
         });
     }
 
+    /** Dessine le cadrillage */
     private void dessinerGrille(int cols, int rows, double size) {
         for (int y = 0; y <= rows; y++) {
             for (int x = 0; x <= cols; x++) {
@@ -321,6 +327,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /** Dessine les ponts */
     private void dessinerPonts(Hashi hashi, double size) {
         for (var pont : hashi.getPonts()) {
             pontGraphique pg = new pontGraphique(pont);
@@ -328,6 +335,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /** Méthode activer lors d'un clique sur un pont */
     private void onPontClicked(Pont pont) {
         hashi.jouer(pont);
         drawGrid(hashi, gamePane.getWidth());
@@ -335,6 +343,7 @@ public class GrilleController extends ManageController {
         undoButton.setDisable(hashi.isUndoEmpty());
     }
 
+    /** Dessine les iles */
     private void dessinerIle(Hashi hashi, double size) {
         for (Ile island : hashi.getIles()) {
             ileGraphique ig = new ileGraphique(island);
@@ -342,6 +351,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /** Méthode activer lors d'un clique sur le bouton UNDO */
     @FXML
     private void onUndoClick() {
         hashi.undo();
@@ -350,6 +360,7 @@ public class GrilleController extends ManageController {
         redoButton.setDisable(hashi.isRedoEmpty());
     }
 
+    /** Méthode activer lors d'un clique sur le bouton REDO */
     @FXML
     private void onRedoClick() {
         hashi.redo();
@@ -358,6 +369,7 @@ public class GrilleController extends ManageController {
         undoButton.setDisable(hashi.isUndoEmpty());
     }
 
+    /** Méthode activer lors d'un clique sur le bouton reset */
     @FXML
     private void onResetClick() {
         hashi.Reset();
@@ -372,6 +384,7 @@ public class GrilleController extends ManageController {
         redoButton.setDisable(true);
     }
 
+    /** Méthode activer lors d'un clique sur le bouton hypothèse */
     @FXML
     protected void onHypothesisClick() {
         Label title = createTitle("Mode Hypothèse");
@@ -430,6 +443,7 @@ public class GrilleController extends ManageController {
         updateSidePanel(title, desc, buttonBox);
     }
 
+    /** Méthode appeler lors d'un clique sur le bouton check */
     @FXML
     protected void onCheckClick() {
         if (onCheck == false) {
@@ -454,6 +468,7 @@ public class GrilleController extends ManageController {
 
     }
 
+    /** Méthode appeler lors d'un clique sur le bouton indice */
     @FXML
     protected void onHintClick() {
         Label title = createTitle("Indice");
@@ -471,11 +486,13 @@ public class GrilleController extends ManageController {
         updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
+    /** ??? */
     private void updateSidePanel(javafx.scene.Node... nodes) {
         sidePanel.getChildren().clear();
         sidePanel.getChildren().addAll(nodes);
     }
 
+    /** ??? */
     private Label createTitle(String text) {
         Label label = new Label(text);
         label.setFont(Font.font("System", FontWeight.BOLD, 16));
@@ -483,6 +500,7 @@ public class GrilleController extends ManageController {
         return label;
     }
 
+    /** Implementation du Konami Code */
     private void handleKonamiKey(KeyCode key) {
         if (konamiActivated)
             return;
@@ -496,13 +514,13 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /** Check si le Konami Code est entré */
     public boolean isKonamiCodeEntered() {
         return konamiActivated;
     }
 
-    /*
-     * réactive les bouttons quand l'utilisateur quiet la grille (quand le mode
-     * hypothèse est actif)
+    /**
+     * Réactive les bouttons quand l'utilisateur quiet la grille (quand le mode hypothèse est actif)
      */
     @FXML
     @Override

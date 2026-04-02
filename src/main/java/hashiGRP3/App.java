@@ -4,13 +4,6 @@ package hashiGRP3;
 //Imports
 import javafx.application.Application;
 import javafx.stage.Stage;
-import java.io.IOException;
-import java.nio.file.Path;
-
-import hashiGRP3.Logic.Direction;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.General;
 
 /** Point de démarrage de l'application */
 public class App extends Application {
@@ -32,6 +25,7 @@ public class App extends Application {
 		sn.changeScene("connexion");
 	}
 
+	/** Démarrage de l'application */
 	public static void main(String[] args) {
 		launch(args);
 	}
