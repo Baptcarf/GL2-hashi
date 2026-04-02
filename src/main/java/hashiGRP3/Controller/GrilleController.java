@@ -1,6 +1,7 @@
 //Attribut au paquet
 package hashiGRP3.Controller;
 
+import java.io.InputStream;
 //Imports
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -163,15 +164,13 @@ public class GrilleController extends ManageController {
             resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi" + fileNumber + ".txt";
         }
 
-        URL url = getClass().getResource(resourcePath);
-        if (url == null) {
-            System.err.println("Fichier " + resourcePath + " non trouvé !");
-            return;
-        }
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                System.err.println("Fichier " + resourcePath + " non trouvé !");
+                return;
+            }
 
-        try {
-            Path chemin = Path.of(url.toURI());
-            hashi = Import.chargerFichier(chemin);
+            hashi = Import.chargerFichierDepuisStream(is, resourcePath);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
             moteurIndice = new MoteurIndice(List.of(new TechniqueSaturation(), new TechniqueIsolation(),
@@ -216,7 +215,7 @@ public class GrilleController extends ManageController {
 
             drawGrid(hashi, parent.getWidth());
 
-        } catch (URISyntaxException | java.io.IOException ex) {
+        } catch (java.io.IOException ex) {
             System.err.println("Erreur au chargement : " + ex.getMessage());
         }
     }

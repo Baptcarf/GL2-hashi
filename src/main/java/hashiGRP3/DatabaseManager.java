@@ -28,6 +28,7 @@ public class DatabaseManager {
 
     /** Initialise la base de données avec le schéma construit. */
     public void init() {
+        new File("data").mkdirs();
         File dbFile = new File("data/Hashi.db");
         if (!dbFile.exists()) {
             try (Connection conn = DriverManager.getConnection(URL);
@@ -743,7 +744,8 @@ public class DatabaseManager {
     }
 
     /**
-     * Separer les lignes correspondant à des ponts de celle correspondant à des iles d'un texte donné
+     * Separer les lignes correspondant à des ponts de celle correspondant à des
+     * iles d'un texte donné
      */
     private static void separerLignes(String txt, List<String> lignesIles, List<String> lignesPonts) {
         String[] lignes = txt.split("\n");

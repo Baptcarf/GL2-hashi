@@ -3,6 +3,7 @@ package hashiGRP3.Logic.InOut;
 
 //Import
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -47,6 +48,25 @@ public class Import {
         ajouterPonts(HashiGrille, lignesPonts);
 
         General.getDb().creerGrille(General.getNum_grille(), chemin.toString(), lignesIles.size());
+
+        return HashiGrille;
+    }
+
+    public static Hashi chargerFichierDepuisStream(InputStream is, String nomFichier) throws IOException {
+        List<String> txt = new java.io.BufferedReader(new java.io.InputStreamReader(is))
+                .lines()
+                .collect(java.util.stream.Collectors.toList());
+
+        List<String> lignesIles = new ArrayList<>();
+        List<String> lignesPonts = new ArrayList<>();
+        Hashi HashiGrille = new Hashi();
+
+        separerLignes(txt, lignesIles, lignesPonts);
+        ajouterIles(HashiGrille, lignesIles);
+        HashiGrille.initialisationToutLesPonts();
+        ajouterPonts(HashiGrille, lignesPonts);
+
+        General.getDb().creerGrille(General.getNum_grille(), nomFichier, lignesIles.size());
 
         return HashiGrille;
     }
