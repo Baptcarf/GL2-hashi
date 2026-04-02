@@ -135,7 +135,7 @@ public class SelectTutorielController extends ManageController {
     /** Configurer les actions des boutons pour gérer la progression. */
     private void setupProgression() {
         for (int i = 0; i < levels.size(); i++) {
-            final int index = i;
+            //final int index = i;
             //getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index)); DESACTIVER
         }
     }
@@ -152,8 +152,7 @@ public class SelectTutorielController extends ManageController {
     }
 
     /** 
-     * Méthode lorsqu'on appuie sur le bouton de la technique de démarrage.
-     * Lance la grille tutoriel
+     * Méthode lorsqu'on appuie sur le bouton de la technique de démarrage pour lancer la grille tutoriel
      */
     @FXML
     public void lancerGrille(ActionEvent event) {
@@ -182,8 +181,6 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
-
-    // Appliquer le style et l'image appropriés à un niveau en fonction de son état
     /**
      * Appliquer le style et l'image appropriés à un niveau en fonction de son état
      * @param level : la HBox représentant le niveau à mettre à jour

@@ -141,7 +141,10 @@ public class GrilleController extends ManageController {
         int grid_num = General.getNum_grille();
 
         if (labelTitreGrille != null) {
-            labelTitreGrille.setText("Grille numéro " + grid_num);
+            if(grid_num > 15)
+                labelTitreGrille.setText("Grille tutoriel " + (grid_num - 15));
+            else
+                labelTitreGrille.setText("Grille numéro " + grid_num);
         }
 
         int folderIndex = (grid_num - 1) / 5;
@@ -227,7 +230,7 @@ public class GrilleController extends ManageController {
         return t;
     }
 
-    /** Dessine la grille */
+    /** Dessine le hashi */
     private void drawGrid(Hashi hashi, double paneWidth) {
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
