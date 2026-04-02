@@ -32,46 +32,23 @@ public class TechniquesBloquePont extends AbstractTechnique {
 
     @Override
     protected Optional<IndiceResultat> detecter(Hashi hashi) {
-        List<Ile> iles = hashi.getIles();
-
-        for (Ile ile : iles) {
+        for (Ile ile : hashi.getIles()) {
             for (Pont pont : getVoisin(ile)) {
-                if (pont.getEtatActuel() != EtatDuPont.VIDE)
+                if (pont.estCorrect())
                     continue;
 
-                // Cloner le plateau pour tester l'ajout
-                Hashi simu = GraphUtils.clonerHashi(hashi);
-                Ile ileSimuA = simu.getIle(ile.getCoordonnees().x, ile.getCoordonnees().y);
-                Ile ileSimuB = (pont.getileA() == ile ? pont.getileB() : pont.getileA());
-                Pont pontSimu = simu.getPont(ileSimuA, simu.getIle(ileSimuB.getCoordonnees().x,
-                        ileSimuB.getCoordonnees().y));
-
-                if (pontSimu.estCorrect()) {
-                    continue;
-                }
-
-                // Simuler le pont
-                pontSimu.setEtatActuel(EtatDuPont.INTERDIT);
-
-                if (!GraphUtils.estConnexe(simu)) {
-                    // pont obligatoire
-
-                    // Ce pont isole des îles → donc il n'est pas possible
-                    // On peut renvoyer un indice ou marquer les ponts forcés
+                if (!GraphUtils.estConnexe(hashi, pont)) {
                     String explication = String.format(
-                            "L'île en (%d, %d) a forcment un pont obligatoire pour éviter l'isolation.",
+                            "L'île en (%d, %d) a forcément un pont obligatoire pour éviter l'isolation.",
                             ile.getCoordonnees().x, ile.getCoordonnees().y);
                     return Optional.of(new IndiceResultat(
-                            getNom(),
-                            explication,
-                            getNiveauDifficulte(),
-                            Optional.of(pont),
-                            Optional.of(EtatDuPont.SIMPLE),
+                            getNom(), explication, getNiveauDifficulte(),
+                            Optional.of(pont), Optional.of(EtatDuPont.SIMPLE),
                             false));
                 }
             }
         }
-
         return Optional.empty();
     }
+
 }

@@ -13,9 +13,7 @@ public enum EtatDuPont {
     /** Pont simple */
     SIMPLE(1),
     /** Pont double */
-    DOUBLE(2),
-    /** Pont interdit */
-    INTERDIT(3);
+    DOUBLE(2);
 
     /** Valeur du pont */
     private final int value;
@@ -49,7 +47,6 @@ public enum EtatDuPont {
             case VIDE -> "VIDE";
             case SIMPLE -> "SIMPLE";
             case DOUBLE -> "DOUBLE";
-            case INTERDIT -> "INTERDIT";
         };
     }
 
