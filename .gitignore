@@ -1,9 +1,9 @@
 #Fichier de compilation
 *.class
 
-#Dossier de build
+#MVN
 target/
-./target/
+dependency-reduced-pom.xml
 
 #Data
 *.db
