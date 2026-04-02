@@ -1,6 +1,5 @@
 package hashiGRP3.Logic.Aide.Techniques;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -58,9 +57,7 @@ public class TechniqueIsolementSegment extends AbstractTechnique {
                         getNiveauDifficulte(),
                         Optional.of(pontCandidat),
                         Optional.of(EtatDuPont.DOUBLE),
-                        true,
-                        List.of(ileA, ileB),
-                        List.of(pontCandidat)));
+                    true));
             }
         }
 

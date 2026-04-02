@@ -4,7 +4,6 @@ package hashiGRP3.Logic.Aide.Techniques;
 
 
 //Imports
-import java.util.List;
 import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.AbstractTechnique;
@@ -75,9 +74,7 @@ public class TechniqueSaturationMoinsUnSpe extends AbstractTechnique {
                                 getNiveauDifficulte(),
                                 Optional.of(pont2),
                                 Optional.of(EtatDuPont.DOUBLE),
-                                false,
-                                List.of(ile),
-                                List.of(pont2)
+                                false
                             ));
                         }
                     }
