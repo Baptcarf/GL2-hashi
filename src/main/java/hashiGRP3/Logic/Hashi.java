@@ -278,7 +278,8 @@ public class Hashi {
         pont.cycler();
         EtatDuPont apres = pont.getEtatActuel();
 
-        if (modeErreur == false && !pont.estCorrect() && pont.getEtatCorrect() == EtatDuPont.VIDE) {
+        if (modeErreur == false && !pont.estCorrect() && (pont.getEtatCorrect() == EtatDuPont.VIDE
+                || (pont.getEtatCorrect() == EtatDuPont.SIMPLE && pont.getEtatActuel() == EtatDuPont.DOUBLE))) {
             modeErreur = true;
         }
 
@@ -401,7 +402,8 @@ public class Hashi {
     public int getNbErreur() {
         int nbPont = 0;
         for (Pont p : ponts) {
-            if (!p.estCorrect()) {
+            if ((p.getEtatActuel() != EtatDuPont.VIDE && p.getEtatCorrect() == EtatDuPont.VIDE)
+                    || (p.getEtatCorrect() == EtatDuPont.SIMPLE && p.getEtatActuel() == EtatDuPont.DOUBLE)) {
                 nbPont++;
             }
         }
