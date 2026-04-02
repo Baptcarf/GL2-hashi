@@ -18,12 +18,8 @@ import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 
 /**
- * Technique T2 Isolation des iles
- *
- * Condition : nbPontsRequis == 1 ou 2
- * si une ile à 1 ou 2 pont avec un seul voisin
- * 
- * Retourne le premier pont de l'île qui n'est pas encore DOUBLE
+ * Technique T *
+ * TODO
  */
 public class TechniquesBloquePont extends AbstractTechnique {
 

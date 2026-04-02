@@ -14,8 +14,7 @@ public enum EtatDuPont {
     SIMPLE(1),
     /** Pont double */
     DOUBLE(2),
-
-    // Pont interdit
+    /** Pont interdit */
     INTERDIT(3);
 
     /** Valeur du pont */

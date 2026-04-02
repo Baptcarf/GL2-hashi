@@ -59,7 +59,7 @@
 
                             <!-- ================= SECTION 1 ================= -->
                            <VBox spacing="30">
-                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Facile (7x7)" />
+                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Facile" />
 
                               <HBox alignment="CENTER">
                                  <GridPane fx:id="grilleFacile"
@@ -72,7 +72,7 @@
 
                            <!-- ================= SECTION 2 ================= -->
                            <VBox spacing="30">
-                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Intermédiaire (10x10)" />
+                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Intermédiaire" />
 
                               <HBox alignment="CENTER">
                                  <GridPane fx:id="grilleMoyen"
@@ -85,7 +85,7 @@
 
                            <!-- ================= SECTION 3 ================= -->
                            <VBox spacing="30">
-                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Difficile (12x12)" />
+                              <Label style="-fx-font-size: 41px; -fx-font-weight: bold;" text="Difficile" />
 
                               <HBox alignment="CENTER">
                                  <GridPane fx:id="grilleDifficile"
