@@ -141,22 +141,21 @@ public class GrilleController extends ManageController {
         int grid_num = General.getNum_grille();
 
         if (labelTitreGrille != null) {
-            if(grid_num > 15)
+            if (grid_num > 15)
                 labelTitreGrille.setText("Grille tutoriel " + (grid_num - 15));
             else
                 labelTitreGrille.setText("Grille numéro " + grid_num);
         }
 
-        //Si grille non tutoriel alors calculer index
+        // Si grille non tutoriel alors calculer index
         String resourcePath = "-1";
-        if(grid_num < 15) {
+        if (grid_num < 15) {
             int folderIndex = (grid_num - 1) / 5;
-            String[] folders = { "7x7", "10x10", "12x12"};
+            String[] folders = { "7x7", "10x10", "12x12" };
             String folder = folders[folderIndex];
             int fileNumber = ((grid_num - 1) % 5) + 1;
             resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
-        }
-        else {
+        } else {
             int fileNumber = grid_num - 15;
             resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi" + fileNumber + ".txt";
         }
@@ -387,6 +386,7 @@ public class GrilleController extends ManageController {
     @FXML
     private void onResetClick() {
         hashi.Reset();
+        hashi.setModeHypothese(false);
         animationTimer.stop();
         General.resetTimer();
         General.getDb().updateScorePartie(0.0);
@@ -394,8 +394,16 @@ public class GrilleController extends ManageController {
 
         drawGrid(hashi, gamePane.getWidth());
 
+        if (hintButton != null)
+            hintButton.setDisable(false);
+        if (checkButton != null)
+            checkButton.setDisable(false);
+        if (hypothesisButton != null)
+            hypothesisButton.setDisable(false);
+
         undoButton.setDisable(true);
         redoButton.setDisable(true);
+        sidePanel.getChildren().clear();
     }
 
     /** Méthode activer lors d'un clique sur le bouton hypothèse */
@@ -534,7 +542,8 @@ public class GrilleController extends ManageController {
     }
 
     /**
-     * Réactive les bouttons quand l'utilisateur quiet la grille (quand le mode hypothèse est actif)
+     * Réactive les bouttons quand l'utilisateur quiet la grille (quand le mode
+     * hypothèse est actif)
      */
     @FXML
     @Override
