@@ -164,9 +164,7 @@ public class TechniqueIsolationSegmentIle extends AbstractTechnique {
                     getNiveauDifficulte(),
                     Optional.of(pontObligatoire),
                     Optional.of(EtatDuPont.SIMPLE),
-                    false,
-                    new ArrayList<>(groupe),
-                    List.of(pontObligatoire)
+                    false
                 ));
             }
         }

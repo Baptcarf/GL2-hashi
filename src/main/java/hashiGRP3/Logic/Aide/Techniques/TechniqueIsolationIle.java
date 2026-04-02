@@ -2,19 +2,15 @@
 package hashiGRP3.Logic.Aide.Techniques;
 
 // Imports
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import hashiGRP3.Logic.Aide.AbstractTechnique;
 import hashiGRP3.Logic.Aide.GraphUtils;
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.NiveauDifficulte;
-import hashiGRP3.Logic.Direction;
 import hashiGRP3.Logic.EtatDuPont;
-import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
@@ -69,7 +65,7 @@ public class TechniqueIsolationIle extends AbstractTechnique {
                     return Optional.of(new IndiceResultat(
                             getNom(), explication, getNiveauDifficulte(),
                             Optional.of(pont), Optional.of(EtatDuPont.SIMPLE),
-                            false, List.of(ile), List.of(pont)));
+                            false));
                 }
             }
         }

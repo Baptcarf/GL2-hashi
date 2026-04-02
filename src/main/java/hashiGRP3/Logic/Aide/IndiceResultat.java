@@ -3,12 +3,9 @@ package hashiGRP3.Logic.Aide;
 
 
 
-/* Imports */
-import java.util.List;
 import java.util.Optional;
 
 import hashiGRP3.Logic.EtatDuPont;
-import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
 
 
@@ -24,20 +21,16 @@ public class IndiceResultat {
 	private final Optional<Pont> pontSuggere;
 	private final Optional<EtatDuPont> etatSuggere;
 	private final boolean estInterdit;
-	private final List<Ile> ilesImpliquees;
-	private final List<Pont> pontsImpliques;
 
-    public IndiceResultat(String nomTechnique, String explication, NiveauDifficulte difficulte,
-                          Optional<Pont> pontSuggere, Optional<EtatDuPont> etatSuggere,
-                          boolean estInterdit, List<Ile> ilesImpliquees, List<Pont> pontsImpliques) {
+        public IndiceResultat(String nomTechnique, String explication, NiveauDifficulte difficulte,
+                              Optional<Pont> pontSuggere, Optional<EtatDuPont> etatSuggere,
+                              boolean estInterdit) {
         this.nomTechnique = nomTechnique;
         this.explication = explication;
         this.difficulte = difficulte;
         this.pontSuggere = pontSuggere;
         this.etatSuggere = etatSuggere;
         this.estInterdit = estInterdit;
-        this.ilesImpliquees = ilesImpliquees;
-        this.pontsImpliques = pontsImpliques;
     }
 
     /**
@@ -88,22 +81,6 @@ public class IndiceResultat {
         return estInterdit;
     }
 
-    /**
-     * Renvoie les iles impliquees avec la technique suggérer.
-     * @return Une liste des iles impliquees.
-     */
-    public List<Ile> getIlesImpliquees() {
-        return ilesImpliquees;
-    }
-
-    /**
-     * Renvoie les ponts impliquees avec la technique suggérer.
-     * @return Une liste des ponts impliquees.
-     */
-    public List<Pont> getPontsImpliques() {
-        return pontsImpliques;
-    }
-
     @Override
     public String toString() {
         return "IndiceResultat{" +
@@ -113,8 +90,6 @@ public class IndiceResultat {
                 ", pontSuggere=" + pontSuggere +
                 ", etatSuggere=" + etatSuggere +
                 ", estInterdit=" + estInterdit +
-                ", ilesImpliquees=" + ilesImpliquees +
-                ", pontsImpliques=" + pontsImpliques +
                 '}';
     }
 }

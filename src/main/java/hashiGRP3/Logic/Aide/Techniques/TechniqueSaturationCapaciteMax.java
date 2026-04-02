@@ -1,6 +1,5 @@
 package hashiGRP3.Logic.Aide.Techniques;
 
-import java.util.List;
 import java.util.Optional;
 import hashiGRP3.Logic.Aide.AbstractTechnique;
 import hashiGRP3.Logic.Aide.IndiceResultat;
@@ -97,9 +96,7 @@ public class TechniqueSaturationCapaciteMax extends AbstractTechnique {
                         getNiveauDifficulte(),
                         Optional.of(pont),
                         Optional.of(etatCible),
-                        false,
-                        List.of(ile),
-                        List.of(pont)
+                        false
                     ));
                 }
             }

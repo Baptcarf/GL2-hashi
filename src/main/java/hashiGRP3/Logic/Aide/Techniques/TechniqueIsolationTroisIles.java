@@ -1,8 +1,8 @@
 package hashiGRP3.Logic.Aide.Techniques;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+
 import hashiGRP3.Logic.Aide.AbstractTechnique;
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.NiveauDifficulte;
@@ -92,9 +92,7 @@ public class TechniqueIsolationTroisIles extends AbstractTechnique {
                                 getNiveauDifficulte(),
                                 Optional.of(autrePont),
                                 Optional.of(EtatDuPont.SIMPLE),
-                                false,
-                                List.of(ile, ileA, ileC),
-                                List.of(autrePont)
+                                false
                             ));
                         }
                     }
