@@ -32,7 +32,7 @@ public class App extends Application {
 		sn.changeScene("connexion");
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		launch(args);
 	}
 }
