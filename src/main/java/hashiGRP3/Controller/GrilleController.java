@@ -136,6 +136,7 @@ public class GrilleController extends ManageController {
         });
     }
 
+    /** Charge la grille avec les niveaux */
     private void chargerGrille() {
         int grid_num = General.getNum_grille();
 
@@ -144,7 +145,7 @@ public class GrilleController extends ManageController {
         }
 
         int folderIndex = (grid_num - 1) / 5;
-        String[] folders = { "7x7", "10x10", "12x12" };
+        String[] folders = { "7x7", "10x10", "12x12", "Grille_Tutoriel" };
         String folder = folders[folderIndex];
         int fileNumber = ((grid_num - 1) % 5) + 1;
         String resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
@@ -201,6 +202,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /** Rafraichie la grille du hashi */
     @Override
     public void refreshGrilles() {
         sidePanel.getChildren().clear();
@@ -256,6 +258,7 @@ public class GrilleController extends ManageController {
         }
     }
 
+    /** Dessine les indices */
     private void dessinerIndices(int cols, int rows, double size) {
         double fontSize = Math.min(14, Math.max(8, size * 0.5));
         Color indexColor = Color.web("#888888");

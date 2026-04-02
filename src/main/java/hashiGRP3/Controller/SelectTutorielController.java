@@ -2,15 +2,17 @@
 package hashiGRP3.Controller;
 
 // Imports
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import java.util.ArrayList;
-import java.util.List;
 
 import hashiGRP3.Logic.General;
 
@@ -134,7 +136,7 @@ public class SelectTutorielController extends ManageController {
     private void setupProgression() {
         for (int i = 0; i < levels.size(); i++) {
             final int index = i;
-            getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index));
+            //getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index));
         }
     }
 
@@ -145,8 +147,18 @@ public class SelectTutorielController extends ManageController {
      */
     private void onLevelClicked(int index) {
         if (states.get(index) == LevelState.LOCKED) return;
-
+	    //MODIFIER NIVEAU ICI DANS FUTUR, CHECK FUNCTION DESSOUS
         completeLevel(index);
+    }
+
+    /** 
+     * Méthode lorsqu'on appuie sur le bouton de la technique de démarrage.
+     * Lance la grille tutoriel
+     */
+    @FXML
+    public void lancerGrille(ActionEvent event) {
+        General.setNum_grille(99);
+        this.changeScene(event);
     }
 
     /**
