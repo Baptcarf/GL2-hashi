@@ -132,11 +132,11 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
-    /** Configurer les actions des boutons pour gérer la progression. */
+    /** Configurer les actions des deux premier pour débloquer. */
     private void setupProgression() {
-        for (int i = 0; i < levels.size(); i++) {
-            //final int index = i;
-            //getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index)); DESACTIVER
+        for (int i = 0; i < 2; i++) {
+            final int index = i;
+            getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index));
         }
     }
 
@@ -147,16 +147,63 @@ public class SelectTutorielController extends ManageController {
      */
     private void onLevelClicked(int index) {
         if (states.get(index) == LevelState.LOCKED) return;
-	    //MODIFIER NIVEAU ICI DANS FUTUR, CHECK FUNCTION DESSOUS
         completeLevel(index);
     }
 
-    /** 
-     * Méthode lorsqu'on appuie sur le bouton de la technique de démarrage pour lancer la grille tutoriel
-     */
+    /** Méthode lorsqu'on appuie sur le bouton de la technique de démarrage pour lancer la grille tutoriel */
     @FXML
-    public void lancerGrille(ActionEvent event) {
-        General.setNum_grille(16);
+    public void lancerT1(ActionEvent event) {
+        int t = 16;
+        General.setNum_grille(t);
+        completeLevel(t - 13);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT2(ActionEvent event) {
+        int t = 17;
+        General.setNum_grille(t);
+        completeLevel(t - 13);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT3(ActionEvent event) {
+        int t = 18;
+        General.setNum_grille(t);
+        completeLevel(t - 13);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT4(ActionEvent event) {
+        int t = 19;
+        General.setNum_grille(t);
+        completeLevel(t - 13);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT5(ActionEvent event) {
+        int t = 20;
+        General.setNum_grille(t);
+        completeLevel(t - 13);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT6(ActionEvent event) {
+        int t = 21;
+        General.setNum_grille(t);
+        completeLevel(t - 13);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT7(ActionEvent event) {
+        int t = 22;
+        General.setNum_grille(t);
+        completeLevel(t - 13);
         this.changeScene(event);
     }
 

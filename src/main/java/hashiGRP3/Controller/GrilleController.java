@@ -147,11 +147,19 @@ public class GrilleController extends ManageController {
                 labelTitreGrille.setText("Grille numéro " + grid_num);
         }
 
-        int folderIndex = (grid_num - 1) / 5;
-        String[] folders = { "7x7", "10x10", "12x12", "Grille_Tutoriel" };
-        String folder = folders[folderIndex];
-        int fileNumber = ((grid_num - 1) % 5) + 1;
-        String resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
+        //Si grille non tutoriel alors calculer index
+        String resourcePath = "-1";
+        if(grid_num < 15) {
+            int folderIndex = (grid_num - 1) / 5;
+            String[] folders = { "7x7", "10x10", "12x12"};
+            String folder = folders[folderIndex];
+            int fileNumber = ((grid_num - 1) % 5) + 1;
+            resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
+        }
+        else {
+            int fileNumber = grid_num - 15;
+            resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi" + fileNumber + ".txt";
+        }
 
         URL url = getClass().getResource(resourcePath);
         if (url == null) {
