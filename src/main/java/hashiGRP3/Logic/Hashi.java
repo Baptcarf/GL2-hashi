@@ -54,7 +54,8 @@ public class Hashi {
      * 
      * @param ile       l'île de départ
      * @param direction la direction dans laquelle chercher
-     * @return l'île voisine trouvée, ou null si aucune île n'existe dans cette direction
+     * @return l'île voisine trouvée, ou null si aucune île n'existe dans cette
+     *         direction
      */
     private Ile trouverVoisin(Ile ile, Direction direction) {
         Coordonnees deplacementTheorique = ile.getCoordonnees().additionner(direction.getDelta());
@@ -272,7 +273,7 @@ public class Hashi {
      * 
      * @param pont Le pont sur lequel jouer
      */
-    public void jouer(Pont pont) {
+    public void jouer(Pont pont, boolean onTuto) {
         EtatDuPont avant = pont.getEtatActuel();
         pont.cycler();
         EtatDuPont apres = pont.getEtatActuel();
@@ -287,7 +288,13 @@ public class Hashi {
             if (modeErreur) {
                 modes.add(Mode.ERREUR);
             } // "ERREUR"
-            historique.ajouterAction(pont, avant, apres, EnumSet.copyOf(modes));
+            if (onTuto) {
+                historique.ajouterActionNotSave(pont, avant, apres, EnumSet.copyOf(modes));
+            } else {
+                historique.ajouterAction(pont, avant, apres, EnumSet.copyOf(modes));
+
+            }
+
             pont.setEstHypothese(this.modeHypothese);
         }
     }
@@ -317,6 +324,7 @@ public class Hashi {
 
     /**
      * Renvoie si le mode hypothèse est actif.
+     * 
      * @return le booléen correspondant.
      */
     public boolean getHypothese() {
@@ -325,13 +333,14 @@ public class Hashi {
 
     /**
      * Setter sur le mode hypothèse.
+     * 
      * @param actif le booleen à set
      */
     public void setModeHypothese(boolean actif) {
         this.modeHypothese = actif;
     }
 
-    /** Fais valider puis désactive le mode hypothèse.*/
+    /** Fais valider puis désactive le mode hypothèse. */
     public void validerHypothese() {
         historique.confirmerHypothese();
         this.setModeHypothese(false);
@@ -350,6 +359,7 @@ public class Hashi {
 
     /**
      * Getter sur le mode erreur
+     * 
      * @return le booleen correspondant
      */
     public boolean EstEtatErreur() {
@@ -383,7 +393,9 @@ public class Hashi {
         General.getDb().resetCoupPartie();
     }
 
-    /** Getteur sur le nombre d'erreur 
+    /**
+     * Getteur sur le nombre d'erreur
+     * 
      * @return Le nombre d'erreur sur le hashi.
      */
     public int getNbErreur() {

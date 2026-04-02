@@ -80,6 +80,7 @@ public class GrilleController extends ManageController {
     private Label labelTitreGrille;
 
     private boolean onCheck = false;
+    private boolean tuto = false;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
             KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
@@ -141,9 +142,10 @@ public class GrilleController extends ManageController {
         int grid_num = General.getNum_grille();
 
         if (labelTitreGrille != null) {
-            if (grid_num > 15)
+            if (grid_num > 15) {
                 labelTitreGrille.setText("Grille tutoriel " + (grid_num - 15));
-            else
+                tuto = true;
+            } else
                 labelTitreGrille.setText("Grille numéro " + grid_num);
         }
 
@@ -201,8 +203,14 @@ public class GrilleController extends ManageController {
             this.elapsedBefore = General.getDb().checkScorePartie();
 
             General.setElapsedTime(elapsedBefore);
-            this.start_timer();
-
+            if (!tuto) {
+                this.start_timer();
+            } else {
+                timer.setVisible(false);
+                checkButton.setVisible(false);
+                hintButton.setVisible(false);
+                hypothesisButton.setVisible(false);
+            }
             System.out.println(this.startup);
 
             drawGrid(hashi, parent.getWidth());
@@ -321,7 +329,7 @@ public class GrilleController extends ManageController {
                 Button dummyButton = new Button();
                 dummyButton.setUserData("selectGrille");
                 ActionEvent event = new ActionEvent(dummyButton, null);
-                changeScene(event);
+                retourArriere(event);
             }
         });
     }
@@ -350,7 +358,7 @@ public class GrilleController extends ManageController {
 
     /** Méthode activer lors d'un clique sur un pont */
     private void onPontClicked(Pont pont) {
-        hashi.jouer(pont);
+        hashi.jouer(pont, tuto);
         drawGrid(hashi, gamePane.getWidth());
         redoButton.setDisable(hashi.isRedoEmpty());
         undoButton.setDisable(hashi.isUndoEmpty());
