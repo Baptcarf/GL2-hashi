@@ -136,7 +136,7 @@ public class SelectTutorielController extends ManageController {
     private void setupProgression() {
         for (int i = 0; i < levels.size(); i++) {
             final int index = i;
-            //getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index));
+            //getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index)); DESACTIVER
         }
     }
 
@@ -157,7 +157,7 @@ public class SelectTutorielController extends ManageController {
      */
     @FXML
     public void lancerGrille(ActionEvent event) {
-        General.setNum_grille(99);
+        General.setNum_grille(16);
         this.changeScene(event);
     }
 
