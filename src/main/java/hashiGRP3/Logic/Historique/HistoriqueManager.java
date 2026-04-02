@@ -24,7 +24,6 @@ import hashiGRP3.Logic.Pont;
  * 
  * @version 1.0
  */
-
 public class HistoriqueManager {
 
     /* Classe d'action à enregistrer */
@@ -212,6 +211,7 @@ public class HistoriqueManager {
         redoStack.clear();
     }
 
+    /** Confirme les coups réalisés en mode hypothèses */
     public void confirmerHypothese() {
         for (Action action : undoStack) {
             if (action.isMode(Mode.TEMPORAIRE)) {
@@ -223,6 +223,7 @@ public class HistoriqueManager {
         redoStack.clear();
     }
 
+    /** Annules les coups réalisés en mode hypothèses */
     public void annulerHypothese() {
         while (!undoStack.isEmpty() && undoStack.peek().isMode(Mode.TEMPORAIRE)) {
             this.undo();
@@ -230,6 +231,7 @@ public class HistoriqueManager {
         redoStack.clear();
     }
 
+    /** Retourne sur l'état sans erreur */
     public void retourEtatCorrect() {
         while (!undoStack.isEmpty() && undoStack.peek().isMode(Mode.ERREUR)) {
             this.undo();

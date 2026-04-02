@@ -54,8 +54,7 @@ public class Hashi {
      * 
      * @param ile       l'île de départ
      * @param direction la direction dans laquelle chercher
-     * @return l'île voisine trouvée, ou null si aucune île n'existe dans cette
-     *         direction
+     * @return l'île voisine trouvée, ou null si aucune île n'existe dans cette direction
      */
     private Ile trouverVoisin(Ile ile, Direction direction) {
         Coordonnees deplacementTheorique = ile.getCoordonnees().additionner(direction.getDelta());
@@ -316,40 +315,56 @@ public class Hashi {
         return historique.redo();
     }
 
+    /**
+     * Renvoie si le mode hypothèse est actif.
+     * @return le booléen correspondant.
+     */
     public boolean getHypothese() {
         return this.modeHypothese;
     }
 
+    /**
+     * Setter sur le mode hypothèse.
+     * @param actif le booleen à set
+     */
     public void setModeHypothese(boolean actif) {
         this.modeHypothese = actif;
     }
 
+    /** Fais valider puis désactive le mode hypothèse.*/
     public void validerHypothese() {
         historique.confirmerHypothese();
         this.setModeHypothese(false);
     }
 
+    /** Fais annuler l'hypothèse puis désactive le mode hypothèse */
     public void annulerHypothese() {
         historique.annulerHypothese();
         setModeHypothese(false);
     }
 
+    /** Setter sur l'erreur */
     public void setErreur(boolean b) {
         this.modeErreur = b;
     }
 
+    /**
+     * Getter sur le mode erreur
+     * @return le booleen correspondant
+     */
     public boolean EstEtatErreur() {
         return this.modeErreur;
     }
 
+    /** Retourne au dernière état correcte */
     public void retourEtatCorrect() {
         historique.retourEtatCorrect();
         setErreur(false);
     }
 
-    // Version d'affichage expériemental afin de visualiser le plateau dans la
-    // console en attnendant une interface graphique
-
+    /**
+     * Retourne si la pool de mouvement effectuer vide.
+     */
     public boolean isUndoEmpty() {
         return historique.isUndoEmpty();
     }
@@ -368,6 +383,7 @@ public class Hashi {
         General.getDb().resetCoupPartie();
     }
 
+    /** Renvoie le nombre d'erreur */
     public int getNbErreur() {
         int nbPont = 0;
         for (Pont p : ponts) {
@@ -378,7 +394,9 @@ public class Hashi {
         return nbPont;
     }
 
-    // to String
+    /**
+     * Renvoie le hashi sous forme de string pour le CLI
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

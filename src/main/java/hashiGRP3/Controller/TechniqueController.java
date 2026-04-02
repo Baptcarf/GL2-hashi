@@ -1,9 +1,12 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
+
+//Imports
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
-//Imports
+import java.io.InputStream;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,16 +16,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import java.io.InputStream;
 
 import hashiGRP3.Logic.General;
 
+
+
 /**
- * Controlleur de la page des techniques
+ * Controlleur de la page des techniques,
  * Affiche les différentes techniques de résolution du jeu, avec des
  * explications détaillées et des images d'exemple.
- * Hérite de ManageController pour bénéficier des fonctionnalités de navigation
- * entre les scènes
+ * Hérite de ManageController pour bénéficier des fonctionnalités de navigation entre les scènes.
  */
 public class TechniqueController extends ManageController {
 
@@ -57,6 +60,7 @@ public class TechniqueController extends ManageController {
         loadTechniqueContent(techniqueID);
     }
 
+    /** Démarre le chrono */
     public void startChrono() {
         coteGrille = true;
         this.elapsedBefore = General.getDb().checkScorePartie();
@@ -65,6 +69,7 @@ public class TechniqueController extends ManageController {
         General.startTimer(); // démarre ou continue le chrono global
     }
 
+    /** Arrête le chrono */
     public void stopChrono() {
         General.stopTimer(); // stoppe le chrono global mais conserve le temps écoulé
         double score = General.getElapsedTime();
@@ -75,8 +80,7 @@ public class TechniqueController extends ManageController {
      * Charger le contenu (texte et images) correspondant à la technique
      * sélectionnée
      * 
-     * @param id : l'identifiant de la technique sélectionnée, utilisé pour
-     *           déterminer quel contenu afficher
+     * @param id : l'identifiant de la technique sélectionnée, utilisé pour déterminer quel contenu afficher
      */
     private void loadTechniqueContent(String id) {
         instructionBox.getChildren().clear();
