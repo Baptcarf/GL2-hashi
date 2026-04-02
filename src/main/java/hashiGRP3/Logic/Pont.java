@@ -190,7 +190,6 @@ public class Pont {
             case VIDE -> pontEstPossible() ? EtatDuPont.SIMPLE : EtatDuPont.VIDE;
             case SIMPLE -> EtatDuPont.DOUBLE;
             case DOUBLE -> EtatDuPont.VIDE;
-            case INTERDIT -> EtatDuPont.INTERDIT;
         };
     }
 

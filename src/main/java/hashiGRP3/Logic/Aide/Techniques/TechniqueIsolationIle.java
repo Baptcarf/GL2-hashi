@@ -37,26 +37,24 @@ public class TechniqueIsolationIle extends AbstractTechnique {
 
     @Override
     protected Optional<IndiceResultat> detecter(Hashi hashi) {
-        List<Ile> iles = hashi.getIles();
-
-        for (Ile ile : iles) {
-            System.out.println(ile);
-            System.out.println(getVoisin(ile));
+        for (Ile ile : hashi.getIles()) {
             for (Pont pont : getVoisin(ile)) {
                 if (pont.getEtatActuel() != EtatDuPont.VIDE)
                     continue;
-
-                if (pont.getEtatCorrect() == EtatDuPont.VIDE) {
+                if (pont.getEtatCorrect() == EtatDuPont.VIDE)
                     continue;
-                }
 
+                // Cloner et bloquer le pont en le mettant DOUBLE (saturé) pour simuler son
+                // absence
                 Hashi simu = GraphUtils.clonerHashi(hashi);
                 Ile ileSimuA = simu.getIle(ile.getCoordonnees().x, ile.getCoordonnees().y);
                 Ile ileSimuB = (pont.getileA() == ile ? pont.getileB() : pont.getileA());
-                Pont pontSimu = simu.getPont(ileSimuA, simu.getIle(ileSimuB.getCoordonnees().x,
-                        ileSimuB.getCoordonnees().y));
+                Pont pontSimu = simu.getPont(ileSimuA,
+                        simu.getIle(ileSimuB.getCoordonnees().x, ileSimuB.getCoordonnees().y));
 
-                pontSimu.setEtatActuel(EtatDuPont.INTERDIT);
+                // Exclure ce pont de la simulation en le marquant comme non disponible
+                pontSimu.setEtatActuel(EtatDuPont.DOUBLE);
+                pontSimu.setEtatCorrect(EtatDuPont.VIDE); // force son exclusion dans propagerEtVerifier
 
                 if (!propagerEtVerifier(simu)) {
                     String explication = String.format(
@@ -69,7 +67,6 @@ public class TechniqueIsolationIle extends AbstractTechnique {
                 }
             }
         }
-
         return Optional.empty();
     }
 

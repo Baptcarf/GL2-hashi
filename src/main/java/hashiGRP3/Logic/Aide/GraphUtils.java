@@ -71,15 +71,20 @@ public class GraphUtils {
         return clone;
     }
 
+    public static Set<Ile> composanteConnexe(Ile ileDépart, Hashi hashi) {
+        return composanteConnexe(ileDépart, hashi, null);
+    }
+
     /**
      * Trouve l'ensemble des iles atteignables à partir d'une ile donnée
      * en utilisant les ponts actifs (SIMPLE ou DOUBLE)
      * Effectue une BFS sur le graphe des ponts.
+     * 
      * @param ileDépart l'ile de départ
      * @param hashi     le plateau de jeu
      * @return l'ensemble des iles atteignables incluant l'ile de départ
      */
-    public static Set<Ile> composanteConnexe(Ile ileDépart, Hashi hashi) {
+    public static Set<Ile> composanteConnexe(Ile ileDépart, Hashi hashi, Pont pontIgnore) {
         Set<Ile> composante = new HashSet<>();
         Queue<Ile> file = new LinkedList<>();
 
@@ -89,14 +94,11 @@ public class GraphUtils {
         while (!file.isEmpty()) {
             Ile ileActuelle = file.poll();
 
-            // Parcourir tous les ponts de l'ile dans les 4 directions
             for (Direction direction : Direction.values()) {
                 Pont pont = ileActuelle.getPont(direction);
 
-                if (pont != null && estPontActif(pont)) {
-                    // Trouver l'autre ile du pont
+                if (pont != null && pont != pontIgnore && estPontActif(pont)) {
                     Ile autreIle = (pont.getileA() == ileActuelle) ? pont.getileB() : pont.getileA();
-
                     if (!composante.contains(autreIle)) {
                         composante.add(autreIle);
                         file.add(autreIle);
@@ -104,8 +106,11 @@ public class GraphUtils {
                 }
             }
         }
-
         return composante;
+    }
+
+    public static boolean estConnexe(Hashi hashi) {
+        return estConnexe(hashi, null);
     }
 
     /**
@@ -115,24 +120,20 @@ public class GraphUtils {
      * @param hashi le plateau de jeu
      * @return true si toutes les iles forment une seule composante connexe
      */
-    public static boolean estConnexe(Hashi hashi) {
+    public static boolean estConnexe(Hashi hashi, Pont pontIgnore) {
         List<Ile> toutesLesIles = hashi.getIles();
-
-        if (toutesLesIles.isEmpty()) {
+        if (toutesLesIles.isEmpty())
             return true;
-        }
 
-        // Prendre une ile comme point de départ
         Ile ileDépart = toutesLesIles.get(0);
-        Set<Ile> composante = composanteConnexe(ileDépart, hashi);
-
-        // Vérifier si la composante contient toutes les iles
+        Set<Ile> composante = composanteConnexe(ileDépart, hashi, pontIgnore);
         return composante.size() == toutesLesIles.size();
     }
 
     /**
      * Determine si poser un pont crée un cycle.
-     * Un pont crée un cycle si ses deux iles sont déjà dans la même composante connexe.
+     * Un pont crée un cycle si ses deux iles sont déjà dans la même composante
+     * connexe.
      *
      * @param pont  le pont à tester
      * @param hashi le plateau de jeu
