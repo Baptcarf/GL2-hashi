@@ -80,6 +80,7 @@ public class GrilleController extends ManageController {
     private Label labelTitreGrille;
 
     private boolean onCheck = false;
+    private boolean onAide = false;
     private boolean tuto = false;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
@@ -200,10 +201,10 @@ public class GrilleController extends ManageController {
             };
             parent.layoutBoundsProperty().addListener(boundsListener);
 
-            this.elapsedBefore = General.getDb().checkScorePartie();
-
-            General.setElapsedTime(elapsedBefore);
             if (!tuto) {
+                double savedScore = General.getDb().checkScorePartie();
+                General.resetTimer();
+                General.setElapsedTime(savedScore);
                 this.start_timer();
             } else {
                 timer.setVisible(false);
@@ -240,9 +241,7 @@ public class GrilleController extends ManageController {
     /** Arrêt du timer */
     public double stop_timer() {
         animationTimer.stop();
-        General.stopTimer();
-        double t = General.getElapsedTime();
-        return t;
+        return General.stopTimer();
     }
 
     /** Dessine le hashi */
@@ -362,6 +361,14 @@ public class GrilleController extends ManageController {
         drawGrid(hashi, gamePane.getWidth());
         redoButton.setDisable(hashi.isRedoEmpty());
         undoButton.setDisable(hashi.isUndoEmpty());
+        if (onCheck == true) {
+            onCheck = false;
+            sidePanel.getChildren().clear();
+        }
+        if (onAide) {
+            onAide = false;
+            sidePanel.getChildren().clear();
+        }
     }
 
     /** Dessine les iles */
@@ -478,6 +485,7 @@ public class GrilleController extends ManageController {
     protected void onCheckClick() {
         if (onCheck == false) {
             onCheck = true;
+            General.addElapsedTime(60.0);
             Label title = createTitle("Vérification");
             Label status = new Label("Il y a " + hashi.getNbErreur() + " erreurs sur la grille.");
             status.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
@@ -501,19 +509,26 @@ public class GrilleController extends ManageController {
     /** Méthode appeler lors d'un clique sur le bouton indice */
     @FXML
     protected void onHintClick() {
-        Label title = createTitle("Indice");
-        Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
-        if (resultat.isEmpty()) {
-            Text msg = new Text("Aucun indice disponible pour le moment.");
-            updateSidePanel(title, new Separator(), msg);
-            return;
+        if (!onAide) {
+            onAide = true;
+            General.addElapsedTime(10.0);
+            Label title = createTitle("Indice");
+            Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
+            if (resultat.isEmpty()) {
+                Text msg = new Text("Aucun indice disponible pour le moment.");
+                updateSidePanel(title, new Separator(), msg);
+                return;
+            }
+            IndiceResultat indice = resultat.get();
+            Label techniqueName = new Label(indice.getNomTechnique());
+            techniqueName.setWrapText(true);
+            Text explication = new Text(indice.getExplication());
+            explication.setWrappingWidth(180);
+            updateSidePanel(title, new Separator(), techniqueName, explication);
+        } else {
+            onAide = false;
+            sidePanel.getChildren().clear();
         }
-        IndiceResultat indice = resultat.get();
-        Label techniqueName = new Label(indice.getNomTechnique());
-        techniqueName.setWrapText(true);
-        Text explication = new Text(indice.getExplication());
-        explication.setWrappingWidth(180);
-        updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
     /** ??? */
@@ -556,16 +571,22 @@ public class GrilleController extends ManageController {
     @FXML
     @Override
     public void changeScene(ActionEvent event) {
-        double score = stop_timer();
-        General.getDb().updateScorePartie(score);
-        General.resetTimer();
-        General.getHashi().setModeHypothese(false);
-        if (hintButton != null)
-            hintButton.setDisable(false);
-        if (checkButton != null)
-            checkButton.setDisable(false);
-        if (hypothesisButton != null)
-            hypothesisButton.setDisable(false);
-        super.changeScene(event);
+        if (tuto) {
+            retourArriere(event);
+        } else {
+            double score = stop_timer();
+            General.getDb().updateScorePartie(score);
+            General.resetTimer();
+            General.getHashi().setModeHypothese(false);
+            if (hintButton != null)
+                hintButton.setDisable(false);
+            if (checkButton != null)
+                checkButton.setDisable(false);
+            if (hypothesisButton != null)
+                hypothesisButton.setDisable(false);
+            super.changeScene(event);
+
+        }
+
     }
 }

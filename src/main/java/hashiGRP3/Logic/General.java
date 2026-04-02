@@ -23,7 +23,7 @@ public class General {
     /** Temps début du timer */
     private static long startTime = -1;
     /** Temps actuel du timer */
-    private static double elapsedBefore = 1;
+    private static double elapsedBefore = 0;
 
     /** Status du chronomètre */
     private static boolean running = false;
@@ -42,11 +42,12 @@ public class General {
     }
 
     /** Arrête le timer */
-    public static void stopTimer() {
+    public static double stopTimer() {
         if (running) {
             elapsedBefore += (System.nanoTime() - startTime) / 1_000_000_000.0;
             running = false;
         }
+        return elapsedBefore;
     }
 
     /** Renvoie le temps écoulé */
@@ -66,6 +67,10 @@ public class General {
     /** Setter sur le temps écoulé */
     public static void setElapsedTime(double el) {
         elapsedBefore = el;
+    }
+
+    public static void addElapsedTime(double val) {
+        elapsedBefore += val;
     }
 
     /** Getter sur l'id de l'utilisateur */

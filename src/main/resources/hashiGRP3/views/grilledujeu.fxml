@@ -20,7 +20,7 @@
    <top>
       <HBox alignment="CENTER_LEFT" prefHeight="70.0" spacing="10.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-width: 0 0 1 0;" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#retourArriere" prefHeight="50.0" prefWidth="50.0" text="←">
+            <Button mnemonicParsing="false" onAction="#changeScene" prefHeight="50.0" prefWidth="50.0" text="←" userData="selectGrille">
                <font>
                   <Font size="18.0" />
                </font>
