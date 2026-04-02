@@ -44,6 +44,22 @@ public class MoteurIndice {
     }
 
     /**
+     * Retourne tous les indices applicables dans l'ordre des techniques.
+     * @param hashi Grille de jeu
+     * @return Liste des indices disponibles
+     */
+    public List<IndiceResultat> proposerTousLesIndices(Hashi hashi) {
+        List<IndiceResultat> indices = new ArrayList<>();
+        for (TechniqueIndice technique : techniques) {
+            Optional<IndiceResultat> res = technique.evaluer(hashi);
+            if (res.isPresent()) {
+                indices.add(res.get());
+            }
+        }
+        return indices;
+    }
+
+    /**
      * Décide d'accepter ou non un indice négatif
      * Un indice négatif (estInterdit == true) ne doit être proposé que si le pont concerné
      * est actuellement dans l'état interdit (état suggéré). Cela centralise la règle :

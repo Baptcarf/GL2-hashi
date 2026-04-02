@@ -6,11 +6,22 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.NiveauDifficulte;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationCapaciteMax;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
+import hashiGRP3.Logic.Aide.Techniques.TechniquesBloquePont;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -23,6 +34,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -79,6 +91,8 @@ public class GrilleController extends ManageController {
     private Label labelTitreGrille;
 
     private boolean onCheck = false;
+    private List<IndiceResultat> indicesDisponibles = List.of();
+    private int indiceAffiche = 0;
 
     private static final List<KeyCode> KONAMI_CODE = List.of(
             KeyCode.Z, KeyCode.Z, KeyCode.S, KeyCode.S,
@@ -158,7 +172,19 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TechniqueIsolationIle()));
+                moteurIndice = new MoteurIndice(List.of(
+                    new TechniqueSaturation(),
+                    new TechniqueIsolation(),
+                    new TechniqueSaturationMoinsDeux(),
+                    new TechniqueSaturationMoinsUn(),
+                    new TechniqueSaturationMoinsUnSpe(),
+                    new TechniqueSaturationCapaciteMax(),
+                    new TechniqueIsolationDeuxIles(),
+                    new TechniqueIsolationTroisIles(),
+                    new TechniqueIsolementSegment(),
+                    new TechniquesBloquePont(),
+                    new TechniqueIsolationIle(),
+                    new TechniqueIsolationSegmentIle()));
 
             General.setHashi(hashi);
             int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
@@ -452,19 +478,48 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onHintClick() {
+        indicesDisponibles = moteurIndice.proposerTousLesIndices(hashi);
+        indiceAffiche = 0;
+        afficherIndiceCourant();
+    }
+
+    private void afficherIndiceCourant() {
         Label title = createTitle("Indice");
-        Optional<IndiceResultat> resultat = moteurIndice.proposerProchainIndice(hashi);
-        if (resultat.isEmpty()) {
+        if (indicesDisponibles.isEmpty()) {
             Text msg = new Text("Aucun indice disponible pour le moment.");
             updateSidePanel(title, new Separator(), msg);
             return;
         }
-        IndiceResultat indice = resultat.get();
+
+        IndiceResultat indice = indicesDisponibles.get(indiceAffiche);
+
+        Label compteur = new Label((indiceAffiche + 1) + " / " + indicesDisponibles.size());
+
+        Label difficulte = new Label("Difficulté : " + indice.getDifficulte());
+
         Label techniqueName = new Label(indice.getNomTechnique());
         techniqueName.setWrapText(true);
+
         Text explication = new Text(indice.getExplication());
         explication.setWrappingWidth(180);
-        updateSidePanel(title, new Separator(), techniqueName, explication);
+
+        Button prevButton = new Button("<-");
+        Button nextButton = new Button("->");
+
+        prevButton.setOnAction(e -> {
+            indiceAffiche = (indiceAffiche == 0) ? indicesDisponibles.size() - 1 : indiceAffiche - 1;
+            afficherIndiceCourant();
+        });
+
+        nextButton.setOnAction(e -> {
+            indiceAffiche = (indiceAffiche + 1) % indicesDisponibles.size();
+            afficherIndiceCourant();
+        });
+
+        HBox navigation = new HBox(10, prevButton, compteur, nextButton);
+        navigation.setAlignment(Pos.CENTER);
+
+        updateSidePanel(title, new Separator(), navigation, difficulte, techniqueName, explication);
     }
 
     private void updateSidePanel(javafx.scene.Node... nodes) {
