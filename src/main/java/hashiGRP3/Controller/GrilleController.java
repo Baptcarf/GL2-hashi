@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.*;
+import hashiGRP3.Logic.Aide.Techniques.TehcniqueIsolationIle;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -463,6 +463,7 @@ public class GrilleController extends ManageController {
         Label techniqueName = new Label(indice.getNomTechnique());
         techniqueName.setWrapText(true);
         Text explication = new Text(indice.getExplication());
+        explication.setWrappingWidth(180);
         updateSidePanel(title, new Separator(), techniqueName, explication);
     }
 
@@ -496,7 +497,7 @@ public class GrilleController extends ManageController {
     }
 
     /*
-     * réactive les bouttons quand l'utilisateur quite la grille (quand le mode
+     * réactive les bouttons quand l'utilisateur quiet la grille (quand le mode
      * hypothèse est actif)
      */
     @FXML
