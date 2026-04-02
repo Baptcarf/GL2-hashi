@@ -27,7 +27,7 @@ import hashiGRP3.Logic.Pont;
  * 
  * Retourne le premier pont de l'île qui n'est pas encore DOUBLE
  */
-public class TehcniqueIsolationIle extends AbstractTechnique {
+public class TechniqueIsolationIle extends AbstractTechnique {
 
     @Override
     public String getNom() {

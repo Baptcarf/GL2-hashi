@@ -158,7 +158,7 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichier(chemin);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-            moteurIndice = new MoteurIndice(List.of(new TehcniqueIsolationIle()));
+            moteurIndice = new MoteurIndice(List.of(new TechniqueIsolationIle()));
 
             General.setHashi(hashi);
             int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
