@@ -88,17 +88,17 @@
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Isolement d'un segment à trois îles" />
+                            <Button onAction="#lancerT8" text="Isolement d'un segment à trois îles" userData="grilledujeu"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Isolement lorsqu'un segment se connecte à une île" />
+                            <Button onAction="#lancerT9" text="Isolement lorsqu'un segment se connecte à une île" userData="grilledujeu"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Isolement lorsqu'un segment se connecte à un autre segment" />
+                            <Button onAction="#lancerT10" text="Isolement lorsqu'un segment se connecte à un autre segment" userData="grilledujeu"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
                     </VBox>
@@ -108,22 +108,22 @@
                         <Label styleClass="section-title" text="Techniques avancées" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Isoler un segment en bloquant un pont" />
+                            <Button onAction="#lancerT11" text="Isoler un segment en bloquant un pont" userData="grilledujeu"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Isoler un segment en ajoutant un pont" />
+                            <Button onAction="#lancerT12" text="Isoler un segment en ajoutant un pont" userData="grilledujeu"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Isoler une île avec des ponts" />
+                            <Button onAction="#lancerT13" text="Isoler une île avec des ponts" userData="grilledujeu"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Création de conflits de connexion pont" />
+                            <Button onAction="#lancerT14" text="Création de conflits de connexion pont" userData="grilledujeu"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
                     </VBox>
