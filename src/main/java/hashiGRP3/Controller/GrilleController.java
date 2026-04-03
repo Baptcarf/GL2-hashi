@@ -161,7 +161,7 @@ public class GrilleController extends ManageController {
 
         // Si grille non tutoriel alors calculer index
         String resourcePath = "-1";
-        if (grid_num < 15) {
+        if (grid_num <= 15) {
             int folderIndex = (grid_num - 1) / 5;
             String[] folders = { "7x7", "10x10", "12x12" };
             String folder = folders[folderIndex];
@@ -217,6 +217,10 @@ public class GrilleController extends ManageController {
             parent.layoutBoundsProperty().addListener(boundsListener);
 
             if (!tuto) {
+                timer.setVisible(true);
+                checkButton.setVisible(true);
+                hintButton.setVisible(true);
+                hypothesisButton.setVisible(true);
                 double savedScore = General.getDb().checkScorePartie();
                 General.resetTimer();
                 General.setElapsedTime(savedScore);
@@ -226,6 +230,7 @@ public class GrilleController extends ManageController {
                 checkButton.setVisible(false);
                 hintButton.setVisible(false);
                 hypothesisButton.setVisible(false);
+                tuto = false;
             }
             System.out.println(this.startup);
 
