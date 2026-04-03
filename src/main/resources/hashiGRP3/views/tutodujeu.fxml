@@ -34,13 +34,7 @@
             <Region HBox.hgrow="ALWAYS" />
 
             <HBox alignment="CENTER" spacing="20.0">
-                  <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../images/chrono.png" />
-                     </image> 
-                  </ImageView>
-                  
-                  <Label fx:id="timer" text="2'31&quot;">
+                  <Label fx:id="timer" text="Mode Tutoriel">
                      <font>
                         <Font name="System Bold" size="28.0" />
                      </font>

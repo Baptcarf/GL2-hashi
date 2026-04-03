@@ -11,9 +11,11 @@ import java.util.List;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueConflitComptage;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIleVoisine;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
@@ -182,9 +184,9 @@ public class GrilleController extends ManageController {
             if (grid_num == 0) {
                 labelTitreGrille.setText("Grille tutoriel " + (grid_num));
                 tuto = true;
-            }
-            else if (grid_num > 15){
-                labelTitreGrille.setText("Grille tutoriel " + (grid_num) + 15 );
+            } else if (grid_num > 15) {
+                labelTitreGrille.setText("Grille tutoriel " + (grid_num) + 15);
+                System.out.println("ici");
                 tuto = true;
             } else
                 labelTitreGrille.setText("Grille numéro " + grid_num);
@@ -227,7 +229,9 @@ public class GrilleController extends ManageController {
                     new TechniqueIsolementSegment(),
                     new TechniquesBloquePont(),
                     new TechniqueIsolationIle(),
-                    new TechniqueIsolationSegmentIle()));
+                    new TechniqueIsolationSegmentIle(),
+                    new TechniqueIsolationIleVoisine(),
+                    new TechniqueConflitComptage()));
 
             General.setHashi(hashi);
             int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
@@ -439,7 +443,7 @@ public class GrilleController extends ManageController {
         if (tuto && !etapesTutoriel.isEmpty()) {
             verifierEtapeTutoriel();
         }
-}
+    }
 
     /** Dessine les iles */
     private void dessinerIle(Hashi hashi, double size) {
@@ -563,6 +567,20 @@ public class GrilleController extends ManageController {
             question.setWrappingWidth(180);
             Button btnYes = new Button("Oui");
             Button btnNo = new Button("Non");
+
+            btnYes.setOnAction(e -> {
+                General.getHashi().retourEtatCorrect();
+                drawGrid(hashi, gamePane.getWidth());
+                sidePanel.getChildren().clear();
+
+                onCheck = false;
+            });
+
+            btnNo.setOnAction(e -> {
+                sidePanel.getChildren().clear();
+                onCheck = false;
+            });
+
             btnYes.setStyle("-fx-base: #f0f0f0;");
             btnNo.setStyle("-fx-base: #f0f0f0;");
             btnYes.setPrefWidth(80);
@@ -700,8 +718,10 @@ public class GrilleController extends ManageController {
      * Affiche l'étape courante du tutoriel dans le panneau latéral.
      */
     private void afficherEtapeTutoriel() {
-        if (etapesTutoriel.isEmpty()) return;
-        if (etapeCourante >= etapesTutoriel.size()) return;
+        if (etapesTutoriel.isEmpty())
+            return;
+        if (etapeCourante >= etapesTutoriel.size())
+            return;
 
         EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
 
@@ -734,8 +754,10 @@ public class GrilleController extends ManageController {
      * Appelée après chaque coup joué.
      */
     private void verifierEtapeTutoriel() {
-        if (etapesTutoriel.isEmpty()) return;
-        if (etapeCourante >= etapesTutoriel.size()) return;
+        if (etapesTutoriel.isEmpty())
+            return;
+        if (etapeCourante >= etapesTutoriel.size())
+            return;
 
         EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
         if (etape.aUneCondition() && etape.estValidee(hashi)) {

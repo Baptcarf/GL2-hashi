@@ -344,20 +344,19 @@ public class DatabaseManager {
      */
     public int obtenirScore(int numeroGrille, String pseudo) {
 
-        int meilleurScore = -1;
+        int meilleurScore = 0;
         int id_utilisateur = getIdUtilisateur(pseudo);
 
         // Si utilisateur inexistant
         if (id_utilisateur == -1) {
-            return -1;
+            return 0;
         }
 
         String sql = "SELECT Partie.maxScore AS meilleurScore " +
                 "FROM Partie " +
                 "JOIN Grille ON Partie.id_grille = Grille.id_grille " +
                 "WHERE Grille.numeroGrille = ? " +
-                "AND Partie.id_utilisateur = ? " +
-                "AND Partie.statut = 2";
+                "AND Partie.id_utilisateur = ? ";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -604,7 +603,7 @@ public class DatabaseManager {
         String sql = "SELECT u.pseudo, p.maxScore " +
                 "FROM Partie p " +
                 "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
-                "WHERE p.statut = 2 AND p.score IS NOT NULL " +
+                "WHERE p.finiUneFois = true" +
                 "ORDER BY p.score ASC " +
                 "LIMIT 5";
 
@@ -641,8 +640,8 @@ public class DatabaseManager {
                 "FROM Partie p " +
                 "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
                 "JOIN Grille g ON p.id_grille = g.id_grille " +
-                "WHERE g.numeroGrille = ? AND p.statut = 2 AND p.score IS NOT NULL " +
-                "ORDER BY p.score DESC " +
+                "WHERE g.numeroGrille = ? AND p.finiUneFois = true " +
+                "ORDER BY p.maxScore DESC " +
                 "LIMIT 5";
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -670,7 +669,7 @@ public class DatabaseManager {
      * @return le numéro du dernier tutoriel complété (0-9), ou 0 si aucun n'a été
      *         complété
      */
-    public int obtenirAvancementTutoriel(){
+    public int obtenirAvancementTutoriel() {
         String sql = "SELECT id_avancement_tutoriel FROM Utilisateur WHERE id_utilisateur = ?";
 
         try (Connection conn = DriverManager.getConnection(URL);
