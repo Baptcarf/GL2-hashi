@@ -21,6 +21,8 @@ public class App extends Application {
 		sn.addScene("selectGrille");
 		sn.addScene("selectTutoriel");
 		sn.addScene("grilledujeu");
+		sn.addScene("tutodujeu");
+
 
 		sn.changeScene("connexion");
 	}

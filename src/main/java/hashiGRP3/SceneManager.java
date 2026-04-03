@@ -132,6 +132,11 @@ public class SceneManager {
             comp.getController().refreshGrilles();
         }
 
+        if (name.equals("tutodujeu")) {
+            Composante comp = findComposant("tutodujeu");
+            comp.getController().refreshGrilles();
+        }
+
         if (name.equals("selectTutoriel")) {
             Composante comp = findComposant("selectTutoriel");
             comp.getController().refreshGrilles();

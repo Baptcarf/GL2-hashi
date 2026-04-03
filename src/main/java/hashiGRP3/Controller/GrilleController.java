@@ -11,6 +11,18 @@ import java.util.List;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationCapaciteMax;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
+import hashiGRP3.Logic.Aide.Techniques.TechniquesBloquePont;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -27,6 +39,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -81,6 +94,10 @@ public class GrilleController extends ManageController {
     private Pane gamePane;
     @FXML
     private Label timer;
+    @FXML
+    private Label labelModeTutoriel;
+    @FXML
+    private ImageView chronoImage;
     @FXML
     private Label win;
     @FXML
@@ -198,7 +215,7 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichierDepuisStream(is, resourcePath);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-                moteurIndice = new MoteurIndice(List.of(
+            moteurIndice = new MoteurIndice(List.of(
                     new TechniqueSaturation(),
                     new TechniqueIsolation(),
                     new TechniqueSaturationMoinsDeux(),
@@ -234,6 +251,13 @@ public class GrilleController extends ManageController {
             parent.layoutBoundsProperty().addListener(boundsListener);
 
             if (!tuto) {
+                timer.setVisible(true);
+                checkButton.setVisible(true);
+                hintButton.setVisible(true);
+                hypothesisButton.setVisible(true);
+                chronoImage.setVisible(true);
+                labelModeTutoriel.setVisible(false);
+                labelModeTutoriel.setManaged(false);
                 double savedScore = General.getDb().checkScorePartie();
                 General.resetTimer();
                 General.setElapsedTime(savedScore);
@@ -243,6 +267,9 @@ public class GrilleController extends ManageController {
                 checkButton.setVisible(false);
                 hintButton.setVisible(false);
                 hypothesisButton.setVisible(false);
+                chronoImage.setVisible(false);
+                labelModeTutoriel.setVisible(true);
+                labelModeTutoriel.setManaged(true);
             }
             System.out.println(this.startup);
 
@@ -309,8 +336,8 @@ public class GrilleController extends ManageController {
         if (hashi.estGagne() && !hashi.getHypothese()) {
             double score = stop_timer();
             General.getDb().updateScorePartie(score);
+            General.getDb().changeStatutPartie(2);
             win.setVisible(true);
-            // win.setVisible(true);
             showWin();
         }
     }
@@ -403,7 +430,6 @@ public class GrilleController extends ManageController {
         undoButton.setDisable(hashi.isUndoEmpty());
         if (onCheck) {
             onCheck = false;
-            sidePanel.getChildren().clear();
         }
         if (onAide) {
             onAide = false;
@@ -591,6 +617,7 @@ public class GrilleController extends ManageController {
         prevButton.setOnAction(e -> {
             if (!indicesDisponibles.isEmpty()) {
                 indiceAffiche = (indiceAffiche - 1 + indicesDisponibles.size()) % indicesDisponibles.size();
+                General.addElapsedTime(10.0);
                 afficherIndiceCourant();
             }
         });
@@ -598,6 +625,7 @@ public class GrilleController extends ManageController {
         nextButton.setOnAction(e -> {
             if (!indicesDisponibles.isEmpty()) {
                 indiceAffiche = (indiceAffiche + 1) % indicesDisponibles.size();
+                General.addElapsedTime(10.0);
                 afficherIndiceCourant();
             }
         });
@@ -649,6 +677,7 @@ public class GrilleController extends ManageController {
     @Override
     public void changeScene(ActionEvent event) {
         if (tuto) {
+            tuto = false;
             retourArriere(event);
         } else {
             double score = stop_timer();
