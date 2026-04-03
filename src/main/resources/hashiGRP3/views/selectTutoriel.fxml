@@ -33,7 +33,7 @@
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Jouer à notre jeu " />
+                            <Button text="Jouer à notre jeu "/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
                     </VBox>
@@ -43,7 +43,7 @@
                         <Label styleClass="section-title" text="Techniques de démarrage" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT1" text="Îles avec 4 dans le coin, 6 sur le côté et 8 au milieu" userData="grilledujeu" />
+                            <Button text="Îles avec 4 dans le coin, 6 sur le côté et 8 au milieu"  onAction="#chooseLevelTuto" userData="1" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
                     </VBox>
@@ -53,27 +53,27 @@
                         <Label styleClass="section-title" text="Techniques de base" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT2" text="Îles avec un seul voisin" userData="grilledujeu"/>
+                            <Button text="Îles avec un seul voisin"  onAction="#chooseLevelTuto" userData="2" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT3" text="Îles avec 3 dans le coin, 5 sur le côté et 7 au milieu" userData="grilledujeu"/>
+                            <Button text="Îles avec 3 dans le coin, 5 sur le côté et 7 au milieu"  onAction="#chooseLevelTuto" userData="3" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT4" text="Cas spéciaux de 3 dans le coin, 5 sur le côté et 7 au milieu" userData="grilledujeu"/>
+                            <Button text="Cas spéciaux de 3 dans le coin, 5 sur le côté et 7 au milieu"  onAction="#chooseLevelTuto" userData="4" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT5" text="Cas spécial de 4 sur le côté" userData="grilledujeu"/>
+                            <Button text="Cas spécial de 4 sur le côté"  onAction="#chooseLevelTuto" userData="5" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT6" text="Cas spécial de 6 au milieu" userData="grilledujeu"/>
+                            <Button text="Cas spécial de 6 au milieu"  onAction="#chooseLevelTuto" userData="6" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
                     </VBox>
@@ -83,22 +83,22 @@
                         <Label styleClass="section-title" text="Techniques d’isolement" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT7" text="Isolement d'un segment à deux îles" userData="grilledujeu"/>
+                            <Button text="Isolement d'un segment à deux îles"  onAction="#chooseLevelTuto" userData="7" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT8" text="Isolement d'un segment à trois îles" userData="grilledujeu"/>
+                            <Button text="Isolement d'un segment à trois îles" onAction="#chooseLevelTuto" userData="8" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT9" text="Isolement lorsqu'un segment se connecte à une île" userData="grilledujeu"/>
+                            <Button text="Isolement lorsqu'un segment se connecte à une île"  onAction="#chooseLevelTuto" userData="9" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT10" text="Isolement lorsqu'un segment se connecte à un autre segment" userData="grilledujeu"/>
+                            <Button text="Isolement lorsqu'un segment se connecte à un autre segment"  onAction="#chooseLevelTuto" userData="10" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
                     </VBox>
@@ -108,22 +108,22 @@
                         <Label styleClass="section-title" text="Techniques avancées" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT11" text="Isoler un segment en bloquant un pont" userData="grilledujeu"/>
+                            <Button text="Isoler un segment en bloquant un pont"  onAction="#chooseLevelTuto" userData="11" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT12" text="Isoler un segment en ajoutant un pont" userData="grilledujeu"/>
+                            <Button text="Isoler un segment en ajoutant un pont"  onAction="#chooseLevelTuto" userData="12" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT13" text="Isoler une île avec des ponts" userData="grilledujeu"/>
+                            <Button text="Isoler une île avec des ponts"  onAction="#chooseLevelTuto" userData="13" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button onAction="#lancerT14" text="Création de conflits de connexion pont" userData="grilledujeu"/>
+                            <Button text="Création de conflits de connexion pont"  onAction="#chooseLevelTuto" userData="14" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
                     </VBox>

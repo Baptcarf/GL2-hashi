@@ -1,6 +1,7 @@
 //Attribut au paquet
 package hashiGRP3.Controller;
 
+import javafx.event.ActionEvent;
 //Imports
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +66,6 @@ public class SelectTutorielController extends ManageController {
     public void initialize() {
         loadImages();
         collectLevels();
-        // Ne pas charger la progression ici - ce sera fait dans refreshGrilles()
-        // quand on arrivera vraiment sur la scène avec un utilisateur connecté
     }
 
     /** Charger les images pour les différents états des niveaux. */
@@ -104,29 +103,35 @@ public class SelectTutorielController extends ManageController {
     /** Initialiser les états des niveaux. */
     private void initLevels() {
         states.clear();
-
-        states.add(LevelState.UNLOCKED); // Premier niveau débloqué
-        applyState(levels.get(0), LevelState.UNLOCKED);
-        for (int i = 1; i < levels.size(); i++) {
+        states.add(LevelState.COMPLETED); // Premier niveau completed
+        applyState(levels.get(0), LevelState.COMPLETED);
+        states.add(LevelState.COMPLETED); // Deuxième niveau completed
+        applyState(levels.get(1), LevelState.COMPLETED);
+        states.add(LevelState.UNLOCKED); // Troisième niveau débloqué
+        applyState(levels.get(2), LevelState.UNLOCKED);
+        for (int i = 3; i < levels.size(); i++) {
             states.add(LevelState.LOCKED);
             applyState(levels.get(i), states.get(i));
         }
+
     }
 
     /**
      * Charge la progression depuis la base de données et met à jour l'état des niveaux.
      */
     private void loadProgressionFromDatabase() {
-        // Vérifier que l'utilisateur est défini
-        String pseudo = getUtilisateur();
-        if (pseudo == null || pseudo.isEmpty()) {
-            return; // Utilisateur non défini, on initialise avec la valeur par défaut
-        }
 
-        int avancement = General.getDb().obtenirAvancementTutoriel(pseudo);
+
+        int avancement = General.getDb().obtenirAvancementTutoriel();
+        System.out.println(avancement);
+        while (General.getDb().obtenirAvancementTutoriel() < 2){
+            General.getDb().incrementerAvancementTutoriel(General.getDb().obtenirAvancementTutoriel()+1);
+        }
+        avancement = General.getDb().obtenirAvancementTutoriel();
+        System.out.println(avancement);
 
         // Marquer tous les tutoriels jusqu'à l'avancement comme complétés
-        for (int i = 0; i < avancement && i < states.size(); i++) {
+        for (int i = 1; i < avancement && i < states.size(); i++) {
             states.set(i, LevelState.COMPLETED);
             applyState(levels.get(i), LevelState.COMPLETED);
         }
@@ -138,157 +143,22 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
-    /** Configurer les actions des deux premier pour débloquer. */
-    private void setupProgression() {
-        for (int i = 0; i < NON_ACTIVE_BUTTON; i++) {
-            final int index = i;
-            getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index));
-        }
-    }
 
-
-    /**
-     * Gérer le clic sur un niveau : si débloqué, le marquer comme complété et débloquer le suivant
-     * @param index : l'index du niveau cliqué dans la liste des niveaux
-     */
-    private void onLevelClicked(int index) {
+    @FXML
+    public void chooseLevelTuto(ActionEvent event){
+        this.refreshGrilles();
+        Button btn = (Button) event.getSource();
+        int index = Integer.parseInt(btn.getUserData().toString());
         if (states.get(index) == LevelState.LOCKED) return;
-        completeLevel(index);
+        General.setId_grille(index);
+
+        completeLevel(index+1);
+        System.out.println("Choix du niveau du tutoriel : " + index+1);
+        getSceneManager().changeScene("tutodujeu");
     }
 
-    /** Méthode lorsqu'on appuie sur le bouton de la technique de démarrage pour lancer la grille tutoriel */
-    @FXML
-    public void lancerT1(ActionEvent event) {
-        int t = 16;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
 
-    @FXML
-    public void lancerT2(ActionEvent event) {
-        int t = 17;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
 
-    @FXML
-    public void lancerT3(ActionEvent event) {
-        int t = 18;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT4(ActionEvent event) {
-        int t = 19;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT5(ActionEvent event) {
-        int t = 20;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT6(ActionEvent event) {
-        int t = 21;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT7(ActionEvent event) {
-        int t = 22;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT8(ActionEvent event) {
-        int t = 22;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT9(ActionEvent event) {
-        int t = 23;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT10(ActionEvent event) {
-        int t = 24;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT11(ActionEvent event) {
-        int t = 25;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT12(ActionEvent event) {
-        int t = 26;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT13(ActionEvent event) {
-        int t = 27;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    @FXML
-    public void lancerT14(ActionEvent event) {
-        int t = 28;
-        General.setNum_grille(t);
-        completeLevel(t - ACTIVE_BUTTON);
-        this.changeScene(event);
-    }
-
-    /**
-     * Marquer un niveau comme complété et débloquer le suivant si nécessaire
-     * @param index : l'index du niveau à marquer comme complété
-     */
-    private void completeLevel(int index) {
-        if (states.get(index) == LevelState.COMPLETED) return;
-
-        states.set(index, LevelState.COMPLETED);
-        applyState(levels.get(index), LevelState.COMPLETED);
-
-        // Enregistrer l'avancement dans la BD
-        General.getDb().incrementerAvancementTutoriel(getUtilisateur(), index + 1);
-
-        if (index + 1 < states.size()
-                && states.get(index + 1) == LevelState.LOCKED) {
-
-            states.set(index + 1, LevelState.UNLOCKED);
-            applyState(levels.get(index + 1), LevelState.UNLOCKED);
-        }
-    }
 
     /**
      * Appliquer le style et l'image appropriés à un niveau en fonction de son état
@@ -343,6 +213,27 @@ public class SelectTutorielController extends ManageController {
     public void refreshGrilles() {
         initLevels();
         loadProgressionFromDatabase();
-        setupProgression();
     }
+
+    private void completeLevel(int index) {
+        if (states.get(index) == LevelState.COMPLETED) return;
+
+        states.set(index, LevelState.COMPLETED);
+        applyState(levels.get(index), LevelState.COMPLETED);
+
+        // Enregistrer l'avancement dans la BD
+        General.getDb().incrementerAvancementTutoriel( index + 1);
+
+        if (index + 1 < states.size()
+                && states.get(index + 1) == LevelState.LOCKED) {
+
+            states.set(index + 1, LevelState.UNLOCKED);
+            applyState(levels.get(index + 1), LevelState.UNLOCKED);
+        }
+    }
+
+
+    
+
+    
 }

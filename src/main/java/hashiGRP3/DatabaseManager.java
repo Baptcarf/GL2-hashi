@@ -670,13 +670,13 @@ public class DatabaseManager {
      * @return le numéro du dernier tutoriel complété (0-9), ou 0 si aucun n'a été
      *         complété
      */
-    public int obtenirAvancementTutoriel(String pseudo) {
-        String sql = "SELECT id_avancement_tutoriel FROM Utilisateur WHERE pseudo = ?";
+    public int obtenirAvancementTutoriel(){
+        String sql = "SELECT id_avancement_tutoriel FROM Utilisateur WHERE id_utilisateur = ?";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, pseudo);
+            pstmt.setInt(1, General.getIdUtilisateur());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -696,14 +696,14 @@ public class DatabaseManager {
      * @param pseudo           le pseudo de l'utilisateur
      * @param nouvelAvancement le nouvel avancement du tutoriel
      */
-    public void incrementerAvancementTutoriel(String pseudo, int nouvelAvancement) {
-        String sql = "UPDATE Utilisateur SET id_avancement_tutoriel = ? WHERE pseudo = ?";
+    public void incrementerAvancementTutoriel(int nouvelAvancement) {
+        String sql = "UPDATE Utilisateur SET id_avancement_tutoriel = ? WHERE id_utilisateur = ?";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, nouvelAvancement);
-            pstmt.setString(2, pseudo);
+            pstmt.setInt(2, General.getIdUtilisateur());
 
             pstmt.executeUpdate();
 
