@@ -165,7 +165,7 @@ public class GrilleController extends ManageController {
 
         // Si grille non tutoriel alors calculer index
         String resourcePath = "-1";
-        if (grid_num < 15) {
+        if (grid_num <= 15) {
             int folderIndex = (grid_num - 1) / 5;
             String[] folders = { "7x7", "10x10", "12x12" };
             String folder = folders[folderIndex];
