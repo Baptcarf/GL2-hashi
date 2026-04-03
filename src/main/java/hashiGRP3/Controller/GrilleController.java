@@ -184,9 +184,9 @@ public class GrilleController extends ManageController {
             if (grid_num == 0) {
                 labelTitreGrille.setText("Grille tutoriel " + (grid_num));
                 tuto = true;
-            }
-            else if (grid_num > 15){
-                labelTitreGrille.setText("Grille tutoriel " + (grid_num) + 15 );
+            } else if (grid_num > 15) {
+                labelTitreGrille.setText("Grille tutoriel " + (grid_num) + 15);
+                System.out.println("ici");
                 tuto = true;
             } else
                 labelTitreGrille.setText("Grille numéro " + grid_num);
@@ -443,7 +443,7 @@ public class GrilleController extends ManageController {
         if (tuto && !etapesTutoriel.isEmpty()) {
             verifierEtapeTutoriel();
         }
-}
+    }
 
     /** Dessine les iles */
     private void dessinerIle(Hashi hashi, double size) {
@@ -704,8 +704,10 @@ public class GrilleController extends ManageController {
      * Affiche l'étape courante du tutoriel dans le panneau latéral.
      */
     private void afficherEtapeTutoriel() {
-        if (etapesTutoriel.isEmpty()) return;
-        if (etapeCourante >= etapesTutoriel.size()) return;
+        if (etapesTutoriel.isEmpty())
+            return;
+        if (etapeCourante >= etapesTutoriel.size())
+            return;
 
         EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
 
@@ -738,8 +740,10 @@ public class GrilleController extends ManageController {
      * Appelée après chaque coup joué.
      */
     private void verifierEtapeTutoriel() {
-        if (etapesTutoriel.isEmpty()) return;
-        if (etapeCourante >= etapesTutoriel.size()) return;
+        if (etapesTutoriel.isEmpty())
+            return;
+        if (etapeCourante >= etapesTutoriel.size())
+            return;
 
         EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
         if (etape.aUneCondition() && etape.estValidee(hashi)) {

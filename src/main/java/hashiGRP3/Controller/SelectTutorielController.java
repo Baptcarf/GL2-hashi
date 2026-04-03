@@ -150,9 +150,10 @@ public class SelectTutorielController extends ManageController {
         if (states.get(index) == LevelState.LOCKED)
             return;
         General.setId_grille(index);
+        General.setNum_grille(index); // Set num_grille for tutorial loading
 
         completeLevel(index + 1);
-        System.out.println("Choix du niveau du tutoriel : " + index + 1);
+        System.out.println("Choix du niveau du tutoriel : " + (index + 1));
         getSceneManager().changeScene("tutodujeu");
     }
 
