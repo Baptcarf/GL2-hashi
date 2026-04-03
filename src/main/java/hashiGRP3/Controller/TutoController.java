@@ -1,10 +1,12 @@
+//Attribut au paquet
 package hashiGRP3.Controller;
 
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
+import java.io.InputStream;
 import java.util.List;
+import java.util.ArrayList;
 
+import hashiGRP3.Logic.EtapeTutoriel;
+import hashiGRP3.Logic.ScenarioTutoriel;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -17,6 +19,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -34,30 +37,23 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-/* Class */
+/** Contrôleur de la grille tutoriel */
 public class TutoController extends ManageController {
 
-    // ← ICI au niveau de la classe, pas dans une méthode
     private Hashi hashi;
     private ChangeListener<Bounds> boundsListener;
 
-    AnimationTimer animationTimer;
-    double startup;
+    // --- Tutoriel guidé ---
+    private List<EtapeTutoriel> etapesTutoriel = new ArrayList<>();
+    private int etapeCourante = 0;
 
-    @FXML
-    private VBox sidePanel;
-    @FXML
-    private Pane gamePane;
-    @FXML
-    private Label timer;
-    @FXML
-    private Button undoButton;
-    @FXML
-    private Button redoButton;
-    @FXML
-    private Button checkButton;
-    @FXML
-    private Button hypothesisButton;
+    @FXML private VBox sidePanel;
+    @FXML private Pane gamePane;
+    @FXML private Label timer;
+    @FXML private Button undoButton;
+    @FXML private Button redoButton;
+    @FXML private Button checkButton;
+    @FXML private Button hypothesisButton;
 
     private boolean onCheck = false;
 
@@ -68,21 +64,16 @@ public class TutoController extends ManageController {
     private int konamiIndex = 0;
     private boolean konamiActivated = false;
 
-    // private boolean winSaved = false;
-
-    // private boolean alreadyComplete = false;
-
-
     @FXML
     public void initialize() {
         Tooltip t1 = new Tooltip("Annuler le dernier coup");
         t1.setShowDelay(Duration.millis(300));
         undoButton.setTooltip(t1);
-    
+
         Tooltip t2 = new Tooltip("Rétablir le coup annulé");
         t2.setShowDelay(Duration.millis(300));
         redoButton.setTooltip(t2);
-    
+
         Tooltip t3 = new Tooltip("Vérifier la grille et revenir à l'état sans erreur");
         t3.setShowDelay(Duration.millis(300));
         checkButton.setTooltip(t3);
@@ -90,7 +81,6 @@ public class TutoController extends ManageController {
         Tooltip t4 = new Tooltip("Activer le mode hypothèse (coups temporaires)");
         t4.setShowDelay(Duration.millis(300));
         hypothesisButton.setTooltip(t4);
-        
 
         gamePane.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
@@ -100,6 +90,8 @@ public class TutoController extends ManageController {
                         for (var pont : hashi.getPonts()) {
                             pont.setEtatActuel(pont.getEtatCorrect());
                         }
+                        konamiActivated = false;
+                        konamiIndex = 0;
                         drawGrid(hashi, gamePane.getWidth());
                     }
                 });
@@ -107,39 +99,31 @@ public class TutoController extends ManageController {
         });
     }
 
-
     private void chargerGrille() {
         sidePanel.getChildren().clear();
-        // winSaved = false;
+        onCheck = false;
 
-        String resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi" + General.getId_grille() + ".txt";
+        int numGrille = General.getNum_grille();
+        String resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi" + numGrille + ".txt";
 
-        URL url = getClass().getResource(resourcePath);
-        if (url == null) {
-            System.err.println("Fichier " + resourcePath + " non trouvé !");
-            return;
-        }
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+            if (is == null) {
+                System.err.println("Fichier " + resourcePath + " non trouvé !");
+                return;
+            }
 
-        try {
-            Path chemin = Path.of(url.toURI());
-            hashi = Import.chargerFichier(chemin);
+            hashi = Import.chargerFichierDepuisStream(is, resourcePath);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
+            hashi.remplirHistorique();
 
             General.setHashi(hashi);
-
-
-            // si on est en mode hypothèse on remet la fenétre de base
-            if (General.getHashi().getHypothese()) {
-                onHypothesisClick();
-            }
 
             undoButton.setDisable(hashi.isUndoEmpty());
             redoButton.setDisable(hashi.isRedoEmpty());
 
             StackPane parent = (StackPane) gamePane.getParent();
 
-            // Supprimer l'ancien listener avant d'en ajouter un nouveau
             if (boundsListener != null) {
                 parent.layoutBoundsProperty().removeListener(boundsListener);
             }
@@ -150,7 +134,14 @@ public class TutoController extends ManageController {
 
             drawGrid(hashi, parent.getWidth());
 
-        } catch (URISyntaxException | java.io.IOException ex) {
+            // Charger le scénario tutoriel
+            etapesTutoriel = ScenarioTutoriel.getEtapes(numGrille);
+            etapeCourante = 0;
+            if (!etapesTutoriel.isEmpty()) {
+                afficherEtapeTutoriel();
+            }
+
+        } catch (java.io.IOException ex) {
             System.err.println("Erreur au chargement : " + ex.getMessage());
         }
     }
@@ -158,19 +149,12 @@ public class TutoController extends ManageController {
     @Override
     public void refreshGrilles() {
         chargerGrille();
-    }
-
-    public void start_timer() {
-        startup = System.nanoTime();
-        animationTimer.start();
-    }
-
-    public void stop_timer() {
-        animationTimer.stop();
+        if (hashi != null && hashi.getHypothese()) {
+            onHypothesisClick();
+        }
     }
 
     private void drawGrid(Hashi hashi, double paneWidth) {
-        System.out.println("DRAW GRID");
         int nbColonnes = hashi.getTaille().x;
         int nbLignes = hashi.getTaille().y;
 
@@ -184,24 +168,18 @@ public class TutoController extends ManageController {
 
         gamePane.setPrefSize(gridWidth, gridHeight);
         gamePane.setMaxSize(gridWidth, gridHeight);
-
         gamePane.getChildren().clear();
 
         dessinerGrille(nbColonnes, nbLignes, cellSize);
         dessinerPonts(hashi, cellSize);
         dessinerIle(hashi, cellSize);
-
-        /* A MODIFIER POUR DEBLOQUER LE PROCHAIN NIVEAU QUAND GAGNE
+        
         if (hashi.estGagne()) {
-            if (winSaved == false && alreadyComplete == false){
-                winSaved = true;
-                System.err.println("User :"+getUtilisateur());
-                System.err.println(General.getDb().obtenirAvancementTutoriel(getUtilisateur()));
-                General.getDb().incrementerAvancementTutoriel(getUtilisateur(), General.getDb().obtenirAvancementTutoriel(getUtilisateur())+1);
-                System.err.println(General.getDb().obtenirAvancementTutoriel(getUtilisateur()));
-            }
-            
-        }*/
+            Label title = createTitle("Félicitations !");
+            Text msg = new Text("Vous avez terminé ce tutoriel !");
+            msg.setWrappingWidth(180);
+            updateSidePanel(title, new Separator(), msg);
+        }
     }
 
     private void dessinerGrille(int cols, int rows, double size) {
@@ -231,9 +209,12 @@ public class TutoController extends ManageController {
         undoButton.setDisable(hashi.isUndoEmpty());
         if (onCheck) {
             onCheck = false;
-            onCheckClick();
+            sidePanel.getChildren().clear();
         }
-
+        // Vérifier la progression du tutoriel
+        if (!etapesTutoriel.isEmpty()) {
+            verifierEtapeTutoriel();
+        }
     }
 
     private void dessinerIle(Hashi hashi, double size) {
@@ -242,6 +223,45 @@ public class TutoController extends ManageController {
             gamePane.getChildren().add(ig.draw(size));
         }
     }
+
+    // --- Tutoriel guidé ---
+
+    /** Affiche l'étape courante dans le panneau latéral */
+    private void afficherEtapeTutoriel() {
+        if (etapesTutoriel.isEmpty() || etapeCourante >= etapesTutoriel.size()) return;
+
+        EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
+
+        Label title = createTitle(etape.getTitre());
+        Separator sep = new Separator();
+        Label compteur = new Label("Étape " + (etapeCourante + 1) + " / " + etapesTutoriel.size());
+
+        Text texte = new Text(etape.getTexte());
+        texte.setWrappingWidth(180);
+
+        Button btnSuivant = new Button("Suivant →");
+        btnSuivant.setMaxWidth(Double.MAX_VALUE);
+        btnSuivant.setDisable(etape.aUneCondition() && !etape.estValidee(hashi));
+
+        btnSuivant.setOnAction(e -> {
+            etapeCourante++;
+            afficherEtapeTutoriel();
+        });
+
+        updateSidePanel(title, sep, compteur, texte, btnSuivant);
+    }
+
+    /** Vérifie si la condition de l'étape courante est remplie et débloque le bouton Suivant */
+    private void verifierEtapeTutoriel() {
+        if (etapesTutoriel.isEmpty() || etapeCourante >= etapesTutoriel.size()) return;
+
+        EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
+        if (etape.aUneCondition() && etape.estValidee(hashi)) {
+            afficherEtapeTutoriel();
+        }
+    }
+
+    // --- Boutons ---
 
     @FXML
     private void onUndoClick() {
@@ -265,15 +285,18 @@ public class TutoController extends ManageController {
         drawGrid(hashi, gamePane.getWidth());
         undoButton.setDisable(true);
         redoButton.setDisable(true);
+        // Réafficher l'étape courante
+        if (!etapesTutoriel.isEmpty()) {
+            afficherEtapeTutoriel();
+        }
     }
 
     @FXML
     protected void onHypothesisClick() {
         onCheck = false;
         Label title = createTitle("Mode Hypothèse");
-
         hashi.setModeHypothese(true);
-        
+
         if (checkButton != null) checkButton.setDisable(true);
         if (hypothesisButton != null) hypothesisButton.setDisable(true);
 
@@ -289,25 +312,21 @@ public class TutoController extends ManageController {
         HBox.setHgrow(btnCancel, Priority.ALWAYS);
 
         btnValidate.setOnAction(e -> {
-            System.out.println("Hypothèse validée");
             hashi.validerHypothese();
             General.getDb().validerHypothese();
             drawGrid(hashi, gamePane.getWidth());
-            sidePanel.getChildren().clear();
-
             if (checkButton != null) checkButton.setDisable(false);
             if (hypothesisButton != null) hypothesisButton.setDisable(false);
+            if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
         });
-        
+
         btnCancel.setOnAction(e -> {
-            System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
             General.getDb().annulerHypothese();
             drawGrid(hashi, gamePane.getWidth());
-            sidePanel.getChildren().clear();
-
             if (checkButton != null) checkButton.setDisable(false);
             if (hypothesisButton != null) hypothesisButton.setDisable(false);
+            if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
         });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
@@ -316,7 +335,7 @@ public class TutoController extends ManageController {
 
     @FXML
     protected void onCheckClick() {
-        if (onCheck == false) {
+        if (!onCheck) {
             onCheck = true;
             Label title = createTitle("Vérification");
             Label status = new Label("Il y a " + hashi.getNbErreur() + " erreurs sur la grille.");
@@ -325,33 +344,33 @@ public class TutoController extends ManageController {
             question.setWrappingWidth(180);
             Button btnYes = new Button("Oui");
             Button btnNo = new Button("Non");
-            btnYes.setStyle("-fx-base: #f0f0f0;");
-            btnNo.setStyle("-fx-base: #f0f0f0;");
             btnYes.setPrefWidth(80);
             btnNo.setPrefWidth(80);
 
             btnYes.setOnAction(e -> {
-
-                System.out.println("retour à l'état correct");
                 hashi.retourEtatCorrect();
                 General.getDb().retourEtatCorrect();
                 drawGrid(hashi, gamePane.getWidth());
-                sidePanel.getChildren().clear();
-
+                onCheck = false;
+                if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
             });
 
             btnNo.setOnAction(e -> {
-                sidePanel.getChildren().clear();
                 onCheck = false;
+                if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
+                else sidePanel.getChildren().clear();
             });
+
             HBox actionBox = new HBox(10, btnYes, btnNo);
             updateSidePanel(title, status, new Separator(), question, actionBox);
         } else {
-            sidePanel.getChildren().clear();
             onCheck = false;
+            if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
+            else sidePanel.getChildren().clear();
         }
-
     }
+
+    // --- Utilitaires ---
 
     private void updateSidePanel(javafx.scene.Node... nodes) {
         sidePanel.getChildren().clear();
@@ -366,8 +385,7 @@ public class TutoController extends ManageController {
     }
 
     private void handleKonamiKey(KeyCode key) {
-        if (konamiActivated)
-            return;
+        if (konamiActivated) return;
         if (key == KONAMI_CODE.get(konamiIndex)) {
             konamiIndex++;
             if (konamiIndex == KONAMI_CODE.size()) {
@@ -382,17 +400,12 @@ public class TutoController extends ManageController {
         return konamiActivated;
     }
 
-    /*réactive les bouttons quand l'utilisateur quite la grille (quand le mode hypothèse est actif)   */
     @FXML
     @Override
-    public void changeScene(ActionEvent event){
+    public void changeScene(ActionEvent event) {
         General.getHashi().setModeHypothese(false);
         if (checkButton != null) checkButton.setDisable(false);
         if (hypothesisButton != null) hypothesisButton.setDisable(false);
         super.changeScene(event);
     }
-    /* 
-    public void alreadyComplete(){
-        this.alreadyComplete = true;
-    }*/
 }
