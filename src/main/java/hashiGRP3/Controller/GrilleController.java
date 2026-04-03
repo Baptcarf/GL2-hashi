@@ -184,7 +184,7 @@ public class GrilleController extends ManageController {
             hashi = Import.chargerFichierDepuisStream(is, resourcePath);
             hashi.initialisationToutLesPonts();
             hashi.initialisationToutLesConflits();
-                moteurIndice = new MoteurIndice(List.of(
+            moteurIndice = new MoteurIndice(List.of(
                     new TechniqueSaturation(),
                     new TechniqueIsolation(),
                     new TechniqueSaturationMoinsDeux(),
@@ -292,8 +292,8 @@ public class GrilleController extends ManageController {
         if (hashi.estGagne() && !hashi.getHypothese()) {
             double score = stop_timer();
             General.getDb().updateScorePartie(score);
+            General.getDb().changeStatutPartie(2);
             win.setVisible(true);
-            // win.setVisible(true);
             showWin();
         }
     }

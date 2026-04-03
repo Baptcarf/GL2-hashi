@@ -23,6 +23,8 @@ CREATE TABLE Partie(
         id_grille BIGINT,
         statut INTEGER NOT NULL, 		-- Le statut de la partie (0 pas commencé, 1 en cours, 2 terminé)
         score REAL, 				-- Le score de l'utilisateur si la partie est terminé
+        maxScore REAL,
+        finiUneFois boolean,
         FOREIGN KEY (id_utilisateur)
             REFERENCES Utilisateur(id_utilisateur)
             ON DELETE CASCADE,
