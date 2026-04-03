@@ -159,8 +159,7 @@ public class SelectTutorielController extends ManageController {
 
 
 
-        completeLevel(index);
-    }
+    
 
     @FXML
     public void lancerRegles(ActionEvent event) {
@@ -295,7 +294,7 @@ public class SelectTutorielController extends ManageController {
         applyState(levels.get(index), LevelState.COMPLETED);
 
         // Enregistrer l'avancement dans la BD
-        General.getDb().incrementerAvancementTutoriel(getUtilisateur(), index + 1);
+        General.getDb().incrementerAvancementTutoriel(index + 1);
 
         if (index + 1 < states.size()
                 && states.get(index + 1) == LevelState.LOCKED) {
@@ -360,22 +359,7 @@ public class SelectTutorielController extends ManageController {
         loadProgressionFromDatabase();
     }
 
-    private void completeLevel(int index) {
-        if (states.get(index) == LevelState.COMPLETED) return;
-
-        states.set(index, LevelState.COMPLETED);
-        applyState(levels.get(index), LevelState.COMPLETED);
-
-        // Enregistrer l'avancement dans la BD
-        General.getDb().incrementerAvancementTutoriel( index + 1);
-
-        if (index + 1 < states.size()
-                && states.get(index + 1) == LevelState.LOCKED) {
-
-            states.set(index + 1, LevelState.UNLOCKED);
-            applyState(levels.get(index + 1), LevelState.UNLOCKED);
-        }
-    }
+ 
 
 
     
