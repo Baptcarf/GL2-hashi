@@ -57,9 +57,9 @@ public class TechniqueIsolationIle extends AbstractTechnique {
                 pontSimu.setEtatCorrect(EtatDuPont.VIDE); // force son exclusion dans propagerEtVerifier
 
                 if (!propagerEtVerifier(simu)) {
-                    String explication = String.format(
-                            "L'île en (%d, %d) serait isolée sans ce pont. Il est obligatoire.",
-                            ile.getCoordonnees().x, ile.getCoordonnees().y);
+                        String explication = "Fais un test mental: si retirer ce pont laisse une île "
+                            + "ou un petit groupe sans sortie, alors cette liaison est nécessaire "
+                            + "pour garder la grille connectée.";
                     return Optional.of(new IndiceResultat(
                             getNom(), explication, getNiveauDifficulte(),
                             Optional.of(pont), Optional.of(EtatDuPont.SIMPLE),

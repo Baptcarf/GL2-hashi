@@ -37,9 +37,9 @@ public class TechniquesBloquePont extends AbstractTechnique {
                     continue;
 
                 if (!GraphUtils.estConnexe(hashi, pont)) {
-                    String explication = String.format(
-                            "L'île en (%d, %d) a forcément un pont obligatoire pour éviter l'isolation.",
-                            ile.getCoordonnees().x, ile.getCoordonnees().y);
+                        String explication = "Si bloquer un pont isole une partie de la grille, c'est "
+                            + "un bon signal: ce lien doit rester disponible pour garder une "
+                            + "connexion globale.";
                     return Optional.of(new IndiceResultat(
                             getNom(), explication, getNiveauDifficulte(),
                             Optional.of(pont), Optional.of(EtatDuPont.SIMPLE),

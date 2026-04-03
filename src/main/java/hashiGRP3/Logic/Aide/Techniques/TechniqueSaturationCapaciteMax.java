@@ -83,13 +83,9 @@ public class TechniqueSaturationCapaciteMax extends AbstractTechnique {
                 EtatDuPont etatCible = (maxVersCeVoisin == 2) ? EtatDuPont.DOUBLE : EtatDuPont.SIMPLE;
 
                 if (pont.getEtatActuel() != etatCible) {
-                    String explication = String.format(
-                        "L'île en (%d, %d) a %d ponts restants à poser,  " +
-                        "égal exactement à la somme des capacités restantes de ses voisins.  " +
-                        "Chaque voisin doit recevoir le maximum de ponts possible.",
-                        ile.getCoordonnees().x, ile.getCoordonnees().y,
-                        pontsRestants
-                    );
+                    String explication = "Compare les ponts restants d'une île avec la capacité "
+                        + "encore disponible chez ses voisins. Si c'est exactement égal, il n'y "
+                        + "a plus de liberté: chaque liaison doit utiliser toute sa capacité.";
                     return Optional.of(new IndiceResultat(
                         getNom(),
                         explication,

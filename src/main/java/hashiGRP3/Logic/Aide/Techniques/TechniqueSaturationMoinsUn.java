@@ -48,13 +48,9 @@ public class TechniqueSaturationMoinsUn extends AbstractTechnique{
                 for (Direction dir : Direction.values()) {
                     Pont pont = ile.getPont(dir);
                     if (pont != null && pont.getEtatActuel() == EtatDuPont.VIDE) {
-                        String explication = String.format(
-                            "L'île en (%d, %d) requiert %d pont(s) et a %d voisin(s).  "
-                            + "Elle doit obligatoirement avoir au moins un pont simple" +
-                            "vers chacun d'eux.",
-                            ile.getCoordonnees().x, ile.getCoordonnees().y,
-                            ile.getNbPontsRequis(), nbVoisins
-                        );
+                        String explication = "Repère une île à un pont près de la saturation totale. "
+                            + "Une bonne approche est de garantir d'abord un passage minimal vers "
+                            + "chaque voisin, puis d'affiner ensuite.";
                         return Optional.of(new IndiceResultat(
                             getNom(),
                             explication,

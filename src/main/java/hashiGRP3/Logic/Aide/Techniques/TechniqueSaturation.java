@@ -49,12 +49,9 @@ public class TechniqueSaturation extends AbstractTechnique {
                 for (Direction dir : Direction.values()) {
                     Pont pont = ile.getPont(dir);
                     if (pont != null && pont.getEtatActuel() != EtatDuPont.DOUBLE) {
-                        String explication = String.format(
-                            "L'île en (%d, %d) requiert %d pont(s) et a %d voisin(s).  "
-                            + "Elle doit obligatoirement avoir un pont double vers chacun d'eux.",
-                            ile.getCoordonnees().x, ile.getCoordonnees().y,
-                            ile.getNbPontsRequis(), nbVoisins
-                        );
+                        String explication = "Repère une île où le nombre de ponts restants "
+                            + "vaut deux fois le nombre de voisins disponibles. Quand ça arrive, "
+                            + "chaque liaison autour de cette île doit être exploitée au maximum.";
                         return Optional.of(new IndiceResultat(
                             getNom(),
                             explication,

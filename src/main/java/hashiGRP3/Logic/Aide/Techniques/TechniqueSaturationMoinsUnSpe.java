@@ -63,11 +63,9 @@ public class TechniqueSaturationMoinsUnSpe extends AbstractTechnique {
                             && !pont2.equals(pont)
                             && pont2.getEtatActuel() == EtatDuPont.VIDE) {
 
-                            String explication = String.format(
-                                "L'île en (%d, %d) a un voisin contraint à 1 pont.  "
-                                + "Les autres voisins reçoivent obligatoirement un pont double.",
-                                ile.getCoordonnees().x, ile.getCoordonnees().y
-                            );
+                            String explication = "Si une île presque saturée a un voisin contraint "
+                                + "à un seul pont, regarde surtout les autres branches: c'est souvent "
+                                + "elles qui doivent porter la majorité des ponts restants.";
                             return Optional.of(new IndiceResultat(
                                 getNom(),
                                 explication,

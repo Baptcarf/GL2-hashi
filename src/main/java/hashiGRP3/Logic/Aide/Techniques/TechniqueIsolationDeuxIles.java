@@ -69,13 +69,9 @@ public class TechniqueIsolationDeuxIles extends AbstractTechnique {
                     EtatDuPont etatCible = (pontsMaxEntreEux == 2)
                             ? EtatDuPont.DOUBLE : EtatDuPont.SIMPLE;
                     if (pont.getEtatActuel() != etatCible) {
-                        String explication = String.format(
-                            "L'île en (%d, %d) n'a qu'un seul voisin possible :  " +
-                            "l'île en (%d, %d). Elle doit obligatoirement lui envoyer  " +
-                            "tous ses ponts.",
-                            ile.getCoordonnees().x, ile.getCoordonnees().y,
-                            voisin.getCoordonnees().x, voisin.getCoordonnees().y
-                        );
+                        String explication = "Quand une île n'a qu'une seule sortie exploitable, "
+                            + "commence par ce passage: sa résolution influence directement les "
+                            + "choix suivants.";
                         return Optional.of(new IndiceResultat(
                             getNom(),
                             explication,
@@ -94,13 +90,9 @@ public class TechniqueIsolationDeuxIles extends AbstractTechnique {
                 for (Pont autrePont : voisinsIle) {
                     if (autrePont.equals(pont)) continue;
                     if (autrePont.getEtatActuel() == EtatDuPont.VIDE) {
-                        String explication = String.format(
-                            "Relier l'île en (%d, %d) à son voisin en (%d, %d) au maximum " +
-                            "formerait un segment isolé à deux îles. " +
-                            "Au moins un pont doit aller vers une autre île.",
-                            ile.getCoordonnees().x, ile.getCoordonnees().y,
-                            voisin.getCoordonnees().x, voisin.getCoordonnees().y
-                        );
+                        String explication = "Évite de saturer trop vite un duo d'îles si cela risque "
+                            + "de former un bloc fermé. Garde au moins une ouverture vers le reste "
+                            + "de la grille.";
                         return Optional.of(new IndiceResultat(
                             getNom(),
                             explication,

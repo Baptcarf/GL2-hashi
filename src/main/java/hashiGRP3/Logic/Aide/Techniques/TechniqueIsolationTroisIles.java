@@ -77,15 +77,9 @@ public class TechniqueIsolationTroisIles extends AbstractTechnique {
                                 ? autrePont.getileB() : autrePont.getileA();
                         if (autreVoisin.equals(ileA) || autreVoisin.equals(ileC)) continue;
                         if (autrePont.getEtatActuel() == EtatDuPont.VIDE) {
-                            String explication = String.format(
-                                "Relier uniquement l'île en (%d, %d) à ses voisins  " +
-                                "en (%d, %d) et (%d, %d) formerait un segment isolé  " +
-                                "à trois îles. Au moins un pont doit aller vers  " +
-                                "une île externe.",
-                                ile.getCoordonnees().x, ile.getCoordonnees().y,
-                                ileA.getCoordonnees().x, ileA.getCoordonnees().y,
-                                ileC.getCoordonnees().x, ileC.getCoordonnees().y
-                            );
+                            String explication = "Sur une chaîne de trois îles, vérifie que l'île "
+                                + "centrale conserve une sortie vers l'extérieur. Sinon, le segment "
+                                + "peut se refermer et bloquer la progression.";
                             return Optional.of(new IndiceResultat(
                                 getNom(),
                                 explication,

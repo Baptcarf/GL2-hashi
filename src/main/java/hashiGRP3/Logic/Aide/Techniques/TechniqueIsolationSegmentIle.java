@@ -146,17 +146,9 @@ public class TechniqueIsolationSegmentIle extends AbstractTechnique {
             // Un seul pont valide → il est obligatoire
             if (pontsValides.size() == 1) {
                 Pont pontObligatoire = pontsValides.get(0);
-                Ile ileSource = groupe.contains(pontObligatoire.getileA())
-                        ? pontObligatoire.getileA()
-                        : pontObligatoire.getileB();
-
-                String explication = String.format(
-                    "Depuis le groupe d'îles connectées à (%d, %d), tous les ponts  " +
-                    "possibles sauf un créeraient un groupe isolé du reste du puzzle.  " +
-                    "Le pont depuis (%d, %d) est donc obligatoire.",
-                    ileSource.getCoordonnees().x, ileSource.getCoordonnees().y,
-                    ileSource.getCoordonnees().x, ileSource.getCoordonnees().y
-                );
+                String explication = "Observe le groupe déjà connecté: si presque tous les ponts "
+                    + "possibles l'enferment, privilégie la liaison qui garde une ouverture "
+                    + "vers le reste de la grille.";
 
                 return Optional.of(new IndiceResultat(
                     getNom(),

@@ -39,17 +39,9 @@ public class TechniqueIsolementSegment extends AbstractTechnique {
             }
 
             if (isolationSiDouble(hashi, pontCandidat)) {
-                Ile ileA = pontCandidat.getileA();
-                Ile ileB = pontCandidat.getileB();
-
-                String explication = String.format(
-                        "Relier les segments via le pont entre (%d, %d) et (%d, %d) en DOUBLE "
-                        + "isolerait une composante sans sortie externe. "
-                        + "Ce pont ne doit donc pas être doublé.",
-                        ileA.getCoordonnees().x,
-                        ileA.getCoordonnees().y,
-                        ileB.getCoordonnees().x,
-                        ileB.getCoordonnees().y);
+                String explication = "Avant de renforcer un pont entre deux segments, vérifie que "
+                    + "la fusion garde une sortie externe. Sinon, mieux vaut conserver de la "
+                    + "souplesse sur ce lien.";
 
                 return Optional.of(new IndiceResultat(
                         getNom(),
