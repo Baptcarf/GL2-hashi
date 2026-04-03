@@ -344,12 +344,12 @@ public class DatabaseManager {
      */
     public int obtenirScore(int numeroGrille, String pseudo) {
 
-        int meilleurScore = -1;
+        int meilleurScore = 0;
         int id_utilisateur = getIdUtilisateur(pseudo);
 
         // Si utilisateur inexistant
         if (id_utilisateur == -1) {
-            return -1;
+            return 0;
         }
 
         String sql = "SELECT Partie.maxScore AS meilleurScore " +

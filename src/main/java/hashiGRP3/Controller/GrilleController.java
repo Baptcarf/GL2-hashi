@@ -11,9 +11,11 @@ import java.util.List;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueConflitComptage;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIleVoisine;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
@@ -227,7 +229,9 @@ public class GrilleController extends ManageController {
                     new TechniqueIsolementSegment(),
                     new TechniquesBloquePont(),
                     new TechniqueIsolationIle(),
-                    new TechniqueIsolationSegmentIle()));
+                    new TechniqueIsolationSegmentIle(),
+                    new TechniqueIsolationIleVoisine(),
+                    new TechniqueConflitComptage()));
 
             General.setHashi(hashi);
             int idPartie = General.getDb().creerPartie(General.getIdUtilisateur(), General.getNum_grille());
