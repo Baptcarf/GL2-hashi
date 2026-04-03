@@ -232,7 +232,7 @@ public class TutoController extends ManageController {
     }
 
     private void onPontClicked(Pont pont) {
-        hashi.jouer(pont);
+        hashi.jouer(pont, true);
         drawGrid(hashi, gamePane.getWidth());
         redoButton.setDisable(hashi.isRedoEmpty());
         undoButton.setDisable(hashi.isUndoEmpty());
