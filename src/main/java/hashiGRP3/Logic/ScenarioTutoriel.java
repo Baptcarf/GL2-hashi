@@ -5,17 +5,10 @@ import java.util.List;
 
 /**
  * Fournit les scénarios de tutoriel pour chaque grille.
- * Chaque scénario est une liste d'étapes (EtapeTutoriel).
- * Les conditions peuvent être ajoutées au fur et à mesure.
+ * Basé sur les techniques de détection réelles du moteur d'indices.
  */
 public class ScenarioTutoriel {
 
-    /**
-     * Retourne la liste des étapes pour un numéro de grille tutoriel donné.
-     *
-     * @param numGrille le numéro de la grille (0 à 14)
-     * @return la liste des étapes du scénario, ou une liste vide si non défini
-     */
     public static List<EtapeTutoriel> getEtapes(int numGrille) {
         return switch (numGrille) {
             case 0  -> etapesHashi0();
@@ -39,1094 +32,1421 @@ public class ScenarioTutoriel {
 
     // -------------------------------------------------------------------------
     // HASHI 0 — Règles du jeu
+    // (0,2):2  (2,0):1  (2,2):4  (2,4):1
+    // Solution : (0,2)-(2,2):2  (2,0)-(2,2):1  (2,2)-(2,4):1
     // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi0() {
         return List.of(
 
             new EtapeTutoriel(
                 "Bienvenue dans Hashi !",
-                "Hashi est un puzzle japonais.  " +
-                "Le plateau contient des îles numérotées. " +
-                "Votre objectif : relier toutes les îles par des ponts " +
-                "de façon à ce que chaque île ait exactement " +
-                "autant de ponts que son numéro l'indique.  " +
-                "Cliquez sur Suivant pour continuer."
+                "Hashi est un puzzle japonais. Le plateau contient des îles numérotées. " +
+                "Votre objectif : relier toutes les îles par des ponts de façon à ce que " +
+                "chaque île ait exactement autant de ponts que son numéro l'indique."
             ),
 
             new EtapeTutoriel(
                 "Les ponts",
-                "Un pont relie deux îles voisines " +
-                "(horizontalement ou verticalement).  " +
-                "Un premier clic place un pont simple (─). " +
-                "Un second clic place un pont double (═). " +
-                "Un troisième clic supprime le pont.  " +
-                "Les ponts ne peuvent pas se croiser !  " +
-                "Cliquez sur Suivant pour continuer."
+                "Un pont relie deux îles voisines (horizontalement ou verticalement). " +
+                "Un premier clic place un pont simple. Un second clic place un pont double. " +
+                "Un troisième clic supprime le pont. Les ponts ne peuvent pas se croiser !"
             ),
 
             new EtapeTutoriel(
-                "À vous de jouer !",
-                "L'île en (0,2) a la valeur 2. " +
-                "L'île en (2,2) a la valeur 4.  " +
-                "Placez un pont DOUBLE entre ces deux îles " +
-                "(cliquez deux fois entre (0,2) et (2,2)).",
+                "Île (2,0) — valeur 1",
+                "L'île en (2,0) vaut 1 et n'a qu'un seul voisin : (2,2). " +
+                "Elle doit donc avoir exactement 1 pont vers (2,2). " +
+                "Placez un pont simple entre (2,0) et (2,2).",
                 hashi -> {
-                    Ile ileA = hashi.getIle(0, 2);
-                    Ile ileB = hashi.getIle(2, 2);
-                    if (ileA == null || ileB == null) return false;
-                    Pont pont = hashi.getPont(ileA, ileB);
-                    return pont != null && pont.getEtatActuel() == EtatDuPont.DOUBLE;
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Bien joué !",
-                "L'île en (2,0) a la valeur 1. " +
-                "Elle n'a qu'un seul voisin : l'île en (2,2).  " +
-                "Placez un pont SIMPLE entre (2,0) et (2,2).",
+                "Île (2,4) — valeur 1",
+                "L'île en (2,4) vaut 1 et n'a qu'un seul voisin : (2,2). " +
+                "Placez un pont simple entre (2,4) et (2,2).",
                 hashi -> {
-                    Ile ileA = hashi.getIle(2, 0);
-                    Ile ileB = hashi.getIle(2, 2);
-                    if (ileA == null || ileB == null) return false;
-                    Pont pont = hashi.getPont(ileA, ileB);
-                    return pont != null && pont.getEtatActuel() == EtatDuPont.SIMPLE;
+                    Ile a = hashi.getIle(2, 4); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Dernière étape !",
-                "L'île en (2,4) a la valeur 1. " +
-                "Placez un pont SIMPLE entre (2,2) et (2,4) " +
-                "pour terminer la grille.",
+                "Île (0,2) — valeur 2",
+                "L'île en (0,2) vaut 2 et n'a qu'un seul voisin : (2,2). " +
+                "Elle doit donc avoir 2 ponts vers (2,2). " +
+                "Placez un pont double entre (0,2) et (2,2).",
                 hashi -> {
-                    Ile ileA = hashi.getIle(2, 2);
-                    Ile ileB = hashi.getIle(2, 4);
-                    if (ileA == null || ileB == null) return false;
-                    Pont pont = hashi.getPont(ileA, ileB);
-                    return pont != null && pont.getEtatActuel() == EtatDuPont.SIMPLE;
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Vous avez terminé la grille !  " +
-                "Toutes les îles sont connectées avec " +
-                "le bon nombre de ponts.  " +
+                "Vous avez terminé votre première grille ! " +
+                "L'île (2,2) valait 4 : elle a reçu 2 ponts de (0,2), 1 de (2,0) et 1 de (2,4). " +
                 "Vous êtes prêt pour les vrais tutoriels !"
             )
         );
     }
 
     // -------------------------------------------------------------------------
-    // HASHI 1 — Îles avec 4 dans le coin, 6 sur le côté et 8 au milieu
+    // HASHI 1 — Technique Saturation totale
+    // (0,0):4  (0,2):6  (0,4):4  (2,0):4  (2,2):8  (2,4):4  (4,2):2
+    // Solution : tous doubles
     // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi1() {
         return List.of(
 
             new EtapeTutoriel(
-                "Technique : saturation maximale",
-                "Certaines îles ont un nombre de ponts " +
-                "si élevé qu'on peut déduire directement " +
-                "quels ponts placer.  " +
-                "Une île de valeur 4 dans un coin n'a " +
-                "que 2 voisins : elle a forcément " +
-                "2 ponts doubles vers chacun d'eux !  " +
-                "Cliquez sur Suivant pour commencer."
+                "Technique : saturation totale",
+                "Quand le nombre de ponts d'une île est égal au double de son nombre de voisins, " +
+                "elle doit avoir un pont DOUBLE vers chacun d'eux. " +
+                "Repérez ces îles en premier : elles se résolvent automatiquement !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,2) — valeur 2",
+                "(4,2):2 n'a qu'un voisin : (2,2). 2 = 1×2 → pont double obligatoire. " +
+                "Placez un pont double entre (4,2) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
             ),
 
             new EtapeTutoriel(
                 "Île (0,0) — valeur 4",
-                "L'île en (0,0) vaut 4. " +
-                "Ses seuls voisins sont (0,2) et (2,0).  " +
-                "Elle doit avoir 4 ponts au total, " +
-                "répartis sur 2 voisins : " +
-                "→ 2 ponts doubles obligatoires !  " +
-                "Placez un pont double entre " +
-                "(0,0) et (0,2).",
+                "(0,0):4 a 2 voisins : (0,2) et (2,0). 4 = 2×2 → ponts doubles obligatoires. " +
+                "Placez un pont double entre (0,0) et (0,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,0) — suite",
-                "Parfait ! Maintenant placez un pont " +
-                "double entre (0,0) et (2,0).  " +
-                "L'île (0,0) sera alors complète.",
+                "Placez un pont double entre (0,0) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(2,0));
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,4) — valeur 4",
-                "Même raisonnement pour l'île (0,4). " +
-                "Ses voisins sont (0,2) et (2,4).  " +
-                "Placez un pont double entre " +
-                "(0,4) et (0,2).",
+                "(0,4):4 a 2 voisins : (0,2) et (2,4). Même raisonnement. " +
+                "Placez un pont double entre (0,4) et (0,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,4), hashi.getIle(0,2));
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,4) — suite",
-                "Placez maintenant un pont double " +
-                "entre (0,4) et (2,4).",
+                "Placez un pont double entre (0,4) et (2,4).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,4), hashi.getIle(2,4));
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (2,0) — valeur 4",
-                "L'île (2,0) vaut 4. " +
-                "Ses voisins sont (0,0) et (2,2). " +
-                "(0,0)-(2,0) est déjà double.  " +
-                "Placez un pont double entre " +
-                "(2,0) et (2,2).",
+                "(2,0):4 a 2 voisins. 1 double vers (0,0) déjà placé. " +
+                "Placez un pont double entre (2,0) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,0), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (2,4) — valeur 4",
-                "L'île (2,4) vaut 4. " +
-                "Ses voisins sont (0,4) et (2,2). " +
-                "(0,4)-(2,4) est déjà double.  " +
-                "Placez un pont double entre " +
-                "(2,4) et (2,2).",
+                "(2,4):4. 1 double vers (0,4). Placez un pont double entre (2,4) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,4), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(2, 4); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,2) — valeur 6",
-                "L'île (0,2) vaut 6. " +
-                "Elle a 3 voisins : (0,0), (0,4), (2,2). " +
-                "2 ponts sont déjà placés vers (0,0) " +
-                "et 2 vers (0,4).  " +
-                "Il reste 2 ponts à placer. " +
-                "Placez un pont double entre " +
-                "(0,2) et (2,2).",
+                "(0,2):6 a 3 voisins. 6 = 3×2 → tout en double. " +
+                "Placez un pont double entre (0,2) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,2), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,2) — valeur 2",
-                "Dernière île : (4,2) vaut 2. " +
-                "Son seul voisin est (2,2).  " +
-                "Placez un pont double entre " +
-                "(4,2) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,2), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Vous avez terminé ce tutoriel !  " +
-                "Retenez la technique : " +
-                "une île dont la valeur est égale " +
-                "au double de son nombre de voisins " +
-                "a forcément des ponts doubles " +
-                "vers chacun d'eux."
+                "Excellent ! Quand nbPonts = nbVoisins × 2, tous les ponts sont doubles. " +
+                "C'est la technique la plus rapide pour démarrer une grille !"
             )
         );
     }
 
+    // -------------------------------------------------------------------------
+    // HASHI 2 — Technique Isolation (île avec un seul voisin)
+    // (0,0):3  (3,0):1  (0,2):4  (2,2):6  (4,2):2  (2,4):4  (5,4):2
+    // Solution : (0,0)-(3,0):1  (0,0)-(0,2):2  (0,2)-(2,2):2  (2,2)-(4,2):2  (2,2)-(2,4):2  (2,4)-(5,4):2
+    // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi2() {
         return List.of(
 
             new EtapeTutoriel(
                 "Technique : île avec un seul voisin",
-                "Quand une île n'a qu'un seul voisin, " +
+                "Quand une île n'a qu'un seul voisin accessible, " +
                 "tous ses ponts vont forcément vers lui. " +
-                "Repérez ces îles en premier !"
+                "Repérez ces îles en premier pour démarrer la résolution !"
             ),
 
             new EtapeTutoriel(
                 "Île (3,0) — valeur 1",
-                "L'île (3,0) vaut 1 et n'a qu'un seul voisin : (0,0). " +
-                "Placez un pont simple entre (3,0) et (0,0).",
+                "(3,0):1 n'a qu'un voisin : (0,0). Placez un pont simple entre (3,0) et (0,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(3,0), hashi.getIle(0,0));
+                    Ile a = hashi.getIle(3, 0); Ile b = hashi.getIle(0, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (4,2) — valeur 2",
-                "L'île (4,2) vaut 2 et n'a qu'un seul voisin : (2,2). " +
+                "(4,2):2 n'a qu'un voisin : (2,2). 2 ponts vers un seul voisin = pont double. " +
                 "Placez un pont double entre (4,2) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,2), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(4, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (5,4) — valeur 2",
-                "L'île (5,4) vaut 2 et n'a qu'un seul voisin : (2,4). " +
-                "Placez un pont double entre (5,4) et (2,4).",
+                "(5,4):2 n'a qu'un voisin : (2,4). Placez un pont double entre (5,4) et (2,4).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(5,4), hashi.getIle(2,4));
+                    Ile a = hashi.getIle(5, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,0) — valeur 3",
-                "L'île (0,0) vaut 3. " +
-                "1 pont est déjà placé vers (3,0). " +
-                "Il en reste 2 vers (0,2). " +
+                "(0,0):3. 1 pont vers (3,0). Il reste 2 ponts et (0,2) est le seul autre voisin. " +
                 "Placez un pont double entre (0,0) et (0,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,2) — valeur 4",
-                "L'île (0,2) vaut 4. " +
-                "2 ponts sont déjà placés vers (0,0). " +
+                "(0,2):4. 2 ponts vers (0,0). Il reste 2 ponts et (2,2) est le seul autre voisin. " +
                 "Placez un pont double entre (0,2) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,2), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (2,4) — valeur 4",
-                "L'île (2,4) vaut 4. " +
-                "2 ponts sont déjà placés vers (5,4). " +
-                "Placez un pont double entre (2,4) et (2,2).",
+                "(2,4):4. 2 ponts vers (5,4). Placez un pont double entre (2,4) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,4), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — valeur 6",
-                "L'île (2,2) vaut 6. " +
-                "4 ponts sont déjà placés. " +
-                "Placez un pont double entre (2,2) et (4,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(4,2));
+                    Ile a = hashi.getIle(2, 4); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Vous maîtrisez la technique des îles à un seul voisin. " +
-                "Repérez-les toujours en premier pour démarrer une grille !"
+                "Vous maîtrisez la technique des îles à un seul voisin ! " +
+                "Repérez-les toujours en premier : elles se résolvent sans ambiguïté."
             )
         );
     }
 
+    // -------------------------------------------------------------------------
+    // HASHI 3 — TechniqueSaturationMoinsUn (7 au milieu)
+    // (0,0):3  (0,2):3  (2,0):5  (2,2):7  (2,4):2  (4,0):1  (4,2):2  (6,2):1
+    // Solution : (0,0)-(0,2):1  (0,0)-(2,0):2  (0,2)-(2,2):2  (2,0)-(2,2):2
+    //            (2,0)-(4,0):1  (2,2)-(4,2):1  (2,2)-(2,4):2  (4,2)-(6,2):1
+    // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi3() {
         return List.of(
 
             new EtapeTutoriel(
-                "Technique : 3 dans le coin, 5 sur le côté, 7 au milieu",
-                "Une île de valeur impaire élevée par rapport à ses voisins " +
-                "impose au moins un pont vers chacun d'eux. " +
-                "Observez l'île (2,2) qui vaut 7 avec 4 voisins : " +
-                "elle a forcément au moins 1 pont vers chacun !"
+                "Technique : saturation moins un",
+                "Quand nbPonts = nbVoisins×2 - 1, l'île a un pont de moins que la saturation totale. " +
+                "Chaque voisin reçoit alors au moins un pont simple. " +
+                "Ici (2,2):7 a 4 voisins (max 8), donc au moins 1 pont vers chacun !"
             ),
 
             new EtapeTutoriel(
-                "Île (4,0) — valeur 1",
-                "Commençons par les îles à un seul voisin. " +
-                "L'île (4,0) vaut 1, son seul voisin est (2,0). " +
-                "Placez un pont simple entre (4,0) et (2,0).",
+                "Îles à un seul voisin d'abord",
+                "(4,0):1 n'a qu'un voisin : (2,0). Placez un pont simple entre (4,0) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,0), hashi.getIle(2,0));
+                    Ile a = hashi.getIle(4, 0); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (6,2) — valeur 1",
-                "L'île (6,2) vaut 1, son seul voisin est (4,2). " +
-                "Placez un pont simple entre (6,2) et (4,2).",
+                "(6,2):1 n'a qu'un voisin : (4,2). Placez un pont simple entre (6,2) et (4,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(6,2), hashi.getIle(4,2));
+                    Ile a = hashi.getIle(6, 2); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (2,4) — valeur 2",
-                "L'île (2,4) vaut 2, son seul voisin est (2,2). " +
-                "Placez un pont double entre (2,4) et (2,2).",
+                "(2,4):2 n'a qu'un voisin : (2,2). Placez un pont double entre (2,4) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,4), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(2, 4); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (2,2) — valeur 7",
-                "L'île (2,2) vaut 7 avec 4 voisins (max 8 ponts). " +
-                "2 ponts sont déjà placés vers (2,4). " +
-                "Il reste 5 ponts pour 3 voisins : au moins 1 pont vers chacun, " +
-                "et 2 vers l'un d'eux. " +
+                "(2,2):7 a 4 voisins. 7 = 4×2-1 → au moins 1 pont vers chacun. " +
+                "2 ponts vers (2,4). Il reste 5 ponts pour 3 voisins. " +
                 "Placez un pont double entre (2,2) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,0));
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
+                "Île (2,2) — suite",
+                "Placez un pont double entre (2,2) et (0,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — suite",
+                "Il reste 1 pont pour (2,2). Placez un pont simple entre (2,2) et (4,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
                 "Île (2,0) — valeur 5",
-                "L'île (2,0) vaut 5. " +
-                "1 pont est placé vers (4,0), 2 vers (2,2). " +
-                "Il reste 2 ponts vers (0,0). " +
+                "(2,0):5. 1 pont vers (4,0), 2 vers (2,2). Il reste 2 vers (0,0). " +
                 "Placez un pont double entre (2,0) et (0,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,0), hashi.getIle(0,0));
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(0, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,0) — valeur 3",
-                "L'île (0,0) vaut 3. " +
-                "2 ponts sont placés vers (2,0). " +
-                "Placez un pont simple entre (0,0) et (0,2).",
+                "(0,0):3. 2 ponts vers (2,0). Placez un pont simple entre (0,0) et (0,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,2) — valeur 3",
-                "L'île (0,2) vaut 3. " +
-                "1 pont est placé vers (0,0). " +
-                "Placez un pont double entre (0,2) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,2), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,2) — valeur 2",
-                "L'île (4,2) vaut 2. " +
-                "1 pont est placé vers (6,2). " +
-                "Placez un pont simple entre (4,2) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,2), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Vous maîtrisez la technique des valeurs élevées. " +
-                "Une île dont la valeur est proche du maximum impose " +
-                "des ponts vers chacun de ses voisins !"
+                "Bravo ! Quand nbPonts = nbVoisins×2-1, au moins 1 pont simple " +
+                "est garanti vers chaque voisin."
             )
         );
     }
 
+    // -------------------------------------------------------------------------
+    // HASHI 4 — Cas spéciaux (SaturationMoinsDeux / SaturationCapaciteMax)
+    // (0,0):2  (0,2):1  (0,4):1  (2,0):5  (2,2):7  (2,4):4  (4,0):1  (4,2):3  (4,4):2
+    // Solution : (0,0)-(2,0):2  (0,2)-(2,2):1  (0,4)-(2,4):1  (2,0)-(4,0):1
+    //            (2,0)-(2,2):2  (2,2)-(4,2):2  (2,2)-(2,4):2  (2,4)-(4,4):1  (4,2)-(4,4):1
+    // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi4() {
         return List.of(
 
             new EtapeTutoriel(
-                "Technique : cas spéciaux",
-                "Parfois une île ne peut pas saturer tous ses voisins " +
-                "à cause des contraintes de ses voisins eux-mêmes. " +
-                "On doit alors raisonner par élimination."
+                "Technique : cas spéciaux de saturation",
+                "Quand nbPonts = nbVoisins×2-2 et qu'un voisin est limité à 1 pont, " +
+                "les autres voisins reçoivent au moins un pont simple chacun. " +
+                "Ici (2,2):7 a des voisins à 1 pont qui contraignent la distribution !"
             ),
 
             new EtapeTutoriel(
-                "Île (4,0) — valeur 1",
-                "L'île (4,0) vaut 1, son seul voisin est (2,0). " +
-                "Placez un pont simple entre (4,0) et (2,0).",
+                "Îles à un seul voisin d'abord",
+                "(4,0):1 n'a qu'un voisin : (2,0). Placez un pont simple entre (4,0) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,0), hashi.getIle(2,0));
+                    Ile a = hashi.getIle(4, 0); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (6,2) — valeur 1",
-                "L'île (6,2) vaut 1, son seul voisin est (4,2). " +
-                "Placez un pont simple entre (6,2) et (4,2).",
+                "Île (0,2) — valeur 1",
+                "(0,2):1 n'a qu'un voisin : (2,2). Placez un pont simple entre (0,2) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(6,2), hashi.getIle(4,2));
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,4) — valeur 2",
-                "L'île (2,4) vaut 2, son seul voisin est (2,2). " +
-                "Placez un pont double entre (2,4) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,4), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — valeur 7",
-                "L'île (2,2) vaut 7. " +
-                "2 ponts sont placés vers (2,4), 1 vers (4,2). " +
-                "Il reste 4 ponts pour 2 voisins : (0,2) et (2,0). " +
-                "Placez un pont double entre (2,2) et (2,0).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,0));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — suite",
-                "Placez un pont double entre (2,2) et (0,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(0,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,0) — valeur 5",
-                "L'île (2,0) vaut 5. " +
-                "1 pont vers (4,0), 2 vers (2,2). " +
-                "Il reste 2 ponts vers (0,0). " +
-                "Placez un pont double entre (2,0) et (0,0).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,0), hashi.getIle(0,0));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,0) — valeur 3",
-                "L'île (0,0) vaut 3. " +
-                "2 ponts sont placés vers (2,0). " +
-                "Placez un pont simple entre (0,0) et (0,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,2) — valeur 2",
-                "L'île (4,2) vaut 2. " +
-                "1 pont vers (6,2), 1 vers (2,2). " +
-                "Elle est complète !",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,2), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Félicitations !",
-                "Bien joué ! Quand une île a beaucoup de ponts, " +
-                "raisonnez par élimination en partant des contraintes déjà connues."
-            )
-        );
-    }
-
-    private static List<EtapeTutoriel> etapesHashi5() {
-        return List.of(
-
-            new EtapeTutoriel(
-                "Technique : cas spécial de 4 sur le côté",
-                "Une île de valeur 4 sur le bord de la grille " +
-                "n'a que 3 voisins au maximum. " +
-                "Elle a donc forcément au moins 1 pont vers chacun !"
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,0) — valeur 1",
-                "L'île (4,0) vaut 1, son seul voisin est (2,0). " +
-                "Placez un pont simple entre (4,0) et (2,0).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,0), hashi.getIle(2,0));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,4) — valeur 2",
-                "L'île (2,4) vaut 2, son seul voisin est (2,2). " +
-                "Placez un pont double entre (2,4) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,4), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,4) — valeur 1",
-                "L'île (0,4) vaut 1, son seul voisin est (2,4). " +
-                "Placez un pont simple entre (0,4) et (2,4).",
+                "(0,4):1 n'a qu'un voisin : (2,4). Placez un pont simple entre (0,4) et (2,4).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,4), hashi.getIle(2,4));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,4) — valeur 1",
-                "L'île (4,4) vaut 1, son seul voisin est (2,4). " +
-                "Placez un pont simple entre (4,4) et (2,4).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,4), hashi.getIle(2,4));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,4) — valeur 4",
-                "L'île (2,4) vaut 4. " +
-                "2 ponts vers (2,2), 1 vers (0,4), 1 vers (4,4). " +
-                "Elle est complète ! Observez comment la valeur 4 " +
-                "a imposé au moins 1 pont vers chacun de ses voisins."
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — valeur 3",
-                "L'île (2,2) vaut 3. " +
-                "2 ponts sont placés vers (2,4). " +
-                "Placez un pont simple entre (2,2) et (2,0).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,0));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,0) — valeur 2",
-                "L'île (2,0) vaut 2. " +
-                "1 pont est placé vers (4,0) et 1 vers (2,2). " +
-                "Elle est complète !"
-            ),
-
-            new EtapeTutoriel(
-                "Félicitations !",
-                "Vous avez résolu la grille ! " +
-                "Retenez que les îles à fort coefficient sur le bord " +
-                "imposent des ponts vers tous leurs voisins."
-            )
-        );
-    }
-
-    private static List<EtapeTutoriel> etapesHashi6() {
-        return List.of(
-
-            new EtapeTutoriel(
-                "Technique : cas spécial de 6 au milieu",
-                "Une île de valeur 6 au milieu de la grille " +
-                "a 4 voisins possibles (max 8 ponts). " +
-                "Elle a forcément au moins 1 pont vers chacun de ses voisins !"
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,0) — valeur 1",
-                "L'île (0,0) vaut 1, son seul voisin est (0,2). " +
-                "Placez un pont simple entre (0,0) et (0,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,2) — valeur 1",
-                "L'île (4,2) vaut 1, son seul voisin est (2,2). " +
-                "Placez un pont simple entre (4,2) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,2), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — valeur 6",
-                "L'île (2,2) vaut 6 avec 4 voisins. " +
-                "1 pont est déjà placé vers (4,2). " +
-                "Il reste 5 ponts pour 3 voisins : au moins 1 vers chacun. " +
-                "Placez un pont double entre (2,2) et (2,0).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,0));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — suite",
-                "Placez un pont double entre (2,2) et (0,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(0,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — suite",
-                "Placez un pont simple entre (2,2) et (2,4).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,4));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,0) — valeur 2",
-                "L'île (2,0) vaut 2. " +
-                "2 ponts sont placés vers (2,2). Elle est complète !"
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,2) — valeur 3",
-                "L'île (0,2) vaut 3. " +
-                "1 pont vers (0,0), 2 vers (2,2). Elle est complète !"
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,4) — valeur 2",
-                "L'île (4,4) vaut 2, son seul voisin restant est (2,4). " +
-                "Placez un pont double entre (4,4) et (2,4).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,4), hashi.getIle(2,4));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Félicitations !",
-                "Excellent ! Une île de valeur 6 au milieu impose " +
-                "au moins 1 pont vers chacun de ses voisins. " +
-                "Cette contrainte permet de démarrer la résolution rapidement."
-            )
-        );
-    }
-
-    private static List<EtapeTutoriel> etapesHashi7() {
-        return List.of(
-
-            new EtapeTutoriel(
-                "Technique : isolement d'un segment à deux îles",
-                "Quand deux îles ne peuvent se connecter qu'entre elles " +
-                "sans relier le reste de la grille, " +
-                "elles forment un segment isolé. " +
-                "Ce segment ne doit pas couper la grille en deux parties !"
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,0) — valeur 1",
-                "L'île (0,0) vaut 1, son seul voisin est (0,2). " +
-                "Placez un pont simple entre (0,0) et (0,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,0) — valeur 2",
-                "L'île (2,0) vaut 2, son seul voisin est (2,2). " +
-                "Placez un pont double entre (2,0) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,0), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,2) — valeur 3",
-                "L'île (0,2) vaut 3. " +
-                "1 pont vers (0,0). " +
-                "Placez un pont double entre (0,2) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,2), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — valeur 6",
-                "L'île (2,2) vaut 6. " +
-                "2 ponts vers (2,0), 2 vers (0,2). " +
-                "Placez un pont simple entre (2,2) et (4,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(4,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — suite",
-                "Placez un pont simple entre (2,2) et (2,4).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,4));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (4,2) — valeur 1",
-                "L'île (4,2) vaut 1. " +
-                "1 pont vers (2,2). Elle est complète !"
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,4) — valeur 3",
-                "L'île (2,4) vaut 3. " +
-                "1 pont vers (2,2). " +
-                "Placez un pont double entre (2,4) et (4,4).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,4), hashi.getIle(4,4));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Félicitations !",
-                "Bravo ! Vous avez appris à identifier les segments isolés " +
-                "et à les résoudre sans couper la connectivité de la grille."
-            )
-        );
-    }
-
-    private static List<EtapeTutoriel> etapesHashi8() {
-        return List.of(
-
-            new EtapeTutoriel(
-                "Technique : isolement d'un segment à trois îles",
-                "Quand trois îles forment un groupe qui ne peut se connecter " +
-                "qu'entre elles, elles forment un segment isolé. " +
-                "Attention à ne pas créer de sous-groupes déconnectés du reste !"
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,4) — valeur 1",
-                "L'île (0,4) vaut 1, son seul voisin est (2,4). " +
-                "Placez un pont simple entre (0,4) et (2,4).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,4), hashi.getIle(2,4));
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,0) — valeur 2",
-                "L'île (0,0) vaut 2, son seul voisin est (0,2). " +
-                "Placez un pont double entre (0,0) et (0,2).",
+                "(0,0):2 n'a qu'un voisin accessible : (2,0). " +
+                "Placez un pont double entre (0,0) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (0,2) — valeur 3",
-                "L'île (0,2) vaut 3. " +
-                "2 ponts sont placés vers (0,0). " +
-                "Placez un pont simple entre (0,2) et (2,2).",
+                "Île (2,2) — valeur 7",
+                "(2,2):7 a 4 voisins. 1 pont vers (0,2) (limité à 1). " +
+                "Il reste 6 ponts pour 3 voisins → ponts doubles obligatoires vers (2,0), (2,4) et (4,2). " +
+                "Placez un pont double entre (2,2) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,2), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — suite",
+                "Placez un pont double entre (2,2) et (2,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — suite",
+                "Placez un pont double entre (2,2) et (4,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,4) — valeur 2",
+                "(4,4):2 a 2 voisins : (2,4) et (4,2). " +
+                "Placez un pont simple entre (4,4) et (2,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (2,2) — valeur 2",
-                "L'île (2,2) vaut 2. " +
-                "1 pont vers (0,2). " +
-                "Placez un pont simple entre (2,2) et (2,4).",
+                "Île (4,4) — suite",
+                "Placez un pont simple entre (4,4) et (4,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,4));
+                    Ile a = hashi.getIle(4, 4); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Bravo ! Vous avez identifié et résolu un segment à trois îles. " +
-                "Observez comment (0,4), (2,4) et (2,2) forment un groupe " +
-                "relié au reste via (0,2)."
+                "Bravo ! Les voisins limités à 1 pont contraignent la distribution " +
+                "et permettent de déduire les ponts doubles obligatoires."
             )
         );
     }
 
-    private static List<EtapeTutoriel> etapesHashi9() {
+    // -------------------------------------------------------------------------
+    // HASHI 5 — Cas spécial de 4 sur le côté (SaturationCapaciteMax)
+    // (0,4):1  (2,0):2  (2,2):3  (2,4):4  (4,0):1  (4,4):1
+    // Solution : (0,4)-(2,4):1  (2,4)-(4,4):1  (2,2)-(2,4):2  (2,2)-(2,0):1  (2,0)-(4,0):1
+    // -------------------------------------------------------------------------
+    private static List<EtapeTutoriel> etapesHashi5() {
         return List.of(
 
             new EtapeTutoriel(
-                "Technique : isolement lorsqu'un segment se connecte à une île",
-                "Quand un segment isolé doit obligatoirement se connecter " +
-                "à une île précise, on peut en déduire des ponts forcés " +
-                "vers cette île."
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,0) — valeur 1",
-                "L'île (0,0) vaut 1, son seul voisin est (0,2). " +
-                "Placez un pont simple entre (0,0) et (0,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
+                "Technique : cas spécial de 4 sur le côté",
+                "Une île de valeur 4 avec 3 voisins dont deux sont limités à 1 pont " +
+                "doit obligatoirement avoir un pont double vers le troisième. " +
+                "Comparez les capacités restantes de chaque voisin avec les ponts à placer !"
             ),
 
             new EtapeTutoriel(
                 "Île (0,4) — valeur 1",
-                "L'île (0,4) vaut 1, son seul voisin est (0,2). " +
-                "Placez un pont simple entre (0,4) et (0,2).",
+                "(0,4):1 n'a qu'un voisin : (2,4). Placez un pont simple entre (0,4) et (2,4).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,4), hashi.getIle(0,2));
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (4,4) — valeur 1",
-                "L'île (4,4) vaut 1, son seul voisin est (2,4). " +
-                "Placez un pont simple entre (4,4) et (2,4).",
+                "(4,4):1 n'a qu'un voisin : (2,4). Placez un pont simple entre (4,4) et (2,4).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,4), hashi.getIle(2,4));
+                    Ile a = hashi.getIle(4, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (1,5) — valeur 1",
-                "L'île (1,5) vaut 1, son seul voisin est (3,5). " +
-                "Placez un pont simple entre (1,5) et (3,5).",
+                "Île (2,4) — valeur 4",
+                "(2,4):4 a 3 voisins : (0,4):1, (4,4):1, (2,2). " +
+                "2 ponts placés (1 vers chaque voisin à 1). Il reste 2 ponts, seul (2,2) peut les recevoir. " +
+                "Placez un pont double entre (2,4) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(1,5), hashi.getIle(3,5));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,0) — valeur 3",
-                "L'île (2,0) vaut 3. " +
-                "Placez un pont double entre (2,0) et (5,0).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,0), hashi.getIle(5,0));
+                    Ile a = hashi.getIle(2, 4); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (2,0) — suite",
-                "Il reste 1 pont pour (2,0). " +
-                "Placez un pont simple entre (2,0) et (2,2).",
+                "Île (4,0) — valeur 1",
+                "(4,0):1 n'a qu'un voisin : (2,0). Placez un pont simple entre (4,0) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,0), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(4, 0); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (4,2) — valeur 2",
-                "L'île (4,2) vaut 2, son seul voisin est (2,2). " +
-                "Placez un pont double entre (4,2) et (2,2).",
+                "Île (2,2) — valeur 3",
+                "(2,2):3. 2 ponts vers (2,4). Placez un pont simple entre (2,2) et (2,0).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,2), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (3,3) — valeur 2",
-                "L'île (3,3) vaut 2, son seul voisin restant est (5,3). " +
-                "Placez un pont double entre (3,3) et (5,3).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(3,3), hashi.getIle(5,3));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (3,5) — valeur 3",
-                "L'île (3,5) vaut 3. " +
-                "1 pont vers (1,5). " +
-                "Placez un pont double entre (3,5) et (5,5).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(3,5), hashi.getIle(5,5));
-                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (0,2) — valeur 3",
-                "L'île (0,2) vaut 3. " +
-                "1 pont vers (0,0), 1 vers (0,4). " +
-                "Placez un pont simple entre (0,2) et (2,2).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,2), hashi.getIle(2,2));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (2,2) — valeur 5",
-                "L'île (2,2) vaut 5. " +
-                "1 pont vers (2,0), 2 vers (4,2), 1 vers (0,2). " +
-                "Placez un pont simple entre (2,2) et (2,4).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,2), hashi.getIle(2,4));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (5,0) — valeur 3",
-                "L'île (5,0) vaut 3. " +
-                "2 ponts vers (2,0). " +
-                "Placez un pont simple entre (5,0) et (5,3).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(5,0), hashi.getIle(5,3));
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
-
-            new EtapeTutoriel(
-                "Île (5,3) — valeur 4",
-                "L'île (5,3) vaut 4. " +
-                "2 ponts vers (3,3), 1 vers (5,0). " +
-                "Placez un pont simple entre (5,3) et (5,5).",
-                hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(5,3), hashi.getIle(5,5));
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Excellent ! Cette grille illustre bien comment " +
-                "les segments isolés se connectent obligatoirement " +
-                "à certaines îles, ce qui permet de déduire des ponts forcés."
+                "Bien joué ! Quand une île a des voisins limités, " +
+                "comparez les capacités restantes pour déduire les ponts obligatoires."
             )
         );
     }
 
-    private static List<EtapeTutoriel> etapesHashi10() {
+    // -------------------------------------------------------------------------
+    // HASHI 6 — Cas spécial de 6 au milieu (SaturationMoinsUn)
+    // (0,0):1  (0,2):3  (2,0):2  (2,2):6  (2,4):3  (4,2):1  (4,4):2
+    // Solution : (0,0)-(0,2):1  (0,2)-(2,2):2  (2,0)-(2,2):2  (2,2)-(4,2):1  (2,2)-(2,4):1  (2,4)-(4,4):2
+    // -------------------------------------------------------------------------
+    private static List<EtapeTutoriel> etapesHashi6() {
         return List.of(
 
             new EtapeTutoriel(
-                "Technique : isolement lorsqu'un segment se connecte à un autre segment",
-                "Deux groupes d'îles peuvent être forcés à se connecter entre eux. " +
-                "Identifier ces groupes permet de déduire les ponts qui les relient."
+                "Technique : cas spécial de 6 au milieu",
+                "Une île de valeur 6 avec 4 voisins vérifie 6 = 4×2-2. " +
+                "Si deux voisins sont limités à 1 pont, les deux autres reçoivent un pont double. " +
+                "Observez (2,2):6 avec ses voisins contraints !"
             ),
 
             new EtapeTutoriel(
-                "Île (4,0) — valeur 1",
-                "L'île (4,0) vaut 1, son seul voisin est (2,0). " +
-                "Placez un pont simple entre (4,0) et (2,0).",
+                "Île (0,0) — valeur 1",
+                "(0,0):1 n'a qu'un voisin : (0,2). Placez un pont simple entre (0,0) et (0,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(4,0), hashi.getIle(2,0));
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (0,0) — valeur 3",
-                "L'île (0,0) vaut 3. " +
-                "Placez un pont double entre (0,0) et (0,2).",
+                "Île (4,2) — valeur 1",
+                "(4,2):1 n'a qu'un voisin : (2,2). Placez un pont simple entre (4,2) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(0,2));
+                    Ile a = hashi.getIle(4, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — valeur 6",
+                "(2,2):6 a 4 voisins. (4,2):1 et (2,4) sont contraints. " +
+                "1 pont vers (4,2). Il reste 5 ponts → (2,0) et (0,2) reçoivent des doubles. " +
+                "Placez un pont double entre (2,2) et (2,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (0,0) — suite",
-                "Il reste 1 pont pour (0,0). " +
-                "Placez un pont simple entre (0,0) et (2,0).",
+                "Île (2,2) — suite",
+                "Placez un pont double entre (2,2) et (0,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,0), hashi.getIle(2,0));
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — suite",
+                "Il reste 1 pont pour (2,2). Placez un pont simple entre (2,2) et (2,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
-                "Île (2,0) — valeur 3",
-                "L'île (2,0) vaut 3. " +
-                "1 pont vers (4,0), 1 vers (0,0). " +
-                "Placez un pont simple entre (2,0) et (2,2).",
+                "Île (2,4) — valeur 3",
+                "(2,4):3. 1 pont vers (2,2). Il reste 2 ponts vers (4,4). " +
+                "Placez un pont double entre (2,4) et (4,4).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(2,0), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(2, 4); Ile b = hashi.getIle(4, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Excellent ! Les voisins contraints révèlent les ponts doubles obligatoires " +
+                "sur les autres directions."
+            )
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // HASHI 7 — Isolement d'un segment à deux îles (TechniqueIsolationDeuxIles)
+    // (0,0):1  (0,2):2  (2,0):1  (2,2):2
+    // Solution : (0,0)-(0,2):1  (0,2)-(2,2):1  (2,0)-(2,2):1
+    // -------------------------------------------------------------------------
+    private static List<EtapeTutoriel> etapesHashi7() {
+        return List.of(
+
+            new EtapeTutoriel(
+                "Technique : isolement d'un segment à deux îles",
+                "Si deux îles se connectent au maximum et épuisent leurs deux indices, " +
+                "elles forment un segment isolé du reste de la grille. " +
+                "Cette connexion maximale est alors interdite !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,0) — valeur 1",
+                "(0,0):1 n'a qu'un voisin : (0,2). Placez un pont simple entre (0,0) et (0,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,0) — valeur 1",
+                "(2,0):1 n'a qu'un voisin : (2,2). Placez un pont simple entre (2,0) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Attention à l'isolement !",
+                "Pourrait-on mettre un pont double entre (0,2) et (2,2) ? " +
+                "Non ! (0,2):2 + (2,2):2 = 4, et 2 ponts internes × 2 = 4 : segment isolé ! " +
+                "On pose donc 1 seul pont simple. Placez un pont simple entre (0,2) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Bravo ! Avant de doubler un pont, vérifiez que les deux îles reliées " +
+                "ont encore des sorties vers le reste de la grille."
+            )
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // HASHI 8 — Isolement d'un segment à trois îles (TechniqueIsolationTroisIles)
+    // (0,0):2  (0,2):3  (0,4):1  (2,2):2  (2,4):2
+    // Solution : (0,0)-(0,2):2  (0,2)-(2,2):1  (0,4)-(2,4):1  (2,2)-(2,4):1
+    // -------------------------------------------------------------------------
+    private static List<EtapeTutoriel> etapesHashi8() {
+        return List.of(
+
+            new EtapeTutoriel(
+                "Technique : isolement d'un segment à trois îles",
+                "Trois îles en chaîne peuvent former un segment isolé si l'île centrale " +
+                "sature ses deux extrémités sans sortie externe. " +
+                "L'île centrale doit conserver au moins une sortie vers l'extérieur !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,4) — valeur 1",
+                "(0,4):1 n'a qu'un voisin : (2,4). Placez un pont simple entre (0,4) et (2,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,0) — valeur 2",
+                "(0,0):2 n'a qu'un voisin : (0,2). Placez un pont double entre (0,0) et (0,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (0,2) — valeur 3",
-                "L'île (0,2) vaut 3. " +
-                "2 ponts vers (0,0). " +
+                "(0,2):3. 2 ponts vers (0,0). Il reste 1 pont. " +
                 "Placez un pont simple entre (0,2) et (2,2).",
                 hashi -> {
-                    Pont p = hashi.getPont(hashi.getIle(0,2), hashi.getIle(2,2));
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
 
             new EtapeTutoriel(
                 "Île (2,2) — valeur 2",
-                "L'île (2,2) vaut 2. " +
-                "1 pont vers (2,0), 1 vers (0,2). Elle est complète !"
+                "(2,2):2. 1 pont vers (0,2). Il reste 1 pont vers (2,4). " +
+                "Placez un pont simple entre (2,2) et (2,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
             ),
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Bien joué ! Vous avez appris à identifier deux segments " +
-                "qui doivent obligatoirement se connecter, " +
-                "ce qui impose les ponts entre eux."
+                "Bien joué ! Sur une chaîne de trois îles, vérifiez toujours " +
+                "que l'île centrale garde une sortie externe."
             )
         );
     }
 
+    // -------------------------------------------------------------------------
+    // HASHI 9 — Isolement segment vers île (TechniqueIsolationSegmentIle)
+    // 14 îles
+    // -------------------------------------------------------------------------
+    private static List<EtapeTutoriel> etapesHashi9() {
+        return List.of(
+
+            new EtapeTutoriel(
+                "Technique : isolement segment vers île",
+                "Quand un groupe d'îles connectées n'a qu'une seule sortie possible, " +
+                "ce pont est obligatoire. Identifiez les groupes quasi-fermés " +
+                "et forcez leur unique connexion externe !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,0) — valeur 1",
+                "(0,0):1 n'a qu'un voisin : (0,2). Placez un pont simple entre (0,0) et (0,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,4) — valeur 1",
+                "(0,4):1 n'a qu'un voisin : (0,2). Placez un pont simple entre (0,4) et (0,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,4) — valeur 1",
+                "(4,4):1 n'a qu'un voisin : (2,4). Placez un pont simple entre (4,4) et (2,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 4); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (1,5) — valeur 1",
+                "(1,5):1 n'a qu'un voisin : (3,5). Placez un pont simple entre (1,5) et (3,5).",
+                hashi -> {
+                    Ile a = hashi.getIle(1, 5); Ile b = hashi.getIle(3, 5);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (3,3) — valeur 2",
+                "(3,3):2 n'a qu'un voisin accessible : (5,3). " +
+                "Placez un pont double entre (3,3) et (5,3).",
+                hashi -> {
+                    Ile a = hashi.getIle(3, 3); Ile b = hashi.getIle(5, 3);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,0) — valeur 3",
+                "(2,0):3 a 2 voisins : (5,0) et (2,2). " +
+                "Placez un pont double entre (2,0) et (5,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(5, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,0) — suite",
+                "Il reste 1 pont pour (2,0). Placez un pont simple entre (2,0) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,2) — valeur 2",
+                "(4,2):2 n'a qu'un voisin : (2,2). Placez un pont double entre (4,2) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (3,5) — valeur 3",
+                "(3,5):3. 1 pont vers (1,5). Placez un pont double entre (3,5) et (5,5).",
+                hashi -> {
+                    Ile a = hashi.getIle(3, 5); Ile b = hashi.getIle(5, 5);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,2) — valeur 3",
+                "(0,2):3. 1 pont vers (0,0), 1 vers (0,4). Placez un pont simple entre (0,2) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — valeur 5",
+                "(2,2):5. 1 vers (2,0), 2 vers (4,2), 1 vers (0,2). " +
+                "Placez un pont simple entre (2,2) et (2,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (5,0) — valeur 3",
+                "(5,0):3. 2 ponts vers (2,0). Placez un pont simple entre (5,0) et (5,3).",
+                hashi -> {
+                    Ile a = hashi.getIle(5, 0); Ile b = hashi.getIle(5, 3);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (5,3) — valeur 4",
+                "(5,3):4. 2 vers (3,3), 1 vers (5,0). Placez un pont simple entre (5,3) et (5,5).",
+                hashi -> {
+                    Ile a = hashi.getIle(5, 3); Ile b = hashi.getIle(5, 5);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Excellent ! Identifiez les groupes quasi-fermés : " +
+                "leur unique sortie possible devient un pont obligatoire."
+            )
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // HASHI 10 — Isolement segment vers segment (TechniqueIsolementSegment)
+    // (0,0):3  (0,2):3  (4,0):1  (2,0):3  (2,2):2
+    // Solution : (0,0)-(0,2):2  (0,0)-(2,0):1  (0,2)-(2,2):1  (2,0)-(2,2):1  (2,0)-(4,0):1
+    // -------------------------------------------------------------------------
+    private static List<EtapeTutoriel> etapesHashi10() {
+        return List.of(
+
+            new EtapeTutoriel(
+                "Technique : isolement segment vers segment",
+                "Quand deux groupes d'îles fusionnent en formant un bloc sans sortie externe, " +
+                "ce pont est interdit. Avant de renforcer un pont entre deux segments, " +
+                "vérifiez que la fusion conserve une ouverture vers le reste !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,0) — valeur 1",
+                "(4,0):1 n'a qu'un voisin : (2,0). Placez un pont simple entre (4,0) et (2,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 0); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,0) — valeur 3",
+                "(0,0):3 a 2 voisins : (0,2) et (2,0). " +
+                "Placez un pont double entre (0,0) et (0,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Attention à l'isolement !",
+                "Pourrait-on mettre un pont double entre (0,0) et (2,0) ? " +
+                "Non ! Cela formerait un groupe {(0,0),(0,2),(2,0),(4,0)} sans sortie. " +
+                "Placez seulement un pont simple entre (0,0) et (2,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(2, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,0) — valeur 3",
+                "(2,0):3. 1 pont vers (4,0), 1 vers (0,0). " +
+                "Placez un pont simple entre (2,0) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,2) — valeur 3",
+                "(0,2):3. 2 ponts vers (0,0). Placez un pont simple entre (0,2) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Bien joué ! Avant de renforcer un pont entre deux segments, " +
+                "vérifiez toujours que la fusion garde une sortie externe possible."
+            )
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // HASHI 11 — Isoler un segment en bloquant un pont (TechniquesBloquePont)
+    // (0,0):2  (0,2):2  (2,2):2  (4,0):2  (4,2):4  (4,4):2
+    // Solution : (0,0)-(0,2):1  (0,0)-(4,0):1  (0,2)-(2,2):1  (4,0)-(4,2):1  (2,2)-(4,2):1  (4,2)-(4,4):2
+    // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi11() {
         return List.of(
-            new EtapeTutoriel("Tutoriel 11", "Contenu à venir.  Cliquez sur Suivant pour commencer.")
+
+            new EtapeTutoriel(
+                "Technique : isoler un segment en bloquant un pont",
+                "Si supprimer un pont laisse une île sans aucune sortie vers le reste, " +
+                "ce pont est indispensable. Testez mentalement : " +
+                "que se passe-t-il si ce pont n'existe pas ?"
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,4) — valeur 2",
+                "(4,4):2 n'a qu'un voisin : (4,2). Placez un pont double entre (4,4) et (4,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 4); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Raisonnement par blocage",
+                "Si on bloquait (0,0)-(4,0), l'île (0,0) n'aurait plus que (0,2) comme sortie. " +
+                "Ce pont est donc nécessaire pour garder la connexion globale. " +
+                "Placez un pont simple entre (0,0) et (4,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(4, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,0) — suite",
+                "(0,0):2. 1 pont vers (4,0). Placez un pont simple entre (0,0) et (0,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,0) — valeur 2",
+                "(4,0):2. 1 pont vers (0,0). Placez un pont simple entre (4,0) et (4,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 0); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,2) — valeur 2",
+                "(0,2):2. 1 pont vers (0,0). Placez un pont simple entre (0,2) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 2); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — valeur 2",
+                "(2,2):2. 1 pont vers (0,2). Placez un pont simple entre (2,2) et (4,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Excellent ! Simuler la suppression d'un pont révèle " +
+                "les liens indispensables à la connectivité de la grille."
+            )
         );
     }
 
+    // -------------------------------------------------------------------------
+    // HASHI 12 — Isoler un segment en ajoutant un pont (TechniqueIsolationSegmentIle)
+    // (0,1):1  (0,3):2  (1,0):1  (2,3):3  (3,0):2  (5,0):2  (5,3):3
+    // Solution : (0,1)-(0,3):1  (0,3)-(2,3):1  (1,0)-(3,0):1  (2,3)-(5,3):2  (3,0)-(5,0):1  (5,0)-(5,3):1
+    // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi12() {
         return List.of(
-            new EtapeTutoriel("Tutoriel 12", "Contenu à venir.  Cliquez sur Suivant pour commencer.")
+
+            new EtapeTutoriel(
+                "Technique : isoler un segment en ajoutant un pont",
+                "Parfois, ajouter un pont à un groupe d'îles l'enferme sans sortie externe. " +
+                "Ce pont est alors interdit. Identifiez le seul pont valide qui " +
+                "garde une ouverture vers le reste de la grille !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,1) — valeur 1",
+                "(0,1):1 n'a qu'un voisin : (0,3). Placez un pont simple entre (0,1) et (0,3).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 1); Ile b = hashi.getIle(0, 3);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (1,0) — valeur 1",
+                "(1,0):1 n'a qu'un voisin : (3,0). Placez un pont simple entre (1,0) et (3,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(1, 0); Ile b = hashi.getIle(3, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,3) — valeur 3",
+                "(2,3):3 a 2 voisins : (0,3) et (5,3). " +
+                "Placez un pont double entre (2,3) et (5,3).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 3); Ile b = hashi.getIle(5, 3);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,3) — valeur 2",
+                "(0,3):2. 1 pont vers (0,1). Placez un pont simple entre (0,3) et (2,3).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 3); Ile b = hashi.getIle(2, 3);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (3,0) — valeur 2",
+                "(3,0):2. 1 pont vers (1,0). Placez un pont simple entre (3,0) et (5,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(3, 0); Ile b = hashi.getIle(5, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (5,0) — valeur 2",
+                "(5,0):2. 1 pont vers (3,0). Placez un pont simple entre (5,0) et (5,3).",
+                hashi -> {
+                    Ile a = hashi.getIle(5, 0); Ile b = hashi.getIle(5, 3);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Bravo ! Identifiez toujours le pont qui maintient une ouverture " +
+                "entre les différents groupes d'îles de la grille."
+            )
         );
     }
 
+    // -------------------------------------------------------------------------
+    // HASHI 13 — Isoler une île avec des ponts (TechniqueIsolationIle)
+    // (0,0):2  (0,4):3  (2,2):1  (4,0):2  (4,4):2  (6,0):2  (6,2):2
+    // Solution : (0,0)-(4,0):1  (0,0)-(0,4):1  (0,4)-(4,4):2  (2,2)-(6,2):1  (4,0)-(6,0):1  (6,0)-(6,2):1
+    // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi13() {
         return List.of(
-            new EtapeTutoriel("Tutoriel 13", "Contenu à venir.  Cliquez sur Suivant pour commencer.")
+
+            new EtapeTutoriel(
+                "Technique : isoler une île avec des ponts",
+                "Si retirer un pont laisse une île sans aucune sortie possible, " +
+                "ce pont est indispensable pour maintenir la connexité. " +
+                "Testez chaque pont en imaginant sa suppression !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — valeur 1",
+                "(2,2):1 n'a qu'un voisin : (6,2). Placez un pont simple entre (2,2) et (6,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(6, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,4) — valeur 3",
+                "(0,4):3 a 2 voisins : (0,0) et (4,4). " +
+                "Placez un pont double entre (0,4) et (4,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(4, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,4) — suite",
+                "Il reste 1 pont pour (0,4). Placez un pont simple entre (0,4) et (0,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(0, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,0) — valeur 2",
+                "(0,0):2. 1 pont vers (0,4). Placez un pont simple entre (0,0) et (4,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(4, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,0) — valeur 2",
+                "(4,0):2. 1 pont vers (0,0). Placez un pont simple entre (4,0) et (6,0).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 0); Ile b = hashi.getIle(6, 0);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (6,0) — valeur 2",
+                "(6,0):2. 1 pont vers (4,0). Placez un pont simple entre (6,0) et (6,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(6, 0); Ile b = hashi.getIle(6, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Parfait ! La simulation mentale de suppression de ponts " +
+                "est une technique puissante pour identifier les liens obligatoires."
+            )
         );
     }
 
+    // -------------------------------------------------------------------------
+    // HASHI 14 — Création de conflits de connexion pont (TechniqueIsolementSegment)
+    // (0,0):1  (0,4):2  (2,0):2  (2,2):4  (4,2):4  (4,4):3
+    // Solution : (0,0)-(0,4):1  (0,4)-(4,4):1  (2,0)-(2,2):2  (2,2)-(4,2):2  (4,2)-(4,4):2
+    // -------------------------------------------------------------------------
     private static List<EtapeTutoriel> etapesHashi14() {
         return List.of(
-            new EtapeTutoriel("Tutoriel 14", "Contenu à venir.  Cliquez sur Suivant pour commencer.")
+
+            new EtapeTutoriel(
+                "Technique : conflits de connexion de ponts",
+                "Deux ponts perpendiculaires ne peuvent pas se croiser. " +
+                "Poser un pont double peut bloquer un autre pont nécessaire. " +
+                "Anticipez ces conflits pour ne pas bloquer la résolution !"
+            ),
+
+            new EtapeTutoriel(
+                "Île (0,0) — valeur 1",
+                "(0,0):1 n'a qu'un voisin : (0,4). Placez un pont simple entre (0,0) et (0,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,0) — valeur 2",
+                "(2,0):2 n'a qu'un voisin : (2,2). Placez un pont double entre (2,0) et (2,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(2, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (2,2) — valeur 4",
+                "(2,2):4. 2 ponts vers (2,0). Placez un pont double entre (2,2) et (4,2).",
+                hashi -> {
+                    Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(4, 2);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Attention aux conflits !",
+                "Un pont double entre (0,4) et (4,4) croiserait (2,0)-(2,2) et (2,2)-(4,2). " +
+                "Ce pont ne peut donc être que simple. " +
+                "Placez un pont simple entre (0,4) et (4,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(0, 4); Ile b = hashi.getIle(4, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Île (4,2) — valeur 4",
+                "(4,2):4. 2 ponts vers (2,2). Placez un pont double entre (4,2) et (4,4).",
+                hashi -> {
+                    Ile a = hashi.getIle(4, 2); Ile b = hashi.getIle(4, 4);
+                    if (a == null || b == null) return false;
+                    Pont p = hashi.getPont(a, b);
+                    return p != null && p.getEtatActuel() == EtatDuPont.DOUBLE;
+                }
+            ),
+
+            new EtapeTutoriel(
+                "Félicitations !",
+                "Vous avez terminé tous les tutoriels ! Vous maîtrisez maintenant " +
+                "les techniques essentielles de Hashi : saturation, isolation, et conflits de ponts. " +
+                "Bonne chance sur les vraies grilles !"
+            )
         );
     }
 }
