@@ -51,8 +51,6 @@ public class TutoController extends ManageController {
     @FXML
     private Label timer;
     @FXML
-    private Label win;
-    @FXML
     private Button undoButton;
     @FXML
     private Button redoButton;
@@ -130,7 +128,6 @@ public class TutoController extends ManageController {
 
             General.setHashi(hashi);
 
-            win.setVisible(false);
 
             // si on est en mode hypothèse on remet la fenétre de base
             if (General.getHashi().getHypothese()) {
@@ -203,12 +200,8 @@ public class TutoController extends ManageController {
                 General.getDb().incrementerAvancementTutoriel(getUtilisateur(), General.getDb().obtenirAvancementTutoriel(getUtilisateur())+1);
                 System.err.println(General.getDb().obtenirAvancementTutoriel(getUtilisateur()));
             }
-            win.setVisible(true);
             
         }*/
-        if (hashi.estGagne()) {
-            win.setVisible(true);
-        }
     }
 
     private void dessinerGrille(int cols, int rows, double size) {
