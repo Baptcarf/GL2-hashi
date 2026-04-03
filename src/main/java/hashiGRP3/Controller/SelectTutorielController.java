@@ -27,8 +27,8 @@ import hashiGRP3.Logic.General;
 public class SelectTutorielController extends ManageController {
     
     //Defines
-    private static final int NON_ACTIVE_BUTTON = 2;
-    private static final int ACTIVE_BUTTON = 13;
+    private static final int NON_ACTIVE_BUTTON = 0;
+    private static final int ACTIVE_BUTTON = 15;
 
     /** États possibles pour chaque niveau. 
      * LOCKED : niveau bloqué, non accessible
@@ -159,6 +159,150 @@ public class SelectTutorielController extends ManageController {
 
 
 
+    
+
+    @FXML
+    public void lancerRegles(ActionEvent event) {
+        int t = 0; // hashi0.txt
+        General.setNum_grille(t);
+        // index dans la liste des levels = 0 (premier bouton)
+        completeLevel(0);
+        this.changeScene(event);
+    }
+
+    /** Méthode lorsqu'on appuie sur le bouton de la technique de démarrage pour lancer la grille tutoriel */
+    @FXML
+    public void lancerT1(ActionEvent event) {
+        int t = 16;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT2(ActionEvent event) {
+        int t = 17;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT3(ActionEvent event) {
+        int t = 18;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT4(ActionEvent event) {
+        int t = 19;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT5(ActionEvent event) {
+        int t = 20;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT6(ActionEvent event) {
+        int t = 21;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT7(ActionEvent event) {
+        int t = 22;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT8(ActionEvent event) {
+        int t = 22;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT9(ActionEvent event) {
+        int t = 23;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT10(ActionEvent event) {
+        int t = 24;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT11(ActionEvent event) {
+        int t = 25;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT12(ActionEvent event) {
+        int t = 26;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT13(ActionEvent event) {
+        int t = 27;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT14(ActionEvent event) {
+        int t = 28;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    /**
+     * Marquer un niveau comme complété et débloquer le suivant si nécessaire
+     * @param index : l'index du niveau à marquer comme complété
+     */
+    private void completeLevel(int index) {
+        if (states.get(index) == LevelState.COMPLETED) return;
+
+        states.set(index, LevelState.COMPLETED);
+        applyState(levels.get(index), LevelState.COMPLETED);
+
+        // Enregistrer l'avancement dans la BD
+        General.getDb().incrementerAvancementTutoriel(index + 1);
+
+        if (index + 1 < states.size()
+                && states.get(index + 1) == LevelState.LOCKED) {
+
+            states.set(index + 1, LevelState.UNLOCKED);
+            applyState(levels.get(index + 1), LevelState.UNLOCKED);
+        }
+    }
 
     /**
      * Appliquer le style et l'image appropriés à un niveau en fonction de son état
@@ -215,22 +359,7 @@ public class SelectTutorielController extends ManageController {
         loadProgressionFromDatabase();
     }
 
-    private void completeLevel(int index) {
-        if (states.get(index) == LevelState.COMPLETED) return;
-
-        states.set(index, LevelState.COMPLETED);
-        applyState(levels.get(index), LevelState.COMPLETED);
-
-        // Enregistrer l'avancement dans la BD
-        General.getDb().incrementerAvancementTutoriel( index + 1);
-
-        if (index + 1 < states.size()
-                && states.get(index + 1) == LevelState.LOCKED) {
-
-            states.set(index + 1, LevelState.UNLOCKED);
-            applyState(levels.get(index + 1), LevelState.UNLOCKED);
-        }
-    }
+ 
 
 
     

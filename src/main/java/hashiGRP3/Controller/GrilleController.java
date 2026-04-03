@@ -2,6 +2,11 @@
 package hashiGRP3.Controller;
 
 import java.io.InputStream;
+//Imports
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
@@ -51,6 +56,19 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import hashiGRP3.Logic.EtapeTutoriel;
+import hashiGRP3.Logic.ScenarioTutoriel;
+
+import hashiGRP3.Logic.Aide.IndiceResultat;
+import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.*;
+import hashiGRP3.Logic.General;
+import hashiGRP3.Logic.Hashi;
+import hashiGRP3.Logic.Ile;
+import hashiGRP3.Logic.InOut.Import;
+import hashiGRP3.Logic.Pont;
+import hashiGRP3.ObjectGraphique.ileGraphique;
+import hashiGRP3.ObjectGraphique.pontGraphique;
 
 /** Classe de controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
@@ -64,6 +82,10 @@ public class GrilleController extends ManageController {
 
     AnimationTimer animationTimer;
     double startup;
+
+    // --- Tutoriel guidé ---
+    private List<EtapeTutoriel> etapesTutoriel = new ArrayList<>();
+    private int etapeCourante = 0;
 
     double elapsedBefore = 0;
     @FXML
@@ -157,8 +179,12 @@ public class GrilleController extends ManageController {
         int grid_num = General.getNum_grille();
 
         if (labelTitreGrille != null) {
-            if (grid_num > 15) {
-                labelTitreGrille.setText("Grille tutoriel " + (grid_num - 15));
+            if (grid_num == 0) {
+                labelTitreGrille.setText("Grille tutoriel " + (grid_num));
+                tuto = true;
+            }
+            else if (grid_num > 15){
+                labelTitreGrille.setText("Grille tutoriel " + (grid_num) + 15 );
                 tuto = true;
             } else
                 labelTitreGrille.setText("Grille numéro " + grid_num);
@@ -166,7 +192,10 @@ public class GrilleController extends ManageController {
 
         // Si grille non tutoriel alors calculer index
         String resourcePath = "-1";
-        if (grid_num <= 15) {
+        if (grid_num == 0) {
+            // Règles du jeu : hashi0.txt dans Grille_Tutoriel
+            resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi0.txt";
+        } else if (grid_num <= 15) {
             int folderIndex = (grid_num - 1) / 5;
             String[] folders = { "7x7", "10x10", "12x12" };
             String folder = folders[folderIndex];
@@ -245,6 +274,14 @@ public class GrilleController extends ManageController {
             System.out.println(this.startup);
 
             drawGrid(hashi, parent.getWidth());
+
+            // Charger le scénario tutoriel si on est en mode tuto
+            if (tuto) {
+                int numScenario = (grid_num == 0) ? 0 : grid_num - 15;
+                etapesTutoriel = ScenarioTutoriel.getEtapes(numScenario);
+                etapeCourante = 0;
+                afficherEtapeTutoriel();
+            }
 
         } catch (java.io.IOException ex) {
             System.err.println("Erreur au chargement : " + ex.getMessage());
@@ -391,13 +428,18 @@ public class GrilleController extends ManageController {
         drawGrid(hashi, gamePane.getWidth());
         redoButton.setDisable(hashi.isRedoEmpty());
         undoButton.setDisable(hashi.isUndoEmpty());
-        if (onCheck == true) {
+        if (onCheck) {
             onCheck = false;
         }
         if (onAide) {
             onAide = false;
+            sidePanel.getChildren().clear();
         }
-    }
+        // Vérifier la progression du tutoriel
+        if (tuto && !etapesTutoriel.isEmpty()) {
+            verifierEtapeTutoriel();
+        }
+}
 
     /** Dessine les iles */
     private void dessinerIle(Hashi hashi, double size) {
@@ -652,5 +694,53 @@ public class GrilleController extends ManageController {
 
         }
 
+    }
+
+    /**
+     * Affiche l'étape courante du tutoriel dans le panneau latéral.
+     */
+    private void afficherEtapeTutoriel() {
+        if (etapesTutoriel.isEmpty()) return;
+        if (etapeCourante >= etapesTutoriel.size()) return;
+
+        EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
+
+        Label title = createTitle(etape.getTitre());
+        Separator sep = new Separator();
+
+        Label compteur = new Label("Étape " + (etapeCourante + 1) + " / " + etapesTutoriel.size());
+
+        Text texte = new Text(etape.getTexte());
+        texte.setWrappingWidth(180);
+
+        Button btnSuivant = new Button("Suivant →");
+        btnSuivant.setMaxWidth(Double.MAX_VALUE);
+
+        // Bloquer le bouton si une condition est définie et pas encore remplie
+        boolean conditionRemplie = etape.estValidee(hashi);
+        btnSuivant.setDisable(etape.aUneCondition() && !conditionRemplie);
+
+        btnSuivant.setOnAction(e -> {
+            etapeCourante++;
+            afficherEtapeTutoriel();
+        });
+
+        updateSidePanel(title, sep, compteur, texte, btnSuivant);
+    }
+
+    /**
+     * Vérifie si la condition de l'étape courante est remplie
+     * et débloque le bouton Suivant si c'est le cas.
+     * Appelée après chaque coup joué.
+     */
+    private void verifierEtapeTutoriel() {
+        if (etapesTutoriel.isEmpty()) return;
+        if (etapeCourante >= etapesTutoriel.size()) return;
+
+        EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
+        if (etape.aUneCondition() && etape.estValidee(hashi)) {
+            // Rafraîchir le panneau pour débloquer le bouton
+            afficherEtapeTutoriel();
+        }
     }
 }
