@@ -2,15 +2,22 @@
 package hashiGRP3.Controller;
 
 import java.io.InputStream;
-//Imports
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.util.List;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationDeuxIles;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationSegmentIle;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationTroisIles;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolementSegment;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturation;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationCapaciteMax;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
+import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
+import hashiGRP3.Logic.Aide.Techniques.TechniquesBloquePont;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -43,17 +50,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
-import hashiGRP3.Logic.Aide.IndiceResultat;
-import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.*;
-import hashiGRP3.Logic.General;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 
 /** Classe de controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
@@ -382,11 +378,9 @@ public class GrilleController extends ManageController {
         undoButton.setDisable(hashi.isUndoEmpty());
         if (onCheck == true) {
             onCheck = false;
-            sidePanel.getChildren().clear();
         }
         if (onAide) {
             onAide = false;
-            sidePanel.getChildren().clear();
         }
     }
 
@@ -566,6 +560,7 @@ public class GrilleController extends ManageController {
         prevButton.setOnAction(e -> {
             if (!indicesDisponibles.isEmpty()) {
                 indiceAffiche = (indiceAffiche - 1 + indicesDisponibles.size()) % indicesDisponibles.size();
+                General.addElapsedTime(10.0);
                 afficherIndiceCourant();
             }
         });
@@ -573,6 +568,7 @@ public class GrilleController extends ManageController {
         nextButton.setOnAction(e -> {
             if (!indicesDisponibles.isEmpty()) {
                 indiceAffiche = (indiceAffiche + 1) % indicesDisponibles.size();
+                General.addElapsedTime(10.0);
                 afficherIndiceCourant();
             }
         });
