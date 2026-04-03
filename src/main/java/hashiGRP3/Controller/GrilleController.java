@@ -230,7 +230,6 @@ public class GrilleController extends ManageController {
                 checkButton.setVisible(false);
                 hintButton.setVisible(false);
                 hypothesisButton.setVisible(false);
-                tuto = false;
             }
             System.out.println(this.startup);
 
@@ -625,6 +624,7 @@ public class GrilleController extends ManageController {
     @Override
     public void changeScene(ActionEvent event) {
         if (tuto) {
+            tuto = false;
             retourArriere(event);
         } else {
             double score = stop_timer();
