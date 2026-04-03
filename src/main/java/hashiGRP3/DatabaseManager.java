@@ -80,7 +80,7 @@ public class DatabaseManager {
     public int creerPartie(int id_utilisateur, int numGrille) {
 
         String sqlCheck = "SELECT id_partie, statut FROM Partie JOIN Grille on partie.id_grille = Grille.id_grille WHERE id_utilisateur = ? AND numeroGrille = ? ORDER BY id_partie DESC LIMIT 1";
-        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut,score) VALUES (?,(SELECT id_grille FROM Grille where numeroGrille = ?), ?,0)";
+        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut,score,maxScore,finiUneFois) VALUES (?,(SELECT id_grille FROM Grille where numeroGrille = ?), ?,0,9999,false)";
 
         boolean reset = false;
         int id_partie = -1;
@@ -144,7 +144,7 @@ public class DatabaseManager {
 
     /** Ajoute une grille dans la base de donnée */
     public double checkScorePartie() {
-        String sqlCheck = "SELECT Score from Partie WHERE id_partie = ?";
+        String sqlCheck = "SELECT score from Partie WHERE id_partie = ?";
 
         try (Connection conn = DriverManager.getConnection(
                 URL);
@@ -352,7 +352,7 @@ public class DatabaseManager {
             return -1;
         }
 
-        String sql = "SELECT MAX(Partie.score) AS meilleurScore " +
+        String sql = "SELECT Partie.maxScore AS meilleurScore " +
                 "FROM Partie " +
                 "JOIN Grille ON Partie.id_grille = Grille.id_grille " +
                 "WHERE Grille.numeroGrille = ? " +
@@ -396,7 +396,7 @@ public class DatabaseManager {
                 "JOIN Grille ON Partie.id_grille = Grille.id_grille " +
                 "WHERE Grille.numeroGrille = ? " +
                 "AND id_utilisateur = ? " +
-                "AND statut = 2";
+                "AND finiUneFois = true";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -601,7 +601,7 @@ public class DatabaseManager {
     public List<String> obtenirTop5Scores() {
         List<String> scores = new ArrayList<>();
 
-        String sql = "SELECT u.pseudo, p.score " +
+        String sql = "SELECT u.pseudo, p.maxScore " +
                 "FROM Partie p " +
                 "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
                 "WHERE p.statut = 2 AND p.score IS NOT NULL " +
@@ -637,7 +637,7 @@ public class DatabaseManager {
 
         // On joint la table Grille pour filtrer sur le numeroGrille (1, 2, 3...)
         // et non sur l'id_grille (la clé primaire auto-incrémentée)
-        String sql = "SELECT u.pseudo, p.score " +
+        String sql = "SELECT u.pseudo, p.maxScore " +
                 "FROM Partie p " +
                 "JOIN Utilisateur u ON p.id_utilisateur = u.id_utilisateur " +
                 "JOIN Grille g ON p.id_grille = g.id_grille " +
@@ -652,7 +652,7 @@ public class DatabaseManager {
 
             while (rs.next()) {
                 String pseudo = rs.getString("pseudo");
-                int score = rs.getInt("score");
+                int score = rs.getInt("maxScore");
                 scores.add(pseudo + " " + score + "s");
             }
 
@@ -730,13 +730,48 @@ public class DatabaseManager {
     /** Change le status d'une partie ; la partie est soit en cours soit terminé. */
     public void changeStatutPartie(int status) {
         String sql = "UPDATE Partie SET statut = ? WHERE id_partie = ?";
-        try (Connection conn = DriverManager.getConnection(URL);
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        String sql2 = "SELECT score,maxScore FROM Partie WHERE id_partie = ?";
+        String sql3 = "UPDATE Partie SET maxScore = ?,finiUneFois = true WHERE id_partie = ?";
 
-            pstmt.setInt(1, status);
-            pstmt.setInt(2, General.getId_partie());
-            pstmt.executeUpdate();
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
+            if (status == 2) {
+                try (PreparedStatement pstmt = conn.prepareStatement(sql2)) {
+
+                    pstmt.setInt(1, General.getId_partie());
+                    try (ResultSet rs = pstmt.executeQuery()) {
+
+                        if (rs.next()) {
+
+                            Double score = rs.getDouble("score");
+                            Double maxScore = rs.getDouble("maxScore");
+
+                            if (score > 0 && score < maxScore) {
+                                try (PreparedStatement pstmt2 = conn.prepareStatement(sql3)) {
+                                    pstmt2.setDouble(1, score);
+                                    pstmt2.setInt(2, General.getId_partie());
+                                    pstmt2.executeUpdate();
+
+                                }
+                            }
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+                pstmt.setInt(1, status);
+                pstmt.setInt(2, General.getId_partie());
+                pstmt.executeUpdate();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

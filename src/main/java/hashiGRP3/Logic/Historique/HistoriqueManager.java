@@ -30,8 +30,8 @@ public class HistoriqueManager {
         final Pont pont;
         final EtatDuPont etatAvant;
         final EtatDuPont etatApres;
-        final boolean etatHypoAvant;
-        private EnumSet<Mode> modes;
+        private boolean etatHypoAvant;
+        final EnumSet<Mode> modes;
 
         /**
          * Crée une nouvelle instance d'action.
@@ -74,6 +74,7 @@ public class HistoriqueManager {
         public Boolean retireTemporaire() {
             if (modes.contains(Mode.TEMPORAIRE)) {
                 modes.remove(Mode.TEMPORAIRE);
+                this.etatHypoAvant = false;
                 return true;
             } else {
                 return false;
@@ -168,7 +169,7 @@ public class HistoriqueManager {
     public boolean redo() {
         if (redoStack.isEmpty())
             return false;
-
+        
         Action action = redoStack.pop();
         action.pont.setEtatActuel(action.etatApres);
         action.pont.setEstHypothese(action.isMode(Mode.TEMPORAIRE));
@@ -209,8 +210,8 @@ public class HistoriqueManager {
     /** Confirme les coups réalisés en mode hypothèses */
     public void confirmerHypothese() {
         for (Action action : undoStack) {
-            if (action.isMode(Mode.TEMPORAIRE)) {
-                action.retireTemporaire();
+            action.retireTemporaire();
+            if (!action.isMode(Mode.HISTORIQUE)){
                 action.getModes().add(Mode.HISTORIQUE);
                 action.pont.setEstHypothese(false);
             }
