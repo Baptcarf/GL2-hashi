@@ -141,8 +141,9 @@ public class TutoController extends ManageController {
                 afficherEtapeTutoriel();
             }
 
-        } catch (java.io.IOException ex) {
+        } catch (Exception ex) {
             System.err.println("Erreur au chargement : " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 

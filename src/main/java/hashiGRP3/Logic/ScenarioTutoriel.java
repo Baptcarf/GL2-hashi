@@ -53,9 +53,34 @@ public class ScenarioTutoriel {
             ),
 
             new EtapeTutoriel(
-                "Île (2,0) — valeur 1",
+                "Bouton Annuler / Rétablir",
+                "Les boutons ← et → en haut à droite permettent d'annuler ou rétablir " +
+                "votre dernier coup. Utilisez-les sans hésiter si vous faites une erreur !"
+            ),
+
+            new EtapeTutoriel(
+                "Bouton Vérification",
+                "Le bouton ✓ (vert) vérifie votre grille et vous indique combien d'erreurs " +
+                "vous avez commises. Attention : l'utiliser ajoute 60 secondes à votre score !"
+            ),
+
+            new EtapeTutoriel(
+                "Bouton Indice",
+                "Le bouton indice vous suggère un pont à placer avec une explication. " +
+                "Attention : l'utiliser ajoute 10 secondes à votre score !"
+            ),
+
+            new EtapeTutoriel(
+                "Mode Hypothèse",
+                "Le bouton crayon active le mode hypothèse. Vos coups sont alors temporaires. " +
+                "Si votre hypothèse est bonne, validez-la. Sinon, annulez pour revenir à l'état précédent. " +
+                "Ce mode désactive temporairement la vérification et les indices."
+            ),
+
+            new EtapeTutoriel(
+                "À vous de jouer !",
+                "Commençons l'apprentissage des règles du jeu" + 
                 "L'île en (2,0) vaut 1 et n'a qu'un seul voisin : (2,2). " +
-                "Elle doit donc avoir exactement 1 pont vers (2,2). " +
                 "Placez un pont simple entre (2,0) et (2,2).",
                 hashi -> {
                     Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(2, 2);
@@ -92,7 +117,7 @@ public class ScenarioTutoriel {
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Vous avez terminé votre première grille ! " +
+                "Vous avez terminé les règles du jeu ! " +
                 "L'île (2,2) valait 4 : elle a reçu 2 ponts de (0,2), 1 de (2,0) et 1 de (2,4). " +
                 "Vous êtes prêt pour les vrais tutoriels !"
             )

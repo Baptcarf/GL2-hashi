@@ -102,17 +102,12 @@ public class SelectTutorielController extends ManageController {
     /** Initialiser les états des niveaux. */
     private void initLevels() {
         states.clear();
-        states.add(LevelState.COMPLETED); // Premier niveau completed
-        applyState(levels.get(0), LevelState.COMPLETED);
-        states.add(LevelState.COMPLETED); // Deuxième niveau completed
-        applyState(levels.get(1), LevelState.COMPLETED);
-        states.add(LevelState.UNLOCKED); // Troisième niveau débloqué
-        applyState(levels.get(2), LevelState.UNLOCKED);
-        for (int i = 3; i < levels.size(); i++) {
+        for (int i = 0; i < levels.size(); i++) {
             states.add(LevelState.LOCKED);
-            applyState(levels.get(i), states.get(i));
+            applyState(levels.get(i), LevelState.LOCKED);
         }
-
+        states.set(0, LevelState.COMPLETED);
+        applyState(levels.get(0), LevelState.COMPLETED);
     }
 
     /**
@@ -120,26 +115,31 @@ public class SelectTutorielController extends ManageController {
      * niveaux.
      */
     private void loadProgressionFromDatabase() {
+        try {
+            while (General.getDb().obtenirAvancementTutoriel() < 1) {
+                General.getDb().incrementerAvancementTutoriel(1);
+            }
+            int avancement = General.getDb().obtenirAvancementTutoriel();
 
-        int avancement = General.getDb().obtenirAvancementTutoriel();
-        System.out.println(avancement);
-        while (General.getDb().obtenirAvancementTutoriel() < 2) {
-            General.getDb().incrementerAvancementTutoriel(General.getDb().obtenirAvancementTutoriel() + 1);
-        }
-        avancement = General.getDb().obtenirAvancementTutoriel();
-        System.out.println(avancement);
+            for (int i = 0; i < avancement && i < states.size(); i++) {
+                states.set(i, LevelState.COMPLETED);
+                applyState(levels.get(i), LevelState.COMPLETED);
+            }
 
-        // Marquer tous les tutoriels jusqu'à l'avancement comme complétés
-        for (int i = 1; i < avancement && i < states.size(); i++) {
-            states.set(i, LevelState.COMPLETED);
-            applyState(levels.get(i), LevelState.COMPLETED);
+            if (avancement < states.size()) {
+                states.set(avancement, LevelState.UNLOCKED);
+                applyState(levels.get(avancement), LevelState.UNLOCKED);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur loadProgressionFromDatabase : " + e.getMessage());
+            e.printStackTrace();
         }
+    }
 
-        // Débloquer le niveau suivant s'il existe
-        if (avancement < states.size()) {
-            states.set(avancement, LevelState.UNLOCKED);
-            applyState(levels.get(avancement), LevelState.UNLOCKED);
-        }
+    @FXML
+    public void lancerRegles(ActionEvent event) {
+        General.setNum_grille(0);
+        getSceneManager().changeScene("tutodujeu");
     }
 
     @FXML

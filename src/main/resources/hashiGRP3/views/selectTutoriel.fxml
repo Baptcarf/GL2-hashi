@@ -28,14 +28,10 @@
                         <Label styleClass="section-title" text="Les bases" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Règles du jeu" />
+                            <Button text="Règles du jeu" onAction="#lancerRegles"/>
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 
-                        <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Jouer à notre jeu "/>
-                            <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
-                        </HBox>
                     </VBox>
 
                     <!-- SECTION 2 -->
