@@ -50,6 +50,7 @@ public enum EtatDuPont {
         };
     }
 
+    /** Trouve un etat de pont à partir d'une valeur */
     public static EtatDuPont fromValue(int value) {
         for (EtatDuPont etat : EtatDuPont.values()) {
             if (etat.getValue() == value) {

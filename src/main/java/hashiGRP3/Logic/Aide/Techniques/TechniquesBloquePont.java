@@ -2,7 +2,6 @@
 package hashiGRP3.Logic.Aide.Techniques;
 
 // Imports
-import java.util.List;
 import java.util.Optional;
 
 import hashiGRP3.Logic.Aide.AbstractTechnique;

@@ -1,18 +1,22 @@
-//Attribut au packet
+//Attribut au paquet
 package hashiGRP3.Controller;
 
-// Imports
+//Imports
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import java.util.ArrayList;
-import java.util.List;
 
 import hashiGRP3.Logic.General;
+
+
 
 /** Contrôleur pour la scène de sélection du tutoriel.
  * Permet à l'utilisateur de voir  l'état des niveaux (bloqué, débloqué, complété),
@@ -21,6 +25,10 @@ import hashiGRP3.Logic.General;
  */
 public class SelectTutorielController extends ManageController {
     
+    //Defines
+    private static final int NON_ACTIVE_BUTTON = 2;
+    private static final int ACTIVE_BUTTON = 13;
+
     /** États possibles pour chaque niveau. 
      * LOCKED : niveau bloqué, non accessible
      * UNLOCKED : niveau débloqué, accessible mais pas encore complété
@@ -130,9 +138,9 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
-    /** Configurer les actions des boutons pour gérer la progression. */
+    /** Configurer les actions des deux premier pour débloquer. */
     private void setupProgression() {
-        for (int i = 0; i < levels.size(); i++) {
+        for (int i = 0; i < NON_ACTIVE_BUTTON; i++) {
             final int index = i;
             getButton(levels.get(i)).setOnAction(e -> onLevelClicked(index));
         }
@@ -145,8 +153,120 @@ public class SelectTutorielController extends ManageController {
      */
     private void onLevelClicked(int index) {
         if (states.get(index) == LevelState.LOCKED) return;
-
         completeLevel(index);
+    }
+
+    /** Méthode lorsqu'on appuie sur le bouton de la technique de démarrage pour lancer la grille tutoriel */
+    @FXML
+    public void lancerT1(ActionEvent event) {
+        int t = 16;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT2(ActionEvent event) {
+        int t = 17;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT3(ActionEvent event) {
+        int t = 18;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT4(ActionEvent event) {
+        int t = 19;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT5(ActionEvent event) {
+        int t = 20;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT6(ActionEvent event) {
+        int t = 21;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT7(ActionEvent event) {
+        int t = 22;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT8(ActionEvent event) {
+        int t = 22;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT9(ActionEvent event) {
+        int t = 23;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT10(ActionEvent event) {
+        int t = 24;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT11(ActionEvent event) {
+        int t = 25;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT12(ActionEvent event) {
+        int t = 26;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT13(ActionEvent event) {
+        int t = 27;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
+    }
+
+    @FXML
+    public void lancerT14(ActionEvent event) {
+        int t = 28;
+        General.setNum_grille(t);
+        completeLevel(t - ACTIVE_BUTTON);
+        this.changeScene(event);
     }
 
     /**
@@ -170,8 +290,6 @@ public class SelectTutorielController extends ManageController {
         }
     }
 
-
-    // Appliquer le style et l'image appropriés à un niveau en fonction de son état
     /**
      * Appliquer le style et l'image appropriés à un niveau en fonction de son état
      * @param level : la HBox représentant le niveau à mettre à jour

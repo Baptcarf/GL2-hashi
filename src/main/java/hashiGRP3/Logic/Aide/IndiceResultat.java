@@ -3,10 +3,12 @@ package hashiGRP3.Logic.Aide;
 
 
 
+//Imports
 import java.util.Optional;
 
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Pont;
+
 
 
 /** Classe résultat d'une technique et les ponts concernés.*/
@@ -22,15 +24,16 @@ public class IndiceResultat {
 	private final Optional<EtatDuPont> etatSuggere;
 	private final boolean estInterdit;
 
+	/** Constructeur de classe */
         public IndiceResultat(String nomTechnique, String explication, NiveauDifficulte difficulte,
                               Optional<Pont> pontSuggere, Optional<EtatDuPont> etatSuggere,
                               boolean estInterdit) {
-        this.nomTechnique = nomTechnique;
-        this.explication = explication;
-        this.difficulte = difficulte;
-        this.pontSuggere = pontSuggere;
-        this.etatSuggere = etatSuggere;
-        this.estInterdit = estInterdit;
+		this.nomTechnique = nomTechnique;
+		this.explication = explication;
+		this.difficulte = difficulte;
+		this.pontSuggere = pontSuggere;
+		this.etatSuggere = etatSuggere;
+		this.estInterdit = estInterdit;
     }
 
     /**

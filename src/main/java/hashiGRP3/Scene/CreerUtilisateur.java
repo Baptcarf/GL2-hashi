@@ -25,6 +25,7 @@ import hashiGRP3.DatabaseManager;
 /** Classe d'une fenêtre pop-up pour la création d'un utilisateur. */
 public class CreerUtilisateur {
 
+    /** Structure d'un résultat de pop-up*/
     public record Result(String pseudo, Color color, boolean isNewPlayer) {}
 
     private final TextField pseudoField = new TextField();
@@ -32,6 +33,10 @@ public class CreerUtilisateur {
     private final CheckBox cbField = new CheckBox();
     private final Label messageLabel = new Label();
 
+    /** 
+     * Pop-up pour créer un utilisateur
+     * @return Une option au cas où le joueur annule la création.
+     */
     public Optional<Result> showAndWait(Window parent, DatabaseManager db) {
 
         // Creer la fenetre

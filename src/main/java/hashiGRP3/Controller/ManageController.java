@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import hashiGRP3.SceneManager;
-import hashiGRP3.Logic.General;
 
 /**
  * Classe parent des controleurs.

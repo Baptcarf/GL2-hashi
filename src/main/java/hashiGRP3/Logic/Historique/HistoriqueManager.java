@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.EnumSet;
 
-import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Pont;
@@ -26,7 +25,7 @@ import hashiGRP3.Logic.Pont;
  */
 public class HistoriqueManager {
 
-    /* Classe d'action à enregistrer */
+    /** Classe d'action à enregistrer */
     private static class Action {
         final Pont pont;
         final EtatDuPont etatAvant;
@@ -70,8 +69,7 @@ public class HistoriqueManager {
 
         /**
          * Retire le mode TEMPORAIRE de l'action si celui-ci est présent.
-         * * @return {@code true} si le mode a été retiré, {@code false} s'il n'était
-         * pas présent.
+         * @return {@code true} si le mode a été retiré, {@code false} s'il n'était pas présent.
          */
         public Boolean retireTemporaire() {
             if (modes.contains(Mode.TEMPORAIRE)) {
@@ -119,6 +117,7 @@ public class HistoriqueManager {
      * @param pont  Le pont sur lequel l'action a été faite.
      * @param avant L'etat du pont avant l'action.
      * @param apres L'etat du pont après l'action.
+     * @param modes Le mode de l'action (conctrète / hypothèse)
      */
     public void ajouterActionNotSave(Pont pont, EtatDuPont avant, EtatDuPont apres, EnumSet<Mode> modes) {
         undoStack.push(new Action(pont, avant, apres, modes));
@@ -164,8 +163,7 @@ public class HistoriqueManager {
      * et l'action est remise dans la pile d'annulation.
      * </p>
      * 
-     * @return {@code true} si une action a été rétablie, {@code false} si la pile
-     *         redo est vide.
+     * @return {@code true} si une action a été rétablie, {@code false} si la pile redo est vide.
      */
     public boolean redo() {
         if (redoStack.isEmpty())
@@ -180,7 +178,6 @@ public class HistoriqueManager {
 
     /**
      * Renvoie si l'historique est vide ou non.
-     * 
      * @return bool
      */
     public boolean isEmpty() {
@@ -189,7 +186,6 @@ public class HistoriqueManager {
 
     /**
      * Renvoie si l'historique des anciens mouvements est vide.
-     * 
      * @return bool
      */
     public boolean isUndoEmpty() {
@@ -198,7 +194,6 @@ public class HistoriqueManager {
 
     /**
      * Renvoie si l'historique des mouvements annulés est vide.
-     * 
      * @return bool
      */
     public boolean isRedoEmpty() {
@@ -238,5 +233,4 @@ public class HistoriqueManager {
         }
         redoStack.clear();
     }
-
 }

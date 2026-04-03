@@ -28,8 +28,7 @@ import javafx.scene.layout.VBox;
 public class SelectGrilleController extends ManageController {
 
     /**
-     * Gestionnaire de base de données pour accéder aux informations sur les
-     * grilles.
+     * Gestionnaire de base de données pour accéder aux informations sur les grilles.
      */
     private DatabaseManager databaseManager = new DatabaseManager();
     private Button currentlySelectedButton = null;
@@ -52,33 +51,23 @@ public class SelectGrilleController extends ManageController {
     @FXML
     private Label labelTempsPerso;
 
-    /**
-     * Label affichant le score 1 dans le leaderboard pour la grille sélectionnée.
-     */
+    /** Label affichant le score 1 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore1;
 
-    /**
-     * Label affichant le score 2 dans le leaderboard pour la grille sélectionnée.
-     */
+    /** Label affichant le score 2 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore2;
 
-    /**
-     * Label affichant le score 3 dans le leaderboard pour la grille sélectionnée.
-     */
+    /** Label affichant le score 3 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore3;
 
-    /**
-     * Label affichant le score 4 dans le leaderboard pour la grille sélectionnée.
-     */
+    /** Label affichant le score 4 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore4;
 
-    /**
-     * Label affichant le score 5 dans le leaderboard pour la grille sélectionnée.
-     */
+    /** Label affichant le score 5 dans le leaderboard pour la grille sélectionnée. */
     @FXML
     private Label labelScore5;
 
@@ -252,8 +241,7 @@ public class SelectGrilleController extends ManageController {
             score.setManaged(true);
         }
 
-        // Utiliser un StackPane pour superposer le score sur le bouton sans affecter la
-        // hauteur
+        //Utiliser un StackPane pour superposer le score sur le bouton sans affecter la hauteur
         StackPane stackPane = new StackPane();
         stackPane.getChildren().add(bouton);
         stackPane.getChildren().add(score);
@@ -336,6 +324,7 @@ public class SelectGrilleController extends ManageController {
         this.changeScene(event);
     }
 
+    /** Fonction d'aide pour formater le score */
     private String formatScore(int score) {
         int minutes = score / 60;
         int secondes = score % 60;

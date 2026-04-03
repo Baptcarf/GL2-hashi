@@ -1,5 +1,8 @@
+//Attribut au paquet
 package hashiGRP3.Logic.Aide;
 
+
+//Import
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,6 +17,8 @@ import hashiGRP3.Logic.EtatDuPont;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.Pont;
+
+
 
 /**
  * Utilitaires pour l'analyse des graphes de ponts du Hashi.
@@ -71,6 +76,7 @@ public class GraphUtils {
         return clone;
     }
 
+    /** Wrapper function ?? */
     public static Set<Ile> composanteConnexe(Ile ileDépart, Hashi hashi) {
         return composanteConnexe(ileDépart, hashi, null);
     }
@@ -109,6 +115,7 @@ public class GraphUtils {
         return composante;
     }
 
+    /** Wrapper function ??*/
     public static boolean estConnexe(Hashi hashi) {
         return estConnexe(hashi, null);
     }

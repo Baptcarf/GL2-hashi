@@ -3,7 +3,6 @@ package hashiGRP3.Controller;
 
 
 //Imports
-import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import java.io.InputStream;
 
@@ -41,9 +40,12 @@ public class TechniqueController extends ManageController {
     @FXML
     private Label titleLabel;
 
+    /** Temps lorsque le chronomètre à était démarré */
     protected double startup;
+    /** Temps depuis que le chronomètre à était démarré */
     protected double elapsedBefore;
 
+    /** ??? */
     private boolean coteGrille = false;
 
     /**
