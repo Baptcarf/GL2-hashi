@@ -567,6 +567,20 @@ public class GrilleController extends ManageController {
             question.setWrappingWidth(180);
             Button btnYes = new Button("Oui");
             Button btnNo = new Button("Non");
+
+            btnYes.setOnAction(e -> {
+                General.getHashi().retourEtatCorrect();
+                drawGrid(hashi, gamePane.getWidth());
+                sidePanel.getChildren().clear();
+
+                onCheck = false;
+            });
+
+            btnNo.setOnAction(e -> {
+                sidePanel.getChildren().clear();
+                onCheck = false;
+            });
+
             btnYes.setStyle("-fx-base: #f0f0f0;");
             btnNo.setStyle("-fx-base: #f0f0f0;");
             btnYes.setPrefWidth(80);
