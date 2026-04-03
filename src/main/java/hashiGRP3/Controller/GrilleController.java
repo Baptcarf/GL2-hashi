@@ -10,7 +10,6 @@ import java.util.List;
 
 import hashiGRP3.Logic.Aide.IndiceResultat;
 import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.TechniqueIsolationIle;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
@@ -221,6 +220,10 @@ public class GrilleController extends ManageController {
             parent.layoutBoundsProperty().addListener(boundsListener);
 
             if (!tuto) {
+                timer.setVisible(true);
+                checkButton.setVisible(true);
+                hintButton.setVisible(true);
+                hypothesisButton.setVisible(true);
                 double savedScore = General.getDb().checkScorePartie();
                 General.resetTimer();
                 General.setElapsedTime(savedScore);
@@ -230,6 +233,7 @@ public class GrilleController extends ManageController {
                 checkButton.setVisible(false);
                 hintButton.setVisible(false);
                 hypothesisButton.setVisible(false);
+                tuto = false;
             }
             System.out.println(this.startup);
 
