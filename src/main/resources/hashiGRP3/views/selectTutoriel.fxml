@@ -28,7 +28,7 @@
                         <Label styleClass="section-title" text="Les bases" />
 
                         <HBox alignment="CENTER" spacing="10" styleClass="level-line">
-                            <Button text="Règles du jeu" />
+                            <Button onAction="#lancerRegles" text="Règles du jeu" userData="grilledujeu" />
                             <ImageView fitHeight="20" fitWidth="20" preserveRatio="true" />
                         </HBox>
 

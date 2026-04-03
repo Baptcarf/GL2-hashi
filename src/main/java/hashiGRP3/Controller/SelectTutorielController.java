@@ -26,8 +26,8 @@ import hashiGRP3.Logic.General;
 public class SelectTutorielController extends ManageController {
     
     //Defines
-    private static final int NON_ACTIVE_BUTTON = 2;
-    private static final int ACTIVE_BUTTON = 13;
+    private static final int NON_ACTIVE_BUTTON = 0;
+    private static final int ACTIVE_BUTTON = 15;
 
     /** États possibles pour chaque niveau. 
      * LOCKED : niveau bloqué, non accessible
@@ -154,6 +154,15 @@ public class SelectTutorielController extends ManageController {
     private void onLevelClicked(int index) {
         if (states.get(index) == LevelState.LOCKED) return;
         completeLevel(index);
+    }
+
+    @FXML
+    public void lancerRegles(ActionEvent event) {
+        int t = 0; // hashi0.txt
+        General.setNum_grille(t);
+        // index dans la liste des levels = 0 (premier bouton)
+        completeLevel(0);
+        this.changeScene(event);
     }
 
     /** Méthode lorsqu'on appuie sur le bouton de la technique de démarrage pour lancer la grille tutoriel */
