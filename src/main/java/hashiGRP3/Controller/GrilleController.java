@@ -91,7 +91,7 @@ public class GrilleController extends ManageController {
     private Label labelTitreGrille;
 
     private boolean onCheck = false;
-    private List<IndiceResultat> indicesDisponibles = List.of();
+    private java.util.ArrayList<IndiceResultat> indicesDisponibles = new java.util.ArrayList<>();
     private int indiceAffiche = 0;
     private boolean onAide = false;
     private boolean tuto = false;
@@ -526,9 +526,12 @@ public class GrilleController extends ManageController {
     }
 
     /** Méthode appeler lors d'un clique sur le bouton indice */
+
     @FXML
     protected void onHintClick() {
-        indicesDisponibles = moteurIndice.proposerTousLesIndices(hashi);
+        java.util.List<IndiceResultat> nouveauxIndices = moteurIndice.proposerTousLesIndices(hashi);
+        indicesDisponibles.clear();
+        indicesDisponibles.addAll(nouveauxIndices);
         indiceAffiche = 0;
         afficherIndiceCourant();
     }
@@ -537,46 +540,47 @@ public class GrilleController extends ManageController {
         if (!onAide) {
             onAide = true;
             General.addElapsedTime(10.0);
-            Label title = createTitle("Indice");
-                if (indicesDisponibles.isEmpty()) {
-                Text msg = new Text("Aucun indice disponible pour le moment.");
-                updateSidePanel(title, new Separator(), msg);
-                return;
-            }
+        }
+        Label title = createTitle("Indice");
+        if (indicesDisponibles.isEmpty()) {
+            Text msg = new Text("Aucun indice disponible pour le moment.");
+            updateSidePanel(title, new Separator(), msg);
+            return;
+        }
 
-            IndiceResultat indice = indicesDisponibles.get(indiceAffiche);
+        if (indiceAffiche < 0 || indiceAffiche >= indicesDisponibles.size()) {
+            indiceAffiche = 0;
+        }
 
+        IndiceResultat indice = indicesDisponibles.get(indiceAffiche);
         Label compteur = new Label((indiceAffiche + 1) + " / " + indicesDisponibles.size());
-
         Label difficulte = new Label("Difficulté : " + indice.getDifficulte());
+        Label techniqueName = new Label(indice.getNomTechnique());
+        techniqueName.setWrapText(true);
+        Text explication = new Text(indice.getExplication());
+        explication.setWrappingWidth(180);
 
-            Label techniqueName = new Label(indice.getNomTechnique());
-            techniqueName.setWrapText(true);
-
-            Text explication = new Text(indice.getExplication());
-            explication.setWrappingWidth(180);
-    
         Button prevButton = new Button("<-");
         Button nextButton = new Button("->");
 
         prevButton.setOnAction(e -> {
-            indiceAffiche = (indiceAffiche == 0) ? indicesDisponibles.size() - 1 : indiceAffiche - 1;
-            afficherIndiceCourant();
+            if (!indicesDisponibles.isEmpty()) {
+                indiceAffiche = (indiceAffiche - 1 + indicesDisponibles.size()) % indicesDisponibles.size();
+                afficherIndiceCourant();
+            }
         });
 
         nextButton.setOnAction(e -> {
-            indiceAffiche = (indiceAffiche + 1) % indicesDisponibles.size();
-            afficherIndiceCourant();
+            if (!indicesDisponibles.isEmpty()) {
+                indiceAffiche = (indiceAffiche + 1) % indicesDisponibles.size();
+                afficherIndiceCourant();
+            }
         });
 
         HBox navigation = new HBox(10, prevButton, compteur, nextButton);
         navigation.setAlignment(Pos.CENTER);
 
         updateSidePanel(title, new Separator(), navigation, difficulte, techniqueName, explication);
-        } else {
-            onAide = false;
-            sidePanel.getChildren().clear();
-        }
     }
 
     /** ??? */
