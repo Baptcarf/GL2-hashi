@@ -34,6 +34,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -71,6 +72,10 @@ public class GrilleController extends ManageController {
     private Pane gamePane;
     @FXML
     private Label timer;
+    @FXML
+    private Label labelModeTutoriel;
+    @FXML
+    private ImageView chronoImage;
     @FXML
     private Label win;
     @FXML
@@ -221,6 +226,9 @@ public class GrilleController extends ManageController {
                 checkButton.setVisible(true);
                 hintButton.setVisible(true);
                 hypothesisButton.setVisible(true);
+                chronoImage.setVisible(true);
+                labelModeTutoriel.setVisible(false);
+                labelModeTutoriel.setManaged(false);
                 double savedScore = General.getDb().checkScorePartie();
                 General.resetTimer();
                 General.setElapsedTime(savedScore);
@@ -230,6 +238,9 @@ public class GrilleController extends ManageController {
                 checkButton.setVisible(false);
                 hintButton.setVisible(false);
                 hypothesisButton.setVisible(false);
+                chronoImage.setVisible(false);
+                labelModeTutoriel.setVisible(true);
+                labelModeTutoriel.setManaged(true);
             }
             System.out.println(this.startup);
 
