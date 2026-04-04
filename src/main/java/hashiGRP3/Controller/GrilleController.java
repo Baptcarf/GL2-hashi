@@ -177,35 +177,35 @@ public class GrilleController extends ManageController {
     }
 
     /** Charge la grille avec les niveaux */
-    private void chargerGrille() {
+    private void chargerGrille(boolean tuto) {
         int grid_num = General.getNum_grille();
 
         if (labelTitreGrille != null) {
-            if (grid_num == 0) {
+            if (tuto) {
                 labelTitreGrille.setText("Grille tutoriel " + (grid_num));
-                tuto = true;
-            } else if (grid_num > 15) {
-                labelTitreGrille.setText("Grille tutoriel " + (grid_num) + 15);
-                System.out.println("ici");
-                tuto = true;
-            } else
-                labelTitreGrille.setText("Grille numéro " + grid_num);
-        }
+                this.tuto = true;
+            }
+        } else
+            labelTitreGrille.setText("Grille numéro " + grid_num);
 
         // Si grille non tutoriel alors calculer index
         String resourcePath = "-1";
-        if (grid_num == 0) {
-            // Règles du jeu : hashi0.txt dans Grille_Tutoriel
-            resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi0.txt";
-        } else if (grid_num <= 15) {
+        if (tuto) {
+            if (grid_num == 0) {
+                // Règles du jeu : hashi0.txt dans Grille_Tutoriel
+                resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi0.txt";
+            }
+
+            else {
+                int numGrille = General.getNum_grille();
+                resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi" + numGrille + ".txt";
+            }
+        } else {
             int folderIndex = (grid_num - 1) / 5;
             String[] folders = { "7x7", "10x10", "12x12" };
             String folder = folders[folderIndex];
             int fileNumber = ((grid_num - 1) % 5) + 1;
             resourcePath = "/hashiGRP3/" + folder + "/hashi" + fileNumber + ".txt";
-        } else {
-            int fileNumber = grid_num - 15;
-            resourcePath = "/hashiGRP3/Grille_Tutoriel/hashi" + fileNumber + ".txt";
         }
 
         try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
@@ -268,12 +268,23 @@ public class GrilleController extends ManageController {
                 this.start_timer();
             } else {
                 timer.setVisible(false);
-                checkButton.setVisible(false);
-                hintButton.setVisible(false);
-                hypothesisButton.setVisible(false);
-                chronoImage.setVisible(false);
                 labelModeTutoriel.setVisible(true);
                 labelModeTutoriel.setManaged(true);
+                chronoImage.setVisible(false);
+                if (grid_num == 0) {
+
+                    checkButton.setVisible(true);
+                    hintButton.setVisible(true);
+                    hypothesisButton.setVisible(true);
+
+                } else {
+
+                    checkButton.setVisible(false);
+                    hintButton.setVisible(false);
+                    hypothesisButton.setVisible(false);
+
+                }
+
             }
             System.out.println(this.startup);
 
@@ -294,9 +305,9 @@ public class GrilleController extends ManageController {
 
     /** Rafraichie la grille du hashi */
     @Override
-    public void refreshGrilles() {
+    public void refreshGrilles(boolean tuto) {
         sidePanel.getChildren().clear();
-        chargerGrille();
+        chargerGrille(tuto);
         if (General.getHashi().getHypothese()) {
             onHypothesisClick();
         }
@@ -341,7 +352,8 @@ public class GrilleController extends ManageController {
             double score = stop_timer();
             General.getDb().updateScorePartie(score);
             General.getDb().changeStatutPartie(2);
-            win.setVisible(true);
+            if (!tuto)
+                win.setVisible(true);
             showWin();
         }
     }
@@ -376,32 +388,36 @@ public class GrilleController extends ManageController {
 
     /** Affiche une pop-op lorsqu'on gagne */
     private void showWin() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        if (!tuto) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-        // Attacher la pop-up à la fenêtre principale (mac)
-        if (gamePane.getScene() != null && gamePane.getScene().getWindow() != null) {
-            alert.initOwner(gamePane.getScene().getWindow());
+            // Attacher la pop-up à la fenêtre principale (mac)
+            if (gamePane.getScene() != null && gamePane.getScene().getWindow() != null) {
+                alert.initOwner(gamePane.getScene().getWindow());
+            }
+
+            alert.setTitle("Victoire !");
+            alert.setHeaderText("Félicitations, vous avez réussi la grille !");
+            alert.setContentText("Que souhaitez-vous faire ?");
+
+            ButtonType btnRejouer = new ButtonType("Rejouer", ButtonData.OK_DONE);
+            ButtonType btnMenu = new ButtonType("Retour au menu", ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(btnRejouer, btnMenu);
+
+            alert.showAndWait().ifPresent(result -> {
+                if (result == btnRejouer) {
+                    onResetClick();
+                } else if (result == btnMenu) {
+                    Button dummyButton = new Button();
+                    dummyButton.setUserData("selectGrille");
+                    ActionEvent event = new ActionEvent(dummyButton, null);
+                    retourArriere(event);
+                }
+            });
+
         }
 
-        alert.setTitle("Victoire !");
-        alert.setHeaderText("Félicitations, vous avez réussi la grille !");
-        alert.setContentText("Que souhaitez-vous faire ?");
-
-        ButtonType btnRejouer = new ButtonType("Rejouer", ButtonData.OK_DONE);
-        ButtonType btnMenu = new ButtonType("Retour au menu", ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(btnRejouer, btnMenu);
-
-        alert.showAndWait().ifPresent(result -> {
-            if (result == btnRejouer) {
-                onResetClick();
-            } else if (result == btnMenu) {
-                Button dummyButton = new Button();
-                dummyButton.setUserData("selectGrille");
-                ActionEvent event = new ActionEvent(dummyButton, null);
-                retourArriere(event);
-            }
-        });
     }
 
     /** Dessine le cadrillage */

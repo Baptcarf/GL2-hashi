@@ -186,8 +186,12 @@ public class SelectGrilleController extends ManageController {
         else
             labelNombreIle.setText("Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
 
-        labelTempsPerso.setText(
-                "Meilleur score : " + formatScore(databaseManager.obtenirScore(numeroGrille, getUtilisateur())));
+        int score = databaseManager.obtenirScore(numeroGrille, getUtilisateur());
+        if (score == -1) {
+            labelTempsPerso.setText("Meilleur score : Aucun score");
+        } else {
+            labelTempsPerso.setText("Meilleur score : " + formatScore(score));
+        }
 
         chargerLeaderboard(numeroGrille);
     }

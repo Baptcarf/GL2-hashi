@@ -1,8 +1,6 @@
 //Attribut au packet
 package hashiGRP3;
 
-
-
 //Imports
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
@@ -17,8 +15,6 @@ import java.util.ArrayList;
 
 import hashiGRP3.Controller.*;
 
-
-
 /**
  * Classe de gestion des fenêtres.
  */
@@ -30,7 +26,8 @@ public class SceneManager {
     private Composante currentScene = null;
     private boolean boolFull = false;
 
-    //Un seul conteneur racine et une seule scène pour éviter le bug fullscreen sur macOS
+    // Un seul conteneur racine et une seule scène pour éviter le bug fullscreen sur
+    // macOS
     private final StackPane rootContainer = new StackPane();
     private final Scene mainScene = new Scene(rootContainer, 1600, 900);
 
@@ -42,7 +39,7 @@ public class SceneManager {
     SceneManager(Stage stage) {
         this.stage = stage;
 
-        //On set la scène unique une seule fois ici, et on ajoute le CSS global
+        // On set la scène unique une seule fois ici, et on ajoute le CSS global
         mainScene.getStylesheets().add(getClass().getResource("/hashiGRP3/style/style.css").toExternalForm());
         stage.setScene(mainScene);
     }
@@ -71,7 +68,8 @@ public class SceneManager {
                 manageController.setSceneManager(this);
             }
 
-            // On stocke le Parent (contenu FXML) directement, plus besoin de créer une scene
+            // On stocke le Parent (contenu FXML) directement, plus besoin de créer une
+            // scene
             allScene.add(new Composante(root, name, (ManageController) controller));
 
         } catch (IOException ex) {
@@ -113,6 +111,8 @@ public class SceneManager {
         Composante c;
         if (name.equals("techniqueWithChrono")) {
             c = findComposant("technique");
+        } else if (name.equals("grilledujeuTuto")) {
+            c = findComposant("grilledujeu");
         } else {
             c = findComposant(name);
         }
@@ -149,7 +149,12 @@ public class SceneManager {
 
         if (name.equals("grilledujeu")) {
             Composante comp = findComposant("grilledujeu");
-            comp.getController().refreshGrilles();
+            comp.getController().refreshGrilles(false);
+        }
+
+        if (name.equals("grilledujeuTuto")) {
+            Composante comp = findComposant("grilledujeu");
+            comp.getController().refreshGrilles(true);
         }
 
         // On swap uniquement le contenu dans le StackPane racine
@@ -213,6 +218,7 @@ public class SceneManager {
 
         /**
          * Getter du contenu FXML
+         * 
          * @return le Parent racine du FXML
          */
         public Parent getRoot() {
@@ -221,6 +227,7 @@ public class SceneManager {
 
         /**
          * Getter du nom de la scène
+         * 
          * @return le nom de la scène
          */
         public String getNom() {

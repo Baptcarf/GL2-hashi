@@ -344,19 +344,20 @@ public class DatabaseManager {
      */
     public int obtenirScore(int numeroGrille, String pseudo) {
 
-        int meilleurScore = 0;
+        int meilleurScore = -1;
         int id_utilisateur = getIdUtilisateur(pseudo);
 
         // Si utilisateur inexistant
         if (id_utilisateur == -1) {
-            return 0;
+            return -1;
         }
 
         String sql = "SELECT Partie.maxScore AS meilleurScore " +
                 "FROM Partie " +
                 "JOIN Grille ON Partie.id_grille = Grille.id_grille " +
                 "WHERE Grille.numeroGrille = ? " +
-                "AND Partie.id_utilisateur = ? ";
+                "AND Partie.id_utilisateur = ? " +
+                "AND Partie.finiUneFois = true";
 
         try (Connection conn = DriverManager.getConnection(URL);
                 PreparedStatement ps = conn.prepareStatement(sql)) {

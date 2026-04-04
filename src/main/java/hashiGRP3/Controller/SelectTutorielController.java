@@ -116,9 +116,6 @@ public class SelectTutorielController extends ManageController {
      */
     private void loadProgressionFromDatabase() {
         try {
-            while (General.getDb().obtenirAvancementTutoriel() < 1) {
-                General.getDb().incrementerAvancementTutoriel(1);
-            }
             int avancement = General.getDb().obtenirAvancementTutoriel();
 
             for (int i = 0; i < avancement && i < states.size(); i++) {
@@ -139,7 +136,8 @@ public class SelectTutorielController extends ManageController {
     @FXML
     public void lancerRegles(ActionEvent event) {
         General.setNum_grille(0);
-        getSceneManager().changeScene("tutodujeu");
+        completeLevel(0);
+        getSceneManager().changeScene("grilledujeuTuto");
     }
 
     @FXML
@@ -152,9 +150,9 @@ public class SelectTutorielController extends ManageController {
         General.setId_grille(index);
         General.setNum_grille(index); // Set num_grille for tutorial loading
 
-        completeLevel(index + 1);
-        System.out.println("Choix du niveau du tutoriel : " + (index + 1));
-        getSceneManager().changeScene("tutodujeu");
+        completeLevel(index);
+        System.out.println("Choix du niveau du tutoriel : " + (index));
+        getSceneManager().changeScene("grilledujeuTuto");
     }
 
     /**
