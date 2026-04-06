@@ -31,7 +31,6 @@ public class SelectGrilleController extends ManageController {
      * Gestionnaire de base de données pour accéder aux informations sur les
      * grilles.
      */
-    private DatabaseManager databaseManager = new DatabaseManager();
     private Button currentlySelectedButton = null;
 
     /* ===================== LABELS ===================== */
@@ -180,13 +179,13 @@ public class SelectGrilleController extends ManageController {
         imageGrilleSelected.setVisible(true);
 
         // Check le nombre d'ile, placer un holder au cas ou
-        int i = databaseManager.obtenirNombreIle(numeroGrille);
+        int i = General.getDb().obtenirNombreIle(numeroGrille);
         if (i == -1)
             labelNombreIle.setText("Veuillez charger là grille.");
         else
-            labelNombreIle.setText("Nombre d'île : " + databaseManager.obtenirNombreIle(numeroGrille));
+            labelNombreIle.setText("Nombre d'île : " + General.getDb().obtenirNombreIle(numeroGrille));
 
-        int score = databaseManager.obtenirScore(numeroGrille, getUtilisateur());
+        int score = General.getDb().obtenirScore(numeroGrille);
         if (score == -1) {
             labelTempsPerso.setText("Meilleur score : Aucun score");
         } else {
@@ -252,9 +251,9 @@ public class SelectGrilleController extends ManageController {
 
         score.setVisible(false);
         score.setManaged(false);
-        if (databaseManager.grilleCompletee(numeroGrille, getUtilisateur())) {
+        if (General.getDb().grilleCompletee(numeroGrille)) {
             score.setText("score : " +
-                    formatScore(databaseManager.obtenirScore(numeroGrille, getUtilisateur())));
+                    formatScore(General.getDb().obtenirScore(numeroGrille)));
             score.setVisible(true);
             score.setManaged(true);
         }
@@ -289,7 +288,7 @@ public class SelectGrilleController extends ManageController {
      */
     private void chargerLeaderboard(int numeroGrille) {
         try {
-            java.util.List<String> top5 = databaseManager.obtenirTop5ScoresParGrille(numeroGrille);
+            java.util.List<String> top5 = General.getDb().obtenirTop5ScoresParGrille(numeroGrille);
             Label[] labels = { labelScore1, labelScore2, labelScore3, labelScore4, labelScore5 };
 
             // 1. On vide d'abord les labels pour éviter l'affichage d'anciens scores

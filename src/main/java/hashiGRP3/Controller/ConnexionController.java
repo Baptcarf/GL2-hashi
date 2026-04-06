@@ -1,8 +1,6 @@
 //Attribut au packet
 package hashiGRP3.Controller;
 
-
-
 //Imports
 import java.util.List;
 
@@ -31,12 +29,11 @@ import javafx.stage.Stage;
  */
 public class ConnexionController extends ManageController {
 
-	/** Compteur du nombre de comptes utilisateurs affichés. */
+    /** Compteur du nombre de comptes utilisateurs affichés. */
     private int nbCount;
-    
+
     /** Indique si le mode suppression est activé. */
     private boolean sup = false;
-
 
     /** Conteneur horizontal pour les cercles de sélection des utilisateurs. */
     @FXML
@@ -54,9 +51,9 @@ public class ConnexionController extends ManageController {
     @FXML
     private Button supprimer;
 
-
     /**
      * Initialise le gestionnaire de scène et charge tous les comptes utilisateurs.
+     * 
      * @param sm le gestionnaire de scène à utiliser
      */
     public void setSceneManager(SceneManager sm) {
@@ -80,7 +77,8 @@ public class ConnexionController extends ManageController {
 
     /**
      * Crée une boîte contenant un cercle de couleur et un label avec le pseudo.
-     * @param c le cercle de couleur du compte
+     * 
+     * @param c   le cercle de couleur du compte
      * @param val le pseudo de l'utilisateur
      */
     private void createBoxUser(Circle c, String val) {
@@ -102,6 +100,7 @@ public class ConnexionController extends ManageController {
      * Si le mode suppression est activé, clique pour supprimer le compte.
      * Sinon, clique pour se connecter au compte.
      * </p>
+     * 
      * @param color la couleur du cercle au format hexadécimal
      * @return le cercle créé avec les gestionnaires d'événements
      */
@@ -140,9 +139,6 @@ public class ConnexionController extends ManageController {
         return circle;
     }
 
-
-
-
     /**
      * Cache le label d'avertissement de limite de comptes.
      */
@@ -153,6 +149,7 @@ public class ConnexionController extends ManageController {
 
     /**
      * Affiche une boîte de dialogue pour créer un nouvel utilisateur.
+     * 
      * @param c le cercle associé au nouveau compte
      */
     private void creerUtilisateur(Circle c) {
@@ -177,7 +174,6 @@ public class ConnexionController extends ManageController {
                 getSceneManager().changeScene("accueil");
             }
         });
-    
 
     }
 
@@ -187,42 +183,44 @@ public class ConnexionController extends ManageController {
      */
     @FXML
     private void addCount() {
-            if (nbCount < 5) {
-                    endSupp();
+        if (nbCount < 5) {
+            endSupp();
 
-                    Circle circle = createCircle("#eaf5ff");
+            Circle circle = createCircle("#eaf5ff");
 
-                    this.creerUtilisateur(circle);
+            this.creerUtilisateur(circle);
 
-            }
+        }
 
     }
 
     /**
      * Convertit une couleur JavaFX en format hexadécimal CSS.
+     * 
      * @param c la couleur à convertir
      * @return la couleur au format hexadécimal
      */
     public String colorToString(Color c) {
 
-            String couleurCSS = String.format("#%02X%02X%02X",
-                            (int) (c.getRed() * 255),
-                            (int) (c.getGreen() * 255),
-                            (int) (c.getBlue() * 255));
+        String couleurCSS = String.format("#%02X%02X%02X",
+                (int) (c.getRed() * 255),
+                (int) (c.getGreen() * 255),
+                (int) (c.getBlue() * 255));
 
-            return couleurCSS;
+        return couleurCSS;
 
     }
 
     /**
      * Applique une couleur de fond à la scène.
+     * 
      * @param c la couleur à appliquer
      */
     private void appliqueCouleur(Color c) {
         String couleurCSS = colorToString(c);
 
         String value = String.format("-fx-background-color:%s;", couleurCSS);
-                    hbox.getScene().getRoot().setStyle(value); 
+        hbox.getScene().getRoot().setStyle(value);
     }
 
     /**
@@ -230,20 +228,21 @@ public class ConnexionController extends ManageController {
      */
     @FXML
     private void supCompte() {
-            appliqueCouleur(Color.web("#E57373"));
-            sup = true;
+        appliqueCouleur(Color.web("#E57373"));
+        sup = true;
     }
 
     /**
      * Désactive le mode suppression de compte et restaure la couleur de fond.
      */
     private void endSupp() {
-            appliqueCouleur(Color.WHITE);
-            sup = false;
+        appliqueCouleur(Color.WHITE);
+        sup = false;
     }
 
     /**
      * Affiche une boîte de dialogue de confirmation pour supprimer un compte.
+     * 
      * @param circle le cercle du compte à supprimer
      */
     private void supprimerCompte(Circle circle) {
@@ -252,7 +251,7 @@ public class ConnexionController extends ManageController {
         s.setTitle("Supprimer un compte");
 
         s.setOnCloseRequest(ev -> {
-                endSupp();
+            endSupp();
         });
 
         VBox v = new VBox();
@@ -272,31 +271,31 @@ public class ConnexionController extends ManageController {
         v.getChildren().addAll(l, h);
 
         bn.setOnAction(ev -> {
-                s.close();
-                endSupp();
+            s.close();
+            endSupp();
         });
 
         bo.setOnAction(ev -> {
-                DatabaseManager db = General.getDb();
+            DatabaseManager db = General.getDb();
 
-                VBox parentVBox = (VBox) circle.getParent();
-                Label lab = null;
+            VBox parentVBox = (VBox) circle.getParent();
+            Label lab = null;
 
-                // Parcours les enfants du VBox
-                for (Node node : parentVBox.getChildren()) {
-                        if (node instanceof Label) {
-                                lab = (Label) node;
-                                break;
-                        }
+            // Parcours les enfants du VBox
+            for (Node node : parentVBox.getChildren()) {
+                if (node instanceof Label) {
+                    lab = (Label) node;
+                    break;
                 }
+            }
 
-                db.deleteUser(lab.getText());
+            db.deleteUser(lab.getText());
 
-                hbox.getChildren().remove(circle.getParent());
-                nbCount--;
-                s.close();
-                endSupp();
-                creer.setFill(Color.web("#eaf5ff"));
+            hbox.getChildren().remove(circle.getParent());
+            nbCount--;
+            s.close();
+            endSupp();
+            creer.setFill(Color.web("#eaf5ff"));
         });
 
         Scene sn = new Scene(v);
@@ -306,12 +305,13 @@ public class ConnexionController extends ManageController {
     }
 
     /**
-     * Affiche un message d'avertissement si le nombre maximum de comptes est atteint.
+     * Affiche un message d'avertissement si le nombre maximum de comptes est
+     * atteint.
      */
     @FXML
     private void afficheMessage() {
         if (nbCount == 5) {
-                labelCreer.setVisible(true);
+            labelCreer.setVisible(true);
         }
     }
 }

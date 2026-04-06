@@ -342,10 +342,10 @@ public class DatabaseManager {
      * 
      * @return -1 si on a aucun score.
      */
-    public int obtenirScore(int numeroGrille, String pseudo) {
+    public int obtenirScore(int numeroGrille) {
 
         int meilleurScore = -1;
-        int id_utilisateur = getIdUtilisateur(pseudo);
+        int id_utilisateur = General.getIdUtilisateur();
 
         // Si utilisateur inexistant
         if (id_utilisateur == -1) {
@@ -383,9 +383,9 @@ public class DatabaseManager {
      * 
      * @return true si la grille est complétée par le joueur (via pseudo)
      */
-    public boolean grilleCompletee(int numeroGrille, String pseudo) {
+    public boolean grilleCompletee(int numeroGrille) {
 
-        int id_utilisateur = getIdUtilisateur(pseudo);
+        int id_utilisateur = General.getIdUtilisateur();
 
         // Si l'utilisateur n'existe pas
         if (id_utilisateur == -1) {
