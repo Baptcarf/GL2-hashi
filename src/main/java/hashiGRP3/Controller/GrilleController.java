@@ -766,6 +766,7 @@ public class GrilleController extends ManageController {
             return;
         if (etapeCourante >= etapesTutoriel.size()) {
             getSceneManager().changeScene("selectTutoriel");
+            tuto = false;
             return;
         }
 
