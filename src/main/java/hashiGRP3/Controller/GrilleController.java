@@ -164,11 +164,11 @@ public class GrilleController extends ManageController {
     /** Charge la grille avec les niveaux */
     private void chargerGrille(boolean tuto) {
         int grid_num = General.getNum_grille();
-        
-        if (tuto){
-                labelTitreGrille.setText("Grille tutoriel " + (grid_num));
-                this.tuto = true;
-        }else
+
+        if (tuto) {
+            labelTitreGrille.setText("Grille tutoriel " + (grid_num));
+            this.tuto = true;
+        } else
             labelTitreGrille.setText("Grille numéro " + grid_num);
 
         // Si grille non tutoriel alors calculer index
