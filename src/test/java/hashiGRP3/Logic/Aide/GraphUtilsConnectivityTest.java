@@ -30,7 +30,6 @@ public class GraphUtilsConnectivityTest {
         hashi.initialisationToutLesConflits();
 
         Pont pa = a.getPont(Direction.BAS);
-        Pont pb = b.getPont(Direction.DROITE);
 
         // Activer A-B seulement
         pa.setEtatActuel(EtatDuPont.SIMPLE);

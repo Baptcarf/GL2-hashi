@@ -24,10 +24,6 @@ import javafx.scene.layout.VBox;
  */
 public class SelectTutorielController extends ManageController {
 
-    // Defines
-    private static final int NON_ACTIVE_BUTTON = 2;
-    private static final int ACTIVE_BUTTON = 13;
-
     /**
      * États possibles pour chaque niveau.
      * LOCKED : niveau bloqué, non accessible

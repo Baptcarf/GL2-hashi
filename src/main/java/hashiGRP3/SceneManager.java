@@ -24,7 +24,6 @@ public class SceneManager {
     private Stage stage;
     private Stack<Composante> history = new Stack<>();
     private Composante currentScene = null;
-    private boolean boolFull = false;
 
     // Un seul conteneur racine et une seule scène pour éviter le bug fullscreen sur
     // macOS
@@ -170,7 +169,6 @@ public class SceneManager {
      * @param value : la nouvelle valeur
      */
     public void setFullScreen(boolean value) {
-        boolFull = value;
         stage.setFullScreen(value);
     }
 

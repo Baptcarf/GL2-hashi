@@ -14,12 +14,10 @@ import hashiGRP3.Logic.InOut.Import;
 import hashiGRP3.Logic.Pont;
 import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
-import javafx.animation.AnimationTimer;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -47,13 +45,20 @@ public class TutoController extends ManageController {
     private List<EtapeTutoriel> etapesTutoriel = new ArrayList<>();
     private int etapeCourante = 0;
 
-    @FXML private VBox sidePanel;
-    @FXML private Pane gamePane;
-    @FXML private Label timer;
-    @FXML private Button undoButton;
-    @FXML private Button redoButton;
-    @FXML private Button checkButton;
-    @FXML private Button hypothesisButton;
+    @FXML
+    private VBox sidePanel;
+    @FXML
+    private Pane gamePane;
+    @FXML
+    private Label timer;
+    @FXML
+    private Button undoButton;
+    @FXML
+    private Button redoButton;
+    @FXML
+    private Button checkButton;
+    @FXML
+    private Button hypothesisButton;
 
     private boolean onCheck = false;
 
@@ -174,7 +179,7 @@ public class TutoController extends ManageController {
         dessinerGrille(nbColonnes, nbLignes, cellSize);
         dessinerPonts(hashi, cellSize);
         dessinerIle(hashi, cellSize);
-        
+
         if (hashi.estGagne()) {
             Label title = createTitle("Félicitations !");
             Text msg = new Text("Vous avez terminé ce tutoriel !");
@@ -229,7 +234,8 @@ public class TutoController extends ManageController {
 
     /** Affiche l'étape courante dans le panneau latéral */
     private void afficherEtapeTutoriel() {
-        if (etapesTutoriel.isEmpty() || etapeCourante >= etapesTutoriel.size()) return;
+        if (etapesTutoriel.isEmpty() || etapeCourante >= etapesTutoriel.size())
+            return;
 
         EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
 
@@ -252,9 +258,13 @@ public class TutoController extends ManageController {
         updateSidePanel(title, sep, compteur, texte, btnSuivant);
     }
 
-    /** Vérifie si la condition de l'étape courante est remplie et débloque le bouton Suivant */
+    /**
+     * Vérifie si la condition de l'étape courante est remplie et débloque le bouton
+     * Suivant
+     */
     private void verifierEtapeTutoriel() {
-        if (etapesTutoriel.isEmpty() || etapeCourante >= etapesTutoriel.size()) return;
+        if (etapesTutoriel.isEmpty() || etapeCourante >= etapesTutoriel.size())
+            return;
 
         EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
         if (etape.aUneCondition() && etape.estValidee(hashi)) {
@@ -298,8 +308,10 @@ public class TutoController extends ManageController {
         Label title = createTitle("Mode Hypothèse");
         hashi.setModeHypothese(true);
 
-        if (checkButton != null) checkButton.setDisable(true);
-        if (hypothesisButton != null) hypothesisButton.setDisable(true);
+        if (checkButton != null)
+            checkButton.setDisable(true);
+        if (hypothesisButton != null)
+            hypothesisButton.setDisable(true);
 
         Text desc = new Text("Vous êtes en mode hypothèse. Vos coups sont temporaires.");
         desc.setWrappingWidth(180);
@@ -316,18 +328,24 @@ public class TutoController extends ManageController {
             hashi.validerHypothese();
             General.getDb().validerHypothese();
             drawGrid(hashi, gamePane.getWidth());
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
-            if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
+            if (checkButton != null)
+                checkButton.setDisable(false);
+            if (hypothesisButton != null)
+                hypothesisButton.setDisable(false);
+            if (!etapesTutoriel.isEmpty())
+                afficherEtapeTutoriel();
         });
 
         btnCancel.setOnAction(e -> {
             hashi.annulerHypothese();
             General.getDb().annulerHypothese();
             drawGrid(hashi, gamePane.getWidth());
-            if (checkButton != null) checkButton.setDisable(false);
-            if (hypothesisButton != null) hypothesisButton.setDisable(false);
-            if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
+            if (checkButton != null)
+                checkButton.setDisable(false);
+            if (hypothesisButton != null)
+                hypothesisButton.setDisable(false);
+            if (!etapesTutoriel.isEmpty())
+                afficherEtapeTutoriel();
         });
 
         HBox buttonBox = new HBox(10, btnValidate, btnCancel);
@@ -353,21 +371,26 @@ public class TutoController extends ManageController {
                 General.getDb().retourEtatCorrect();
                 drawGrid(hashi, gamePane.getWidth());
                 onCheck = false;
-                if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
+                if (!etapesTutoriel.isEmpty())
+                    afficherEtapeTutoriel();
             });
 
             btnNo.setOnAction(e -> {
                 onCheck = false;
-                if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
-                else sidePanel.getChildren().clear();
+                if (!etapesTutoriel.isEmpty())
+                    afficherEtapeTutoriel();
+                else
+                    sidePanel.getChildren().clear();
             });
 
             HBox actionBox = new HBox(10, btnYes, btnNo);
             updateSidePanel(title, status, new Separator(), question, actionBox);
         } else {
             onCheck = false;
-            if (!etapesTutoriel.isEmpty()) afficherEtapeTutoriel();
-            else sidePanel.getChildren().clear();
+            if (!etapesTutoriel.isEmpty())
+                afficherEtapeTutoriel();
+            else
+                sidePanel.getChildren().clear();
         }
     }
 
@@ -386,7 +409,8 @@ public class TutoController extends ManageController {
     }
 
     private void handleKonamiKey(KeyCode key) {
-        if (konamiActivated) return;
+        if (konamiActivated)
+            return;
         if (key == KONAMI_CODE.get(konamiIndex)) {
             konamiIndex++;
             if (konamiIndex == KONAMI_CODE.size()) {
@@ -405,8 +429,10 @@ public class TutoController extends ManageController {
     @Override
     public void changeScene(ActionEvent event) {
         General.getHashi().setModeHypothese(false);
-        if (checkButton != null) checkButton.setDisable(false);
-        if (hypothesisButton != null) hypothesisButton.setDisable(false);
+        if (checkButton != null)
+            checkButton.setDisable(false);
+        if (hypothesisButton != null)
+            hypothesisButton.setDisable(false);
         super.changeScene(event);
     }
 }

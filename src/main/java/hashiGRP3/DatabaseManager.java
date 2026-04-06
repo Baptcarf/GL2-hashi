@@ -778,29 +778,6 @@ public class DatabaseManager {
 
     }
 
-    /**
-     * Separer les lignes correspondant à des ponts de celle correspondant à des
-     * iles d'un texte donné
-     */
-    private static void separerLignes(String txt, List<String> lignesIles, List<String> lignesPonts) {
-        String[] lignes = txt.split("\n");
-        boolean isIles = true;
-        for (String ligne : lignes) {
-            ligne = ligne.trim();
-            if (ligne.isEmpty())
-                continue;
-            if (ligne.equals("PONTS")) {
-                isIles = false;
-                continue;
-            }
-            if (isIles) {
-                lignesIles.add(ligne);
-            } else {
-                lignesPonts.add(ligne);
-            }
-        }
-    }
-
     /** Valide les coups réalisés lors du mode hypothèse */
     public void validerHypothese() {
         String sql = "UPDATE Coup SET mode_coup = 0 WHERE id_partie = ?";

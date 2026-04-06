@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>hashiGRP3</groupId>
    <artifactId>GL2-hashi</artifactId>
-   <version>1.0-SNAPSHOT</version>
+   <version>1.0</version>
    <name>GL2-hashi</name>
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,7 +12,6 @@
       <javafx.version>21.0.2</javafx.version>
    </properties>
    <dependencies>
-      <!-- JavaFX modules with classifier for Linux -->
       <dependency>
          <groupId>org.openjfx</groupId>
          <artifactId>javafx-base</artifactId>
@@ -52,7 +51,6 @@
    </dependencies>
    <build>
       <plugins>
-         <!-- Compiler plugin -->
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.13.0</version>
@@ -60,7 +58,6 @@
                <release>${maven.compiler.release}</release>
             </configuration>
          </plugin>
-         <!-- Jar plugin with mainClass -->
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
@@ -76,12 +73,13 @@
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                            <mainClass>hashiGRP3.Main</mainClass>
                         </transformer>
+                        <!-- AJOUT : fusionne les drivers JDBC au lieu d'en écraser un -->
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                      </transformers>
                   </configuration>
                </execution>
             </executions>
          </plugin>
-         <!-- JavaFX Maven plugin -->
          <plugin>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-maven-plugin</artifactId>

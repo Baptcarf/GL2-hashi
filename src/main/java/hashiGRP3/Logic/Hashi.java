@@ -27,8 +27,6 @@ public class Hashi {
     private Coordonnees taille = new Coordonnees(0, 0);
     /** Historique de la partie */
     private final HistoriqueManager historique = new HistoriqueManager();
-    /** Id de l'utilisateur en cours */
-    private int idUtilisateur;
     /** True si le modeHypoothese est actif, false sinon */
     private boolean modeHypothese = false;
 
