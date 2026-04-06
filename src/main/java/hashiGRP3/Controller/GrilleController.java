@@ -718,8 +718,10 @@ public class GrilleController extends ManageController {
     private void afficherEtapeTutoriel() {
         if (etapesTutoriel.isEmpty())
             return;
-        if (etapeCourante >= etapesTutoriel.size())
+        if (etapeCourante >= etapesTutoriel.size()) {
+            getSceneManager().changeScene("selectTutoriel");
             return;
+        }
 
         EtapeTutoriel etape = etapesTutoriel.get(etapeCourante);
 
