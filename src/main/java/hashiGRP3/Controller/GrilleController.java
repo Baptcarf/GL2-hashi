@@ -515,7 +515,12 @@ public class GrilleController extends ManageController {
     /** Méthode activer lors d'un clique sur le bouton hypothèse */
     @FXML
     protected void onHypothesisClick() {
+        if (tuto) {
+            return;
+        }
         Label title = createTitle("Mode Hypothèse");
+        onAide = false;
+        onCheck = false;
 
         hashi.setModeHypothese(true);
 
@@ -572,6 +577,10 @@ public class GrilleController extends ManageController {
     /** Méthode appeler lors d'un clique sur le bouton check */
     @FXML
     protected void onCheckClick() {
+        if (tuto) {
+            return;
+        }
+        onAide = false;
         if (onCheck == false) {
             onCheck = true;
             General.addElapsedTime(60.0);
@@ -613,6 +622,10 @@ public class GrilleController extends ManageController {
 
     @FXML
     protected void onHintClick() {
+        if (tuto) {
+            return;
+        }
+        onCheck = false;
         java.util.List<IndiceResultat> nouveauxIndices = moteurIndice.proposerTousLesIndices(hashi);
         indicesDisponibles.clear();
         indicesDisponibles.addAll(nouveauxIndices);
