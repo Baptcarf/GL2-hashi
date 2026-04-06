@@ -342,25 +342,14 @@ public class ScenarioTutoriel {
 
             new EtapeTutoriel(
                 "Technique : saturation moins un",
-                "Quand nbPonts = nbVoisins×2 - 1, l'île a un pont de moins que la saturation totale. " +
+                "Quand une île vaut nbVoisins × 2 - 1, elle a un pont de moins que la saturation totale. " +
                 "Chaque voisin reçoit alors au moins un pont simple. " +
-                "L'île en (2,2) vaut 7 et a 4 voisins (max 8), donc au moins 1 pont vers chacun !"
+                "\nL'île en (2,2) vaut 7 et a 4 voisins (max 8), donc au moins 1 pont vers chacun !"
             ),
 
-            new EtapeTutoriel(
-                "Îles à un seul voisin d'abord",
-                "L'île en (4,0) vaut 1 et n'a qu'un seul voisin : l'île en (2,0). " +
-                "Placez un pont simple entre ces deux îles.",
-                hashi -> {
-                    Ile a = hashi.getIle(4, 0); Ile b = hashi.getIle(2, 0);
-                    if (a == null || b == null) return false;
-                    Pont p = hashi.getPont(a, b);
-                    return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
-                }
-            ),
 
             new EtapeTutoriel(
-                "Île en (6,2)",
+                "Commençons",
                 "L'île en (6,2) vaut 1 et n'a qu'un seul voisin : l'île en (4,2). " +
                 "Placez un pont simple entre ces deux îles.",
                 hashi -> {
@@ -386,7 +375,9 @@ public class ScenarioTutoriel {
             new EtapeTutoriel(
                 "Île en (2,2) — partie 1",
                 "L'île en (2,2) vaut 7 et a 4 voisins. 7 = 4×2-1 donc au moins 1 pont vers chacun. " +
-                "2 ponts sont déjà placés vers l'île en (2,4). " +
+                "2 ponts sont déjà placés vers l'île en (2,4). Il reste 5 ponts pour 3 voisins. " +
+                "Chaque voisin peut recevoir au maximum 2 ponts, donc la répartition est forcée : " +
+                "2 vers (2,0), 2 vers (0,2), 1 vers (4,2). " +
                 "Placez un pont double entre l'île en (2,2) et l'île en (2,0).",
                 hashi -> {
                     Ile a = hashi.getIle(2, 2); Ile b = hashi.getIle(2, 0);
@@ -421,8 +412,9 @@ public class ScenarioTutoriel {
 
             new EtapeTutoriel(
                 "Île en (2,0)",
-                "L'île en (2,0) vaut 5. 1 pont vers l'île en (4,0), 2 vers l'île en (2,2). " +
-                "Il reste 2 ponts vers l'île en (0,0). " +
+                "L'île en (2,0) vaut 5 et a 3 voisins : les îles en (0,0), (2,2) et (4,0). " +
+                "2 ponts vers l'île en (2,2) sont déjà placés. " +
+                "Il reste 3 ponts, un vers l'île en (0,4) et 2 vers l'île en (0,0). " +
                 "Placez un pont double entre ces deux îles.",
                 hashi -> {
                     Ile a = hashi.getIle(2, 0); Ile b = hashi.getIle(0, 0);
@@ -434,8 +426,9 @@ public class ScenarioTutoriel {
 
             new EtapeTutoriel(
                 "Île en (0,0)",
-                "L'île en (0,0) vaut 3. 2 ponts sont déjà placés vers l'île en (2,0). " +
-                "Placez un pont simple entre l'île en (0,0) et l'île en (0,2).",
+                "L'île en (0,0) vaut 3 et a 2 voisins : les îles en (0,2) et (2,0). " +
+                "2 ponts sont déjà placés vers l'île en (2,0). Il reste 1 pont vers l'île en (0,2). " +
+                "Placez un pont simple entre ces deux îles.",
                 hashi -> {
                     Ile a = hashi.getIle(0, 0); Ile b = hashi.getIle(0, 2);
                     if (a == null || b == null) return false;
@@ -443,11 +436,13 @@ public class ScenarioTutoriel {
                     return p != null && p.getEtatActuel() == EtatDuPont.SIMPLE;
                 }
             ),
+            
 
             new EtapeTutoriel(
                 "Félicitations !",
-                "Bravo ! Quand nbPonts = nbVoisins×2-1, au moins 1 pont simple " +
-                "est garanti vers chaque voisin."
+                "Bravo ! Quand une île vaut nbVoisins × 2 - 1, au moins 1 pont simple " +
+                "est garanti vers chaque voisin. Et si les capacités sont bien calculées, " +
+                "on peut déduire la répartition exacte !"
             )
         );
     }
