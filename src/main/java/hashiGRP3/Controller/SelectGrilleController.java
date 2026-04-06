@@ -181,7 +181,7 @@ public class SelectGrilleController extends ManageController {
         // Check le nombre d'ile, placer un holder au cas ou
         int i = General.getDb().obtenirNombreIle(numeroGrille);
         if (i == -1)
-            labelNombreIle.setText("Veuillez charger là grille.");
+            labelNombreIle.setText("Veuillez charger la grille.");
         else
             labelNombreIle.setText("Nombre d'île : " + General.getDb().obtenirNombreIle(numeroGrille));
 
