@@ -10,6 +10,8 @@
       <maven.compiler.release>21</maven.compiler.release>
       <java.version>21</java.version>
       <javafx.version>21.0.2</javafx.version>
+      <javafx.platform>local</javafx.platform>
+      <deliverable.jar.name>groupe3</deliverable.jar.name>
       
    </properties>
    <dependencies>
@@ -17,21 +19,25 @@
          <groupId>org.openjfx</groupId>
          <artifactId>javafx-base</artifactId>
          <version>${javafx.version}</version>
+         <classifier>${javafx.platform}</classifier>
       </dependency>
       <dependency>
          <groupId>org.openjfx</groupId>
          <artifactId>javafx-controls</artifactId>
          <version>${javafx.version}</version>
+         <classifier>${javafx.platform}</classifier>
       </dependency>
       <dependency>
          <groupId>org.openjfx</groupId>
          <artifactId>javafx-fxml</artifactId>
          <version>${javafx.version}</version>
+         <classifier>${javafx.platform}</classifier>
       </dependency>
       <dependency>
          <groupId>org.openjfx</groupId>
          <artifactId>javafx-graphics</artifactId>
          <version>${javafx.version}</version>
+         <classifier>${javafx.platform}</classifier>
       </dependency>
       <dependency>
          <groupId>org.xerial</groupId>
@@ -51,6 +57,7 @@
       </dependency>
    </dependencies>
    <build>
+      <finalName>${deliverable.jar.name}</finalName>
       <plugins>
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
@@ -70,6 +77,7 @@
                      <goal>shade</goal>
                   </goals>
                   <configuration>
+                     <createDependencyReducedPom>false</createDependencyReducedPom>
                      <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                            <mainClass>hashiGRP3.Main</mainClass>
@@ -91,4 +99,71 @@
          </plugin>
       </plugins>
    </build>
+
+   <profiles>
+      <profile>
+         <id>linux-x64</id>
+         <activation>
+            <os>
+               <family>unix</family>
+               <arch>amd64</arch>
+            </os>
+         </activation>
+         <properties>
+            <javafx.platform>linux</javafx.platform>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>linux-arm64</id>
+         <activation>
+            <os>
+               <family>unix</family>
+               <arch>aarch64</arch>
+            </os>
+         </activation>
+         <properties>
+            <javafx.platform>linux-aarch64</javafx.platform>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>mac-x64</id>
+         <activation>
+            <os>
+               <family>mac</family>
+               <arch>x86_64</arch>
+            </os>
+         </activation>
+         <properties>
+            <javafx.platform>mac</javafx.platform>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>mac-arm64</id>
+         <activation>
+            <os>
+               <family>mac</family>
+               <arch>aarch64</arch>
+            </os>
+         </activation>
+         <properties>
+            <javafx.platform>mac-aarch64</javafx.platform>
+         </properties>
+      </profile>
+
+      <profile>
+         <id>windows-x64</id>
+         <activation>
+            <os>
+               <family>windows</family>
+               <arch>amd64</arch>
+            </os>
+         </activation>
+         <properties>
+            <javafx.platform>win</javafx.platform>
+         </properties>
+      </profile>
+   </profiles>
 </project>
