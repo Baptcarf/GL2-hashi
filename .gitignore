@@ -3,7 +3,6 @@
 
 #MVN
 target/
-dependency-reduced-pom.xml
 
 #Data
 *.db
