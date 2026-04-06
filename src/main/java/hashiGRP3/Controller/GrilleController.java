@@ -99,6 +99,8 @@ public class GrilleController extends ManageController {
     private Button hypothesisButton;
     @FXML
     private Label labelTitreGrille;
+    @FXML
+    private Button resetBtn;
 
     private boolean onCheck = false;
     private java.util.ArrayList<IndiceResultat> indicesDisponibles = new java.util.ArrayList<>();
@@ -237,6 +239,10 @@ public class GrilleController extends ManageController {
             };
             parent.layoutBoundsProperty().addListener(boundsListener);
 
+            undoButton.setVisible(true);
+            redoButton.setVisible(true);
+            resetBtn.setVisible(true);
+
             if (!tuto) {
                 timer.setVisible(true);
                 checkButton.setVisible(true);
@@ -254,6 +260,7 @@ public class GrilleController extends ManageController {
                 labelModeTutoriel.setVisible(true);
                 labelModeTutoriel.setManaged(true);
                 chronoImage.setVisible(false);
+                resetBtn.setVisible(false);
                 if (grid_num == 0) {
 
                     checkButton.setVisible(true);
@@ -262,6 +269,8 @@ public class GrilleController extends ManageController {
 
                 } else {
 
+                    undoButton.setVisible(false);
+                    redoButton.setVisible(false);
                     checkButton.setVisible(false);
                     hintButton.setVisible(false);
                     hypothesisButton.setVisible(false);
@@ -272,7 +281,8 @@ public class GrilleController extends ManageController {
 
             drawGrid(hashi, parent.getWidth());
 
-            // Charger le scénario tutoriel si on est en mode tuto
+            // Charger le scénario tutoriel
+            // si on est en mode tuto
             if (tuto) {
                 int numScenario = grid_num;
                 etapesTutoriel = ScenarioTutoriel.getEtapes(numScenario);
@@ -401,6 +411,14 @@ public class GrilleController extends ManageController {
 
         }
 
+    }
+
+    @Override
+    public void retourArriere(ActionEvent event) {
+        if (tuto) {
+            tuto = false;
+        }
+        super.retourArriere(event);
     }
 
     /** Dessine le cadrillage */
@@ -691,22 +709,38 @@ public class GrilleController extends ManageController {
     @FXML
     @Override
     public void changeScene(ActionEvent event) {
-        if (tuto) {
-            tuto = false;
-            retourArriere(event);
-        } else {
+        Button btn = (Button) event.getSource();
+        String action = (String) btn.getUserData();
+
+        if (action == null)
+            return;
+
+        if (!tuto) {
             double score = stop_timer();
             General.getDb().updateScorePartie(score);
             General.resetTimer();
             General.getHashi().setModeHypothese(false);
-            if (hintButton != null)
-                hintButton.setDisable(false);
-            if (checkButton != null)
-                checkButton.setDisable(false);
-            if (hypothesisButton != null)
-                hypothesisButton.setDisable(false);
-            super.changeScene(event);
 
+        }
+
+        switch (action) {
+            case "retour":
+                if (tuto) {
+                    getSceneManager().changeScene("selectTutoriel");
+                    tuto = false;
+                } else {
+
+                    getSceneManager().changeScene("selectGrille");
+                }
+                break;
+
+            case "techniqueWithChrono":
+                if (tuto) {
+                    getSceneManager().changeScene("technique");
+                } else {
+
+                    getSceneManager().changeScene("techniqueWithChrono");
+                }
         }
 
     }

@@ -22,8 +22,9 @@ public class SceneManager {
 
     private List<Composante> allScene = new ArrayList<>();
     private Stage stage;
-    private Stack<Composante> history = new Stack<>();
+    private Stack<String> history = new Stack<>();
     private Composante currentScene = null;
+    private String currentSceneName = null;
 
     // Un seul conteneur racine et une seule scène pour éviter le bug fullscreen sur
     // macOS
@@ -122,8 +123,9 @@ public class SceneManager {
         }
 
         if (currentScene != null) {
-            history.push(currentScene);
+            history.push(currentSceneName);
         }
+        currentSceneName = name;
         currentScene = c;
 
         if (name.equals("selectGrille")) {
@@ -182,9 +184,8 @@ public class SceneManager {
         }
 
         // On pop la scène précédente sans la re-push dans l'historique
-        Composante previous = history.pop();
-        currentScene = null;
-        changeScene(previous.getNom());
+        String previousName = history.pop();
+        changeScene(previousName);
     }
 
     /**
