@@ -80,7 +80,7 @@ public class DatabaseManager {
     public int creerPartie(int id_utilisateur, int numGrille) {
 
         String sqlCheck = "SELECT id_partie, statut FROM Partie JOIN Grille on partie.id_grille = Grille.id_grille WHERE id_utilisateur = ? AND numeroGrille = ? ORDER BY id_partie DESC LIMIT 1";
-        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut,score,maxScore,finiUneFois) VALUES (?,(SELECT id_grille FROM Grille where numeroGrille = ?), ?,0,9999,false)";
+        String sqlInsert = "INSERT INTO Partie (id_utilisateur, id_grille, statut,score,maxScore,finiUneFois) VALUES (?,(SELECT id_grille FROM Grille where numeroGrille = ?), ?,0,999999,false)";
 
         boolean reset = false;
         int id_partie = -1;
