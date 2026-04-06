@@ -389,6 +389,7 @@ public class GrilleController extends ManageController {
 
             alert.showAndWait().ifPresent(result -> {
                 if (result == btnRejouer) {
+                    win.setVisible(false);
                     onResetClick();
                 } else if (result == btnMenu) {
                     Button dummyButton = new Button();
