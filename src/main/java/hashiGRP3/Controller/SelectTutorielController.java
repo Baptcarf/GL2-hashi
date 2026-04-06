@@ -1,21 +1,18 @@
 //Attribut au paquet
 package hashiGRP3.Controller;
 
-import javafx.event.ActionEvent;
-//Imports
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.fxml.FXML;
+import hashiGRP3.Logic.General;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import hashiGRP3.Logic.General;
 
 /**
  * Contrôleur pour la scène de sélection du tutoriel.
@@ -151,7 +148,6 @@ public class SelectTutorielController extends ManageController {
         General.setNum_grille(index); // Set num_grille for tutorial loading
 
         completeLevel(index);
-        System.out.println("Choix du niveau du tutoriel : " + (index));
         getSceneManager().changeScene("grilledujeuTuto");
     }
 

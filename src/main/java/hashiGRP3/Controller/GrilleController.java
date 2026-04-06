@@ -2,10 +2,6 @@
 package hashiGRP3.Controller;
 
 import java.io.InputStream;
-//Imports
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +21,13 @@ import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsDeux;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUn;
 import hashiGRP3.Logic.Aide.Techniques.TechniqueSaturationMoinsUnSpe;
 import hashiGRP3.Logic.Aide.Techniques.TechniquesBloquePont;
+import hashiGRP3.Logic.EtapeTutoriel;
 import hashiGRP3.Logic.General;
 import hashiGRP3.Logic.Hashi;
 import hashiGRP3.Logic.Ile;
 import hashiGRP3.Logic.InOut.Import;
 import hashiGRP3.Logic.Pont;
+import hashiGRP3.Logic.ScenarioTutoriel;
 import hashiGRP3.ObjectGraphique.ileGraphique;
 import hashiGRP3.ObjectGraphique.pontGraphique;
 import javafx.animation.AnimationTimer;
@@ -41,11 +39,11 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -58,19 +56,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import hashiGRP3.Logic.EtapeTutoriel;
-import hashiGRP3.Logic.ScenarioTutoriel;
-
-import hashiGRP3.Logic.Aide.IndiceResultat;
-import hashiGRP3.Logic.Aide.MoteurIndice;
-import hashiGRP3.Logic.Aide.Techniques.*;
-import hashiGRP3.Logic.General;
-import hashiGRP3.Logic.Hashi;
-import hashiGRP3.Logic.Ile;
-import hashiGRP3.Logic.InOut.Import;
-import hashiGRP3.Logic.Pont;
-import hashiGRP3.ObjectGraphique.ileGraphique;
-import hashiGRP3.ObjectGraphique.pontGraphique;
 
 /** Classe de controlleur d'une grille de jeu */
 public class GrilleController extends ManageController {
@@ -286,7 +271,6 @@ public class GrilleController extends ManageController {
                 }
 
             }
-            System.out.println(this.startup);
 
             drawGrid(hashi, parent.getWidth());
 
@@ -537,7 +521,6 @@ public class GrilleController extends ManageController {
         HBox.setHgrow(btnCancel, Priority.ALWAYS);
 
         btnValidate.setOnAction(e -> {
-            System.out.println("Hypothèse validée");
             hashi.validerHypothese();
             General.getDb().validerHypothese();
             drawGrid(hashi, gamePane.getWidth());
@@ -552,7 +535,6 @@ public class GrilleController extends ManageController {
         });
 
         btnCancel.setOnAction(e -> {
-            System.out.println("Hypothèse annulée");
             hashi.annulerHypothese();
             General.getDb().annulerHypothese();
             drawGrid(hashi, gamePane.getWidth());
