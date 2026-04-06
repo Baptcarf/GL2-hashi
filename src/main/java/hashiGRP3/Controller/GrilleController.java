@@ -292,7 +292,7 @@ public class GrilleController extends ManageController {
 
             // Charger le scénario tutoriel si on est en mode tuto
             if (tuto) {
-                int numScenario = (grid_num == 0) ? 0 : grid_num - 15;
+                int numScenario = grid_num;
                 etapesTutoriel = ScenarioTutoriel.getEtapes(numScenario);
                 etapeCourante = 0;
                 afficherEtapeTutoriel();
